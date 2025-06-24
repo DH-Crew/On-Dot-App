@@ -30,18 +30,6 @@ internal fun Project.configureKMPCommonPlugin() {
             commonTest.dependencies {
                 implementation(kotlin("test"))
             }
-
-            val androidMain = getByName("androidMain")
-            val iosX64Main = getByName("iosX64Main")
-            val iosArm64Main = getByName("iosArm64Main")
-            val iosSimulatorArm64Main = getByName("iosSimulatorArm64Main")
-
-            val iosMain = create("iosMain") {
-                dependsOn(commonMain)
-                iosX64Main.dependsOn(this)
-                iosArm64Main.dependsOn(this)
-                iosSimulatorArm64Main.dependsOn(this)
-            }
         }
     }
 }
