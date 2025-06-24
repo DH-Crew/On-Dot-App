@@ -30,10 +30,6 @@ gradlePlugin {
             id = "ondot.kmp.common"
             implementationClass = "com.ondot.build_logic.KmpCommonPlugin"
         }
-        register("kmp-compose-ui") {
-            id = "ondot.kmp.compose.ui"
-            implementationClass = "com.ondot.build_logic.KmpComposeUiPlugin"
-        }
         register("android-application") {
             id = "ondot.android.application"
             implementationClass = "com.ondot.build_logic.AndroidApplicationPlugin"
