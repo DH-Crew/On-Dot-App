@@ -5,8 +5,9 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 
 class ComposeAppPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        apply<AndroidApplicationPlugin>()
-        apply<KmpComposeUiPlugin>()
+    override fun apply(project: Project) {
+        project.pluginManager.apply(AndroidApplicationPlugin::class.java)
+        project.pluginManager.apply(KotlinMultiplatformPlugin::class.java)
+        project.pluginManager.apply(ComposeMultiplatformPlugin::class.java)
     }
 }
