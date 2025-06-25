@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.provideDelegate
@@ -26,7 +27,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
         // 3) KMP sourceSets에 의존성 추가
         project.extensions.configure<KotlinMultiplatformExtension> {
             with(sourceSets) {
-                val commonMain = getByName("commonMain")
+                val commonMain = maybeCreate("commonMain")
                 commonMain.dependencies {
                     implementation(libs.findLibrary("compose-runtime").get())
                     implementation(libs.findLibrary("compose-foundation").get())
@@ -34,7 +35,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compose-material3").get())
                     implementation(libs.findLibrary("compose-components-resources").get())
                 }
-                val androidMain = getByName("androidMain")
+                val androidMain = maybeCreate("androidMain")
                 androidMain.dependencies {
                     implementation(libs.findLibrary("androidx-activity-compose").get())
                     implementation(libs.findLibrary("compose-ui-tooling-preview").get())
