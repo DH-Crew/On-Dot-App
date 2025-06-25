@@ -42,6 +42,8 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("kotlinx-coroutines-android").get())
                     implementation(libs.findLibrary("androidx-lifecycle-viewmodel").get())
                     implementation(libs.findLibrary("androidx-lifecycle-runtimeCompose").get())
+                    implementation(libs.findLibrary("datastore-core").get())
+                    implementation(libs.findLibrary("datastore-preferences").get())
                 }
             }
         }

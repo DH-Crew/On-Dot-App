@@ -37,6 +37,9 @@ serialization = "1.7.3"
 # DI
 hilt = "2.44.2"
 
+# DataStore
+datastore = "1.1.7"
+
 # Coroutines / DateTime / Logging
 coroutines = "1.8.1"
 datetime = "0.6.0"
@@ -103,6 +106,10 @@ kotlinx-serialization-json     = { module = "org.jetbrains.kotlinx:kotlinx-seria
 # DI (Hilt)
 hilt-android                   = { module = "com.google.dagger:hilt-android",              version.ref = "hilt" }
 hilt-compiler                  = { module = "com.google.dagger:hilt-compiler",             version.ref = "hilt" }
+
+# DataStore
+datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 # Coroutines, DateTime, Logging
 kotlinx-coroutines-core        = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
