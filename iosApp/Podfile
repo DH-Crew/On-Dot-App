@@ -1,0 +1,8 @@
+platform :ios, '14.1'
+
+target 'iosApp' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'composeApp', :path => '../composeApp' 
+end
