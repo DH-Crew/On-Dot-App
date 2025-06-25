@@ -17,4 +17,5 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-composeApp/src/commonMain/kotlin/com/dh/ondot/data/NetworkConfig.kt
+
+composeApp/src/commonMain/kotlin/com/dh/ondot/network/NetworkConfig.kt
