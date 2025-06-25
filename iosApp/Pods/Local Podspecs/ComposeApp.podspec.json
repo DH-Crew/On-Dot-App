@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "homepage": "https://github.com/DH-Crew/On-Dot-App",
   "source": {
-    "http": ""
+    "http": "https://github.com/DH-Crew/On-Dot-App.git",
+    "tag": "1.0.0"
   },
-  "authors": "",
-  "license": "",
+  "authors": {
+    "DH-Crew": "hj296914@gmail.com"
+  },
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
   "summary": "Compose Multiplatform Shared UI",
   "vendored_frameworks": "build/cocoapods/framework/composeApp.framework",
   "libraries": "c++",
