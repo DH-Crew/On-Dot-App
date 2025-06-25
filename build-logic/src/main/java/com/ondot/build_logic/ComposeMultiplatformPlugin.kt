@@ -50,6 +50,11 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("androidx-lifecycle-runtimeCompose").get())
                     implementation(libs.findLibrary("datastore-core").get())
                     implementation(libs.findLibrary("datastore-preferences").get())
+                    implementation(libs.findLibrary("ktor-client-okhttp").get())
+                }
+                val iosMain = maybeCreate("iosMain")
+                iosMain.dependencies {
+                    implementation(libs.findLibrary("ktor-client-darwin").get())
                 }
             }
         }
