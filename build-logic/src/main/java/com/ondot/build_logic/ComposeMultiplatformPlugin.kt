@@ -35,6 +35,11 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compose-material3").get())
                     implementation(libs.findLibrary("compose-components-resources").get())
                     implementation(libs.findLibrary("kermit").get())
+                    implementation(libs.findLibrary("kotlinx-serialization-json").get())
+                    implementation(libs.findLibrary("ktor-client").get())
+                    implementation(libs.findLibrary("ktor-client-content-negotiation").get())
+                    implementation(libs.findLibrary("ktor-serialization").get())
+                    implementation(libs.findLibrary("ktor-client-logging").get())
                 }
                 val androidMain = maybeCreate("androidMain")
                 androidMain.dependencies {
