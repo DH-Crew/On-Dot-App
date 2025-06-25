@@ -52,6 +52,9 @@ coil = "2.4.0"
 # Compose Resources (if still needed separately)
 resources = "1.8.2"
 
+# Logging
+kermit = "2.0.0"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -126,3 +129,7 @@ junit                          = { module = "junit:junit",                      
 androidx-test-ext-junit        = { module = "androidx.test.ext:junit",                   version.ref = "androidx-testExt" }
 androidx-espresso-core         = { module = "androidx.test.espresso:espresso-core",        version.ref = "androidx-espresso" }
 mockk                          = { module = "io.mockk:mockk",                             version.ref = "mockk" }
+
+
+# Logging
+kermit                         = { module = "co.touchlab:kermit", version.ref = "kermit" }

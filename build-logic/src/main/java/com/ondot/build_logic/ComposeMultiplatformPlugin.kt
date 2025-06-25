@@ -34,6 +34,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compose-ui").get())
                     implementation(libs.findLibrary("compose-material3").get())
                     implementation(libs.findLibrary("compose-components-resources").get())
+                    implementation(libs.findLibrary("kermit").get())
                 }
                 val androidMain = maybeCreate("androidMain")
                 androidMain.dependencies {
