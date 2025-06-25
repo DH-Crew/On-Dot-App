@@ -40,6 +40,8 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("ktor-client-content-negotiation").get())
                     implementation(libs.findLibrary("ktor-serialization").get())
                     implementation(libs.findLibrary("ktor-client-logging").get())
+                    implementation(libs.findLibrary("viewmodel").get())
+                    implementation(libs.findLibrary("navigation").get())
                 }
                 val androidMain = maybeCreate("androidMain")
                 androidMain.dependencies {
