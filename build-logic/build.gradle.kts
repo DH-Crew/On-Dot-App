@@ -26,10 +26,6 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("kmp-common") {
-            id = "ondot.kmp.common"
-            implementationClass = "com.ondot.build_logic.KmpCommonPlugin"
-        }
         register("android-application") {
             id = "ondot.android.application"
             implementationClass = "com.ondot.build_logic.AndroidApplicationPlugin"
