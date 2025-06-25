@@ -34,6 +34,12 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compose-ui").get())
                     implementation(libs.findLibrary("compose-material3").get())
                     implementation(libs.findLibrary("compose-components-resources").get())
+                    implementation(libs.findLibrary("kermit").get())
+                    implementation(libs.findLibrary("kotlinx-serialization-json").get())
+                    implementation(libs.findLibrary("ktor-client").get())
+                    implementation(libs.findLibrary("ktor-client-content-negotiation").get())
+                    implementation(libs.findLibrary("ktor-serialization").get())
+                    implementation(libs.findLibrary("ktor-client-logging").get())
                 }
                 val androidMain = maybeCreate("androidMain")
                 androidMain.dependencies {
@@ -42,6 +48,13 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("kotlinx-coroutines-android").get())
                     implementation(libs.findLibrary("androidx-lifecycle-viewmodel").get())
                     implementation(libs.findLibrary("androidx-lifecycle-runtimeCompose").get())
+                    implementation(libs.findLibrary("datastore-core").get())
+                    implementation(libs.findLibrary("datastore-preferences").get())
+                    implementation(libs.findLibrary("ktor-client-okhttp").get())
+                }
+                val iosMain = maybeCreate("iosMain")
+                iosMain.dependencies {
+                    implementation(libs.findLibrary("ktor-client-darwin").get())
                 }
             }
         }
