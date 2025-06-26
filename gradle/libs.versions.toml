@@ -1,6 +1,6 @@
 [versions]
 # Android / Kotlin 플랫폼
-agp = "8.5.2"
+agp = "8.6.1"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -11,6 +11,7 @@ jetbrainsKotlinJvm = "2.0.20"
 
 # Compose Multiplatform
 composeMultiplatform = "1.8.2"
+composeHotReload = "1.0.0-alpha11"
 
 # AndroidX
 androidx-core = "1.16.0"
@@ -60,6 +61,9 @@ kermit = "2.0.0"
 viewmodel = "2.9.1"
 navigation = "2.9.0-beta03"
 
+# Compottie
+compottie = "2.0.0-rc04"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -68,6 +72,7 @@ jetbrainsKotlinJvm      = { id = "org.jetbrains.kotlin.jvm",         version.ref
 composeMultiplatform    = { id = "org.jetbrains.compose",            version.ref = "composeMultiplatform" }
 composeCompiler         = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinCocoapods         = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+composeHotReload        = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload"}
 
 [libraries]
 # Android Gradle Plugin
@@ -150,3 +155,8 @@ kermit                         = { module = "co.touchlab:kermit", version.ref = 
 # Jetbrains Androidx
 navigation                     = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 viewmodel                      = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+
+# Compottie
+compottie                      = { module = "io.github.alexzhirkevich:compottie",        version.ref = "compottie" }
+compottie-dot                  = { module = "io.github.alexzhirkevich:compottie-dot",    version.ref = "compottie" }
+compottie-network              = { module = "io.github.alexzhirkevich:compottie-network",version.ref = "compottie" }
