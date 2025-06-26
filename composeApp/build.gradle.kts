@@ -19,7 +19,7 @@ kotlin {
 
         summary = "Compose Multiplatform Shared UI"
         homepage = "https://github.com/DH-Crew/On-Dot-App"
-        ios.deploymentTarget = "14.1"
+        ios.deploymentTarget = "15.6"
         framework {
             baseName = "composeApp"
             isStatic = true
