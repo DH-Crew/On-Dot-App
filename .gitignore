@@ -19,3 +19,8 @@ captures
 
 
 composeApp/src/commonMain/kotlin/com/dh/ondot/network/NetworkConfig.kt
+
+# CocoaPods
+iosApp/Pods/
+iosApp/Pods
+iosApp/Podfile.lock
