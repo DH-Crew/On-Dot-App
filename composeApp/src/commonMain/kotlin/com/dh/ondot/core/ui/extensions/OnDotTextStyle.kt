@@ -3,7 +3,7 @@ package com.dh.ondot.core.ui.extensions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.presentation.ui.components.LocalOnDotTypography
+import com.dh.ondot.presentation.ui.theme.LocalOnDotTypography
 
 @Composable
 fun OnDotTextStyle.toTextStyle(): TextStyle {

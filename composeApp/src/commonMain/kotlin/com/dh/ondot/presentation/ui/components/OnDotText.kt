@@ -14,9 +14,7 @@ import com.dh.ondot.core.ui.extensions.toTextStyle
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotTypography
 
-val LocalOnDotTypography = staticCompositionLocalOf<OnDotTypography> {
-    error("No OnDotTypography provided")
-}
+
 
 @Composable
 fun OnDotText(
