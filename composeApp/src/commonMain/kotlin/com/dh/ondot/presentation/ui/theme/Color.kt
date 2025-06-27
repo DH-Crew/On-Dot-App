@@ -1,4 +1,4 @@
-package com.dh.ondot.presentation.theme
+package com.dh.ondot.presentation.ui.theme
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush

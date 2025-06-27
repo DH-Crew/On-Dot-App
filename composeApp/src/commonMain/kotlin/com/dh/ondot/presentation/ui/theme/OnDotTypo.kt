@@ -1,21 +1,10 @@
-package com.dh.ondot.presentation.theme
+package com.dh.ondot.presentation.ui.theme
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
-import com.dh.ondot.core.ui.extensions.toTextStyle
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.Font
@@ -85,33 +74,4 @@ fun OnDotTypo(): OnDotTypography {
         bodySmallR2 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 11.sp, lineHeight = lh(11)),
         bodySmallR3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 8.sp, lineHeight = lh(8)),
     )
-}
-
-val LocalOnDotTypography = staticCompositionLocalOf<OnDotTypography> {
-    error("No OnDotTypography provided")
-}
-
-@Composable
-fun OnDotText(
-    text: String,
-    style: OnDotTextStyle,
-    modifier: Modifier = Modifier,
-    color: Color = Color.Unspecified,
-    textAlign: TextAlign? = null,
-    maxLines: Int = Int.MAX_VALUE,
-    overflow: TextOverflow = TextOverflow.Clip
-) {
-    val textStyle = style.toTextStyle()
-
-    CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale = 1f)) {
-        Text(
-            text = text,
-            style = textStyle,
-            color = color,
-            modifier = modifier,
-            textAlign = textAlign,
-            maxLines = maxLines,
-            overflow = overflow
-        )
-    }
 }
