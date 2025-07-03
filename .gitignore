@@ -24,3 +24,4 @@ composeApp/src/commonMain/kotlin/com/dh/ondot/network/NetworkConfig.kt
 iosApp/Pods/
 iosApp/Pods
 iosApp/Podfile.lock
+iosApp/iosApp/Secrets.swift
