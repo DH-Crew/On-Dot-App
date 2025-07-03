@@ -2,17 +2,9 @@ package com.ondot.build_logic
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.MinimalExternalModuleDependency
-import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.creating
-import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.findByType
-import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class ComposeMultiplatformPlugin : Plugin<Project> {
@@ -49,6 +41,8 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compottie").get())
                     implementation(libs.findLibrary("compottie-dot").get())
                     implementation(libs.findLibrary("compottie-network").get())
+                    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
+                    implementation("org.jetbrains.kotlinx:kotlinx-io-bytestring:0.3.0")
                 }
 
                 val androidMain = maybeCreate("androidMain")
@@ -61,8 +55,9 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("datastore-core").get())
                     implementation(libs.findLibrary("datastore-preferences").get())
                     implementation(libs.findLibrary("ktor-client-okhttp").get())
+                    implementation(libs.findLibrary("kakao-login").get())
                 }
-                
+
                 val iosMain = maybeCreate("iosMain")
                 iosMain.dependencies {
                     implementation(libs.findLibrary("ktor-client-darwin").get())
@@ -72,21 +67,22 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
 
         project.configurations.configureEach {
             resolutionStrategy.eachDependency {
-                if (requested.group == "org.jetbrains.kotlinx" &&
-                    requested.name  == "kotlinx-io-core") {
-                    useVersion("0.3.3")
-                    because("Align io-core with Ktor to avoid ByteReadPacket symbol clash")
-                }
-                if (requested.group == "org.jetbrains.kotlinx" &&
-                    requested.name == "kotlinx-io-bytestring") {
-                    useVersion("0.3.3")
+                when {
+                    requested.group == "io.ktor" -> {
+                        useVersion("3.0.0")
+                    }
                 }
             }
         }
 
         project.configurations.configureEach {
             resolutionStrategy.eachDependency {
-                if (requested.group == "io.ktor") useVersion("2.3.10")
+                if (requested.group == "org.jetbrains.kotlinx" &&
+                    (requested.name == "kotlinx-io-core" ||
+                            requested.name == "kotlinx-io-bytestring")) {
+                    useVersion("0.3.0")
+                    because("Align kotlinx-io modules with Ktor requirement")
+                }
             }
         }
 
