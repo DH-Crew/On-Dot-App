@@ -2,7 +2,7 @@
 # Android / Kotlin 플랫폼
 agp = "8.6.1"
 android-compileSdk = "35"
-android-minSdk = "24"
+android-minSdk = "26"
 android-targetSdk = "35"
 android-application = "8.4.2"
 
@@ -34,7 +34,7 @@ retrofit = "2.9.0"
 okhttp = "4.11.0"
 moshi = "1.14.0"
 serialization = "1.7.3"
-ktor = "2.3.0"
+ktor = "3.0.0"
 
 # DI
 hilt = "2.44.2"
@@ -64,6 +64,12 @@ navigation = "2.9.0-beta03"
 # Compottie
 compottie = "2.0.0-rc04"
 
+# KMP-SPM
+kmp-spm = "0.3.3"
+
+# Kakao-Login
+kakao-login = "2.19.0"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -71,8 +77,8 @@ kotlinMultiplatform     = { id = "org.jetbrains.kotlin.multiplatform", version.r
 jetbrainsKotlinJvm      = { id = "org.jetbrains.kotlin.jvm",         version.ref = "jetbrainsKotlinJvm" }
 composeMultiplatform    = { id = "org.jetbrains.compose",            version.ref = "composeMultiplatform" }
 composeCompiler         = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinCocoapods         = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 composeHotReload        = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload"}
+kmp-spm                 = { id = "io.github.frankois944.spmForKmp", version.ref = "kmp-spm" }
 
 [libraries]
 # Android Gradle Plugin
@@ -160,3 +166,6 @@ viewmodel                      = { module = "org.jetbrains.androidx.lifecycle:li
 compottie                      = { module = "io.github.alexzhirkevich:compottie",        version.ref = "compottie" }
 compottie-dot                  = { module = "io.github.alexzhirkevich:compottie-dot",    version.ref = "compottie" }
 compottie-network              = { module = "io.github.alexzhirkevich:compottie-network",version.ref = "compottie" }
+
+# Kakao-Login
+kakao-login                    = { module = "com.kakao.sdk:v2-user", version.ref = "kakao-login" }
