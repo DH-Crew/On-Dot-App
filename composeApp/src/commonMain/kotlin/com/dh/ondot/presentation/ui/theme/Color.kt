@@ -34,6 +34,9 @@ object OnDotColor {
     // Red
     val Red = Color(0xFFFF196D)
 
+    // Kakao
+    val Kakao = Color(0xFFFAE100)
+
     // Gradients
     val Gradient = Brush.linearGradient(
         colors = listOf(Color(0xFFBFFF00).copy(alpha = 0.5f), Color(0xFFFF196D)),
