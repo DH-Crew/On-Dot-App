@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.di.provideTokenProvider
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.components.OnDotButton
@@ -27,9 +26,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = viewModel {
-        LoginViewModel(tokenProvider = provideTokenProvider())
-    }
+    viewModel: LoginViewModel = viewModel { LoginViewModel() }
 ) {
     LoginContent(
         onKakaoLogin = { viewModel.onKakaoLogin() }
@@ -86,7 +83,7 @@ fun LoginButtons(
         )
 
         if (getPlatform().name == IOS) {
-
+            // TODO: Apple Login Button
         }
 
         Spacer(modifier = Modifier.height(16.dp))
