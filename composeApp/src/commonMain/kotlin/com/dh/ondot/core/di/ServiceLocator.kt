@@ -17,4 +17,7 @@ object ServiceLocator {
         this.tokenProvider = tokenProvider
         this.networkClient = NetworkClient(tokenProvider)
     }
+
+    fun provideNetworkClient(): NetworkClient = networkClient
+    fun provideTokenProvider(): TokenProvider = tokenProvider
 }
