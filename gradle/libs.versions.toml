@@ -78,7 +78,7 @@ jetbrainsKotlinJvm      = { id = "org.jetbrains.kotlin.jvm",         version.ref
 composeMultiplatform    = { id = "org.jetbrains.compose",            version.ref = "composeMultiplatform" }
 composeCompiler         = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeHotReload        = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload"}
-kmp-spm                 = { id = "io.github.frankois944.spmForKmp", version.ref = "kmp-spm" }
+serialization           = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
 # Android Gradle Plugin

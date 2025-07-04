@@ -13,6 +13,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
         project.pluginManager.apply("org.jetbrains.kotlin.multiplatform")
         project.pluginManager.apply("org.jetbrains.compose")
         project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
+        project.pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
         // 2) 버전 카탈로그 읽기
         val libs = project.extensions
