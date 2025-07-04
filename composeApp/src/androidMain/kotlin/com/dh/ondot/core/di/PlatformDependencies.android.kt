@@ -1,4 +1,4 @@
-package com.dh.ondot.di
+package com.dh.ondot.core.di
 
 import com.dh.ondot.network.TokenProvider
 import com.dh.ondot.util.AppContextHolder
