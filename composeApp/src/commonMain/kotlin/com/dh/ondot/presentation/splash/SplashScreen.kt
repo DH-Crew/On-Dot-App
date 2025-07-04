@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.di.provideTokenProvider
+import com.dh.ondot.core.di.provideTokenProvider
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -24,11 +23,7 @@ import ondot.composeapp.generated.resources.Res
 
 @Composable
 fun SplashScreen(
-    viewModel: SplashViewModel = viewModel {
-        SplashViewModel(
-            tokenProvider = provideTokenProvider()
-        )
-    }
+    viewModel: SplashViewModel = viewModel { SplashViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val composition by rememberLottieComposition {
