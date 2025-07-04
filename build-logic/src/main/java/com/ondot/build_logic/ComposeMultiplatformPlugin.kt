@@ -76,16 +76,16 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
             }
         }
 
-        project.configurations.configureEach {
-            resolutionStrategy.eachDependency {
-                if (requested.group == "org.jetbrains.kotlinx" &&
-                    (requested.name == "kotlinx-io-core" ||
-                            requested.name == "kotlinx-io-bytestring")) {
-                    useVersion("0.3.0")
-                    because("Align kotlinx-io modules with Ktor requirement")
-                }
-            }
-        }
+//        project.configurations.configureEach {
+//            resolutionStrategy.eachDependency {
+//                if (requested.group == "org.jetbrains.kotlinx" &&
+//                    (requested.name == "kotlinx-io-core" ||
+//                            requested.name == "kotlinx-io-bytestring")) {
+//                    useVersion("0.3.0")
+//                    because("Align kotlinx-io modules with Ktor requirement")
+//                }
+//            }
+//        }
 
         project.dependencies.add(
             "debugImplementation",

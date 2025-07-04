@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 class KotlinMultiplatformPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
@@ -28,6 +28,10 @@ class KotlinMultiplatformPlugin : Plugin<Project> {
                     )
                 }
             }
+
+            val xcFramework = XCFramework("ComposeApp")
+            xcFramework.add(iosArm64().binaries.getFramework("DEBUG"))
+            xcFramework.add(iosSimulatorArm64().binaries.getFramework("DEBUG"))
         }
     }
 }
