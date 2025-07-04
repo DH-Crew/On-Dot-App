@@ -22,6 +22,8 @@ dependencies {
     // Kotlin Multiplatform 플러그인 사용을 위한 의존성
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.android.gradle.plugin)
+
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.21")
 }
 
 gradlePlugin {
