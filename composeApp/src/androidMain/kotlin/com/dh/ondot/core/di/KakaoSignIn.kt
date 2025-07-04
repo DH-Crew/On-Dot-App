@@ -1,4 +1,4 @@
-package com.dh.ondot.di
+package com.dh.ondot.core.di
 
 import android.content.Context
 import android.util.Log
