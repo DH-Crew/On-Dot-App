@@ -1,9 +1,14 @@
 package com.dh.ondot.presentation.onboarding
 
+import androidx.lifecycle.viewModelScope
+import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.domain.model.response.AddressInfo
+import com.dh.ondot.domain.repository.PlaceRepository
+import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-
+    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository
 ): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
     fun initStep() {
@@ -15,6 +20,9 @@ class OnboardingViewModel(
         return when (uiState.value.currentStep) {
             1 -> {
                 uiState.value.hourInput.isNotEmpty() || uiState.value.minuteInput.isNotEmpty()
+            }
+            2 -> {
+                uiState.value.selectedAddress != null
             }
             else -> {
                 false
@@ -44,7 +52,7 @@ class OnboardingViewModel(
         }
     }
 
-    // ------------------------- OnboardingStep1 ----------------------------
+    // ---------------------------------------- OnboardingStep1 ----------------------------
 
     // hourInput의 변화를 반영하는 콜백 메서드
     fun onHourInputChanged(hourInput: String) {
@@ -62,5 +70,34 @@ class OnboardingViewModel(
 
         val totalMinutes = hour * 60 + minute
         updateState(uiState.value.copy(preparationTime = totalMinutes))
+    }
+
+    // ----------------------------------------- OnboardingStep2 ----------------------------
+
+    // 검색어에 따른 장소 검색 API 호출 메서드
+    fun onAddressInputChanged(input: String) {
+        updateState(uiState.value.copy(addressInput = input))
+        searchPlace(input)
+    }
+
+    private fun searchPlace(query: String) {
+        viewModelScope.launch {
+            placeRepository.searchPlace(query).collect {
+                resultResponse(it, ::onSuccessSearchPlace)
+            }
+        }
+    }
+
+    private fun onSuccessSearchPlace(result: List<AddressInfo>) {
+        updateState(uiState.value.copy(addressList = result))
+    }
+
+    fun onClickPlace(info: AddressInfo) {
+        updateState(
+            uiState.value.copy(
+                addressInput = info.title,
+                selectedAddress = info
+            )
+        )
     }
 }
