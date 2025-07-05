@@ -8,8 +8,10 @@ actual fun kakaoSignIn(onResult: (String) -> Unit) {
     val helper = KakaoLoginHelper()
 
     helper.login { accessToken, error ->
-        if (error != null) {
+        if (error == null) {
             onResult(accessToken ?: "")
+        } else {
+            onResult("")
         }
     }
 }
