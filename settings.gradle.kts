@@ -15,9 +15,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven {
-            url = uri("https://company/com/maven2")
-        }
+        maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
         mavenLocal()
         flatDir {
             dirs("libs")
@@ -38,9 +36,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven {
-            url = uri("https://company/com/maven2")
-        }
+        maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
         mavenLocal()
         flatDir {
             dirs("libs")

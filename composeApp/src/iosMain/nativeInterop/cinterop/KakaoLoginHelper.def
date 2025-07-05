@@ -1,0 +1,3 @@
+language = Objective-C
+headers = KakaoLoginHelper.h
+package = com.dh.ondot.kakaologin
