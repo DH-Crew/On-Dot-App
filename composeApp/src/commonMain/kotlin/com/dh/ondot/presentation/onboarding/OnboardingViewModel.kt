@@ -67,8 +67,8 @@ class OnboardingViewModel(
     }
 
     private fun calculatePreparationTime() {
-        val hour = uiState.value.hourInput.toIntOrNull() ?: 0
-        val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
+        val hour = uiState.value.hourInput.toIntOrNull()?.coerceAtLeast(0) ?: 0
+        val minute = uiState.value.minuteInput.toIntOrNull()?.coerceAtLeast(0) ?: 0
 
         val totalMinutes = hour * 60 + minute
         updateState(uiState.value.copy(preparationTime = totalMinutes))
