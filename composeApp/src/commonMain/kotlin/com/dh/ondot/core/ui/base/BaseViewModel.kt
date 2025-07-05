@@ -40,8 +40,7 @@ abstract class BaseViewModel<STATE: UiState>(
     protected fun<D> resultResponse(
         response: Result<D>,
         successCallback: (D) -> Unit,
-        errorCallback: ((Throwable) -> Unit)? = null,
-        needLoading: Boolean = false
+        errorCallback: ((Throwable) -> Unit)? = null
     ) {
         viewModelScope.launch {
             response.fold(
