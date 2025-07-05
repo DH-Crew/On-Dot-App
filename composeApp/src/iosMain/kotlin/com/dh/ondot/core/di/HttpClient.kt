@@ -10,7 +10,9 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import kotlin.experimental.ExperimentalNativeApi
 
+@OptIn(ExperimentalNativeApi::class)
 actual fun httpClient(): HttpClient = HttpClient(Darwin) {
     install(ContentNegotiation) {
         json(
@@ -25,7 +27,7 @@ actual fun httpClient(): HttpClient = HttpClient(Darwin) {
         logger = object : Logger {
             override fun log(message: String) = println("Ktor ▶ $message")
         }
-        level = LogLevel.ALL
+        level = if (Platform.isDebugBinary) LogLevel.ALL else LogLevel.NONE
     }
 
     defaultRequest { header("Content-Type", "application/json") }

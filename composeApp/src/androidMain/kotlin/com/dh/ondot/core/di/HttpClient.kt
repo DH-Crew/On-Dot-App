@@ -1,5 +1,6 @@
 package com.dh.ondot.core.di
 
+import com.dh.ondot.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -25,7 +26,7 @@ actual fun httpClient(): HttpClient = HttpClient(OkHttp) {
         logger = object : Logger {
             override fun log(message: String) = println("Ktor ▶ $message")
         }
-        level = LogLevel.BODY
+        level = if (BuildConfig.DEBUG) LogLevel.BODY else LogLevel.NONE
     }
 
     defaultRequest { header("Content-Type", "application/json") }
