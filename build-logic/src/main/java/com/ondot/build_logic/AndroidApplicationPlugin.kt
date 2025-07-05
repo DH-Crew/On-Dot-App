@@ -43,9 +43,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
                 sourceCompatibility = JavaVersion.VERSION_17
                 targetCompatibility = JavaVersion.VERSION_17
             }
-        }
 
-        extensions.configure<com.android.build.gradle.BaseExtension>("android") {
             defaultConfig {
                 buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
                 manifestPlaceholders["KAKAO_HOST_SCHEME"] = "kakao$kakaoKey"
