@@ -42,8 +42,8 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compottie").get())
                     implementation(libs.findLibrary("compottie-dot").get())
                     implementation(libs.findLibrary("compottie-network").get())
-                    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
-                    implementation("org.jetbrains.kotlinx:kotlinx-io-bytestring:0.3.0")
+                    implementation(libs.findLibrary("kotlinx-io-core").get())
+                    implementation(libs.findLibrary("kotlinx-io-bytestring").get())
                 }
 
                 val androidMain = maybeCreate("androidMain")
