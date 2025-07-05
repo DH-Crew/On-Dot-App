@@ -2,7 +2,9 @@ package com.dh.ondot.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,43 +29,58 @@ fun RoundedTextField(
     enabled: Boolean = true,
     maxLength: Int = 5,
     maxLines: Int = 1,
+    icon: @Composable (() -> Unit)? = null,
+    readOnly: Boolean = false,
+    onClickWhenReadOnly: () -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(
         keyboardType = KeyboardType.Number
     )
 ) {
-    BasicTextField(
-        value = value,
-        onValueChange = {
-            if (it.length <= maxLength) onValueChange(it)
-        },
-        enabled = enabled,
-        singleLine = true,
-        textStyle = OnDotTypo().bodyLargeR1.copy(color = OnDotColor.Gray0),
-        keyboardOptions = keyboardOptions,
-        cursorBrush = SolidColor(OnDotColor.Gray0),
-        decorationBox = { innerTextField ->
-            Box(
-                modifier = modifier
-                    .background(color = OnDotColor.Gray700, shape = RoundedCornerShape(12.dp))
-                    .border(
-                        width = 1.dp,
-                        color = OnDotColor.Gray600,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .defaultMinSize(minWidth = 64.dp),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                if (value.isEmpty()) {
-                    OnDotText(
-                        text = placeholder,
-                        color = OnDotColor.Gray300,
-                        style = OnDotTextStyle.BodyLargeR1,
-                        maxLines = maxLines
-                    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        icon?.invoke()
+
+        BasicTextField(
+            value = value,
+            onValueChange = {
+                if (it.length <= maxLength) onValueChange(it)
+            },
+            enabled = enabled,
+            singleLine = true,
+            textStyle = OnDotTypo().bodyLargeR1.copy(color = OnDotColor.Gray0),
+            keyboardOptions = keyboardOptions,
+            cursorBrush = SolidColor(OnDotColor.Gray0),
+            readOnly = readOnly,
+            modifier = Modifier
+                .clickable(enabled = readOnly) {
+                    if (readOnly) { onClickWhenReadOnly() }
+                },
+            decorationBox = { innerTextField ->
+                Box(
+                    modifier = modifier
+                        .background(color = OnDotColor.Gray700, shape = RoundedCornerShape(12.dp))
+                        .border(
+                            width = 1.dp,
+                            color = OnDotColor.Gray600,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .defaultMinSize(minWidth = 64.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (value.isEmpty()) {
+                        OnDotText(
+                            text = placeholder,
+                            color = OnDotColor.Gray300,
+                            style = OnDotTextStyle.BodyLargeR1,
+                            maxLines = maxLines
+                        )
+                    }
+
+                    innerTextField()
                 }
-                innerTextField()
             }
-        }
-    )
+        )
+    }
 }
