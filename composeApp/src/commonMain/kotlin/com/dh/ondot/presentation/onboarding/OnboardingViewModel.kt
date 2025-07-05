@@ -27,6 +27,7 @@ class OnboardingViewModel(
         when (uiState.value.currentStep) {
             1 -> {
                 updateState(uiState.value.copy(currentStep = 2))
+                calculatePreparationTime()
             }
             2 -> {
                 updateState(uiState.value.copy(currentStep = 3))
@@ -53,5 +54,13 @@ class OnboardingViewModel(
     // minuteInput의 변화를 반영하는 콜백 메서드
     fun onMinuteInputChanged(minuteInput: String) {
         updateState(uiState.value.copy(minuteInput = minuteInput))
+    }
+
+    private fun calculatePreparationTime() {
+        val hour = uiState.value.hourInput.toIntOrNull() ?: 0
+        val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
+
+        val totalMinutes = hour * 60 + minute
+        updateState(uiState.value.copy(preparationTime = totalMinutes))
     }
 }
