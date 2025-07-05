@@ -8,30 +8,44 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.ui.extensions.styles
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
+import com.dh.ondot.presentation.ui.theme.OnDotColor
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun OnDotButton(
     buttonText: String,
     buttonType: ButtonType,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Box(
-        modifier = Modifier
-            .padding(horizontal = 22.dp)
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
             .background(color = buttonType.styles().backgroundColor, shape = RoundedCornerShape(12.dp))
+            .drawBehind {
+                if (buttonType != ButtonType.Gradient) return@drawBehind
+
+                val width = 1.dp.toPx()
+                val cornerRadius = 12.dp.toPx()
+                drawRoundRect(
+                    brush = OnDotColor.Gradient,
+                    style = Stroke(width = width),
+                    cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+                )
+            }
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
