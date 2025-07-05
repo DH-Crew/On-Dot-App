@@ -10,7 +10,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import platform.Foundation.NSLog
 
 actual fun httpClient(): HttpClient = HttpClient(Darwin) {
     install(ContentNegotiation) {
@@ -24,7 +23,7 @@ actual fun httpClient(): HttpClient = HttpClient(Darwin) {
 
     install(Logging) {
         logger = object : Logger {
-            override fun log(message: String) = NSLog("Ktor ▶ %@", message)
+            override fun log(message: String) = println("Ktor ▶ $message")
         }
         level = LogLevel.ALL
     }
