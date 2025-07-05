@@ -19,10 +19,12 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun TopBar(
-    type: TopBarType = TopBarType.BACK
+    type: TopBarType = TopBarType.BACK,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         Spacer(modifier = Modifier.height(50.dp))
         Row(

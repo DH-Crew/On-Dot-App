@@ -33,7 +33,7 @@ fun OnboardingStep1(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = 19.dp),
+            .padding(horizontal = 22.dp),
         horizontalAlignment = Alignment.Start
     ) {
         OnDotHighlightText(

@@ -27,10 +27,11 @@ import org.jetbrains.compose.resources.painterResource
 fun OnDotButton(
     buttonText: String,
     buttonType: ButtonType,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
             .background(color = buttonType.styles().backgroundColor, shape = RoundedCornerShape(12.dp))
