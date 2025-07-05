@@ -17,7 +17,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
         val properties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
         }
-        val kakaoKey = properties.getProperty("KAKAO_APP_KEY")
+        val kakaoKey = properties.getProperty("KAKAO_APP_KEY") ?: error("KAKAO_APP_KEY not found in local.properties")
 
         extensions.configure<ApplicationExtension> {
             namespace = "com.dh.ondot"
