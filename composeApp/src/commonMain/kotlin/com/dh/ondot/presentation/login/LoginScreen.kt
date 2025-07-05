@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,17 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = viewModel { LoginViewModel() }
+    viewModel: LoginViewModel = viewModel { LoginViewModel() },
+    navigateToOnboarding: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect {
+            when (it) {
+                is LoginEvent.NavigateToOnboarding -> navigateToOnboarding()
+            }
+        }
+    }
+
     LoginContent(
         onKakaoLogin = { viewModel.onKakaoLogin() }
     )
@@ -73,6 +83,7 @@ fun LoginButtons(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 22.dp)
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
