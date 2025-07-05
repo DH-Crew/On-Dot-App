@@ -70,6 +70,9 @@ kmp-spm = "0.3.3"
 # Kakao-Login
 kakao-login = "2.19.0"
 
+# kotlinx-io
+kotlinx-io = "0.3.0"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -169,3 +172,7 @@ compottie-network              = { module = "io.github.alexzhirkevich:compottie-
 
 # Kakao-Login
 kakao-login                    = { module = "com.kakao.sdk:v2-user", version.ref = "kakao-login" }
+
+# kotlinx-io
+kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
+kotlinx-io-bytestring = { module = "org.jetbrains.kotlinx:kotlinx-io-bytestring", version.ref = "kotlinx-io" }
