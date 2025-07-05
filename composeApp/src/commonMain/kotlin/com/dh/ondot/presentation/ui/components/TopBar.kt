@@ -1,6 +1,7 @@
 package com.dh.ondot.presentation.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +21,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TopBar(
     type: TopBarType = TopBarType.BACK,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -35,7 +37,9 @@ fun TopBar(
             Image(
                 painter = painterResource(if (type == TopBarType.BACK) Res.drawable.ic_back else Res.drawable.ic_close),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable { onClick() }
             )
 
             Spacer(modifier = Modifier.weight(1f))
