@@ -11,5 +11,9 @@ import ondot.composeapp.generated.resources.ic_kakao
 fun ButtonType.styles(): ButtonStyle {
     return when(this) {
         ButtonType.Kakao -> ButtonStyle(backgroundColor = OnDotColor.Kakao, fontColor = OnDotColor.Gray900, drawableResource = Res.drawable.ic_kakao)
+        ButtonType.Green500 -> ButtonStyle(backgroundColor = OnDotColor.Green500, fontColor = OnDotColor.Gray900)
+        ButtonType.Green600 -> ButtonStyle(backgroundColor = OnDotColor.Green600, fontColor = OnDotColor.Gray900)
+        ButtonType.Gray300 -> ButtonStyle(backgroundColor = OnDotColor.Gray300, fontColor = OnDotColor.Gray900)
+        ButtonType.Gradient -> ButtonStyle(backgroundColor = OnDotColor.Gray700, fontColor = OnDotColor.Gray0)
     }
 }
