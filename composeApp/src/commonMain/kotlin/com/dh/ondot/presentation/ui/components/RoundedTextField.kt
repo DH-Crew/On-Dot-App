@@ -5,8 +5,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,51 +38,53 @@ fun RoundedTextField(
         keyboardType = KeyboardType.Number
     )
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        modifier = modifier
+            .background(color = OnDotColor.Gray700, shape = RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = OnDotColor.Gray600,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .defaultMinSize(minWidth = 64.dp),
+        contentAlignment = Alignment.CenterStart
     ) {
-        icon?.invoke()
-
-        BasicTextField(
-            value = value,
-            onValueChange = {
-                if (it.length <= maxLength) onValueChange(it)
-            },
-            enabled = enabled,
-            singleLine = true,
-            textStyle = OnDotTypo().bodyLargeR1.copy(color = OnDotColor.Gray0),
-            keyboardOptions = keyboardOptions,
-            cursorBrush = SolidColor(OnDotColor.Gray0),
-            readOnly = readOnly,
-            modifier = Modifier
-                .clickable(enabled = readOnly) {
-                    if (readOnly) { onClickWhenReadOnly() }
-                },
-            decorationBox = { innerTextField ->
-                Box(
-                    modifier = modifier
-                        .background(color = OnDotColor.Gray700, shape = RoundedCornerShape(12.dp))
-                        .border(
-                            width = 1.dp,
-                            color = OnDotColor.Gray600,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .defaultMinSize(minWidth = 64.dp),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    if (value.isEmpty()) {
-                        OnDotText(
-                            text = placeholder,
-                            color = OnDotColor.Gray300,
-                            style = OnDotTextStyle.BodyLargeR1,
-                            maxLines = maxLines
-                        )
-                    }
-
-                    innerTextField()
-                }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            icon?.let {
+                it.invoke()
+                Spacer(modifier = Modifier.width(8.dp))
             }
-        )
+
+            Box {
+                if (value.isEmpty()) {
+                    OnDotText(
+                        text = placeholder,
+                        color = OnDotColor.Gray300,
+                        style = OnDotTextStyle.BodyLargeR1,
+                        maxLines = maxLines
+                    )
+                }
+
+                BasicTextField(
+                    value = value,
+                    onValueChange = {
+                        if (it.length <= maxLength) onValueChange(it)
+                    },
+                    enabled = enabled,
+                    singleLine = true,
+                    textStyle = OnDotTypo().bodyLargeR1.copy(color = OnDotColor.Gray0),
+                    keyboardOptions = keyboardOptions,
+                    cursorBrush = SolidColor(OnDotColor.Gray0),
+                    readOnly = readOnly,
+                    modifier = Modifier
+                        .clickable(enabled = readOnly) {
+                            if (readOnly) { onClickWhenReadOnly() }
+                        }
+                )
+            }
+        }
     }
 }
