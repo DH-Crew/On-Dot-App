@@ -1,5 +1,9 @@
 package com.dh.ondot
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +25,30 @@ fun App() {
             NavHost(
                 navController = navController,
                 startDestination = NavRoutes.SplashGraph.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    )
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    )
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    )
+                },
                 modifier = Modifier.fillMaxSize()
             ) {
                 splashNavGraph(navController = navController)
