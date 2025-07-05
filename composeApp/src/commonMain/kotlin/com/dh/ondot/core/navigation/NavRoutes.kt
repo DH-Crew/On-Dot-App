@@ -8,4 +8,8 @@ sealed class NavRoutes(val route: String) {
     // Login
     data object LoginGraph: NavRoutes("loginGraph")
     data object Login: NavRoutes("login")
+
+    // Onboarding
+    data object OnboardingGraph: NavRoutes("onboardingGraph")
+    data object Onboarding: NavRoutes("onboarding")
 }
