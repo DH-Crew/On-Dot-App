@@ -71,7 +71,9 @@ fun OnDotHighlightText(
                 append(text.substring(startIndex + highlight.length))
             }
         } else {
-            append(text)
+            withStyle(SpanStyle(color = textColor)) {
+                append(text)
+            }
         }
     }
 
