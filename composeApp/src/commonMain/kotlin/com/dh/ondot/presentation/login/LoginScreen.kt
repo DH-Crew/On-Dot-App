@@ -84,6 +84,7 @@ fun LoginButtons(
 
         if (getPlatform().name == IOS) {
             // TODO: Apple Login Button
+            Spacer(modifier = Modifier.height(21.dp))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
