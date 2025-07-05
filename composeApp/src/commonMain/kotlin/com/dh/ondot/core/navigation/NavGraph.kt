@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dh.ondot.presentation.login.LoginScreen
+import com.dh.ondot.presentation.onboarding.OnboardingScreen
 import com.dh.ondot.presentation.splash.SplashScreen
 
 fun NavGraphBuilder.splashNavGraph(navController: NavHostController) {
@@ -32,7 +33,25 @@ fun NavGraphBuilder.loginNavGraph(navController: NavHostController) {
         route = NavRoutes.LoginGraph.route
     ) {
         composable(NavRoutes.Login.route) {
-            LoginScreen()
+            LoginScreen(
+                navigateToOnboarding = {
+                    navController.navigate(NavRoutes.Onboarding.route) {
+                        popUpTo(NavRoutes.Login.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.onboardingNavGraph(navController: NavHostController) {
+    navigation(
+        startDestination = NavRoutes.Onboarding.route,
+        route = NavRoutes.OnboardingGraph.route
+    ) {
+        composable(NavRoutes.Onboarding.route) {
+            OnboardingScreen()
         }
     }
 }
