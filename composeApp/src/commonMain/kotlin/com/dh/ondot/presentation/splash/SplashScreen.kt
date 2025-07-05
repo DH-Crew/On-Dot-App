@@ -14,21 +14,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.di.provideTokenProvider
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
+import kotlinx.coroutines.delay
 import ondot.composeapp.generated.resources.Res
 
 @Composable
 fun SplashScreen(
-    viewModel: SplashViewModel = viewModel {
-        SplashViewModel(
-            tokenProvider = provideTokenProvider()
-        )
-    }
+    viewModel: SplashViewModel = viewModel { SplashViewModel() },
+    navigateToLogin: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val composition by rememberLottieComposition {
@@ -38,6 +35,11 @@ fun SplashScreen(
         composition,
         iterations = Compottie.IterateForever
     )
+
+    LaunchedEffect(Unit) {
+        delay(2000L)
+        navigateToLogin()
+    }
 
     Box(
         modifier = Modifier
