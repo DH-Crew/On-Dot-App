@@ -10,7 +10,7 @@ object ServiceLocator {
     private lateinit var networkClient: NetworkClient
 
     val authRepository: AuthRepository by lazy {
-        AuthRepositoryImpl(networkClient)
+        AuthRepositoryImpl(networkClient, tokenProvider)
     }
 
     fun init(tokenProvider: TokenProvider) {
