@@ -81,6 +81,11 @@ class OnboardingViewModel(
     }
 
     private fun searchPlace(query: String) {
+        if (query.isBlank()) {
+            updateState(uiState.value.copy(addressList = emptyList()))
+            return
+        }
+
         viewModelScope.launch {
             placeRepository.searchPlace(query).collect {
                 resultResponse(it, ::onSuccessSearchPlace)
@@ -96,7 +101,8 @@ class OnboardingViewModel(
         updateState(
             uiState.value.copy(
                 addressInput = info.title,
-                selectedAddress = info
+                selectedAddress = info,
+                addressList = emptyList()
             )
         )
     }
