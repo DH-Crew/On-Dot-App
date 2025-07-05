@@ -1,6 +1,5 @@
 package com.dh.ondot.data.repository
 
-import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.data.model.TokenModel
 import com.dh.ondot.domain.model.response.AuthResponse
 import com.dh.ondot.domain.repository.AuthRepository
@@ -11,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class AuthRepositoryImpl(
-    private val networkClient: NetworkClient = ServiceLocator.provideNetworkClient(),
-    private val tokenProvider: TokenProvider = ServiceLocator.provideTokenProvider()
+    private val networkClient: NetworkClient,
+    private val tokenProvider: TokenProvider
 ): AuthRepository {
     override suspend fun login(provider: String, accessToken: String): Flow<Result<AuthResponse>> = flow {
         val response = networkClient.request<AuthResponse>(
