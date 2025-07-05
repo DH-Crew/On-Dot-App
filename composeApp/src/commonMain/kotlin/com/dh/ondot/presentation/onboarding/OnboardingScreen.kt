@@ -14,8 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.domain.model.enums.ButtonType
+import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep1
+import com.dh.ondot.presentation.onboarding.step.OnboardingStep2
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.components.StepProgressIndicator
 import com.dh.ondot.presentation.ui.components.TopBar
@@ -38,7 +40,9 @@ fun OnboardingScreen(
         isButtonEnabled = viewModel.isButtonEnabled(),
         onClickNext = { viewModel.onClickNext() },
         onHourInputChanged = { viewModel.onHourInputChanged(it) },
-        onMinuteInputChanged = { viewModel.onMinuteInputChanged(it) }
+        onMinuteInputChanged = { viewModel.onMinuteInputChanged(it) },
+        onAddressInputChanged = { viewModel.onAddressInputChanged(it) },
+        onClickPlace = { viewModel.onClickPlace(it) }
     )
 }
 
@@ -48,19 +52,24 @@ fun OnboardingContent(
     isButtonEnabled: Boolean = false,
     onClickNext: () -> Unit,
     onHourInputChanged: (String) -> Unit,
-    onMinuteInputChanged: (String) -> Unit
+    onMinuteInputChanged: (String) -> Unit,
+    onAddressInputChanged: (String) -> Unit,
+    onClickPlace: (AddressInfo) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(OnDotColor.Gray900)
-            .padding(horizontal = 22.dp)
     ) {
-        TopBar()
+        TopBar(modifier = Modifier.padding(horizontal = 22.dp))
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        StepProgressIndicator(totalStep = uiState.totalStep, currentStep = uiState.currentStep)
+        StepProgressIndicator(
+            totalStep = uiState.totalStep,
+            currentStep = uiState.currentStep,
+            modifier = Modifier.padding(horizontal = 22.dp)
+        )
 
         Spacer(modifier = Modifier.height(34.dp))
 
@@ -71,7 +80,12 @@ fun OnboardingContent(
                 onHourInputChanged = onHourInputChanged,
                 onMinuteInputChanged = onMinuteInputChanged
             )
-            2 -> TODO("OnboardingStep2()")
+            2 -> OnboardingStep2(
+                addressInput = uiState.addressInput,
+                onAddressInputChanged = onAddressInputChanged,
+                addressList = uiState.addressList,
+                onClickPlace = onClickPlace
+            )
             3 -> TODO("OnboardingStep3()")
             4 -> TODO("OnboardingStep4()")
             5 -> TODO("OnboardingStep5()")
@@ -82,6 +96,7 @@ fun OnboardingContent(
         OnDotButton(
             buttonText = WORD_NEXT,
             buttonType = if (isButtonEnabled) ButtonType.Green500 else ButtonType.Gray300,
+            modifier = Modifier.padding(horizontal = 22.dp),
             onClick = {
                 if (isButtonEnabled) {
                     onClickNext()
