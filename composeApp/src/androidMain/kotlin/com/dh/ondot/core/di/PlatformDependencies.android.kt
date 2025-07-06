@@ -1,5 +1,7 @@
 package com.dh.ondot.core.di
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.Composable
 import com.dh.ondot.core.util.AndroidSoundPlayer
 import com.dh.ondot.domain.di.SoundPlayer
 import com.dh.ondot.network.TokenProvider
@@ -15,4 +17,11 @@ actual fun provideSoundPlayer(): SoundPlayer {
     val context = runCatching { AppContextHolder.context }
         .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
     return AndroidSoundPlayer(context)
+}
+
+@Composable
+actual fun BackPressHandler(onBack: () -> Unit) {
+    BackHandler {
+        onBack()
+    }
 }
