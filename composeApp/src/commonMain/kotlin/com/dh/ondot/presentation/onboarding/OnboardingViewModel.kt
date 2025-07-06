@@ -193,7 +193,7 @@ class OnboardingViewModel(
             val soundCategory = when(uiState.value.selectedCategoryIndex) {
                 0 -> SoundCategory.BRIGHT_ENERGY
                 1 -> SoundCategory.FAST_INTENSE
-                else -> { SoundCategory.BRIGHT_ENERGY }
+                else -> SoundCategory.BRIGHT_ENERGY
             }
 
             val request = OnboardingRequest(
