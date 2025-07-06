@@ -2,13 +2,16 @@ package com.dh.ondot.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.domain.di.SoundPlayer
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.repository.PlaceRepository
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository
+    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository,
+    private val soundPlayer: SoundPlayer = provideSoundPlayer()
 ): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
     fun initStep() {
@@ -25,6 +28,9 @@ class OnboardingViewModel(
             }
             2 -> {
                 uiState.value.selectedAddress != null
+            }
+            3 -> {
+                uiState.value.isMuted || uiState.value.selectedSound != null
             }
             else -> {
                 false
@@ -107,5 +113,30 @@ class OnboardingViewModel(
                 addressList = emptyList()
             )
         )
+    }
+
+    // ----------------------------------------- OnboardingStep3 ----------------------------
+
+    fun onToggleMute(newValue: Boolean) {
+        updateState(uiState.value.copy(isMuted = newValue))
+        if (newValue) { soundPlayer.stopSound() }
+    }
+
+    fun onCategorySelected(newIndex: Int) {
+        updateState(
+            uiState.value.copy(
+                selectedCategoryIndex = newIndex,
+                filteredSounds = uiState.value.sounds.filter { it.category == uiState.value.categories[newIndex] }
+            )
+        )
+    }
+
+    fun onSelectSound(newSoundId: String) {
+        updateState(uiState.value.copy(selectedSound = newSoundId))
+//        soundPlayer.playSound(newSoundId)
+    }
+
+    fun onVolumeChange(newVolume: Float) {
+        updateState(uiState.value.copy(volume = newVolume))
     }
 }
