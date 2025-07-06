@@ -13,6 +13,7 @@ const val WORD_MUTE = "무음"
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
 const val CATEGORY_BRIGHT_ENERGY = "밝은 에너지"
+const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
