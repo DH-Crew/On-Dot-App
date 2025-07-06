@@ -13,6 +13,7 @@ class OnboardingViewModel(
     private val placeRepository: PlaceRepository = ServiceLocator.placeRepository,
     private val soundPlayer: SoundPlayer = provideSoundPlayer()
 ): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
+
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
     fun initStep() {
         updateState(uiState.value.copy(currentStep = 1, totalStep = 5))
@@ -57,6 +58,28 @@ class OnboardingViewModel(
             }
             5 -> {
                 // TODO: 온보딩 완료 로직
+            }
+        }
+    }
+
+    // 뒤로가기 버튼을 클릭했을 때 호출되는 메서드
+    fun onClickBack() {
+        when (uiState.value.currentStep) {
+            2 -> {
+                updateState(uiState.value.copy(currentStep = 1))
+            }
+            3 -> {
+                updateState(uiState.value.copy(currentStep = 2))
+                soundPlayer.stopSound()
+            }
+            4 -> {
+                updateState(uiState.value.copy(currentStep = 3))
+            }
+            5 -> {
+                updateState(uiState.value.copy(currentStep = 4))
+            }
+            else -> {
+                return
             }
         }
     }
