@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.dh.ondot.core.navigation.NavRoutes
 import com.dh.ondot.core.navigation.loginNavGraph
+import com.dh.ondot.core.navigation.mainNavGraph
 import com.dh.ondot.core.navigation.onboardingNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
@@ -59,6 +60,7 @@ fun App() {
                     splashNavGraph(navController = navController)
                     loginNavGraph(navController = navController)
                     onboardingNavGraph(navController = navController)
+                    mainNavGraph(navController = navController)
                 }
 
                 ToastHost()
