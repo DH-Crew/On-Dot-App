@@ -18,6 +18,7 @@ import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep1
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep2
+import com.dh.ondot.presentation.onboarding.step.OnboardingStep3
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.components.StepProgressIndicator
 import com.dh.ondot.presentation.ui.components.TopBar
@@ -42,7 +43,11 @@ fun OnboardingScreen(
         onHourInputChanged = { viewModel.onHourInputChanged(it) },
         onMinuteInputChanged = { viewModel.onMinuteInputChanged(it) },
         onAddressInputChanged = { viewModel.onAddressInputChanged(it) },
-        onClickPlace = { viewModel.onClickPlace(it) }
+        onClickPlace = { viewModel.onClickPlace(it) },
+        onToggleMute = { viewModel.onToggleMute(it) },
+        onCategorySelected = { viewModel.onCategorySelected(it) },
+        onSelectSound = { viewModel.onSelectSound(it) },
+        onVolumeChange = { viewModel.onVolumeChange(it) }
     )
 }
 
@@ -54,7 +59,11 @@ fun OnboardingContent(
     onHourInputChanged: (String) -> Unit,
     onMinuteInputChanged: (String) -> Unit,
     onAddressInputChanged: (String) -> Unit,
-    onClickPlace: (AddressInfo) -> Unit
+    onClickPlace: (AddressInfo) -> Unit,
+    onToggleMute: (Boolean) -> Unit,
+    onCategorySelected: (Int) -> Unit,
+    onSelectSound: (String) -> Unit,
+    onVolumeChange: (Float) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -86,7 +95,18 @@ fun OnboardingContent(
                 addressList = uiState.addressList,
                 onClickPlace = onClickPlace
             )
-            3 -> TODO("OnboardingStep3()")
+            3 -> OnboardingStep3(
+                isMuted = uiState.isMuted,
+                categories = uiState.categories,
+                selectedCategoryIndex = uiState.selectedCategoryIndex,
+                filteredSounds = uiState.filteredSounds,
+                selectedSoundId = uiState.selectedSound,
+                volume = uiState.volume,
+                onToggleMute = onToggleMute,
+                onCategorySelected = onCategorySelected,
+                onSelectSound = onSelectSound,
+                onVolumeChange = onVolumeChange,
+            )
             4 -> TODO("OnboardingStep4()")
             5 -> TODO("OnboardingStep5()")
         }

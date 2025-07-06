@@ -8,6 +8,11 @@ const val IOS = "IOS"
 const val WORD_NEXT = "다음"
 const val WORD_HOUR = "시간"
 const val WORD_MINUTE = "분"
+const val WORD_MUTE = "무음"
+
+// 알람 카테고리
+const val CATEGORY_GENERAL = "기본"
+const val CATEGORY_BRIGHT_ENERGY = "밝은 에너지"
 
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
@@ -22,3 +27,7 @@ const val ONBOARDING2_TITLE = "주소를 입력해 주세요."
 const val ONBOARDING2_TITLE_HIGHLIGHT = "주소"
 const val ONBOARDING2_SUB_TITLE = "빠른 일정 등록에 꼭 필요한 정보예요. \n집 주소는 안전하게 저장되며 언제든 수정할 수 있어요."
 const val ONBOARDING2_PLACEHOLDER = "도로명 주소"
+
+const val ONBOARDING3_TITLE = "알람의 초기 사운드를 설정해 주세요."
+const val ONBOARDING3_TITLE_HIGHLIGHT = "알람의 초기 사운드"
+const val ONBOARDING3_SUB_TITLE = "추후에 마이페이지에서 수정할 수 있어요."

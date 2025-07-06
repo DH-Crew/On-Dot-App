@@ -77,6 +77,7 @@ fun OnboardingStep2(
                 onValueChange = onAddressInputChanged,
                 placeholder = ONBOARDING2_PLACEHOLDER,
                 modifier = Modifier.fillMaxWidth(),
+                maxLength = 100,
                 icon = {
                     Image(
                         painter = painterResource(Res.drawable.ic_search),
