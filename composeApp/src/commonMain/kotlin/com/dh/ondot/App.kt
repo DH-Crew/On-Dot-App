@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +15,7 @@ import com.dh.ondot.core.navigation.loginNavGraph
 import com.dh.ondot.core.navigation.onboardingNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
+import com.dh.ondot.core.ui.util.ToastHost
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 
 @Composable
@@ -22,38 +24,44 @@ fun App() {
 
     OnDotTheme {
         DismissKeyboardOnClick {
-            NavHost(
-                navController = navController,
-                startDestination = NavRoutes.SplashGraph.route,
-                enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> fullWidth },
-                        animationSpec = tween(300, easing = FastOutSlowInEasing)
-                    )
-                },
-                exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> -fullWidth },
-                        animationSpec = tween(300, easing = FastOutSlowInEasing)
-                    )
-                },
-                popEnterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> -fullWidth },
-                        animationSpec = tween(300, easing = FastOutSlowInEasing)
-                    )
-                },
-                popExitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> fullWidth },
-                        animationSpec = tween(300, easing = FastOutSlowInEasing)
-                    )
-                },
+            Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                splashNavGraph(navController = navController)
-                loginNavGraph(navController = navController)
-                onboardingNavGraph(navController = navController)
+                NavHost(
+                    navController = navController,
+                    startDestination = NavRoutes.SplashGraph.route,
+                    enterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> fullWidth },
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        )
+                    },
+                    exitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        )
+                    },
+                    popEnterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> -fullWidth },
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> fullWidth },
+                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                        )
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    splashNavGraph(navController = navController)
+                    loginNavGraph(navController = navController)
+                    onboardingNavGraph(navController = navController)
+                }
+
+                ToastHost()
             }
         }
     }
