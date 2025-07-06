@@ -4,14 +4,24 @@ import androidx.lifecycle.viewModelScope
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.data.model.TokenModel
 import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.model.enums.AlarmMode
+import com.dh.ondot.domain.model.enums.RingTone
+import com.dh.ondot.domain.model.enums.SoundCategory
+import com.dh.ondot.domain.model.request.OnboardingRequest
+import com.dh.ondot.domain.model.request.QuestionAnswer
 import com.dh.ondot.domain.model.response.AddressInfo
+import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
+import com.dh.ondot.network.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
     private val placeRepository: PlaceRepository = ServiceLocator.placeRepository,
-    private val soundPlayer: SoundPlayer = provideSoundPlayer()
+    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
+    private val soundPlayer: SoundPlayer = provideSoundPlayer(),
+    private val tokenProvider: TokenProvider = ServiceLocator.provideTokenProvider()
 ): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
 
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
@@ -52,12 +62,13 @@ class OnboardingViewModel(
             }
             3 -> {
                 updateState(uiState.value.copy(currentStep = 4))
+                soundPlayer.stopSound()
             }
             4 -> {
                 updateState(uiState.value.copy(currentStep = 5))
             }
             5 -> {
-                // TODO: 온보딩 완료 로직
+                completeOnboarding()
             }
         }
     }
@@ -157,7 +168,7 @@ class OnboardingViewModel(
 
     fun onSelectSound(newSoundId: String) {
         updateState(uiState.value.copy(selectedSound = newSoundId))
-//        soundPlayer.playSound(newSoundId)
+        soundPlayer.playSound(newSoundId)
     }
 
     fun onVolumeChange(newVolume: Float) {
@@ -173,5 +184,47 @@ class OnboardingViewModel(
     // ----------------------------------------- OnboardingStep5 ----------------------------
     fun onClickAnswer2(index: Int) {
         updateState(uiState.value.copy(selectedAnswer2Index = index))
+    }
+
+    private fun completeOnboarding() {
+        viewModelScope.launch {
+            val soundCategory = when(uiState.value.selectedCategoryIndex) {
+                0 -> SoundCategory.BRIGHT_ENERGY
+                1 -> SoundCategory.FAST_INTENSE
+                else -> { SoundCategory.BRIGHT_ENERGY }
+            }
+
+            val request = OnboardingRequest(
+                preparationTime = uiState.value.preparationTime,
+                roadAddress = uiState.value.selectedAddress?.roadAddress ?: "",
+                longitude = uiState.value.selectedAddress?.longitude ?: 0.0,
+                latitude = uiState.value.selectedAddress?.latitude ?: 0.0,
+                alarmMode = AlarmMode.SOUND,
+                isSnoozeEnabled = true,
+                snoozeInterval = 1,
+                snoozeCount = 3,
+                soundCategory = soundCategory,
+                ringTone = RingTone.getNameById(uiState.value.selectedSound ?: ""),
+                volume = uiState.value.volume,
+                questions = listOf(
+                    QuestionAnswer(
+                        questionId = 1,
+                        answerId = uiState.value.answer1[uiState.value.selectedAnswer1Index].id
+                    ),
+                    QuestionAnswer(
+                        questionId = 2,
+                        answerId = uiState.value.answer2[uiState.value.selectedAnswer2Index].id
+                    )
+                )
+            )
+
+            memberRepository.completeOnboarding(request).collect {
+                resultResponse(it, ::onSuccessCompleteOnboarding)
+            }
+        }
+    }
+
+    private fun onSuccessCompleteOnboarding(result: TokenModel) {
+        viewModelScope.launch { tokenProvider.saveToken(result) }
     }
 }

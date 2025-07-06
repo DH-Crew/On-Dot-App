@@ -1,12 +1,12 @@
 package com.dh.ondot.presentation.onboarding
 
 import com.dh.ondot.core.ui.base.UiState
-import com.dh.ondot.core.util.SoundRes
+import com.dh.ondot.domain.model.enums.RingTone
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.ui.AlarmSound
 import com.dh.ondot.domain.model.ui.OnboardingAnswer
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
-import com.dh.ondot.presentation.ui.theme.CATEGORY_GENERAL
+import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE
 
 data class OnboardingUiState(
     val currentStep: Int = 0,
@@ -26,10 +26,19 @@ data class OnboardingUiState(
     // Step3
     val isMuted: Boolean = false,
     val selectedCategoryIndex: Int = 0,
-    val categories: List<String> = listOf(CATEGORY_GENERAL, CATEGORY_BRIGHT_ENERGY),
+    val categories: List<String> = listOf(CATEGORY_BRIGHT_ENERGY, CATEGORY_FAST_INTENSE),
     val sounds: List<AlarmSound> = listOf(
-        AlarmSound(SoundRes.DANCING, "Stardust", CATEGORY_BRIGHT_ENERGY),
-        AlarmSound(SoundRes.RINGTONE, "Ringtone", CATEGORY_GENERAL),
+        AlarmSound(RingTone.DANCING_IN_THE_STARDUST.id, "Dancing In The Stardust", CATEGORY_BRIGHT_ENERGY),
+        AlarmSound(RingTone.IN_THE_CITY_LIGHTS_MIST.id, "In The City Lights Mist", CATEGORY_BRIGHT_ENERGY),
+        AlarmSound(RingTone.FRACTURED_LOVE.id, "Fractured Love", CATEGORY_BRIGHT_ENERGY),
+        AlarmSound(RingTone.CHASING_LIGHTS.id, "Chasing Lights", CATEGORY_BRIGHT_ENERGY),
+        AlarmSound(RingTone.ASHES_OF_US.id, "Ashes of Us", CATEGORY_BRIGHT_ENERGY),
+        AlarmSound(RingTone.HEATING_SUN.id, "Heating Sun", CATEGORY_BRIGHT_ENERGY),
+        AlarmSound(RingTone.MEDAL.id, "Medal", CATEGORY_FAST_INTENSE),
+        AlarmSound(RingTone.EXCITING_SPORTS_COMPETITIONS.id, "Exciting Sports Competitions", CATEGORY_FAST_INTENSE),
+        AlarmSound(RingTone.POSITIVE_WAY.id, "Positive Way", CATEGORY_FAST_INTENSE),
+        AlarmSound(RingTone.ENERGETIC_HAPPY_UPBEAT_ROCK_MUSIC.id, "Energetic Happy Upbeat Rock Music", CATEGORY_FAST_INTENSE),
+        AlarmSound(RingTone.ENERGY_CATCHER.id, "Energy Catcher", CATEGORY_FAST_INTENSE)
     ),
     val filteredSounds: List<AlarmSound> = sounds.filter { it.category == categories[selectedCategoryIndex] },
     val selectedSound: String? = null,
