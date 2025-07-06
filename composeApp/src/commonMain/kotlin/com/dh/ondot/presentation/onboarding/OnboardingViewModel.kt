@@ -4,11 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.data.model.TokenModel
 import com.dh.ondot.domain.di.SoundPlayer
 import com.dh.ondot.domain.model.enums.AlarmMode
 import com.dh.ondot.domain.model.enums.RingTone
 import com.dh.ondot.domain.model.enums.SoundCategory
+import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.request.OnboardingRequest
 import com.dh.ondot.domain.model.request.QuestionAnswer
 import com.dh.ondot.domain.model.response.AddressInfo
@@ -219,12 +221,18 @@ class OnboardingViewModel(
             )
 
             memberRepository.completeOnboarding(request).collect {
-                resultResponse(it, ::onSuccessCompleteOnboarding)
+                resultResponse(it, ::onSuccessCompleteOnboarding, ::onFailedCompleteOnboarding)
             }
         }
     }
 
     private fun onSuccessCompleteOnboarding(result: TokenModel) {
         viewModelScope.launch { tokenProvider.saveToken(result) }
+    }
+
+    private fun onFailedCompleteOnboarding(e: Throwable) {
+        viewModelScope.launch {
+            ToastManager.show(message = "온보딩 과정에서 에러가 발생했습니다.", ToastType.ERROR)
+        }
     }
 }
