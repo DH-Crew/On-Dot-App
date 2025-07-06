@@ -1,8 +1,10 @@
 package com.dh.ondot.core.di
 
 import com.dh.ondot.data.repository.AuthRepositoryImpl
+import com.dh.ondot.data.repository.MemberRepositoryImpl
 import com.dh.ondot.data.repository.PlaceRepositoryImpl
 import com.dh.ondot.domain.repository.AuthRepository
+import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.network.NetworkClient
 import com.dh.ondot.network.TokenProvider
@@ -17,6 +19,10 @@ object ServiceLocator {
 
     val placeRepository: PlaceRepository by lazy {
         PlaceRepositoryImpl(networkClient)
+    }
+
+    val memberRepository: MemberRepository by lazy {
+        MemberRepositoryImpl(networkClient)
     }
 
     fun init(tokenProvider: TokenProvider) {
