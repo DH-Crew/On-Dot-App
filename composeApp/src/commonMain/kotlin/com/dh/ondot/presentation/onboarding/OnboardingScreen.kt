@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dh.ondot.core.di.BackPressHandler
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.getPlatform
@@ -37,6 +38,8 @@ fun OnboardingScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
 
+    BackPressHandler { viewModel.onClickBack() }
+
     LaunchedEffect(uiState.totalStep) {
         if (uiState.totalStep == 0) viewModel.initStep()
     }
@@ -55,7 +58,8 @@ fun OnboardingScreen(
         onSelectSound = { viewModel.onSelectSound(it) },
         onVolumeChange = { viewModel.onVolumeChange(it) },
         onClickAnswer1 = { viewModel.onClickAnswer1(it) },
-        onClickAnswer2 = { viewModel.onClickAnswer2(it) }
+        onClickAnswer2 = { viewModel.onClickAnswer2(it) },
+        onClickBack = { viewModel.onClickBack() }
     )
 }
 
@@ -74,14 +78,18 @@ fun OnboardingContent(
     onSelectSound: (String) -> Unit,
     onVolumeChange: (Float) -> Unit,
     onClickAnswer1: (Int) -> Unit,
-    onClickAnswer2: (Int) -> Unit
+    onClickAnswer2: (Int) -> Unit,
+    onClickBack: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(OnDotColor.Gray900)
     ) {
-        TopBar(modifier = Modifier.padding(horizontal = 22.dp))
+        TopBar(
+            modifier = Modifier.padding(horizontal = 22.dp),
+            onClick = onClickBack
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
