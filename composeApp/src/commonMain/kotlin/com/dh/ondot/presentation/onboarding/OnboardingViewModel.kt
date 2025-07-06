@@ -32,6 +32,7 @@ class OnboardingViewModel(
             3 -> {
                 uiState.value.isMuted || uiState.value.selectedSound != null
             }
+            4, 5 -> true
             else -> {
                 false
             }
@@ -138,5 +139,16 @@ class OnboardingViewModel(
 
     fun onVolumeChange(newVolume: Float) {
         updateState(uiState.value.copy(volume = newVolume))
+    }
+
+    // ----------------------------------------- OnboardingStep4 ----------------------------
+
+    fun onClickAnswer1(index: Int) {
+        updateState(uiState.value.copy(selectedAnswer1Index = index))
+    }
+
+    // ----------------------------------------- OnboardingStep5 ----------------------------
+    fun onClickAnswer2(index: Int) {
+        updateState(uiState.value.copy(selectedAnswer2Index = index))
     }
 }
