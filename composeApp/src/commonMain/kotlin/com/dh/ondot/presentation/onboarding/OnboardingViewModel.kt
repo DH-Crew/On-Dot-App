@@ -196,11 +196,15 @@ class OnboardingViewModel(
                 else -> SoundCategory.BRIGHT_ENERGY
             }
 
+            val address = requireNotNull(uiState.value.selectedAddress) {
+                "OnboardingViewModel: selectedAddress가 null인 상태에서 변환을 시도했습니다."
+            }
+
             val request = OnboardingRequest(
                 preparationTime = uiState.value.preparationTime,
-                roadAddress = uiState.value.selectedAddress?.roadAddress ?: "",
-                longitude = uiState.value.selectedAddress?.longitude ?: 0.0,
-                latitude = uiState.value.selectedAddress?.latitude ?: 0.0,
+                roadAddress = address.roadAddress,
+                longitude = address.longitude,
+                latitude = address.latitude,
                 alarmMode = AlarmMode.SOUND,
                 isSnoozeEnabled = true,
                 snoozeInterval = 1,
