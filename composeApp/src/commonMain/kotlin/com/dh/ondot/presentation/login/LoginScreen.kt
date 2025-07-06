@@ -28,12 +28,14 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = viewModel { LoginViewModel() },
-    navigateToOnboarding: () -> Unit
+    navigateToOnboarding: () -> Unit,
+    navigateToMain: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect {
             when (it) {
                 is LoginEvent.NavigateToOnboarding -> navigateToOnboarding()
+                is LoginEvent.NavigateToMain -> navigateToMain()
             }
         }
     }
