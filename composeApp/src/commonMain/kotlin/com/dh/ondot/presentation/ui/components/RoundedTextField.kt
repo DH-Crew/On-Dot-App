@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +14,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -38,6 +42,9 @@ fun RoundedTextField(
         keyboardType = KeyboardType.Number
     )
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val interactionSource = remember { MutableInteractionSource() }
+
     Box(
         modifier = modifier
             .background(color = OnDotColor.Gray700, shape = RoundedCornerShape(12.dp))
@@ -47,7 +54,19 @@ fun RoundedTextField(
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(horizontal = 16.dp, vertical = 12.dp)
-            .defaultMinSize(minWidth = 64.dp),
+            .defaultMinSize(minWidth = 64.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled,
+                onClick = {
+                    if (readOnly) {
+                        onClickWhenReadOnly()
+                    } else {
+                        focusRequester.requestFocus()
+                    }
+                }
+            ),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(
@@ -79,10 +98,7 @@ fun RoundedTextField(
                     keyboardOptions = keyboardOptions,
                     cursorBrush = SolidColor(OnDotColor.Gray0),
                     readOnly = readOnly,
-                    modifier = Modifier
-                        .clickable(enabled = readOnly) {
-                            if (readOnly) { onClickWhenReadOnly() }
-                        }
+                    modifier = Modifier.focusRequester(focusRequester)
                 )
             }
         }
