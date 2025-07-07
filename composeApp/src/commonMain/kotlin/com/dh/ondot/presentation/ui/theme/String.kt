@@ -48,3 +48,9 @@ const val ONBOARDING5_ANSWER1 = "여유 있는 하루를 보내고 싶어서"
 const val ONBOARDING5_ANSWER2 = "중요한 사람과의 약속을 잘 지키고 싶어서"
 const val ONBOARDING5_ANSWER3 = "계획한 하루를 흐트러짐 없이 보내고 싶어서"
 const val ONBOARDING5_ANSWER4 = "지각 걱정 없이 신뢰받는 사람이 되고 싶어서"
+
+// Home
+const val EMPTY_SCHEDULE = "등록된 알람이 없어요"
+const val QUICK_ADD = "빠른 일정 생성"
+const val GENERAL_ADD = "일반 일정 생성"
+const val ADD_SCHEDULE = "알람 추가"
