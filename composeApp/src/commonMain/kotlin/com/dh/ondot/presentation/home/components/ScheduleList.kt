@@ -37,7 +37,7 @@ fun ScheduleList(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        items(scheduleList) {
+        items(scheduleList, key = { it.scheduleId }) {
             ScheduleListItem(
                 item = it,
                 onClickSwitch = onClickSwitch
