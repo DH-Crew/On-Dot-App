@@ -1,5 +1,10 @@
 package com.dh.ondot.core.util
 
+import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+
 object DateTimeFormatter {
 
     /**----------------------------------------------날짜---------------------------------------------*/
@@ -74,5 +79,20 @@ object DateTimeFormatter {
     fun formatAmPmTimePair(iso: String): Pair<String, String> {
         val (period, hour12, minute) = parseAmPmTime(iso)
         return period to "${hour12.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}"
+    }
+
+    @OptIn(ExperimentalTime::class)
+    fun calculateRemainingTime(iso: String): Triple<Int, Int, Int> {
+        val alarmInstant = Instant.parse(iso)
+        val now = Clock.System.now()
+        val diff: Duration = alarmInstant - now
+        if (diff.isNegative() || diff == Duration.ZERO) {
+            return Triple(0, 0, 0)
+        }
+        val totalMinutes = diff.inWholeMinutes
+        val days = (totalMinutes / (24 * 60)).toInt()
+        val hours = ((totalMinutes % (24 * 60)) / 60).toInt()
+        val minutes = (totalMinutes % 60).toInt()
+        return Triple(days, hours, minutes)
     }
 }
