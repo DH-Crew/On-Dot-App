@@ -31,7 +31,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 @Composable
 fun ScheduleList(
     scheduleList: List<Schedule>,
-    onClickSwitch: (Boolean) -> Unit
+    onClickSwitch: (Long, Boolean) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -51,7 +51,7 @@ fun ScheduleList(
 @Composable
 fun ScheduleListItem(
     item: Schedule,
-    onClickSwitch: (Boolean) -> Unit
+    onClickSwitch: (Long, Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -70,7 +70,9 @@ fun ScheduleListItem(
         DepartureAlarmInfoRow(
             alarmDetail = item.departureAlarm,
             isEnabled = item.isEnabled,
-            onClickSwitch = onClickSwitch
+            onClickSwitch = {
+                onClickSwitch(item.scheduleId, it)
+            }
         )
 
         PreparationAlarmText(item.preparationAlarm)
