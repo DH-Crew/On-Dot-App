@@ -7,6 +7,14 @@ import com.dh.ondot.domain.model.ui.AlarmSound
 import com.dh.ondot.domain.model.ui.OnboardingAnswer
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
 import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE
+import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER1
+import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER2
+import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER3
+import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER4
+import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER1
+import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER2
+import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER3
+import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER4
 
 data class OnboardingUiState(
     val currentStep: Int = 0,
@@ -45,18 +53,18 @@ data class OnboardingUiState(
     val volume: Float = 0.5f,
     // Step4
     val answer1: List<OnboardingAnswer> = listOf(
-        OnboardingAnswer(1, "지각 방지"),
-        OnboardingAnswer(2, "신경 쓰임 해소"),
-        OnboardingAnswer(3, "간편한 일정 관리"),
-        OnboardingAnswer(4, "정확한 출발 타이밍 알림"),
+        OnboardingAnswer(1, ONBOARDING4_ANSWER1),
+        OnboardingAnswer(2, ONBOARDING4_ANSWER2),
+        OnboardingAnswer(3, ONBOARDING4_ANSWER3),
+        OnboardingAnswer(4, ONBOARDING4_ANSWER4),
     ),
     val selectedAnswer1Index: Int = 0,
     // Step5
     val answer2: List<OnboardingAnswer> = listOf(
-        OnboardingAnswer(5, "여유 있는 하루를 보내고 싶어서"),
-        OnboardingAnswer(6, "중요한 사람과의 약속을 잘 지키고 싶어서"),
-        OnboardingAnswer(7, "계획한 하루를 흐트러짐 없이 보내고 싶어서"),
-        OnboardingAnswer(8, "지각 걱정 없이 신뢰받는 사람이 되고 싶어서"),
+        OnboardingAnswer(5, ONBOARDING5_ANSWER1),
+        OnboardingAnswer(6, ONBOARDING5_ANSWER2),
+        OnboardingAnswer(7, ONBOARDING5_ANSWER3),
+        OnboardingAnswer(8, ONBOARDING5_ANSWER4),
     ),
     val selectedAnswer2Index: Int = 0,
 
