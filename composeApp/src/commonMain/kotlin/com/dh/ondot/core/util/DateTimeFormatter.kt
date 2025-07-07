@@ -1,16 +1,8 @@
 package com.dh.ondot.core.util
 
 object DateTimeFormatter {
-    enum class Pattern(val format: String) {
-        /** 년-월-일 (ex: 2025-05-10) */
-        YMD("yyyy-MM-dd"),
 
-        /** 년-월-일 시:분:초 (ex: 2025-05-10 18:30:00) */
-        YMD_HMS("yyyy-MM-dd HH:mm:ss"),
-
-        /** 월.일 (ex: 05.10) */
-        MD("MM.dd")
-    }
+    /**----------------------------------------------날짜---------------------------------------------*/
 
     data class YMD(val year: Int, val month: Int, val day: Int) {
         /** 두 자리 문자열 (5 → "05") */
@@ -38,6 +30,49 @@ object DateTimeFormatter {
         )
     }
 
-    fun formatDate(iso: String, delimiter: String = "."): String =
-        parseYMD(iso).format(delimiter)
+    fun formatDate(iso: String, delimiter: String = "."): String = parseYMD(iso).format(delimiter)
+
+    /**----------------------------------------------시간---------------------------------------------*/
+
+    data class AmPmTime(
+        val period: String,
+        val hour12: Int,
+        val minute: Int
+    ) {
+        private fun Int.pad2() = this.toString().padStart(2, '0')
+        /** "오전 1:05" 같은 형태로 포맷 */
+        fun format(): String = "$period $hour12:${minute.pad2()}"
+    }
+
+    private fun parseAmPmTime(iso: String): AmPmTime {
+        require(iso.contains('T')) { "시간 정보가 포함된 ISO만 지원: $iso" }
+
+        val timePart = iso
+            .substringAfter('T')
+            .substringBefore('Z')
+            .substringBefore('+')
+            .substringBefore('-')
+        val parts = timePart.split(':')
+
+        require(parts.size >= 2) { "유효하지 않은 시간 포맷: $iso" }
+
+        val h24 = parts[0].toIntOrNull() ?: error("잘못된 시간(시): $iso")
+        val minute = parts[1].toIntOrNull() ?: error("잘못된 시간(분): $iso")
+        val period = if (h24 < 12) "오전" else "오후"
+        val hour12 = when (val m = h24 % 12) {
+            0 -> 12
+            else -> m
+        }
+
+        return AmPmTime(period, hour12, minute)
+    }
+
+    /** "오전 01:05" 같은 형태로 포맷 */
+    fun formatAmPmTime(iso: String): String = parseAmPmTime(iso).format()
+
+    /** Pair("오전", "01:05") 같은 형태로 포맷 */
+    fun formatAmPmTimePair(iso: String): Pair<String, String> {
+        val (period, hour12, minute) = parseAmPmTime(iso)
+        return period to "${hour12.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}"
+    }
 }
