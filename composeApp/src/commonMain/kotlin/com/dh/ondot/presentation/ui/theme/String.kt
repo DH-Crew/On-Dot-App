@@ -18,6 +18,9 @@ const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
 
+// ERROR
+const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
+
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
 const val ONBOARDING1_TITLE_HIGHLIGHT = "외출 준비"
