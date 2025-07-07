@@ -9,6 +9,8 @@ const val WORD_NEXT = "다음"
 const val WORD_HOUR = "시간"
 const val WORD_MINUTE = "분"
 const val WORD_MUTE = "무음"
+const val WORD_AM = "오전"
+const val WORD_PM = "오후"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -17,6 +19,9 @@ const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
+
+// ERROR
+const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -48,3 +53,10 @@ const val ONBOARDING5_ANSWER1 = "여유 있는 하루를 보내고 싶어서"
 const val ONBOARDING5_ANSWER2 = "중요한 사람과의 약속을 잘 지키고 싶어서"
 const val ONBOARDING5_ANSWER3 = "계획한 하루를 흐트러짐 없이 보내고 싶어서"
 const val ONBOARDING5_ANSWER4 = "지각 걱정 없이 신뢰받는 사람이 되고 싶어서"
+
+// Home
+const val EMPTY_SCHEDULE = "등록된 알람이 없어요"
+const val QUICK_ADD = "빠른 일정 생성"
+const val GENERAL_ADD = "일반 일정 생성"
+const val ADD_SCHEDULE = "알람 추가"
+const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
