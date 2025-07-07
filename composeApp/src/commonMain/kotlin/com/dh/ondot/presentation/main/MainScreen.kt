@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -25,8 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.domain.model.enums.BottomNavType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.presentation.ui.components.OnDotText
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.home.HomeScreen
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
@@ -46,6 +48,9 @@ fun MainScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = OnDotColor.Gray900),
         bottomBar = {
             BottomNavBar(
                 type = uiState.bottomNavType,
@@ -53,14 +58,18 @@ fun MainScreen(
                 onClick = { viewModel.setBottomNavType(it) }
             )
         }
-    ) {
-        // TODO(HomeScreen, SettingScreen을 분기처리하는 로직 구현)
-
+    ) { padding ->
         Box(
-            modifier = Modifier.fillMaxSize().background(color = OnDotColor.Gray900),
-            contentAlignment = Alignment.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = OnDotColor.Gray900)
+                .padding(padding)
         ) {
-            OnDotText("임시 화면", style = OnDotTextStyle.BodyLargeSB, color = OnDotColor.Gray0)
+            when(uiState.bottomNavType) {
+                BottomNavType.HOME -> HomeScreen()
+                BottomNavType.SETTING -> TODO("SettingScreen 배치")
+                BottomNavType.DEFAULT -> {}
+            }
         }
     }
 }
@@ -78,7 +87,7 @@ fun BottomNavBar(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(72.dp)
+                .height(if (getPlatform().name == ANDROID) 72.dp else 93.dp)
                 .background(Gray800.copy(alpha = 0.8f)),
             horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
             verticalAlignment = Alignment.Top
