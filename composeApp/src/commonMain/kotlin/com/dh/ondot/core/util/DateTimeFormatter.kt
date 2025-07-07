@@ -1,5 +1,7 @@
 package com.dh.ondot.core.util
 
+import com.dh.ondot.presentation.ui.theme.WORD_AM
+import com.dh.ondot.presentation.ui.theme.WORD_PM
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -63,7 +65,7 @@ object DateTimeFormatter {
 
         val h24 = parts[0].toIntOrNull() ?: error("잘못된 시간(시): $iso")
         val minute = parts[1].toIntOrNull() ?: error("잘못된 시간(분): $iso")
-        val period = if (h24 < 12) "오전" else "오후"
+        val period = if (h24 < 12) WORD_AM else WORD_PM
         val hour12 = when (val m = h24 % 12) {
             0 -> 12
             else -> m

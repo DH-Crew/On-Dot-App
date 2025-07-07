@@ -9,6 +9,8 @@ const val WORD_NEXT = "다음"
 const val WORD_HOUR = "시간"
 const val WORD_MINUTE = "분"
 const val WORD_MUTE = "무음"
+const val WORD_AM = "오전"
+const val WORD_PM = "오후"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
