@@ -1,9 +1,13 @@
 package com.dh.ondot.core.navigation
 
+import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
 import com.dh.ondot.presentation.main.MainScreen
 import com.dh.ondot.presentation.onboarding.OnboardingScreen
@@ -70,6 +74,32 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     ) {
         composable(NavRoutes.Main.route) {
             MainScreen()
+        }
+    }
+}
+
+fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
+    val graphRoute = NavRoutes.GeneralScheduleGraph.route
+
+    navigation(
+        startDestination = NavRoutes.ScheduleRepeatSetting.route,
+        route = graphRoute
+    ) {
+        composable(NavRoutes.ScheduleRepeatSetting.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(graphRoute)
+            }
+            val viewModel: GeneralScheduleViewModel = viewModel(parentEntry)
+
+            ScheduleRepeatSettingScreen(
+                viewModel = viewModel,
+                navigateToMain = {
+                    navController.navigate(NavRoutes.Main.route) {
+                        popUpTo(graphRoute) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
     }
 }
