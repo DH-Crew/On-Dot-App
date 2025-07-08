@@ -69,13 +69,15 @@ fun HomeContent(
 
             UserBadgeBanner()
 
-            Spacer(modifier = Modifier.height(16.dp))
+            if (uiState.remainingTime.first != -1) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-            RemainingTimeText(
-                day = uiState.remainingTime.first,
-                hour = uiState.remainingTime.second,
-                minute = uiState.remainingTime.third
-            )
+                RemainingTimeText(
+                    day = uiState.remainingTime.first,
+                    hour = uiState.remainingTime.second,
+                    minute = uiState.remainingTime.third
+                )
+            }
 
             Spacer(modifier = Modifier.height(36.dp))
 

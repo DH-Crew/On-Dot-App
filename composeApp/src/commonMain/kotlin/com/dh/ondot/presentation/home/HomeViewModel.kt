@@ -40,7 +40,9 @@ class HomeViewModel(
     }
 
     private fun onSuccessGetScheduleList(result: ScheduleListResponse) {
-        val remainingTime = DateTimeFormatter.calculateRemainingTime(result.earliestAlarmAt)
+        val remainingTime = if (result.earliestAlarmAt != null) {
+            DateTimeFormatter.calculateRemainingTime(result.earliestAlarmAt)
+        } else { Triple(-1, -1, -1) }
 
         updateState(
             uiState.value.copy(
