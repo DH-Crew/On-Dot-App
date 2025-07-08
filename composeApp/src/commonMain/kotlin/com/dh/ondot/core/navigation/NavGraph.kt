@@ -73,7 +73,13 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         route = NavRoutes.MainGraph.route
     ) {
         composable(NavRoutes.Main.route) {
-            MainScreen()
+            MainScreen(
+                navigateToGeneralSchedule = {
+                    navController.navigate(NavRoutes.GeneralScheduleGraph.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
     }
 }
