@@ -16,6 +16,7 @@ const val WORD_EVERYDAY = "매일"
 const val WORD_WEEKDAY = "평일"
 const val WORD_WEEKEND = "주말"
 const val WORD_DATE = "날짜"
+const val WORD_TIME = "시간"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
