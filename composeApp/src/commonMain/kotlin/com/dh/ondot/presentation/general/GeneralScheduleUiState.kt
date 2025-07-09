@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.general
 import com.dh.ondot.core.ui.base.UiState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -17,6 +18,7 @@ data class GeneralScheduleUiState(
 
     // ScheduleDate
     val isActiveCalendar: Boolean = false,
+    val isActiveDial: Boolean = false,
     val calendarMonth: LocalDate = Clock.System
         .now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
@@ -25,5 +27,6 @@ data class GeneralScheduleUiState(
             LocalDate(today.year, today.monthNumber, 1)
         },
     val selectedDate: LocalDate? = null,
+    val selectedTime: LocalTime? = null,
 
 ): UiState
