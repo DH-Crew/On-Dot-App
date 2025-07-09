@@ -7,12 +7,10 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class GeneralScheduleViewModel(
-) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()), KoinComponent {
-    private val scheduleRepository: ScheduleRepository by inject()
+    private val scheduleRepository: ScheduleRepository
+) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()) {
     private val fullWeek = (0..6).toList()
     private val weekDays = (1..5).toList()
     private val weekend = listOf(0, 6)
