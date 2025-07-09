@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
 import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
@@ -91,11 +92,20 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
         startDestination = NavRoutes.ScheduleRepeatSetting.route,
         route = graphRoute
     ) {
+
         composable(NavRoutes.ScheduleRepeatSetting.route) { backStackEntry ->
+            val vm: GeneralScheduleViewModel = viewModel { GeneralScheduleViewModel() }
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-            val viewModel: GeneralScheduleViewModel = viewModel(parentEntry)
+
+            val factory = remember {
+                GeneralScheduleViewModelFactory(
+                )
+            }
+
+            val viewModel: GeneralScheduleViewModel =
+                viewModel(viewModelStoreOwner = parentEntry, factory = factory)
 
             ScheduleRepeatSettingScreen(
                 viewModel = viewModel,
