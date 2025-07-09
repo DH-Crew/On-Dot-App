@@ -94,18 +94,13 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
     ) {
 
         composable(NavRoutes.ScheduleRepeatSetting.route) { backStackEntry ->
-            val vm: GeneralScheduleViewModel = viewModel { GeneralScheduleViewModel() }
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-
             val factory = remember {
-                GeneralScheduleViewModelFactory(
-                )
+                GeneralScheduleViewModelFactory()
             }
-
-            val viewModel: GeneralScheduleViewModel =
-                viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+            val viewModel: GeneralScheduleViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
 
             ScheduleRepeatSettingScreen(
                 viewModel = viewModel,
