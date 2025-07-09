@@ -2,6 +2,10 @@ package com.dh.ondot.core.util
 
 import com.dh.ondot.presentation.ui.theme.WORD_AM
 import com.dh.ondot.presentation.ui.theme.WORD_PM
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -38,6 +42,19 @@ object DateTimeFormatter {
     }
 
     fun formatDate(iso: String, delimiter: String = "."): String = parseYMD(iso).format(delimiter)
+
+    /** 주어진 연,월의 1일부터 마지막 일까지 리스트로 생성 */
+    fun monthDays(year: Int, month: Int): List<LocalDate> {
+        val first = LocalDate(year, month, 1)
+        val last = first.plus(DatePeriod(months = 1)).minus(DatePeriod(days = 1))
+        return (1..last.dayOfMonth).map { day -> LocalDate(year, month, day) }
+    }
+
+    fun LocalDate.formatKorean(): String {
+        val mm = this.monthNumber.toString().padStart(2, '0')
+        val dd = this.dayOfMonth.toString().padStart(2, '0')
+        return "${this.year}년 ${mm}월 ${dd}일"
+    }
 
     /**----------------------------------------------시간---------------------------------------------*/
 
