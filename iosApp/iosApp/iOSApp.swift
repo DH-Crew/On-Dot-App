@@ -8,6 +8,7 @@ struct iOSApp: App {
         KakaoSDK.initSDK(appKey: KAKAO_APP_KEY)
         
         ComposeApp.SharedInitKt.doInitShared()
+        ComposeApp.SharedInitKt.doInitKoin()
     }
     
     var body: some Scene {
