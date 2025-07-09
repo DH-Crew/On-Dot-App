@@ -29,7 +29,7 @@ import org.jetbrains.compose.resources.painterResource
 fun TextChip(
     text: String,
     chipStyle: ChipStyle,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
     val fontColor = when (chipStyle) {
         ChipStyle.Active -> Green500
