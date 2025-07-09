@@ -4,6 +4,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_AM
 import com.dh.ondot.presentation.ui.theme.WORD_PM
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlin.time.Clock
@@ -113,5 +114,18 @@ object DateTimeFormatter {
         val hours = ((totalMinutes % (24 * 60)) / 60).toInt()
         val minutes = (totalMinutes % 60).toInt()
         return Triple(days, hours, minutes)
+    }
+
+    fun LocalTime.formatAmPmTime(): String {
+        val period = if (hour < 12) WORD_AM else WORD_PM
+        val hour12 = when (val h = hour % 12) {
+            0 -> 12
+            else -> h
+        }
+
+        val hh = hour12.toString().padStart(2, '0')
+        val mm = minute.toString().padStart(2, '0')
+
+        return "$period $hh:$mm"
     }
 }
