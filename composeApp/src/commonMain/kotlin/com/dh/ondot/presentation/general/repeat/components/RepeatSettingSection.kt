@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.constans.AppConstants
+import com.dh.ondot.domain.model.constants.AppConstants
 import com.dh.ondot.domain.model.enums.ChipStyle
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.RepeatType

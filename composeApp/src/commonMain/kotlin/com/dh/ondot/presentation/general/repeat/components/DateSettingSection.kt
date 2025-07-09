@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.formatAmPmTime
 import com.dh.ondot.core.util.DateTimeFormatter.formatKorean
-import com.dh.ondot.domain.model.constans.AppConstants
+import com.dh.ondot.domain.model.constants.AppConstants
 import com.dh.ondot.domain.model.enums.ChipStyle
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.general.GeneralScheduleUiState

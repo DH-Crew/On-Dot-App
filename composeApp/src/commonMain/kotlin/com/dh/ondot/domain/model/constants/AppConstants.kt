@@ -1,4 +1,4 @@
-package com.dh.ondot.domain.model.constans
+package com.dh.ondot.domain.model.constants
 
 object AppConstants {
     val weekDays = arrayOf("일", "월", "화", "수", "목", "금", "토")
