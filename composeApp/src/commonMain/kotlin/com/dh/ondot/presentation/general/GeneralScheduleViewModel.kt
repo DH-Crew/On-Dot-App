@@ -1,10 +1,17 @@
 package com.dh.ondot.presentation.general
 
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.domain.repository.ScheduleRepository
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class GeneralScheduleViewModel(
-
-) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()) {
+) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()), KoinComponent {
+    private val scheduleRepository: ScheduleRepository by inject()
     private val fullWeek = (0..6).toList()
     private val weekDays = (1..5).toList()
     private val weekend = listOf(0, 6)
@@ -57,5 +64,23 @@ class GeneralScheduleViewModel(
                 else -> null
             }
         ))
+    }
+
+    /**--------------------------------------------DateSettingSection-----------------------------------------------*/
+
+    fun onToggleCalendar() {
+        updateState(uiState.value.copy(isActiveCalendar = !uiState.value.isActiveCalendar))
+    }
+
+    fun onPrevMonth() {
+        updateState(uiState.value.copy(calendarMonth = uiState.value.calendarMonth.minus(DatePeriod(months = 1))))
+    }
+
+    fun onNextMonth() {
+        updateState(uiState.value.copy(calendarMonth = uiState.value.calendarMonth.plus(DatePeriod(months = 1))))
+    }
+
+    fun onSelectDate(date: LocalDate) {
+        updateState(uiState.value.copy(selectedDate = date))
     }
 }
