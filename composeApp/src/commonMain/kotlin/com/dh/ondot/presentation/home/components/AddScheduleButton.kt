@@ -78,7 +78,16 @@ fun AddScheduleButton(
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                AddScheduleMenu()
+                AddScheduleMenu(
+                    onQuickAdd = {
+                        onToggle()
+                        onQuickAdd()
+                    },
+                    onGeneralAdd = {
+                        onToggle()
+                        onGeneralAdd()
+                    }
+                )
             }
 
             Spacer(modifier = Modifier.height(15.dp))
@@ -93,7 +102,8 @@ fun AddScheduleButton(
 
 @Composable
 private fun AddScheduleMenu(
-
+    onQuickAdd: () -> Unit,
+    onGeneralAdd: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -102,14 +112,15 @@ private fun AddScheduleMenu(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        AddScheduleMenuItem(type = ScheduleMenuType.Quick)
-        AddScheduleMenuItem(type = ScheduleMenuType.General)
+        AddScheduleMenuItem(type = ScheduleMenuType.Quick, onClick = onQuickAdd)
+        AddScheduleMenuItem(type = ScheduleMenuType.General, onClick = onGeneralAdd)
     }
 }
 
 @Composable
 private fun AddScheduleMenuItem(
-    type: ScheduleMenuType
+    type: ScheduleMenuType,
+    onClick: () -> Unit
 ) {
     val resourceId = when(type) {
         ScheduleMenuType.Quick -> Res.drawable.ic_quick
@@ -118,6 +129,8 @@ private fun AddScheduleMenuItem(
 
     Row(
         modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClick() }
             .padding(start = 8.dp, end = 19.dp, top = 7.dp, bottom = 7.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

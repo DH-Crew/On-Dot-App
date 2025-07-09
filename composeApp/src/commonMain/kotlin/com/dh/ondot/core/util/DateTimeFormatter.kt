@@ -2,6 +2,11 @@ package com.dh.ondot.core.util
 
 import com.dh.ondot.presentation.ui.theme.WORD_AM
 import com.dh.ondot.presentation.ui.theme.WORD_PM
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -38,6 +43,19 @@ object DateTimeFormatter {
     }
 
     fun formatDate(iso: String, delimiter: String = "."): String = parseYMD(iso).format(delimiter)
+
+    /** 주어진 연,월의 1일부터 마지막 일까지 리스트로 생성 */
+    fun monthDays(year: Int, month: Int): List<LocalDate> {
+        val first = LocalDate(year, month, 1)
+        val last = first.plus(DatePeriod(months = 1)).minus(DatePeriod(days = 1))
+        return (1..last.dayOfMonth).map { day -> LocalDate(year, month, day) }
+    }
+
+    fun LocalDate.formatKorean(): String {
+        val mm = this.monthNumber.toString().padStart(2, '0')
+        val dd = this.dayOfMonth.toString().padStart(2, '0')
+        return "${this.year}년 ${mm}월 ${dd}일"
+    }
 
     /**----------------------------------------------시간---------------------------------------------*/
 
@@ -96,5 +114,18 @@ object DateTimeFormatter {
         val hours = ((totalMinutes % (24 * 60)) / 60).toInt()
         val minutes = (totalMinutes % 60).toInt()
         return Triple(days, hours, minutes)
+    }
+
+    fun LocalTime.formatAmPmTime(): String {
+        val period = if (hour < 12) WORD_AM else WORD_PM
+        val hour12 = when (val h = hour % 12) {
+            0 -> 12
+            else -> h
+        }
+
+        val hh = hour12.toString().padStart(2, '0')
+        val mm = minute.toString().padStart(2, '0')
+
+        return "$period $hh:$mm"
     }
 }

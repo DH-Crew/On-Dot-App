@@ -44,6 +44,8 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compottie-network").get())
                     implementation(libs.findLibrary("kotlinx-io-core").get())
                     implementation(libs.findLibrary("kotlinx-io-bytestring").get())
+                    implementation(libs.findLibrary("kotlinx-datetime").get())
+                    implementation("io.insert-koin:koin-core:4.0.3")
                 }
 
                 val androidMain = maybeCreate("androidMain")
@@ -57,6 +59,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("datastore-preferences").get())
                     implementation(libs.findLibrary("ktor-client-okhttp").get())
                     implementation(libs.findLibrary("kakao-login").get())
+                    implementation("io.insert-koin:koin-android:4.0.3")
                 }
 
                 val iosMain = maybeCreate("iosMain")

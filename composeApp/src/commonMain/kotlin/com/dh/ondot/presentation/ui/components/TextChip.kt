@@ -1,0 +1,91 @@
+package com.dh.ondot.presentation.ui.components
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.unit.dp
+import com.dh.ondot.domain.model.enums.ChipStyle
+import com.dh.ondot.domain.model.enums.OnDotTextStyle
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
+import ondot.composeapp.generated.resources.Res
+import ondot.composeapp.generated.resources.ic_check_green
+import org.jetbrains.compose.resources.painterResource
+
+@Composable
+fun TextChip(
+    text: String,
+    chipStyle: ChipStyle,
+    onClick: () -> Unit = {}
+) {
+    val fontColor = when (chipStyle) {
+        ChipStyle.Active -> Green500
+        ChipStyle.Normal -> Gray50
+        ChipStyle.Inactive -> Gray400
+    }
+
+    OnDotText(
+        text = text,
+        style = OnDotTextStyle.BodyMediumR,
+        color = fontColor,
+        modifier = Modifier
+            .background(Gray500, shape = RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(6.dp))
+            .clickable { onClick() }
+            .padding(horizontal = (6.5).dp, vertical = 4.dp)
+    )
+}
+
+@Composable
+fun CheckTextChip(
+    text: String,
+    chipStyle: ChipStyle,
+    onClick: () -> Unit
+) {
+    val fontColor = when (chipStyle) {
+        ChipStyle.Active -> Green500
+        ChipStyle.Normal -> Gray50
+        ChipStyle.Inactive -> Gray400
+    }
+
+    Row(
+        modifier = Modifier
+            .background(Gray500, shape = RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(6.dp))
+            .clickable { onClick() }
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OnDotText(
+            text = text,
+            style = OnDotTextStyle.BodyMediumR,
+            color = fontColor,
+            modifier = Modifier
+                .background(Gray500, shape = RoundedCornerShape(6.dp))
+                .padding(horizontal = (6.5).dp, vertical = 3.dp)
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Image(
+            painter = painterResource(Res.drawable.ic_check_green),
+            contentDescription = null,
+            modifier = Modifier
+                .size(20.dp),
+            colorFilter = ColorFilter.tint(fontColor)
+        )
+    }
+}

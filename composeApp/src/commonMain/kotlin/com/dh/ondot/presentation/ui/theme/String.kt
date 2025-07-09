@@ -11,6 +11,12 @@ const val WORD_MINUTE = "분"
 const val WORD_MUTE = "무음"
 const val WORD_AM = "오전"
 const val WORD_PM = "오후"
+const val WORD_REPEAT = "반복"
+const val WORD_EVERYDAY = "매일"
+const val WORD_WEEKDAY = "평일"
+const val WORD_WEEKEND = "주말"
+const val WORD_DATE = "날짜"
+const val WORD_TIME = "시간"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -60,3 +66,6 @@ const val QUICK_ADD = "빠른 일정 생성"
 const val GENERAL_ADD = "일반 일정 생성"
 const val ADD_SCHEDULE = "알람 추가"
 const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
+
+// General
+const val SCHEDULE_REPEAT_TITLE = "스케줄 날짜와 시간을 선택해주세요."

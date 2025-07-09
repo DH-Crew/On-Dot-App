@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.dh.ondot.core.navigation.NavRoutes
+import com.dh.ondot.core.navigation.generalScheduleNavGraph
 import com.dh.ondot.core.navigation.loginNavGraph
 import com.dh.ondot.core.navigation.mainNavGraph
 import com.dh.ondot.core.navigation.onboardingNavGraph
@@ -61,6 +62,7 @@ fun App() {
                     loginNavGraph(navController = navController)
                     onboardingNavGraph(navController = navController)
                     mainNavGraph(navController = navController)
+                    generalScheduleNavGraph(navController = navController)
                 }
 
                 ToastHost()
