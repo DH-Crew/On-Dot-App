@@ -4,6 +4,7 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.domain.repository.ScheduleRepository
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import org.koin.core.component.KoinComponent
@@ -19,6 +20,8 @@ class GeneralScheduleViewModel(
     fun initStep() {
         updateState(uiState.value.copy(totalStep = 2, currentStep = 1))
     }
+
+    /**--------------------------------------------RepeatSettingSection-----------------------------------------------*/
 
     fun onClickSwitch(newValue: Boolean) {
         updateState(uiState.value.copy(isRepeat = newValue))
@@ -82,5 +85,27 @@ class GeneralScheduleViewModel(
 
     fun onSelectDate(date: LocalDate) {
         updateState(uiState.value.copy(selectedDate = date))
+    }
+
+    fun onToggleDial() {
+        updateState(uiState.value.copy(isActiveDial = !uiState.value.isActiveDial))
+    }
+
+    fun onTimeSelected(newTime: LocalTime) {
+        updateState(uiState.value.copy(selectedTime = newTime))
+    }
+
+    /**--------------------------------------------ETC-----------------------------------------------*/
+
+    fun isButtonEnabled(): Boolean {
+        return when (uiState.value.currentStep) {
+            1 -> uiState.value.selectedTime != null && (uiState.value.selectedDate != null || uiState.value.activeWeekDays.isNotEmpty())
+            2 -> false
+            else -> false
+        }
+    }
+
+    fun onClickNextButton() {
+        updateState(uiState.value.copy(currentStep = uiState.value.currentStep + 1))
     }
 }
