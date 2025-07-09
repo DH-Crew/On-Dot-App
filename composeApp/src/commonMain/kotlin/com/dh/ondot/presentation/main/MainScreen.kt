@@ -42,7 +42,8 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel { MainViewModel() }
+    viewModel: MainViewModel = viewModel { MainViewModel() },
+    navigateToGeneralSchedule: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -66,7 +67,9 @@ fun MainScreen(
                 .padding(padding)
         ) {
             when(uiState.bottomNavType) {
-                BottomNavType.HOME -> HomeScreen()
+                BottomNavType.HOME -> HomeScreen(
+                    navigateToGeneralSchedule = navigateToGeneralSchedule
+                )
                 BottomNavType.SETTING -> TODO("SettingScreen 배치")
                 BottomNavType.DEFAULT -> {}
             }

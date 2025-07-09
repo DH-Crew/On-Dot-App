@@ -1,0 +1,32 @@
+package com.dh.ondot.presentation.general
+
+import com.dh.ondot.core.ui.base.UiState
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
+data class GeneralScheduleUiState(
+    val currentStep: Int = 0,
+    val totalStep: Int = 0,
+
+    // ScheduleRepeat
+    val isRepeat: Boolean = false,
+    val activeCheckChip: Int? = null, // 0: 매일, 1: 주중, 2: 주말
+    val activeWeekDays: Set<Int> = emptySet(),
+
+    // ScheduleDate
+    val isActiveCalendar: Boolean = false,
+    val isActiveDial: Boolean = false,
+    val calendarMonth: LocalDate = Clock.System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
+        .let { today ->
+            LocalDate(today.year, today.monthNumber, 1)
+        },
+    val selectedDate: LocalDate? = null,
+    val selectedTime: LocalTime? = null,
+
+): UiState
