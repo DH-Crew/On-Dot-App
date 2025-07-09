@@ -107,5 +107,6 @@ class GeneralScheduleViewModel(
 
     fun onClickNextButton() {
         updateState(uiState.value.copy(currentStep = uiState.value.currentStep + 1))
+        emitEventFlow(GeneralScheduleEvent.NavigateToPlacePicker)
     }
 }

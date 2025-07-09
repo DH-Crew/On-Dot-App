@@ -109,7 +109,8 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
                         popUpTo(graphRoute) { inclusive = true }
                         launchSingleTop = true
                     }
-                }
+                },
+                navigateToPlacePicker = { TODO("화면 구현 이후 추가") }
             )
         }
     }

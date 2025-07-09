@@ -22,6 +22,7 @@ import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.general.GeneralScheduleEvent
 import com.dh.ondot.presentation.general.GeneralScheduleUiState
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
 import com.dh.ondot.presentation.general.repeat.components.DateSettingSection
@@ -41,7 +42,8 @@ import kotlinx.datetime.LocalTime
 @Composable
 fun ScheduleRepeatSettingScreen(
     viewModel: GeneralScheduleViewModel,
-    navigateToMain: () -> Unit
+    navigateToMain: () -> Unit,
+    navigateToPlacePicker: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -50,6 +52,14 @@ fun ScheduleRepeatSettingScreen(
     LaunchedEffect(uiState.totalStep) {
         if (uiState.totalStep == 0) {
             viewModel.initStep()
+        }
+    }
+
+    LaunchedEffect(viewModel.eventFlow) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is GeneralScheduleEvent.NavigateToPlacePicker -> navigateToPlacePicker()
+            }
         }
     }
 
