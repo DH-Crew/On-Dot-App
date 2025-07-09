@@ -16,6 +16,7 @@ import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.presentation.general.GeneralScheduleUiState
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.dh.ondot.presentation.general.repeat.components.DateSettingSection
 import com.dh.ondot.presentation.general.repeat.components.RepeatSettingSection
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.StepProgressIndicator
@@ -23,6 +24,7 @@ import com.dh.ondot.presentation.ui.components.TopBar
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SCHEDULE_REPEAT_TITLE
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun ScheduleRepeatSettingScreen(
@@ -42,6 +44,10 @@ fun ScheduleRepeatSettingScreen(
         onClickSwitch = viewModel::onClickSwitch,
         onClickCheckTextChip = viewModel::onClickCheckTextChip,
         onClickTextChip = viewModel::onClickTextChip,
+        onToggleCalendar = viewModel::onToggleCalendar,
+        onPrevMonth = viewModel::onPrevMonth,
+        onNextMonth = viewModel::onNextMonth,
+        onDateSelected = viewModel::onSelectDate,
         navigateToMain = navigateToMain
     )
 }
@@ -52,7 +58,11 @@ fun ScheduleRepeatSettingContent(
     onClickSwitch: (Boolean) -> Unit,
     onClickCheckTextChip: (Int) -> Unit,
     onClickTextChip: (Int) -> Unit,
-    navigateToMain: () -> Unit
+    onToggleCalendar: () -> Unit,
+    onPrevMonth: () -> Unit,
+    onNextMonth: () -> Unit,
+    onDateSelected: (LocalDate) -> Unit,
+    navigateToMain: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -83,6 +93,16 @@ fun ScheduleRepeatSettingContent(
             onClickSwitch = onClickSwitch,
             onClickCheckTextChip = onClickCheckTextChip,
             onClickTextChip = onClickTextChip
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        DateSettingSection(
+            uiState = uiState,
+            onToggleCalendar = onToggleCalendar,
+            onPrevMonth = onPrevMonth,
+            onNextMonth = onNextMonth,
+            onDateSelected = onDateSelected
         )
     }
 }
