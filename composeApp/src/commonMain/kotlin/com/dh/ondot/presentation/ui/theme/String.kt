@@ -74,3 +74,4 @@ const val SCHEDULE_REPEAT_TITLE = "스케줄 날짜와 시간을 선택해주세
 const val PLACE_PICKER_TITLE = "출발지와 목적지를 알려주세요."
 const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
 const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
+const val DEPARTURE_FROM_HOME = "집에서 출발해요"
