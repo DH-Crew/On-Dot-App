@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.dh.ondot.presentation.general.loading.RouteLoadingScreen
 import com.dh.ondot.presentation.general.place.PlacePickerScreen
 import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
@@ -136,6 +137,12 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+
+        composable(NavRoutes.RouteLoading.route) {
+            RouteLoadingScreen(
+                navigateToCheckSchedule = { TODO("Not yet implemented") }
             )
         }
     }
