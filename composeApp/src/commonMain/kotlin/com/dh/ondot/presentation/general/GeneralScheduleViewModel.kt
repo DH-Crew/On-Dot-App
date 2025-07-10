@@ -50,7 +50,8 @@ class GeneralScheduleViewModel(
                     roadAddress = result.roadAddress,
                     latitude = result.latitude,
                     longitude = result.longitude
-                )
+                ),
+                isHomeAddressInitialized = true
             )
         )
     }
