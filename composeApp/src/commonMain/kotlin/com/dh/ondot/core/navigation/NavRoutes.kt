@@ -22,5 +22,5 @@ sealed class NavRoutes(val route: String) {
     data object ScheduleRepeatSetting: NavRoutes("scheduleRepeatSetting")
     data object PlacePicker: NavRoutes("placePicker")
     data object RouteLoading: NavRoutes("routeLoading")
-
+    data object CheckSchedule: NavRoutes("checkSchedule")
 }
