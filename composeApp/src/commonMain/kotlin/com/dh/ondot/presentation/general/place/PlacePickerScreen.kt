@@ -41,6 +41,7 @@ import com.dh.ondot.presentation.ui.components.PlaceSearchResultItem
 import com.dh.ondot.presentation.ui.components.StepProgressIndicator
 import com.dh.ondot.presentation.ui.components.TopBar
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.DEPARTURE_FROM_HOME
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
@@ -58,7 +59,7 @@ fun PlacePickerScreen(
     val departureFocusRequester = remember { FocusRequester() }
     val arrivalFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    
+
     LaunchedEffect(uiState.homeAddress) {
         if (uiState.homeAddress.title.isBlank()) {
             viewModel.initHomeAddress()
@@ -183,7 +184,7 @@ fun HomeDepartureOption(
         Spacer(modifier = Modifier.width(8.dp))
 
         OnDotText(
-            text = "집에서 출발해요",
+            text = DEPARTURE_FROM_HOME,
             style = OnDotTextStyle.BodyLargeR1,
             color = Gray200
         )
