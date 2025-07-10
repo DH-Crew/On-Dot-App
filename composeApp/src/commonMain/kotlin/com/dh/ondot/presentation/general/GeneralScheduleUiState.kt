@@ -39,6 +39,7 @@ data class GeneralScheduleUiState(
     val arrivalPlaceInput: String = "",
     val selectedDeparturePlace: AddressInfo? = null,
     val selectedArrivalPlace: AddressInfo? = null,
-    val homeAddress: AddressInfo = AddressInfo()
+    val homeAddress: AddressInfo = AddressInfo(),
+    val isHomeAddressInitialized: Boolean = false,
 
 ): UiState

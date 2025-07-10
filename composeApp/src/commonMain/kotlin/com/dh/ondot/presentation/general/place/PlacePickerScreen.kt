@@ -60,8 +60,8 @@ fun PlacePickerScreen(
     val arrivalFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(uiState.homeAddress) {
-        if (uiState.homeAddress.title.isBlank()) {
+    LaunchedEffect(Unit) {
+        if (uiState.homeAddress.title.isBlank() && !uiState.isHomeAddressInitialized) {
             viewModel.initHomeAddress()
         }
     }
