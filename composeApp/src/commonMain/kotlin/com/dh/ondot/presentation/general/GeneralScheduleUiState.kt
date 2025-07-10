@@ -1,6 +1,8 @@
 package com.dh.ondot.presentation.general
 
 import com.dh.ondot.core.ui.base.UiState
+import com.dh.ondot.domain.model.enums.RouterType
+import com.dh.ondot.domain.model.response.AddressInfo
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -28,5 +30,15 @@ data class GeneralScheduleUiState(
         },
     val selectedDate: LocalDate? = null,
     val selectedTime: LocalTime? = null,
+
+    // PlacePicker
+    val isChecked: Boolean = false,
+    val placeList: List<AddressInfo> = emptyList(),
+    val lastFocusedTextField: RouterType = RouterType.Departure,
+    val departurePlaceInput: String = "",
+    val arrivalPlaceInput: String = "",
+    val selectedDeparturePlace: AddressInfo? = null,
+    val selectedArrivalPlace: AddressInfo? = null,
+    val homeAddress: AddressInfo = AddressInfo()
 
 ): UiState
