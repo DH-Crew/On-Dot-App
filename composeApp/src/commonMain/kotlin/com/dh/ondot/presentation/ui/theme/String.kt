@@ -28,6 +28,8 @@ const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
 
 // ERROR
 const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
+const val ERROR_SEARCH_PLACE = "장소 검색에 실패했습니다."
+const val ERROR_GET_HOME_ADDRESS = "집 주소 조회에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -69,3 +71,6 @@ const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
 
 // General
 const val SCHEDULE_REPEAT_TITLE = "스케줄 날짜와 시간을 선택해주세요."
+const val PLACE_PICKER_TITLE = "출발지와 목적지를 알려주세요."
+const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
+const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
