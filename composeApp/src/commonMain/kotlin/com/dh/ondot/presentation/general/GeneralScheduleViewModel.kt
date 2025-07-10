@@ -221,6 +221,11 @@ class GeneralScheduleViewModel(
     fun onClickCheckBox() {
         val curValue = uiState.value.isChecked
 
+        if (!curValue && uiState.value.homeAddress.title.isBlank()) {
+            initHomeAddress()
+            return
+        }
+
         updateState(
             uiState.value.copy(
                 isChecked = !curValue,
