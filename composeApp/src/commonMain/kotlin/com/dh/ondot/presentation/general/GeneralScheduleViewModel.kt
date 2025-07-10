@@ -13,8 +13,15 @@ import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -22,6 +29,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class GeneralScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val placeRepository: PlaceRepository,
@@ -31,7 +39,32 @@ class GeneralScheduleViewModel(
     private val fullWeek = (0..6).toList()
     private val weekDays = (1..5).toList()
     private val weekend = listOf(0, 6)
-    private var searchJob: Job? = null
+    private val _query = MutableStateFlow("")
+    private val query: StateFlow<String> = _query
+
+    init {
+        viewModelScope.launch {
+            query
+                .debounce(100)
+                .distinctUntilChanged()
+                .onEach { value ->
+                    if (value.isBlank()) {
+                        updateState(uiState.value.copy(placeList = emptyList()))
+                    }
+                }
+                .filter { it.isNotBlank() }
+                .flatMapLatest { q ->
+                    placeRepository.searchPlace(q)
+                }
+                .collect { response ->
+                    resultResponse(
+                        response,
+                        ::onSuccessSearchPlace,
+                        ::onFailedSearchPlace
+                    )
+                }
+        }
+    }
 
     fun initStep() {
         updateState(uiState.value.copy(totalStep = 2, currentStep = 1))
@@ -147,32 +180,13 @@ class GeneralScheduleViewModel(
 
     fun onRouteInputChanged(value: String) {
         onInputValueChanged(value)
-
-        searchJob?.cancel()
-
-        if (value.isBlank()) {
-            updateState(uiState.value.copy(placeList = emptyList()))
-            return
-        }
-
-        searchJob = viewModelScope.launch {
-            delay(300)
-            searchPlace(value)
-        }
+        _query.value = value
     }
 
     private fun onInputValueChanged(value: String) {
         when (uiState.value.lastFocusedTextField) {
             RouterType.Departure -> updateState(uiState.value.copy(departurePlaceInput = value))
             RouterType.Arrival -> updateState(uiState.value.copy(arrivalPlaceInput = value))
-        }
-    }
-
-    private fun searchPlace(query: String) {
-        viewModelScope.launch {
-            placeRepository.searchPlace(query).collect {
-                resultResponse(it, ::onSuccessSearchPlace, ::onFailedSearchPlace)
-            }
         }
     }
 
