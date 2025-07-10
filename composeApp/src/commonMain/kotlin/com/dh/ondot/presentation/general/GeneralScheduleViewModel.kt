@@ -13,6 +13,8 @@ import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -29,6 +31,7 @@ class GeneralScheduleViewModel(
     private val fullWeek = (0..6).toList()
     private val weekDays = (1..5).toList()
     private val weekend = listOf(0, 6)
+    private var searchJob: Job? = null
 
     fun initStep() {
         updateState(uiState.value.copy(totalStep = 2, currentStep = 1))
@@ -145,12 +148,17 @@ class GeneralScheduleViewModel(
     fun onRouteInputChanged(value: String) {
         onInputValueChanged(value)
 
+        searchJob?.cancel()
+
         if (value.isBlank()) {
             updateState(uiState.value.copy(placeList = emptyList()))
             return
         }
 
-        searchPlace(value)
+        searchJob = viewModelScope.launch {
+            delay(300)
+            searchPlace(value)
+        }
     }
 
     private fun onInputValueChanged(value: String) {
