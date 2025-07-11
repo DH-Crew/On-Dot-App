@@ -19,6 +19,7 @@ import com.dh.ondot.domain.model.enums.ChipStyle
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
 import ondot.composeapp.generated.resources.Res
@@ -37,7 +38,7 @@ fun TextChip(
         ChipStyle.Inactive -> Gray400
     }
     val backgroundColor = when (chipStyle) {
-        ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Green500
+        ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Gray500
         ChipStyle.Info -> Green800
     }
 
@@ -65,7 +66,7 @@ fun CheckTextChip(
         ChipStyle.Inactive -> Gray400
     }
     val backgroundColor = when (chipStyle) {
-        ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Green500
+        ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Gray500
         ChipStyle.Info -> Green800
     }
 
