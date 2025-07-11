@@ -39,7 +39,7 @@ fun RouteLoadingScreen(
 
     LaunchedEffect(Unit) {
         delay(2000L)
-//        navigateToCheckSchedule()
+        navigateToCheckSchedule()
     }
 
     Box(
