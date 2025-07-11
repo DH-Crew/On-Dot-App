@@ -60,13 +60,14 @@ fun OnDotButton(
                         modifier = Modifier.width(21.dp).height(20.dp)
                     )
                 }
-            }
 
-            Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(10.dp))
+            }
 
             OnDotText(
                 text = buttonText,
-                style = OnDotTextStyle.TitleSmallSB
+                style = OnDotTextStyle.TitleSmallSB,
+                color = buttonType.styles().fontColor
             )
         }
     }
