@@ -19,8 +19,8 @@ import com.dh.ondot.domain.model.enums.ChipStyle
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_check_green
 import org.jetbrains.compose.resources.painterResource
@@ -33,8 +33,12 @@ fun TextChip(
 ) {
     val fontColor = when (chipStyle) {
         ChipStyle.Active -> Green500
-        ChipStyle.Normal -> Gray50
+        ChipStyle.Normal, ChipStyle.Info -> Gray50
         ChipStyle.Inactive -> Gray400
+    }
+    val backgroundColor = when (chipStyle) {
+        ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Green500
+        ChipStyle.Info -> Green800
     }
 
     OnDotText(
@@ -42,7 +46,7 @@ fun TextChip(
         style = OnDotTextStyle.BodyMediumR,
         color = fontColor,
         modifier = Modifier
-            .background(Gray500, shape = RoundedCornerShape(6.dp))
+            .background(backgroundColor, shape = RoundedCornerShape(6.dp))
             .clip(RoundedCornerShape(6.dp))
             .clickable { onClick() }
             .padding(horizontal = (6.5).dp, vertical = 4.dp)
@@ -57,13 +61,17 @@ fun CheckTextChip(
 ) {
     val fontColor = when (chipStyle) {
         ChipStyle.Active -> Green500
-        ChipStyle.Normal -> Gray50
+        ChipStyle.Normal, ChipStyle.Info -> Gray50
         ChipStyle.Inactive -> Gray400
+    }
+    val backgroundColor = when (chipStyle) {
+        ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Green500
+        ChipStyle.Info -> Green800
     }
 
     Row(
         modifier = Modifier
-            .background(Gray500, shape = RoundedCornerShape(6.dp))
+            .background(backgroundColor, shape = RoundedCornerShape(6.dp))
             .clip(RoundedCornerShape(6.dp))
             .clickable { onClick() }
             .padding(horizontal = 8.dp, vertical = 2.dp),
@@ -74,7 +82,7 @@ fun CheckTextChip(
             style = OnDotTextStyle.BodyMediumR,
             color = fontColor,
             modifier = Modifier
-                .background(Gray500, shape = RoundedCornerShape(6.dp))
+                .background(backgroundColor, shape = RoundedCornerShape(6.dp))
                 .padding(horizontal = (6.5).dp, vertical = 3.dp)
         )
 
