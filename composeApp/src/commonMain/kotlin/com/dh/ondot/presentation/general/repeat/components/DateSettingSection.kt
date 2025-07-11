@@ -58,6 +58,7 @@ fun DateSettingSection(
         DateSectionHeader(
             selectedDate = uiState.selectedDate,
             isActiveCalendar = uiState.isActiveCalendar,
+            interactionSource = interactionSource,
             isRepeat = uiState.isRepeat,
             activeWeekDays = uiState.activeWeekDays,
             onToggleCalendar = onToggleCalendar
@@ -137,7 +138,8 @@ fun TimeSectionHeader(
 
         TextChip(
             text = selectedTime?.formatAmPmTime() ?: "-",
-            chipStyle = if (isActiveDial) ChipStyle.Active else ChipStyle.Normal
+            chipStyle = if (isActiveDial) ChipStyle.Active else ChipStyle.Normal,
+            onClick = onToggleDial
         )
     }
 }
@@ -146,6 +148,7 @@ fun TimeSectionHeader(
 fun DateSectionHeader(
     selectedDate: LocalDate?,
     isActiveCalendar: Boolean,
+    interactionSource: MutableInteractionSource,
     isRepeat: Boolean,
     activeWeekDays: Set<Int>,
     onToggleCalendar: () -> Unit
@@ -153,6 +156,11 @@ fun DateSectionHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = { onToggleCalendar() }
+            )
             .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

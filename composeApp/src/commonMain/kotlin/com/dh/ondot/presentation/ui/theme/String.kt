@@ -25,11 +25,14 @@ const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
+const val CREATE_SCHEDULE = "일정 생성"
 
 // ERROR
 const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
 const val ERROR_SEARCH_PLACE = "장소 검색에 실패했습니다."
 const val ERROR_GET_HOME_ADDRESS = "집 주소 조회에 실패했습니다."
+const val ERROR_GET_SCHEDULE_ALARMS = "알람 정보 계산에 실패했습니다."
+const val ERROR_CREATE_SCHEDULE = "일정 생성에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -76,3 +79,6 @@ const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
 const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
 const val DEPARTURE_FROM_HOME = "집에서 출발해요"
 const val ROUTE_CALCULATE_LABEL = "최적의 출발 시간이 계산된\n알람이 설정되면 알림을 보내드릴게요."
+const val NEW_SCHEDULE_LABEL = "새로운 일정"
+const val DEPARTURE_ALARM_LABEL = "출발 알람"
+const val PREPARATION_ALARM_LABEL = "준비 알람"
