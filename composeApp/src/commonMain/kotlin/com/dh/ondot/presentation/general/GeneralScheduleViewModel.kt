@@ -244,19 +244,8 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------RouteLoading-----------------------------------------------*/
 
     private fun getScheduleAlarms() {
-        val date = requireNotNull(uiState.value.selectedDate) {
-            "selectedDate가 null입니다."
-        }
-        val time = requireNotNull(uiState.value.selectedTime) {
-            "selectedTime가 null입니다."
-        }
-        val departurePlace = requireNotNull(uiState.value.selectedDeparturePlace) {
-            "selectedDeparturePlace가 null입니다."
-        }
-        val arrivalPlace = requireNotNull(uiState.value.selectedArrivalPlace) {
-            "selectedArrivalPlace가 null입니다."
-        }
-
+        val (date, time, places) = validateScheduleInputs()
+        val (departurePlace, arrivalPlace) = places
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
 
         viewModelScope.launch {
@@ -286,19 +275,8 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------CheckSchedule-----------------------------------------------*/
 
     fun createSchedule() {
-        val date = requireNotNull(uiState.value.selectedDate) {
-            "selectedDate가 null입니다."
-        }
-        val time = requireNotNull(uiState.value.selectedTime) {
-            "selectedTime가 null입니다."
-        }
-        val departurePlace = requireNotNull(uiState.value.selectedDeparturePlace) {
-            "selectedDeparturePlace가 null입니다."
-        }
-        val arrivalPlace = requireNotNull(uiState.value.selectedArrivalPlace) {
-            "selectedArrivalPlace가 null입니다."
-        }
-
+        val (date, time, places) = validateScheduleInputs()
+        val (departurePlace, arrivalPlace) = places
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
 
         val request = CreateScheduleRequest(
@@ -357,6 +335,22 @@ class GeneralScheduleViewModel(
                 emitEventFlow(GeneralScheduleEvent.NavigateToRouteLoading)
             }
         }
+    }
 
+    private fun validateScheduleInputs() : Triple<LocalDate, LocalTime, Pair<AddressInfo, AddressInfo>> {
+        val date = requireNotNull(uiState.value.selectedDate) {
+            "selectedDate가 null입니다."
+        }
+        val time = requireNotNull(uiState.value.selectedTime) {
+            "selectedTime가 null입니다."
+        }
+        val departurePlace = requireNotNull(uiState.value.selectedDeparturePlace) {
+            "selectedDeparturePlace가 null입니다."
+        }
+        val arrivalPlace = requireNotNull(uiState.value.selectedArrivalPlace) {
+            "selectedArrivalPlace가 null입니다."
+        }
+
+        return Triple(date, time, departurePlace to arrivalPlace)
     }
 }
