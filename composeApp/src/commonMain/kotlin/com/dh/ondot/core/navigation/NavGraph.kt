@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.dh.ondot.presentation.general.loading.RouteLoadingScreen
+import com.dh.ondot.presentation.general.place.PlacePickerScreen
 import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
 import com.dh.ondot.presentation.main.MainScreen
@@ -110,7 +112,37 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
                         launchSingleTop = true
                     }
                 },
-                navigateToPlacePicker = { TODO("화면 구현 이후 추가") }
+                navigateToPlacePicker = {
+                    navController.navigate(NavRoutes.PlacePicker.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(NavRoutes.PlacePicker.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(graphRoute)
+            }
+            val factory = remember {
+                GeneralScheduleViewModelFactory()
+            }
+            val viewModel: GeneralScheduleViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+
+            PlacePickerScreen(
+                viewModel = viewModel,
+                popScreen = { navController.popBackStack() },
+                navigateToRouteLoading = {
+                    navController.navigate(NavRoutes.RouteLoading.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(NavRoutes.RouteLoading.route) {
+            RouteLoadingScreen(
+                navigateToCheckSchedule = { TODO("Not yet implemented") }
             )
         }
     }

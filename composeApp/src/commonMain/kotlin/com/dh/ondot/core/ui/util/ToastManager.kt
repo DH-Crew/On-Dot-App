@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 object ToastManager {
-    private val _toasts = MutableSharedFlow<ToastData>(extraBufferCapacity = 1)
+    private val _toasts = MutableSharedFlow<ToastData>(
+        replay = 1,
+        extraBufferCapacity = 1
+    )
     val toasts: SharedFlow<ToastData> = _toasts
 
     suspend fun show(message: String, type: ToastType, duration: Long = 2000L) {
