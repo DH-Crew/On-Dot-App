@@ -204,7 +204,7 @@ fun PlaceList(
             .fillMaxWidth()
             .padding(horizontal = 22.dp)
     ) {
-        itemsIndexed(list, key = { _, item -> "${item.latitude}_${item.longitude}" }) { index, item ->
+        itemsIndexed(list, key = { _, item -> "${item.latitude}_${item.longitude}_${item.title}" }) { index, item ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
