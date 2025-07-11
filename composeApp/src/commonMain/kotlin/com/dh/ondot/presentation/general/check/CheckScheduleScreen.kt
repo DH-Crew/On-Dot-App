@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -178,6 +179,12 @@ private fun TopBarSection(
                     singleLine = true,
                     textStyle = OnDotTypo().titleSmallM.copy(color = Gray800),
                     cursorBrush = SolidColor(Gray0),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            onValueChanged(input)
+                            focusRequester.freeFocus()
+                        }
+                    ),
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester)
