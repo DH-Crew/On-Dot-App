@@ -128,4 +128,17 @@ object DateTimeFormatter {
 
         return "$period $hh:$mm"
     }
+
+    /**----------------------------------------------ISO8601 생성---------------------------------------------*/
+
+    private fun Int.pad2() = this.toString().padStart(2, '0')
+
+    fun LocalDate.toIsoDateString(): String =
+        "${year.toString().padStart(4, '0')}-" + "${monthNumber.pad2()}-" + dayOfMonth.pad2()
+
+    fun LocalTime.toIsoTimeString(): String =
+        "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
+
+    fun formatIsoDateTime(date: LocalDate, time: LocalTime): String =
+        "${date.toIsoDateString()}T${time.toIsoTimeString()}"
 }

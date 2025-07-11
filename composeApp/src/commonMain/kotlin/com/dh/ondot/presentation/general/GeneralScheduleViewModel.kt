@@ -4,14 +4,20 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
+import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.RouterType
 import com.dh.ondot.domain.model.enums.ToastType
+import com.dh.ondot.domain.model.request.CreateScheduleRequest
+import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.HomeAddressInfo
+import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
+import com.dh.ondot.presentation.ui.theme.ERROR_CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
+import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -235,6 +241,79 @@ class GeneralScheduleViewModel(
         )
     }
 
+    /**--------------------------------------------RouteLoading-----------------------------------------------*/
+
+    private fun getScheduleAlarms() {
+        val (date, time, places) = validateScheduleInputs()
+        val (departurePlace, arrivalPlace) = places
+        val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
+
+        viewModelScope.launch {
+            scheduleRepository.getScheduleAlarms(
+                request = ScheduleAlarmRequest(
+                    appointmentAt = appointmentAt,
+                    startLatitude = departurePlace.latitude,
+                    startLongitude = departurePlace.longitude,
+                    endLatitude = arrivalPlace.latitude,
+                    endLongitude = arrivalPlace.longitude
+                )
+            ).collect {
+                resultResponse(it, ::onSuccessGetScheduleAlarms, ::onFailedGetScheduleAlarms)
+            }
+        }
+    }
+
+    private fun onSuccessGetScheduleAlarms(result: ScheduleAlarmResponse) {
+        updateState(uiState.value.copy(preparationAlarm = result.preparationAlarm, departureAlarm = result.departureAlarm))
+    }
+
+    private fun onFailedGetScheduleAlarms(e: Throwable) {
+        logger.e { "On Failed Get Schedule Alarms: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_GET_SCHEDULE_ALARMS, ToastType.ERROR) }
+    }
+
+    /**--------------------------------------------CheckSchedule-----------------------------------------------*/
+
+    fun createSchedule() {
+        val (date, time, places) = validateScheduleInputs()
+        val (departurePlace, arrivalPlace) = places
+        val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
+
+        val request = CreateScheduleRequest(
+            title = uiState.value.scheduleTitle,
+            isRepeat = uiState.value.isRepeat,
+            repeatDays = uiState.value.activeWeekDays.map { it + 1 }.toList(),
+            departurePlace = departurePlace,
+            arrivalPlace = arrivalPlace,
+            appointmentAt = appointmentAt,
+            preparationAlarm = uiState.value.preparationAlarm,
+            departureAlarm = uiState.value.departureAlarm
+        )
+
+        viewModelScope.launch {
+            scheduleRepository.createSchedule(request = request).collect {
+                resultResponse(it, ::onSuccessCreateSchedule, ::onFailedCreateSchedule)
+            }
+        }
+    }
+
+    private fun onSuccessCreateSchedule(result: Unit) {
+        emitEventFlow(GeneralScheduleEvent.NavigateToMain)
+    }
+
+    private fun onFailedCreateSchedule(e: Throwable) {
+        logger.e { "On Failed Create Schedule: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_CREATE_SCHEDULE, ToastType.ERROR) }
+    }
+
+    fun updateScheduleTitle(title: String) {
+        updateState(uiState.value.copy(scheduleTitle = title))
+    }
+
+    fun updatePreparationAlarmEnabled() {
+        updateState(uiState.value.copy(preparationAlarm = uiState.value.preparationAlarm.copy(enabled = !uiState.value.preparationAlarm.enabled)))
+    }
+
     /**--------------------------------------------ETC-----------------------------------------------*/
 
     fun isButtonEnabled(): Boolean {
@@ -252,9 +331,26 @@ class GeneralScheduleViewModel(
                 emitEventFlow(GeneralScheduleEvent.NavigateToPlacePicker)
             }
             2 -> {
+                getScheduleAlarms()
                 emitEventFlow(GeneralScheduleEvent.NavigateToRouteLoading)
             }
         }
+    }
 
+    private fun validateScheduleInputs() : Triple<LocalDate, LocalTime, Pair<AddressInfo, AddressInfo>> {
+        val date = requireNotNull(uiState.value.selectedDate) {
+            "selectedDate가 null입니다."
+        }
+        val time = requireNotNull(uiState.value.selectedTime) {
+            "selectedTime가 null입니다."
+        }
+        val departurePlace = requireNotNull(uiState.value.selectedDeparturePlace) {
+            "selectedDeparturePlace가 null입니다."
+        }
+        val arrivalPlace = requireNotNull(uiState.value.selectedArrivalPlace) {
+            "selectedArrivalPlace가 null입니다."
+        }
+
+        return Triple(date, time, departurePlace to arrivalPlace)
     }
 }

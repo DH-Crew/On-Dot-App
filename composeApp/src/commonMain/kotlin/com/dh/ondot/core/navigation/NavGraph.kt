@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.dh.ondot.presentation.general.check.CheckScheduleScreen
 import com.dh.ondot.presentation.general.loading.RouteLoadingScreen
 import com.dh.ondot.presentation.general.place.PlacePickerScreen
 import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
@@ -142,7 +143,35 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
 
         composable(NavRoutes.RouteLoading.route) {
             RouteLoadingScreen(
-                navigateToCheckSchedule = { TODO("Not yet implemented") }
+                navigateToCheckSchedule = {
+                    navController.navigate(NavRoutes.CheckSchedule.route) {
+                        popUpTo(NavRoutes.PlacePicker.route) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(NavRoutes.CheckSchedule.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(graphRoute)
+            }
+            val factory = remember {
+                GeneralScheduleViewModelFactory()
+            }
+            val viewModel: GeneralScheduleViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+
+            CheckScheduleScreen(
+                viewModel = viewModel,
+                popScreen = { navController.popBackStack() },
+                navigateToMain = {
+                    navController.navigate(NavRoutes.Main.route) {
+                        popUpTo(graphRoute) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }
