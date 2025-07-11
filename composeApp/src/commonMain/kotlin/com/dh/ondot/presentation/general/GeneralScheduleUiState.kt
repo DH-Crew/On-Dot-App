@@ -3,6 +3,8 @@ package com.dh.ondot.presentation.general
 import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.domain.model.enums.RouterType
 import com.dh.ondot.domain.model.response.AddressInfo
+import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -41,5 +43,12 @@ data class GeneralScheduleUiState(
     val selectedArrivalPlace: AddressInfo? = null,
     val homeAddress: AddressInfo = AddressInfo(),
     val isHomeAddressInitialized: Boolean = false,
+
+    // RouteLoading
+    val preparationAlarm: AlarmDetail = AlarmDetail(),
+    val departureAlarm: AlarmDetail = AlarmDetail(),
+
+    // CheckSchedule
+    val scheduleTitle: String = NEW_SCHEDULE_LABEL,
 
 ): UiState
