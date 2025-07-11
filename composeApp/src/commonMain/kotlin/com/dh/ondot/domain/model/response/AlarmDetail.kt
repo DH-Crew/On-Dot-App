@@ -9,8 +9,8 @@ data class AlarmDetail(
     val alarmId: Long = -1,
     val alarmMode: AlarmMode = AlarmMode.SOUND,
     @SerialName("isEnabled")
-    val enabled: Boolean? = null,
-    val triggeredAt: String = "",
+    val enabled: Boolean = false,
+    val triggeredAt: String = "2025-05-10T19:00:00",
     val isSnoozeEnabled: Boolean = false,
     val snoozeInterval: Int = 0,
     val snoozeCount: Int = 0,
