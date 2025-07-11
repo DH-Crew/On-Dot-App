@@ -33,6 +33,8 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 
@@ -40,16 +42,17 @@ import com.dh.ondot.presentation.ui.theme.OnDotTypo
 fun RouteInputSection(
     departurePlaceInput: String,
     arrivalPlaceInput: String,
-    departureFocusRequester: FocusRequester,
-    arrivalFocusRequester: FocusRequester,
-    onRouteInputChanged: (String) -> Unit,
-    onRouteInputFocused: (RouterType) -> Unit
+    readOnly: Boolean = false,
+    departureFocusRequester: FocusRequester = FocusRequester(),
+    arrivalFocusRequester: FocusRequester = FocusRequester(),
+    onRouteInputChanged: (String) -> Unit = {},
+    onRouteInputFocused: (RouterType) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Gray700, RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = Gray600, shape = RoundedCornerShape(12.dp))
+            .background(if (!readOnly) Gray700 else Green900, RoundedCornerShape(12.dp))
+            .border(width = 1.dp, color = if (!readOnly) Gray600 else Green800, shape = RoundedCornerShape(12.dp))
             .padding(vertical = 16.dp)
     ) {
         RouteInputTextField(
@@ -62,7 +65,7 @@ fun RouteInputSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        HorizontalDivider(thickness = (0.5).dp, color = Gray600)
+        HorizontalDivider(thickness = (0.5).dp, color = if (!readOnly) Gray600 else Green800)
 
         Spacer(modifier = Modifier.height(16.dp))
 
