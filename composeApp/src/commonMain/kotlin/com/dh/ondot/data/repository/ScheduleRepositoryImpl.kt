@@ -1,5 +1,6 @@
 package com.dh.ondot.data.repository
 
+import com.dh.ondot.domain.model.request.CreateScheduleRequest
 import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
 import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
 import com.dh.ondot.domain.model.response.ScheduleListResponse
@@ -27,6 +28,19 @@ class ScheduleRepositoryImpl(
     override suspend fun getScheduleAlarms(request: ScheduleAlarmRequest): Flow<Result<ScheduleAlarmResponse>> = flow {
         val response = networkClient.request<ScheduleAlarmResponse>(
             path = "/alarms/setting",
+            method = HttpMethod.POST,
+            body = request
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun createSchedule(request: CreateScheduleRequest): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/schedules",
             method = HttpMethod.POST,
             body = request
         )
