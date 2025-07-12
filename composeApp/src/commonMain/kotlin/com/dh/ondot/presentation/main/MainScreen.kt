@@ -25,9 +25,11 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dh.ondot.core.navigation.NavRoutes
 import com.dh.ondot.domain.model.enums.BottomNavType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.home.HomeScreen
+import com.dh.ondot.presentation.setting.SettingScreen
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
@@ -70,7 +72,9 @@ fun MainScreen(
                 BottomNavType.HOME -> HomeScreen(
                     navigateToGeneralSchedule = navigateToGeneralSchedule
                 )
-                BottomNavType.SETTING -> TODO("SettingScreen 배치")
+                BottomNavType.SETTING -> {
+                    SettingScreen()
+                }
                 BottomNavType.DEFAULT -> {}
             }
         }
@@ -131,10 +135,10 @@ fun BottomNavItem(
                     haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                     when (type) {
                         BottomNavType.HOME -> {
-//                            onClick(NavRoutes.HomeScreen.route)
+                            onClick(NavRoutes.Home.route)
                         }
                         BottomNavType.SETTING -> {
-//                            onClick(NavRoutes.SettingScreen.route)
+                            onClick(NavRoutes.Setting.route)
                         }
                         BottomNavType.DEFAULT -> return@clickable
                     }
