@@ -103,7 +103,9 @@ object DateTimeFormatter {
 
     @OptIn(ExperimentalTime::class)
     fun calculateRemainingTime(iso: String): Triple<Int, Int, Int> {
-        val normalized = if (iso.endsWith("Z") || iso.contains('+')) iso else iso + "Z"
+        val timePart = if (iso.contains('T')) iso.substringAfter('T') else ""
+        val hasTimezone = timePart.endsWith("Z") || timePart.matches(Regex(".*[+-]\\d{2}:?\\d{2}$"))
+        val normalized = if (hasTimezone) iso else iso + "Z"
         val alarmInstant = Instant.parse(normalized)
         val now = Clock.System.now()
         val diff: Duration = alarmInstant - now
