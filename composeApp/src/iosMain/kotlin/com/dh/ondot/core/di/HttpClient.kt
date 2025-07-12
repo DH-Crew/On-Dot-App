@@ -19,6 +19,7 @@ actual fun httpClient(): HttpClient = HttpClient(Darwin) {
             Json {
                 ignoreUnknownKeys = true
                 isLenient       = true
+                encodeDefaults  = true
             }
         )
     }

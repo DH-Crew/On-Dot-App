@@ -16,6 +16,8 @@ sealed class NavRoutes(val route: String) {
     // Main
     data object MainGraph: NavRoutes("mainGraph")
     data object Main: NavRoutes("main")
+    data object Home: NavRoutes("home")
+    data object Setting: NavRoutes("setting")
 
     // General
     data object GeneralScheduleGraph: NavRoutes("generalScheduleGraph")
