@@ -57,7 +57,7 @@ fun ToastHost(
 
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.BottomCenter
     ) {
         current?.let { toast ->
             AnimatedVisibility(
@@ -92,7 +92,7 @@ private fun ToastItem(
     }
 
     Box(modifier = Modifier
-        .padding(top = 50.dp)
+        .padding(bottom = 50.dp)
         .padding(horizontal = 22.dp)
     ) {
         Row(
