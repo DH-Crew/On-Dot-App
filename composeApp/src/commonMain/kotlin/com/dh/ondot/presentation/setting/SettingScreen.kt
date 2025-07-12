@@ -130,7 +130,7 @@ fun SettingSection(
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp)
-                            .clickable { section.second }
+                            .clickable { section.second?.invoke() }
                     )
                 }
             }
