@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -18,11 +19,20 @@ import com.dh.ondot.core.navigation.onboardingNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
+import com.dh.ondot.domain.model.ui.AlarmEvent
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 
 @Composable
-fun App() {
+fun App(
+    initialAlarm: AlarmEvent? = null
+) {
     val navController = rememberNavController()
+
+    LaunchedEffect(initialAlarm) {
+        initialAlarm?.let { (type, alarmId) ->
+//            navController.navigate()
+        }
+    }
 
     OnDotTheme {
         DismissKeyboardOnClick {
