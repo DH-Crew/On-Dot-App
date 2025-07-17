@@ -19,6 +19,7 @@ import com.dh.ondot.core.navigation.onboardingNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
+import com.dh.ondot.core.util.AlarmNotifier
 import com.dh.ondot.domain.model.ui.AlarmEvent
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 
@@ -28,9 +29,17 @@ fun App(
 ) {
     val navController = rememberNavController()
 
+    // android 에서 MainActivity 로부터 전달된 이벤트 처리
     LaunchedEffect(initialAlarm) {
         initialAlarm?.let { (type, alarmId) ->
-//            navController.navigate()
+            TODO("네비게이션 로직 구현")
+        }
+    }
+
+    // ios 에서 AlarmNotifier 로부터 전달된 이벤트 처리
+    LaunchedEffect(Unit) {
+        AlarmNotifier.events.collect { event ->
+            TODO("네비게이션 로직 구현")
         }
     }
 
