@@ -16,8 +16,8 @@ import androidx.core.app.ServiceCompat
 import co.touchlab.kermit.Logger
 import com.dh.ondot.R
 import com.dh.ondot.core.di.provideSoundPlayer
-import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.domain.model.enums.AlarmType
+import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.presentation.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -112,7 +112,7 @@ class AlarmService : Service() {
             }
         }
 
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
