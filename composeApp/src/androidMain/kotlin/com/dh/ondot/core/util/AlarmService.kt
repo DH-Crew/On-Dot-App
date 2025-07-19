@@ -82,7 +82,7 @@ class AlarmService : Service() {
             PowerManager.PARTIAL_WAKE_LOCK,
             "OnDot:AlarmWakeLock"
         )
-        wakeLock.acquire(10 * 60 * 1000L)
+        wakeLock.acquire(2 * 60 * 1000L)
 
         serviceScope.launch {
             val alarmList = storage.alarmsFlow.first()
