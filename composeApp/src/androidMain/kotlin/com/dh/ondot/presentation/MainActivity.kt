@@ -70,7 +70,13 @@ class MainActivity : ComponentActivity() {
 
     private fun parseAlarmEvent(intent: Intent): AlarmEvent? {
         val id = intent.getLongExtra("alarmId", -1L)
-        val type = intent.getStringExtra("type")?.let { AlarmType.valueOf(it) }
+        val type = intent.getStringExtra("type")?.let {
+            try {
+                AlarmType.valueOf(it)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
 
         return if (id != -1L && type != null) { AlarmEvent(id, type) } else null
     }
