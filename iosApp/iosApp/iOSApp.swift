@@ -4,6 +4,8 @@ import ComposeApp
 
 @main
 struct iOSApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     init() {
         KakaoSDK.initSDK(appKey: KAKAO_APP_KEY)
         

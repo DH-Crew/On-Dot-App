@@ -1,6 +1,6 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.service.SoundPlayer
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFAudio.AVAudioPlayer
 import platform.AVFAudio.AVAudioSession
@@ -21,7 +21,7 @@ class IosSoundPlayer: SoundPlayer {
         AVAudioSession.sharedInstance().setActive(true, error = null)
     }
 
-    override fun playSound(soundResId: String) {
+    override fun playSound(soundResId: String, onComplete: () -> Unit) {
         stopSound()
 
         val url: NSURL = NSBundle.mainBundle.URLForResource(
@@ -39,10 +39,11 @@ class IosSoundPlayer: SoundPlayer {
         }
     }
 
-    override fun stopSound() {
+    override fun stopSound(onComplete: () -> Unit) {
         player?.apply {
             if (player?.playing == true) stop()
         }
         player = null
+        onComplete()
     }
 }
