@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -18,11 +19,29 @@ import com.dh.ondot.core.navigation.onboardingNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
+import com.dh.ondot.core.util.AlarmNotifier
+import com.dh.ondot.domain.model.ui.AlarmEvent
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 
 @Composable
-fun App() {
+fun App(
+    initialAlarm: AlarmEvent? = null
+) {
     val navController = rememberNavController()
+
+    // android 에서 MainActivity 로부터 전달된 이벤트 처리
+    LaunchedEffect(initialAlarm) {
+        initialAlarm?.let { (type, alarmId) ->
+            TODO("네비게이션 로직 구현")
+        }
+    }
+
+    // ios 에서 AlarmNotifier 로부터 전달된 이벤트 처리
+    LaunchedEffect(Unit) {
+        AlarmNotifier.events.collect { event ->
+            TODO("네비게이션 로직 구현")
+        }
+    }
 
     OnDotTheme {
         DismissKeyboardOnClick {

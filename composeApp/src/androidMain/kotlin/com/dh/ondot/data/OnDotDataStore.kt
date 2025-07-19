@@ -8,7 +8,7 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore by preferencesDataStore(name = "ondot_prefs")
+val Context.dataStore by preferencesDataStore(name = "ondot_prefs")
 
 class OnDotDataStore(context: Context) {
     private val dataStore = context.dataStore

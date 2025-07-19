@@ -2,15 +2,18 @@ package com.dh.ondot.core.util
 
 import com.dh.ondot.presentation.ui.theme.WORD_AM
 import com.dh.ondot.presentation.ui.theme.WORD_PM
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlin.time.Clock
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 object DateTimeFormatter {
 
@@ -70,22 +73,13 @@ object DateTimeFormatter {
     }
 
     private fun parseAmPmTime(iso: String): AmPmTime {
-        require(iso.contains('T')) { "시간 정보가 포함된 ISO만 지원: $iso" }
+        val localDt = LocalDateTime.parse(iso)
+        val h24    = localDt.hour
+        val minute = localDt.minute
 
-        val timePart = iso
-            .substringAfter('T')
-            .substringBefore('Z')
-            .substringBefore('+')
-            .substringBefore('-')
-        val parts = timePart.split(':')
-
-        require(parts.size >= 2) { "유효하지 않은 시간 포맷: $iso" }
-
-        val h24 = parts[0].toIntOrNull() ?: error("잘못된 시간(시): $iso")
-        val minute = parts[1].toIntOrNull() ?: error("잘못된 시간(분): $iso")
         val period = if (h24 < 12) WORD_AM else WORD_PM
         val hour12 = when (val m = h24 % 12) {
-            0 -> 12
+            0   -> 12
             else -> m
         }
 
@@ -101,14 +95,16 @@ object DateTimeFormatter {
         return period to "${hour12.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}"
     }
 
-    @OptIn(ExperimentalTime::class)
     fun calculateRemainingTime(iso: String): Triple<Int, Int, Int> {
-        val timePart = if (iso.contains('T')) iso.substringAfter('T') else ""
-        val hasTimezone = timePart.endsWith("Z") || timePart.matches(Regex(".*[+-]\\d{2}:?\\d{2}$"))
-        val normalized = if (hasTimezone) iso else iso + "Z"
-        val alarmInstant = Instant.parse(normalized)
-        val now = Clock.System.now()
-        val diff: Duration = alarmInstant - now
+        val localDt = LocalDateTime.parse(iso)
+        val alarmInstant = localDt.toInstant(TimeZone.currentSystemDefault())
+
+        val nowInstant: Instant = Clock.System.now()
+        val nowInSeoul: Instant = nowInstant
+            .toLocalDateTime(TimeZone.of("Asia/Seoul"))
+            .toInstant(TimeZone.of("Asia/Seoul"))
+
+        val diff: Duration = alarmInstant - nowInSeoul
         if (diff.isNegative() || diff == Duration.ZERO) {
             return Triple(0, 0, 0)
         }
@@ -144,4 +140,15 @@ object DateTimeFormatter {
 
     fun formatIsoDateTime(date: LocalDate, time: LocalTime): String =
         "${date.toIsoDateString()}T${time.toIsoTimeString()}"
+
+    /**----------------------------------------------ISO8601 변환---------------------------------------------*/
+
+    /** Iso8601 기반의 문자열을 밀리초로 변환하는 메서드 */
+    fun isoStringToEpochMillis(iso: String): Long {
+        // 타임존 없는 ISO 문자열은 "로컬 시간"으로 그대로 해석
+        val localDt: LocalDateTime = LocalDateTime.parse(iso)
+        // KST(Asia/Seoul) 기준 Instant로 변환
+        val instant = localDt.toInstant(TimeZone.of("Asia/Seoul"))
+        return instant.toEpochMilliseconds()
+    }
 }
