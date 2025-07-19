@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import com.dh.ondot.core.util.IosAlarmScheduler
 import com.dh.ondot.core.util.IosAlarmStorage
 import com.dh.ondot.core.util.IosSoundPlayer
-import com.dh.ondot.domain.di.AlarmScheduler
-import com.dh.ondot.domain.di.AlarmStorage
-import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 
 actual fun provideTokenProvider(): TokenProvider = TokenProvider()

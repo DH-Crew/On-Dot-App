@@ -4,8 +4,8 @@ import com.dh.ondot.data.repository.AuthRepositoryImpl
 import com.dh.ondot.data.repository.MemberRepositoryImpl
 import com.dh.ondot.data.repository.PlaceRepositoryImpl
 import com.dh.ondot.data.repository.ScheduleRepositoryImpl
-import com.dh.ondot.domain.di.AlarmScheduler
-import com.dh.ondot.domain.di.AlarmStorage
+import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.repository.AuthRepository
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository

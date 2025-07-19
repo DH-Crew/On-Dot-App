@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import com.dh.ondot.core.util.AndroidAlarmScheduler
 import com.dh.ondot.core.util.AndroidAlarmStorage
 import com.dh.ondot.core.util.AndroidSoundPlayer
-import com.dh.ondot.domain.di.AlarmScheduler
-import com.dh.ondot.domain.di.AlarmStorage
-import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 import com.dh.ondot.util.AppContextHolder
 

@@ -1,6 +1,6 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.di.AlarmStorage
+import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.model.response.AlarmDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,9 +1,9 @@
 package com.dh.ondot.core.di
 
 import androidx.compose.runtime.Composable
-import com.dh.ondot.domain.di.AlarmScheduler
-import com.dh.ondot.domain.di.AlarmStorage
-import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 
 expect fun provideTokenProvider(): TokenProvider

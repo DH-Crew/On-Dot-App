@@ -1,4 +1,4 @@
-package com.dh.ondot.domain.di
+package com.dh.ondot.domain.service
 
 import com.dh.ondot.domain.model.response.AlarmDetail
 import kotlinx.coroutines.flow.Flow
