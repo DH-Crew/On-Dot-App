@@ -1,8 +1,8 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.domain.service.AlarmScheduler
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
 import platform.Foundation.NSCalendarUnitHour
@@ -84,7 +84,11 @@ class IosAlarmScheduler: AlarmScheduler {
 
     private fun isoStringToNSDate(iso: String): NSDate? {
         val fmt = NSDateFormatter().apply {
-            dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            dateFormat = if (iso.contains("Z") || iso.contains("+")) {
+                "yyyy-MM-dd'T'HH:mm:ssZ"
+            } else {
+                "yyyy-MM-dd'T'HH:mm:ss"
+            }
             timeZone = NSTimeZone.localTimeZone
         }
         return fmt.dateFromString(iso)
