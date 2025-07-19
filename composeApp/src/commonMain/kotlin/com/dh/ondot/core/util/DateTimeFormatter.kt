@@ -144,19 +144,8 @@ object DateTimeFormatter {
     /**----------------------------------------------ISO8601 변환---------------------------------------------*/
 
     /** Iso8601 기반의 문자열을 밀리초로 변환하는 메서드 */
-//    fun isoStringToEpochMillis(iso: String): Long {
-//        val timePart = if (iso.contains('T')) iso.substringAfter('T') else ""
-//        val hasTimezone = timePart.endsWith("Z") || timePart.matches(Regex(".*[+-]\\d{2}:?\\d{2}$"))
-//        val normalized = if (hasTimezone) iso else iso + "Z"
-//        val instant = Instant.parse(normalized)
-//        val seoulInstant = instant.toLocalDateTime(TimeZone.of("Asia/Seoul")).toInstant(TimeZone.of("Asia/Seoul"))
-//
-//        return seoulInstant.toEpochMilliseconds()
-//    }
-
-
     fun isoStringToEpochMillis(iso: String): Long {
-        // ※ 타임존 없는 ISO 문자열은 "로컬 시간"으로 그대로 해석
+        // 타임존 없는 ISO 문자열은 "로컬 시간"으로 그대로 해석
         val localDt: LocalDateTime = LocalDateTime.parse(iso)
         // KST(Asia/Seoul) 기준 Instant로 변환
         val instant = localDt.toInstant(TimeZone.of("Asia/Seoul"))
