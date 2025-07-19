@@ -6,8 +6,8 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.di.AlarmScheduler
-import com.dh.ondot.domain.di.AlarmStorage
+import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.Schedule

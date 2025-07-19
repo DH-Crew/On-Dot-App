@@ -6,7 +6,7 @@ import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.data.model.TokenModel
-import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.domain.model.enums.AlarmMode
 import com.dh.ondot.domain.model.enums.RingTone
 import com.dh.ondot.domain.model.enums.SoundCategory

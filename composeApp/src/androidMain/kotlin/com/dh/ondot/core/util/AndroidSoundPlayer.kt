@@ -7,7 +7,7 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
 import co.touchlab.kermit.Logger
-import com.dh.ondot.domain.di.SoundPlayer
+import com.dh.ondot.domain.service.SoundPlayer
 
 class AndroidSoundPlayer(
     private val context: Context

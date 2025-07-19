@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.RequiresPermission
 import co.touchlab.kermit.Logger
-import com.dh.ondot.domain.di.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.response.AlarmDetail
 

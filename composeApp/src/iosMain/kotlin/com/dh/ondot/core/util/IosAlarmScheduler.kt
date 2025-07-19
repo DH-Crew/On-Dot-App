@@ -1,6 +1,6 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.di.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.response.AlarmDetail
 import platform.Foundation.NSCalendar
