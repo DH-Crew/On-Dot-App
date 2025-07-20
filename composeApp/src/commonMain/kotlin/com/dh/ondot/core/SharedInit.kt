@@ -4,6 +4,7 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.di.appModule
 import com.dh.ondot.core.di.provideAlarmScheduler
 import com.dh.ondot.core.di.provideAlarmStorage
+import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.di.provideTokenProvider
 import org.koin.core.context.startKoin
 
@@ -11,7 +12,8 @@ fun initShared() {
     ServiceLocator.init(
         provideTokenProvider(),
         provideAlarmStorage(),
-        provideAlarmScheduler()
+        provideAlarmScheduler(),
+        provideSoundPlayer()
     )
 }
 
