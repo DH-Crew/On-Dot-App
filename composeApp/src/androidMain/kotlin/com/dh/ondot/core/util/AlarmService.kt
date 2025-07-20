@@ -32,7 +32,6 @@ class AlarmService : Service() {
         private const val NOTIFICATION_ID = 1001
     }
 
-
     private val logger = Logger.withTag("AlarmService")
 
     private lateinit var wakeLock: PowerManager.WakeLock
@@ -86,12 +85,12 @@ class AlarmService : Service() {
 
         serviceScope.launch {
             val alarmList = storage.alarmsFlow.first()
-            val alarm = alarmList.firstOrNull { it.alarmId == alarmId }
+            val alarm = alarmList.firstOrNull { it.alarmDetail.alarmId == alarmId }
 
-            logger.d { "Alarm RingTone: ${alarm?.ringTone?.lowercase()}" }
+            logger.d { "Alarm RingTone: ${alarm?.alarmDetail?.ringTone?.lowercase()}" }
 
-            if (alarm != null && alarm.enabled) {
-                soundPlayer.playSound(alarm.ringTone.lowercase()) {
+            if (alarm != null && alarm.alarmDetail.enabled) {
+                soundPlayer.playSound(alarm.alarmDetail.ringTone.lowercase()) {
                     if (wakeLock.isHeld) wakeLock.release()
                     stopForeground(STOP_FOREGROUND_DETACH)
                     stopSelf()
@@ -103,7 +102,7 @@ class AlarmService : Service() {
                     addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
                     putExtra("alarmId", alarmId)
-                    putExtra("alarmType", type.name)
+                    putExtra("type", type.name)
                 }
 
                 startActivity(activityIntent)

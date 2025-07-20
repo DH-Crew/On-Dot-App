@@ -16,15 +16,20 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
+import co.touchlab.kermit.Logger
 import com.dh.ondot.App
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.ui.AlarmEvent
 
 class MainActivity : ComponentActivity() {
 
-    private var initialAlarmEvent: AlarmEvent? = null
+    private val logger = Logger.withTag("MainActivity")
+    private var initialAlarmEvent by mutableStateOf<AlarmEvent?>(null)
 
     private val exactAlarmLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -64,6 +69,7 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
 
         parseAlarmEvent(intent)?.let { event ->
+            logger.d { "onNewIntent: $event" }
             initialAlarmEvent = event
         }
     }
