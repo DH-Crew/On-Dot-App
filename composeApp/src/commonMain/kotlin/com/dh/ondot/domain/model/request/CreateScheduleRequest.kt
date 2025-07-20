@@ -10,6 +10,8 @@ data class CreateScheduleRequest(
     val isRepeat: Boolean,
     val repeatDays: List<Int>,
     val appointmentAt: String,
+    val isMedicationRequired: Boolean,
+    val preparationNote: String,
     val departurePlace: AddressInfo,
     val arrivalPlace: AddressInfo,
     val preparationAlarm: AlarmDetail,
