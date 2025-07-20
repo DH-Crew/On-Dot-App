@@ -4,6 +4,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_AM
 import com.dh.ondot.presentation.ui.theme.WORD_PM
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -26,6 +27,23 @@ object DateTimeFormatter {
         /** 원하는 구분자(delim)로 "yyyy{delim}MM{delim}DD" 포맷 */
         fun format(delim: String = "."): String =
             listOf(year, month.to2(), day.to2()).joinToString(delim)
+
+        /** 06월 13일 화요일 형태로 포맷 */
+        fun formatKoreanDate(): String {
+            val date = LocalDate(year, month, day)
+            val dayOfWeekKorean = when (date.dayOfWeek) {
+                DayOfWeek.MONDAY    -> "월요일"
+                DayOfWeek.TUESDAY   -> "화요일"
+                DayOfWeek.WEDNESDAY -> "수요일"
+                DayOfWeek.THURSDAY  -> "목요일"
+                DayOfWeek.FRIDAY    -> "금요일"
+                DayOfWeek.SATURDAY  -> "토요일"
+                DayOfWeek.SUNDAY    -> "일요일"
+                else -> ""
+            }
+
+            return "${month.pad2()}월 ${day.pad2()}일 $dayOfWeekKorean"
+        }
     }
 
     private fun parseYMD(iso: String): YMD {
@@ -46,6 +64,9 @@ object DateTimeFormatter {
     }
 
     fun formatDate(iso: String, delimiter: String = "."): String = parseYMD(iso).format(delimiter)
+
+    /** 06월 13일 화요일 형태로 포맷 */
+    fun formatKoreanDate(iso: String): String = parseYMD(iso).formatKoreanDate()
 
     /** 주어진 연,월의 1일부터 마지막 일까지 리스트로 생성 */
     fun monthDays(year: Int, month: Int): List<LocalDate> {
@@ -70,6 +91,19 @@ object DateTimeFormatter {
         private fun Int.pad2() = this.toString().padStart(2, '0')
         /** "오전 1:05" 같은 형태로 포맷 */
         fun format(): String = "$period $hour12:${minute.pad2()}"
+
+        /** 23:05 같은 형태로 포맷 */
+        fun formatHourMinute(): String = "${hour12.pad2()}:${minute.pad2()}"
+    }
+
+    data class HourMinuteSecond(
+        val hour: Int,
+        val minute: Int,
+        val second: Int
+    ) {
+        private fun Int.pad2() = this.toString().padStart(2, '0')
+        /** "01:00:00" 형태로 포맷 */
+        fun format(): String = "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
     }
 
     private fun parseAmPmTime(iso: String): AmPmTime {
@@ -88,6 +122,21 @@ object DateTimeFormatter {
 
     /** "오전 01:05" 같은 형태로 포맷 */
     fun formatAmPmTime(iso: String): String = parseAmPmTime(iso).format()
+
+    /** "23:05" 같은 형태로 포맷 */
+    fun formatHourMinute(iso: String): String = parseAmPmTime(iso).formatHourMinute()
+
+    private fun parseHourMinuteSecond(iso: String): HourMinuteSecond {
+        val localDt = LocalDateTime.parse(iso)
+        val h24    = localDt.hour
+        val minute = localDt.minute
+        val second = localDt.second
+
+        return HourMinuteSecond(h24, minute, second)
+    }
+
+    /** "01:00:00" 같은 형태로 포맷 */
+    fun formatHourMinuteSecond(iso: String): String = parseHourMinuteSecond(iso).format()
 
     /** Pair("오전", "01:05") 같은 형태로 포맷 */
     fun formatAmPmTimePair(iso: String): Pair<String, String> {
