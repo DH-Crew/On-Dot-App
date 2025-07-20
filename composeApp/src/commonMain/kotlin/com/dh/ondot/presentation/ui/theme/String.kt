@@ -32,6 +32,7 @@ const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
 const val CREATE_SCHEDULE = "일정 생성"
+const val PREPARATION_START_BUTTON_TEXT = "준비 시작하기"
 
 // ERROR
 const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
@@ -96,3 +97,8 @@ const val SETTING_ALARM_DEFAULT = "알람 초기값 설정"
 const val SETTING_PREPARE_TIME = "준비 시간 설정"
 const val SETTING_CUSTOMER_SERVICE = "고객센터"
 const val SETTING_SERVICE_POLICY = "서비스 정책"
+
+// Alarm
+fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 시작하세요!"
+fun snoozeIntervalLabel(snoozeInterval: Int) = "${snoozeInterval}분 알람 미루기"
+fun formatRemainingSnoozeTime(minute: Int, second: Int) = "${minute}:${second}"
