@@ -185,8 +185,8 @@ private fun SnoozeButton(
 ) {
     Box(
         modifier = Modifier
-            .padding(vertical = 18.dp, horizontal = 28.dp)
             .background(Gray700, RoundedCornerShape(12.dp))
+            .padding(vertical = 18.dp, horizontal = 28.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
