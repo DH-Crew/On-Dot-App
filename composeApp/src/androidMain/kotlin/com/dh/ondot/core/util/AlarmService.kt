@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 class AlarmService : Service() {
 
     companion object {
-        private const val CHANNEL_ID = "fucking_alarm_channel"
+        private const val CHANNEL_ID = "channel_alarm"
         private const val NOTIFICATION_ID = 1001
     }
 
