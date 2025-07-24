@@ -6,13 +6,14 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.domain.model.response.ScheduleListResponse
+import com.dh.ondot.domain.model.ui.AlarmRingInfo
 import com.dh.ondot.domain.repository.ScheduleRepository
+import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import kotlinx.coroutines.launch
 
@@ -63,21 +64,37 @@ class HomeViewModel(
     private fun processAlarms(schedules: List<Schedule>) {
         viewModelScope.launch {
             // 알람 리스트 추출
-            val alarmsWithType = schedules.flatMap { schedule ->
+            val alarmRingInfos = schedules.flatMap { schedule ->
                 buildList {
                     if (schedule.preparationAlarm.enabled) {
-                        add(schedule.preparationAlarm to AlarmType.Preparation)
+                        add(
+                            AlarmRingInfo(
+                                alarmDetail = schedule.preparationAlarm,
+                                alarmType = AlarmType.Preparation,
+                                appointmentAt = schedule.appointmentAt,
+                                scheduleTitle = schedule.scheduleTitle,
+                                scheduleId = schedule.scheduleId
+                            )
+                        )
                     }
-                    add(schedule.departureAlarm to AlarmType.Departure)
+                    add(
+                        AlarmRingInfo(
+                            alarmDetail = schedule.departureAlarm,
+                            alarmType = AlarmType.Departure,
+                            appointmentAt = schedule.appointmentAt,
+                            scheduleTitle = schedule.scheduleTitle,
+                            scheduleId = schedule.scheduleId
+                        )
+                    )
                 }
             }
 
             // 저장소에 저장
-            alarmStorage.saveAlarms(alarmsWithType.map { it.first })
+            alarmStorage.saveAlarms(alarmRingInfos)
 
             // 스케줄러 예약
-            alarmsWithType.forEach { (alarm, type) ->
-                alarmScheduler.scheduleAlarm(alarm, type)
+            alarmRingInfos.forEach { info ->
+                alarmScheduler.scheduleAlarm(info.alarmDetail, info.alarmType)
             }
         }
     }

@@ -1,6 +1,22 @@
 package com.dh.ondot.core.navigation
 
-sealed class NavRoutes(val route: String) {
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+
+@Serializable
+sealed class NavRoutes(@Transient val route: String = "") {
+    // Alarm
+    @Serializable
+    data object AlarmGraph: NavRoutes("alarmGraph")
+    @Serializable
+    data class PreparationAlarm(val alarmId: Long) : NavRoutes("preparationAlarm/{alarmId}") {
+        companion object {
+            const val ROUTE: String = "preparationAlarm/{alarmId}"
+            fun createRoute(id: Long) = "preparationAlarm/$id"
+        }
+    }
+
+
     // Splash
     data object SplashGraph: NavRoutes("splashGraph")
     data object Splash: NavRoutes("splash")
