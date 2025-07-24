@@ -1,7 +1,10 @@
 package com.dh.ondot.presentation
 
+import android.Manifest
 import android.app.AlarmManager
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -10,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -20,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import co.touchlab.kermit.Logger
 import com.dh.ondot.App
@@ -29,6 +34,21 @@ import com.dh.ondot.domain.model.ui.AlarmEvent
 class MainActivity : ComponentActivity() {
 
     private val logger = Logger.withTag("MainActivity")
+
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                logger.i { "알림 권한이 허용되었습니다." }
+            } else {
+                logger.w { "알림 권한이 거부되었습니다. 앱 설정으로 안내합니다." }
+                startActivity(
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", packageName, null)
+                    }
+                )
+            }
+        }
+
     private var initialAlarmEvent by mutableStateOf<AlarmEvent?>(null)
 
     private val exactAlarmLauncher =
@@ -45,9 +65,27 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    @RequiresApi(Build.VERSION_CODES.O_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val has = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (!has) {
+                logger.d { "알림 권한이 필요하여 런타임 요청을 시작합니다." }
+                requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                logger.i { "알림 권한이 이미 허용된 상태입니다." }
+            }
+        }
+
+        setShowWhenLocked(true)
+        setTurnScreenOn(true)
+
+        enableEdgeToEdge()
 
         ensureExactAlarmPermission()
 
