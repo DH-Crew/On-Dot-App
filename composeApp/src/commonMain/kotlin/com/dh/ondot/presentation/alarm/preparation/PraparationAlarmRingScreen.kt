@@ -254,7 +254,7 @@ private fun AlarmSnoozedSection(
     val timeLeftSecond by produceState(initialValue = totalSeconds) {
         var current = totalSeconds
 
-        while (current >= 0) {
+        while (current > 0) {
             delay(1000)
             current--
             value = current
