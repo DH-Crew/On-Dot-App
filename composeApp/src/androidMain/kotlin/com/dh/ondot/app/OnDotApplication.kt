@@ -5,6 +5,7 @@ import com.dh.ondot.BuildConfig
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.di.provideAlarmScheduler
 import com.dh.ondot.core.di.provideAlarmStorage
+import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.di.provideTokenProvider
 import com.dh.ondot.core.initKoin
 import com.dh.ondot.util.AppContextHolder
@@ -18,7 +19,8 @@ class OnDotApplication: Application() {
         ServiceLocator.init(
             provideTokenProvider(),
             provideAlarmStorage(),
-            provideAlarmScheduler()
+            provideAlarmScheduler(),
+            provideSoundPlayer()
         )
         initKoin()
     }

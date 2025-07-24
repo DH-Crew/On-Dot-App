@@ -29,7 +29,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                 // 원격(푸시) 알림 수신을 위해 APNs 서버에 디바이스 토큰 등록
                 // APNs(Apple Push Notification service) 서버로 디바이스 토큰을 요청
                 // application(_:didRegisterForRemoteNotificationsWithDeviceToken:) 콜백에서 토큰을 받아와 서버와 연동할 수 있음
-                application.registerForRemoteNotifications()
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             } else {
                 // 권한이 거부되었을 때 처리
                 self.handleNotificationPermissionDenied()

@@ -283,6 +283,8 @@ class GeneralScheduleViewModel(
             title = uiState.value.scheduleTitle,
             isRepeat = uiState.value.isRepeat,
             repeatDays = uiState.value.activeWeekDays.map { it + 1 }.toList(),
+            isMedicationRequired = false,
+            preparationNote = "",
             departurePlace = departurePlace,
             arrivalPlace = arrivalPlace,
             appointmentAt = appointmentAt,
