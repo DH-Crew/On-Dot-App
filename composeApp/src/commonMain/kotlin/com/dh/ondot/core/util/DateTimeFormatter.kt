@@ -93,7 +93,15 @@ object DateTimeFormatter {
         fun format(): String = "$period $hour12:${minute.pad2()}"
 
         /** 23:05 같은 형태로 포맷 */
-        fun formatHourMinute(): String = "${hour12.pad2()}:${minute.pad2()}"
+        fun formatHourMinute(): String {
+            val hour24 = when {
+                period == WORD_AM && hour12 == 12 -> 0
+                period == WORD_AM -> hour12
+                period == WORD_PM && hour12 == 12 -> 12
+                else -> hour12
+            }
+            return "${hour24.pad2()}:${minute.pad2()}"
+        }
     }
 
     data class HourMinuteSecond(
