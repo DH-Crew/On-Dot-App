@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -31,10 +32,12 @@ fun RoundedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = OnDotColor.Gray700,
     placeholder: String = "",
     enabled: Boolean = true,
     maxLength: Int = 5,
     maxLines: Int = 1,
+    singleLine: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     readOnly: Boolean = false,
     onClickWhenReadOnly: () -> Unit = {},
@@ -47,7 +50,7 @@ fun RoundedTextField(
 
     Box(
         modifier = modifier
-            .background(color = OnDotColor.Gray700, shape = RoundedCornerShape(12.dp))
+            .background(color = backgroundColor, shape = RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
                 color = OnDotColor.Gray600,
@@ -93,7 +96,7 @@ fun RoundedTextField(
                         if (it.length <= maxLength) onValueChange(it)
                     },
                     enabled = enabled,
-                    singleLine = true,
+                    singleLine = singleLine,
                     textStyle = OnDotTypo().bodyLargeR1.copy(color = OnDotColor.Gray0),
                     keyboardOptions = keyboardOptions,
                     cursorBrush = SolidColor(OnDotColor.Gray0),
