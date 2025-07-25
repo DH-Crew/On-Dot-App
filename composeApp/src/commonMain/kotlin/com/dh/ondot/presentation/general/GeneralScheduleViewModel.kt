@@ -274,7 +274,7 @@ class GeneralScheduleViewModel(
 
     /**--------------------------------------------CheckSchedule-----------------------------------------------*/
 
-    fun createSchedule() {
+    fun createSchedule(isChecked: Boolean, input: String) {
         val (date, time, places) = validateScheduleInputs()
         val (departurePlace, arrivalPlace) = places
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
@@ -283,8 +283,8 @@ class GeneralScheduleViewModel(
             title = uiState.value.scheduleTitle,
             isRepeat = uiState.value.isRepeat,
             repeatDays = uiState.value.activeWeekDays.map { it + 1 }.toList(),
-            isMedicationRequired = false,
-            preparationNote = "",
+            isMedicationRequired = isChecked,
+            preparationNote = input,
             departurePlace = departurePlace,
             arrivalPlace = arrivalPlace,
             appointmentAt = appointmentAt,
@@ -314,6 +314,10 @@ class GeneralScheduleViewModel(
 
     fun updatePreparationAlarmEnabled() {
         updateState(uiState.value.copy(preparationAlarm = uiState.value.preparationAlarm.copy(enabled = !uiState.value.preparationAlarm.enabled)))
+    }
+
+    fun updateBottomSheetVisible(visible: Boolean) {
+        updateState(uiState.value.copy(showBottomSheet = visible))
     }
 
     /**--------------------------------------------ETC-----------------------------------------------*/
