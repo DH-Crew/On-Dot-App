@@ -158,7 +158,7 @@ fun ScheduleRepeatSettingContent(
         OnDotButton(
             buttonText = WORD_NEXT,
             buttonType = if (isButtonEnabled) ButtonType.Green500 else ButtonType.Gray300,
-            onClick = onClickButton
+            onClick = { if (isButtonEnabled) onClickButton() }
         )
 
         Spacer(modifier = Modifier.height(if (getPlatform().name == ANDROID) 16.dp else 37.dp))
