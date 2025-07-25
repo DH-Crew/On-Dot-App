@@ -5,5 +5,6 @@ enum class ButtonType {
     Green500,
     Green600,
     Gray300,
+    Gray400,
     Gradient
 }
