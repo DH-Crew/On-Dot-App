@@ -50,5 +50,6 @@ data class GeneralScheduleUiState(
 
     // CheckSchedule
     val scheduleTitle: String = NEW_SCHEDULE_LABEL,
+    val showBottomSheet: Boolean = false,
 
 ): UiState
