@@ -23,6 +23,8 @@ const val WORD_HELP = "도움"
 const val WORD_ACCOUNT = "계정"
 const val WORD_WITHDRAW = "회원탈퇴"
 const val WORD_LOGOUT = "로그아웃"
+const val WORD_FINE = "괜찮아요"
+const val WORD_CONFIRM = "확인"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -89,6 +91,11 @@ const val ROUTE_CALCULATE_LABEL = "최적의 출발 시간이 계산된\n알람�
 const val NEW_SCHEDULE_LABEL = "새로운 일정"
 const val DEPARTURE_ALARM_LABEL = "출발 알람"
 const val PREPARATION_ALARM_LABEL = "준비 알람"
+
+// General/BottomSheet
+const val GENERAL_SCHEDULE_BOTTOM_SHEET_TITLE = "출발 전 챙겨야할 게 있나요?"
+const val GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE = "건강에 중요한 약을 챙겨야해요"
+const val GENERAL_SCHEDULE_BOTTOM_SHEET_MATERIAL = "준비물을 적어두면 출발알람이 울릴 때\n알려드려요!"
 
 // Setting
 const val SETTING_HOME_ADDRESS = "집 주소 설정"
