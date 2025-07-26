@@ -42,7 +42,9 @@ sealed class NavRoutes(@Transient val route: String = "") {
     data object CheckSchedule: NavRoutes("checkSchedule")
 
     // EditSchedule
+    @Serializable
     data object EditScheduleGraph: NavRoutes("editScheduleGraph")
+    @Serializable
     data class EditSchedule(val scheduleId: Long): NavRoutes("editSchedule/{scheduleId}") {
         companion object {
             const val ROUTE: String = "editSchedule/{scheduleId}"

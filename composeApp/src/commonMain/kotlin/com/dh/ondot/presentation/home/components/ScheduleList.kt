@@ -1,6 +1,8 @@
 package com.dh.ondot.presentation.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
@@ -31,7 +34,9 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 @Composable
 fun ScheduleList(
     scheduleList: List<Schedule>,
-    onClickSwitch: (Long, Boolean) -> Unit
+    interactionSource: MutableInteractionSource,
+    onClickSwitch: (Long, Boolean) -> Unit,
+    onClickSchedule: (Long) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -40,7 +45,9 @@ fun ScheduleList(
         items(scheduleList, key = { it.scheduleId }) {
             ScheduleListItem(
                 item = it,
-                onClickSwitch = onClickSwitch
+                interactionSource = interactionSource,
+                onClickSwitch = onClickSwitch,
+                onClickSchedule = onClickSchedule
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -51,13 +58,21 @@ fun ScheduleList(
 @Composable
 fun ScheduleListItem(
     item: Schedule,
-    onClickSwitch: (Long, Boolean) -> Unit
+    interactionSource: MutableInteractionSource,
+    onClickSwitch: (Long, Boolean) -> Unit,
+    onClickSchedule: (Long) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Gray700, RoundedCornerShape(12.dp))
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .clip(RoundedCornerShape(12.dp))
+            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClick = { onClickSchedule(item.scheduleId) }
+            ),
         horizontalAlignment = Alignment.Start
     ) {
         ScheduleTitleDateRow(
