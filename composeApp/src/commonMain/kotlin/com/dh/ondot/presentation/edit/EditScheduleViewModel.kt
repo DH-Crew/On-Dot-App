@@ -5,6 +5,9 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
+import com.dh.ondot.core.util.DateTimeFormatter
+import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
+import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.repository.ScheduleRepository
@@ -12,6 +15,10 @@ import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_EDIT_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class EditScheduleViewModel(
     private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository
@@ -30,7 +37,17 @@ class EditScheduleViewModel(
     }
 
     private fun onSuccessGetScheduleDetail(result: ScheduleDetail) {
-        updateState(uiState.value.copy(schedule = result, isInitialized = true))
+        val date = if (result.repeatDays.isEmpty()) result.appointmentAt.toLocalDateFromIso() else null
+        val time = result.appointmentAt.toLocalTimeFromIso()
+
+        updateState(
+            uiState.value.copy(
+                schedule = result.copy(repeatDays = result.repeatDays.map { it - 1 }),
+                isInitialized = true,
+                selectedDate = date,
+                selectedTime = time,
+            )
+        )
     }
 
     private fun onFailGetScheduleDetail(e: Throwable) {
@@ -41,8 +58,17 @@ class EditScheduleViewModel(
     /**------------------------------------------일정 수정-------------------------------------------------*/
 
     fun saveSchedule() {
+        val newDate = DateTimeFormatter.formatIsoDateTime(
+            date = uiState.value.selectedDate ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            time = uiState.value.selectedTime
+        )
+        val newSchedule = uiState.value.schedule.copy(
+            appointmentAt = newDate,
+            repeatDays = uiState.value.schedule.repeatDays.map { it + 1 }
+        )
+
         viewModelScope.launch {
-            scheduleRepository.editSchedule(uiState.value.scheduleId , uiState.value.schedule).collect {
+            scheduleRepository.editSchedule(uiState.value.scheduleId , newSchedule).collect {
                 resultResponse(it, ::onSuccessSaveSchedule, ::onFailSaveSchedule)
             }
         }
@@ -102,5 +128,37 @@ class EditScheduleViewModel(
 
     fun hideDeleteDialog() {
         updateState(uiState.value.copy(showDeleteDialog = false))
+    }
+
+    fun editDate(isRepeat: Boolean, repeatDays: Set<Int>, date: LocalDate?) {
+        logger.d { "isRepeat: $isRepeat, repeatDays: $repeatDays, date: $date" }
+
+        if (isRepeat && repeatDays.isEmpty()) return
+
+        updateState(
+            uiState.value.copy(
+                schedule = uiState.value.schedule.copy(
+                    isRepeat = isRepeat,
+                    repeatDays = repeatDays.toList()
+                ),
+                selectedDate = if (isRepeat) null else date
+            )
+        )
+    }
+
+    fun showDateBottomSheet() {
+        updateState(uiState.value.copy(showDateBottomSheet = true))
+    }
+
+    fun hideDateBottomSheet() {
+        updateState(uiState.value.copy(showDateBottomSheet = false))
+    }
+
+    fun showTimeBottomSheet() {
+        updateState(uiState.value.copy(showTimeBottomSheet = true))
+    }
+
+    fun hideTimeBottomSheet() {
+        updateState(uiState.value.copy(showTimeBottomSheet = false))
     }
 }
