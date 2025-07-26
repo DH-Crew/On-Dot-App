@@ -3,7 +3,7 @@ package com.dh.ondot.data.repository
 import com.dh.ondot.domain.model.request.CreateScheduleRequest
 import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
 import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
-import com.dh.ondot.domain.model.response.ScheduleDetailResponse
+import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.model.response.ScheduleListResponse
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.network.HttpMethod
@@ -52,11 +52,41 @@ class ScheduleRepositoryImpl(
         )
     }
 
-    override suspend fun getScheduleDetail(scheduleId: Long): Flow<Result<ScheduleDetailResponse>> = flow {
-        val response = networkClient.request<ScheduleDetailResponse>(
+    override suspend fun getScheduleDetail(scheduleId: Long): Flow<Result<ScheduleDetail>> = flow {
+        val response = networkClient.request<ScheduleDetail>(
             path = "/schedules/$scheduleId",
             pathParams = mapOf("scheduleId" to scheduleId.toString()),
             method = HttpMethod.GET,
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun deleteSchedule(scheduleId: Long): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/schedules/$scheduleId",
+            pathParams = mapOf("scheduleId" to scheduleId.toString()),
+            method = HttpMethod.DELETE
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun editSchedule(
+        scheduleId: Long,
+        request: ScheduleDetail
+    ): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/schedules/$scheduleId",
+            pathParams = mapOf("scheduleId" to scheduleId.toString()),
+            method = HttpMethod.PUT,
+            body = request
         )
 
         response.fold(

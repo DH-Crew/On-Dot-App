@@ -3,7 +3,7 @@ package com.dh.ondot.domain.model.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ScheduleDetailResponse(
+data class ScheduleDetail(
     val title: String = "",
     val isRepeat: Boolean = false,
     val repeatDays: List<Int> = emptyList(),
