@@ -114,6 +114,11 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.GeneralScheduleGraph.route) {
                         launchSingleTop = true
                     }
+                },
+                navigateToEditSchedule = { id ->
+                    navController.navigate(NavRoutes.EditSchedule.createRoute(id)) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
