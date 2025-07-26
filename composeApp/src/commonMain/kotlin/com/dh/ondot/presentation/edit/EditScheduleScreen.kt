@@ -1,8 +1,14 @@
 package com.dh.ondot.presentation.edit
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,12 +39,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
-import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.edit.bottomSheet.EditDateBottomSheet
 import com.dh.ondot.presentation.general.check.components.AlarmInfoItem
 import com.dh.ondot.presentation.general.place.components.RouteInputSection
 import com.dh.ondot.presentation.ui.components.DateTimeInfoBar
@@ -59,6 +65,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.WORD_DELETE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
 import kotlinx.coroutines.delay
+import kotlinx.datetime.LocalDate
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_pencil_white
 import org.jetbrains.compose.resources.painterResource
@@ -71,6 +78,7 @@ fun EditScheduleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         delay(200)
@@ -89,6 +97,7 @@ fun EditScheduleScreen(
     if (uiState.isInitialized) {
         EditScheduleContent(
             uiState = uiState,
+            interactionSource = interactionSource,
             focusRequester = focusRequester,
             onClickClose = popScreen,
             onValueChanged = viewModel::updateScheduleTitle,
@@ -96,7 +105,11 @@ fun EditScheduleScreen(
             onSaveSchedule = viewModel::saveSchedule,
             onShowDeleteDialog = viewModel::showDeleteDialog,
             onDeleteSchedule = viewModel::deleteSchedule,
-            onDismissDialog = viewModel::hideDeleteDialog
+            onDismissDialog = viewModel::hideDeleteDialog,
+            onEditDate = viewModel::editDate,
+            onShowDateBottomSheet = viewModel::showDateBottomSheet,
+            onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
+            onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -106,6 +119,7 @@ fun EditScheduleScreen(
 @Composable
 fun EditScheduleContent(
     uiState: EditScheduleUiState,
+    interactionSource: MutableInteractionSource,
     focusRequester: FocusRequester,
     onClickClose: () -> Unit,
     onValueChanged: (String) -> Unit,
@@ -113,10 +127,12 @@ fun EditScheduleContent(
     onSaveSchedule: () -> Unit,
     onShowDeleteDialog: () -> Unit,
     onDeleteSchedule: () -> Unit,
-    onDismissDialog: () -> Unit
+    onDismissDialog: () -> Unit,
+    onEditDate: (Boolean, Set<Int>, LocalDate?) -> Unit,
+    onShowDateBottomSheet: () -> Unit,
+    onDismissDateBottomSheet: () -> Unit,
+    onDismissTimeBottomSheet: () -> Unit
 ) {
-    val date = uiState.schedule.appointmentAt.toLocalDateFromIso()
-    val time = uiState.schedule.appointmentAt.toLocalTimeFromIso()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -139,7 +155,13 @@ fun EditScheduleContent(
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-                DateTimeInfoBar(date = date, time = time)
+                DateTimeInfoBar(
+                    repeatDays = uiState.schedule.repeatDays,
+                    date = uiState.selectedDate,
+                    time = uiState.selectedTime,
+                    interactionSource = interactionSource,
+                    onClickDate = onShowDateBottomSheet
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
                 RouteInputSection(
@@ -195,19 +217,22 @@ fun EditScheduleContent(
             )
         }
 
-//        if (uiState.showBottomSheet) {
-//            AnimatedVisibility(
-//                visible = uiState.showBottomSheet,
-//                modifier = Modifier.fillMaxSize(),
-//                enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
-//                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
-//            ) {
-//                OnDotBottomSheet(
-//                    onDismiss = onDismiss,
-//                    content = { BottomSheetContent(onCreateSchedule = onCreateSchedule) }
-//                )
-//            }
-//        }
+        if (uiState.showDateBottomSheet) {
+            AnimatedVisibility(
+                visible = uiState.showDateBottomSheet,
+                modifier = Modifier.fillMaxSize(),
+                enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+            ) {
+                EditDateBottomSheet(
+                    isRepeat = uiState.schedule.isRepeat,
+                    repeatDays = uiState.schedule.repeatDays.toSet(),
+                    currentDate = uiState.schedule.appointmentAt.toLocalDateFromIso(),
+                    onEditDate = onEditDate,
+                    onDismiss = onDismissDateBottomSheet
+                )
+            }
+        }
     }
 }
 
