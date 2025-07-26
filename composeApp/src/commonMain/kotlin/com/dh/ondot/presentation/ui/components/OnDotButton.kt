@@ -13,9 +13,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.ui.extensions.styles
 import com.dh.ondot.domain.model.enums.ButtonType
@@ -27,14 +29,16 @@ import org.jetbrains.compose.resources.painterResource
 fun OnDotButton(
     buttonText: String,
     buttonType: ButtonType,
+    buttonHeight: Dp = 60.dp,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(buttonHeight)
             .background(color = buttonType.styles().backgroundColor, shape = RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
             .drawBehind {
                 if (buttonType != ButtonType.Gradient) return@drawBehind
 
