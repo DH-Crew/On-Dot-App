@@ -11,6 +11,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
 import com.dh.ondot.presentation.alarm.preparation.PreparationAlarmRingScreen
+import com.dh.ondot.presentation.edit.EditScheduleScreen
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
 import com.dh.ondot.presentation.general.check.CheckScheduleScreen
 import com.dh.ondot.presentation.general.loading.RouteLoadingScreen
@@ -113,6 +114,11 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.GeneralScheduleGraph.route) {
                         launchSingleTop = true
                     }
+                },
+                navigateToEditSchedule = { id ->
+                    navController.navigate(NavRoutes.EditSchedule.createRoute(id)) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -203,6 +209,27 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.editScheduleNavGraph(navController: NavHostController) {
+
+    navigation(
+        startDestination = NavRoutes.EditSchedule.ROUTE,
+        route = NavRoutes.EditScheduleGraph.route
+    ) {
+        composable(
+            NavRoutes.EditSchedule.ROUTE,
+            arguments = listOf(navArgument("scheduleId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val args = backStackEntry.toRoute<NavRoutes.EditSchedule>()
+            val scheduleId = args.scheduleId
+
+            EditScheduleScreen(
+                scheduleId = scheduleId,
+                popScreen = { navController.popBackStack() }
             )
         }
     }

@@ -45,7 +45,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = viewModel { MainViewModel() },
-    navigateToGeneralSchedule: () -> Unit
+    navigateToGeneralSchedule: () -> Unit,
+    navigateToEditSchedule: (Long) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,7 +71,8 @@ fun MainScreen(
         ) {
             when(uiState.bottomNavType) {
                 BottomNavType.HOME -> HomeScreen(
-                    navigateToGeneralSchedule = navigateToGeneralSchedule
+                    navigateToGeneralSchedule = navigateToGeneralSchedule,
+                    navigateToEditSchedule = navigateToEditSchedule
                 )
                 BottomNavType.SETTING -> {
                     SettingScreen()

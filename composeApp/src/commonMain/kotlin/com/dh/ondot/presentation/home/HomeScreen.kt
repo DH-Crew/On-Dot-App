@@ -32,7 +32,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel { HomeViewModel() },
-    navigateToGeneralSchedule: () -> Unit
+    navigateToGeneralSchedule: () -> Unit,
+    navigateToEditSchedule: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -46,7 +47,8 @@ fun HomeScreen(
         interactionSource = interactionSource,
         onToggle = { viewModel.onToggle() },
         onClickAlarmSwitch = { id, isEnabled -> viewModel.onClickAlarmSwitch(id, isEnabled) },
-        navigateToGeneralSchedule = navigateToGeneralSchedule
+        navigateToGeneralSchedule = navigateToGeneralSchedule,
+        navigateToEditSchedule = navigateToEditSchedule
     )
 }
 
@@ -56,7 +58,8 @@ fun HomeContent(
     interactionSource: MutableInteractionSource,
     onToggle: () -> Unit,
     onClickAlarmSwitch: (Long, Boolean) -> Unit,
-    navigateToGeneralSchedule: () -> Unit
+    navigateToGeneralSchedule: () -> Unit,
+    navigateToEditSchedule: (Long) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -101,7 +104,9 @@ fun HomeContent(
 
                 ScheduleList(
                     scheduleList = uiState.scheduleList,
-                    onClickSwitch = onClickAlarmSwitch
+                    interactionSource = interactionSource,
+                    onClickSwitch = onClickAlarmSwitch,
+                    onClickSchedule = navigateToEditSchedule
                 )
             }
         }

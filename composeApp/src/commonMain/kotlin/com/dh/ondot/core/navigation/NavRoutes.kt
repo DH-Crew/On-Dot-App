@@ -16,7 +16,6 @@ sealed class NavRoutes(@Transient val route: String = "") {
         }
     }
 
-
     // Splash
     data object SplashGraph: NavRoutes("splashGraph")
     data object Splash: NavRoutes("splash")
@@ -41,4 +40,15 @@ sealed class NavRoutes(@Transient val route: String = "") {
     data object PlacePicker: NavRoutes("placePicker")
     data object RouteLoading: NavRoutes("routeLoading")
     data object CheckSchedule: NavRoutes("checkSchedule")
+
+    // EditSchedule
+    @Serializable
+    data object EditScheduleGraph: NavRoutes("editScheduleGraph")
+    @Serializable
+    data class EditSchedule(val scheduleId: Long): NavRoutes("editSchedule/{scheduleId}") {
+        companion object {
+            const val ROUTE: String = "editSchedule/{scheduleId}"
+            fun createRoute(id: Long) = "editSchedule/$id"
+        }
+    }
 }
