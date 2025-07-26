@@ -208,4 +208,12 @@ object DateTimeFormatter {
         val instant = localDt.toInstant(TimeZone.of("Asia/Seoul"))
         return instant.toEpochMilliseconds()
     }
+
+    /** ISO-8601 문자열에서 날짜만 파싱 */
+    fun String.toLocalDateFromIso(): LocalDate =
+        LocalDate.parse(substringBefore('T'))
+
+    /** ISO-8601 문자열에서 시간만 파싱 */
+    fun String.toLocalTimeFromIso(): LocalTime =
+        LocalTime.parse(substringAfter('T'))
 }
