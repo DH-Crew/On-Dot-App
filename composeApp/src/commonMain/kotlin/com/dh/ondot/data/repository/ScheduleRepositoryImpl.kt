@@ -3,6 +3,7 @@ package com.dh.ondot.data.repository
 import com.dh.ondot.domain.model.request.CreateScheduleRequest
 import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
 import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
+import com.dh.ondot.domain.model.response.ScheduleDetailResponse
 import com.dh.ondot.domain.model.response.ScheduleListResponse
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.network.HttpMethod
@@ -43,6 +44,19 @@ class ScheduleRepositoryImpl(
             path = "/schedules",
             method = HttpMethod.POST,
             body = request
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun getScheduleDetail(scheduleId: Long): Flow<Result<ScheduleDetailResponse>> = flow {
+        val response = networkClient.request<ScheduleDetailResponse>(
+            path = "/schedules/$scheduleId",
+            pathParams = mapOf("scheduleId" to scheduleId.toString()),
+            method = HttpMethod.GET,
         )
 
         response.fold(
