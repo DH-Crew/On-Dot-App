@@ -16,5 +16,6 @@ fun ButtonType.styles(): ButtonStyle {
         ButtonType.Gray300 -> ButtonStyle(backgroundColor = OnDotColor.Gray300, fontColor = OnDotColor.Gray900)
         ButtonType.Gray400 -> ButtonStyle(backgroundColor = OnDotColor.Gray400, fontColor = OnDotColor.Gray0)
         ButtonType.Gradient -> ButtonStyle(backgroundColor = OnDotColor.Gray700, fontColor = OnDotColor.Gray0)
+        ButtonType.Red -> ButtonStyle(backgroundColor = OnDotColor.Red, fontColor = OnDotColor.Gray0)
     }
 }
