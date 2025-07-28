@@ -39,12 +39,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
+import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
+import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.edit.bottomSheet.EditDateBottomSheet
+import com.dh.ondot.presentation.edit.bottomSheet.EditTimeBottomSheet
 import com.dh.ondot.presentation.general.check.components.AlarmInfoItem
 import com.dh.ondot.presentation.general.place.components.RouteInputSection
 import com.dh.ondot.presentation.ui.components.DateTimeInfoBar
@@ -66,6 +69,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_DELETE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_pencil_white
 import org.jetbrains.compose.resources.painterResource
@@ -107,7 +111,9 @@ fun EditScheduleScreen(
             onDeleteSchedule = viewModel::deleteSchedule,
             onDismissDialog = viewModel::hideDeleteDialog,
             onEditDate = viewModel::editDate,
+            onEditTime = viewModel::editTime,
             onShowDateBottomSheet = viewModel::showDateBottomSheet,
+            onShowTimeBottomSheet = viewModel::showTimeBottomSheet,
             onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
             onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet
         )
@@ -129,10 +135,13 @@ fun EditScheduleContent(
     onDeleteSchedule: () -> Unit,
     onDismissDialog: () -> Unit,
     onEditDate: (Boolean, Set<Int>, LocalDate?) -> Unit,
+    onEditTime: (LocalTime) -> Unit,
     onShowDateBottomSheet: () -> Unit,
+    onShowTimeBottomSheet: (TimeType) -> Unit,
     onDismissDateBottomSheet: () -> Unit,
     onDismissTimeBottomSheet: () -> Unit
 ) {
+    val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -158,9 +167,10 @@ fun EditScheduleContent(
                 DateTimeInfoBar(
                     repeatDays = uiState.schedule.repeatDays,
                     date = uiState.selectedDate,
-                    time = uiState.selectedTime,
+                    time = appointmentDate,
                     interactionSource = interactionSource,
-                    onClickDate = onShowDateBottomSheet
+                    onClickDate = onShowDateBottomSheet,
+                    onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -183,6 +193,8 @@ fun EditScheduleContent(
                 AlarmInfoItem(
                     info = uiState.schedule.preparationAlarm,
                     type = AlarmType.Preparation,
+                    interactionSource = interactionSource,
+                    onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
                     onToggleSwitch = onToggleSwitch
                 )
 
@@ -190,7 +202,9 @@ fun EditScheduleContent(
 
                 AlarmInfoItem(
                     info = uiState.schedule.departureAlarm,
-                    type = AlarmType.Departure
+                    type = AlarmType.Departure,
+                    interactionSource = interactionSource,
+                    onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -230,6 +244,26 @@ fun EditScheduleContent(
                     currentDate = uiState.schedule.appointmentAt.toLocalDateFromIso(),
                     onEditDate = onEditDate,
                     onDismiss = onDismissDateBottomSheet
+                )
+            }
+        }
+
+        if (uiState.showTimeBottomSheet) {
+            AnimatedVisibility(
+                visible = uiState.showTimeBottomSheet,
+                modifier = Modifier.fillMaxSize(),
+                enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+            ) {
+                EditTimeBottomSheet(
+                    currentTime = uiState.selectedTime,
+                    onDismiss = {
+                        onDismissTimeBottomSheet()
+                    },
+                    onTimeSelected = {
+                        onEditTime(it)
+                        onDismissTimeBottomSheet()
+                    }
                 )
             }
         }
