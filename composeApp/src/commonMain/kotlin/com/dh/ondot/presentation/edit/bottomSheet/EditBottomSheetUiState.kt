@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.edit.bottomSheet
 import com.dh.ondot.core.ui.base.UiState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -25,6 +26,10 @@ data class EditBottomSheetUiState(
     /**
      * EditTimeBottomSheet
      * */
+    val currentTime: LocalTime = Clock.System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .time,
 
 
 ): UiState
