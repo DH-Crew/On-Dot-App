@@ -6,8 +6,10 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
+import com.dh.ondot.core.util.DateTimeFormatter.toIsoTimeString
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
+import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.repository.ScheduleRepository
@@ -17,6 +19,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -60,7 +63,7 @@ class EditScheduleViewModel(
     fun saveSchedule() {
         val newDate = DateTimeFormatter.formatIsoDateTime(
             date = uiState.value.selectedDate ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
-            time = uiState.value.selectedTime
+            time = uiState.value.schedule.appointmentAt.toLocalTimeFromIso()
         )
         val newSchedule = uiState.value.schedule.copy(
             appointmentAt = newDate,
@@ -154,8 +157,40 @@ class EditScheduleViewModel(
         updateState(uiState.value.copy(showDateBottomSheet = false))
     }
 
-    fun showTimeBottomSheet() {
-        updateState(uiState.value.copy(showTimeBottomSheet = true))
+    fun editTime(newTime: LocalTime) {
+        when(uiState.value.selectedTimeType) {
+            TimeType.APPOINTMENT -> updateState(
+                uiState.value.copy(
+                    schedule = uiState.value.schedule.copy(appointmentAt = newTime.toIsoTimeString())
+                )
+            )
+            TimeType.DEPARTURE -> updateState(
+                uiState.value.copy(
+                    schedule = uiState.value.schedule.copy(departureAlarm = uiState.value.schedule.departureAlarm.copy(triggeredAt = newTime.toIsoTimeString()))
+                )
+            )
+            TimeType.PREPARATION -> updateState(
+                uiState.value.copy(
+                    schedule = uiState.value.schedule.copy(preparationAlarm = uiState.value.schedule.preparationAlarm.copy(triggeredAt = newTime.toIsoTimeString()))
+                )
+            )
+        }
+    }
+
+    fun showTimeBottomSheet(timeType: TimeType) {
+        val selectedTime = when(timeType) {
+            TimeType.APPOINTMENT -> uiState.value.schedule.appointmentAt.toLocalTimeFromIso()
+            TimeType.DEPARTURE -> uiState.value.schedule.departureAlarm.triggeredAt.toLocalTimeFromIso()
+            TimeType.PREPARATION -> uiState.value.schedule.preparationAlarm.triggeredAt.toLocalTimeFromIso()
+        }
+
+        updateStateSync(
+            uiState.value.copy(
+                showTimeBottomSheet = true,
+                selectedTimeType = timeType,
+                selectedTime = selectedTime
+            )
+        )
     }
 
     fun hideTimeBottomSheet() {
