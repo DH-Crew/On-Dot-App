@@ -115,9 +115,13 @@ object DateTimeFormatter {
     }
 
     private fun parseAmPmTime(iso: String): AmPmTime {
-        val localDt = LocalDateTime.parse(iso)
-        val h24    = localDt.hour
-        val minute = localDt.minute
+        val (h24, minute) = if ('T' in iso) {
+            val dt = LocalDateTime.parse(iso)
+            dt.hour to dt.minute
+        } else {
+            val t = LocalTime.parse(iso)
+            t.hour to t.minute
+        }
 
         val period = if (h24 < 12) WORD_AM else WORD_PM
         val hour12 = when (val m = h24 % 12) {
