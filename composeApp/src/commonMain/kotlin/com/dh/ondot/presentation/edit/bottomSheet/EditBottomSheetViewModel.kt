@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.edit.bottomSheet
 import com.dh.ondot.core.ui.base.BaseViewModel
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
@@ -80,6 +81,16 @@ class EditBottomSheetViewModel(
     }
 
     /**---------------------------------------------Time-----------------------------------------------*/
+
+    fun initTime(currentTime: LocalTime) {
+        updateState(uiState.value.copy(currentTime = currentTime))
+    }
+
+    fun onTimeSelected(time: LocalTime) {
+        updateState(uiState.value.copy(currentTime = time))
+    }
+
+    /**---------------------------------------------ETC-----------------------------------------------*/
 
     fun clear() {
         updateState(EditBottomSheetUiState())
