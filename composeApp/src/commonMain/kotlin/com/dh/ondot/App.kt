@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.dh.ondot.core.navigation.NavRoutes
@@ -25,8 +22,8 @@ import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
 import com.dh.ondot.core.util.AlarmNotifier
+import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.ui.AlarmEvent
-import com.dh.ondot.presentation.app.AppViewModel
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 
 @Composable
@@ -34,13 +31,14 @@ fun App(
     initialAlarm: AlarmEvent? = null
 ) {
     val navController = rememberNavController()
-    val viewModel: AppViewModel = viewModel { AppViewModel() }
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     // android 에서 MainActivity 로부터 전달된 이벤트 처리
     LaunchedEffect(initialAlarm) {
         initialAlarm?.let { (alarmId, type) ->
-            navController.navigate(NavRoutes.PreparationAlarm.createRoute(alarmId))
+            when(type) {
+                AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(alarmId))
+                AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(alarmId))
+            }
         }
     }
 
