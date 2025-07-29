@@ -35,4 +35,8 @@ class AppViewModel(
         soundPlayer.stopSound()
         updateState(uiState.value.copy(showPreparationStartAnimation = true))
     }
+
+    fun snoozeDepartureAlarm() {
+        updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
+    }
 }
