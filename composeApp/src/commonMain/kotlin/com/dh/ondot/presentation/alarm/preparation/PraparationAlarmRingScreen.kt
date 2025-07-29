@@ -164,7 +164,7 @@ fun PreparationAlarmRingContent(
 }
 
 @Composable
-private fun AlarmRingTitle(
+fun AlarmRingTitle(
     title: String,
     highlight: String,
 ) {
@@ -179,7 +179,7 @@ private fun AlarmRingTitle(
 }
 
 @Composable
-private fun SnoozeButton(
+fun SnoozeButton(
     snoozeInterval: Int,
     onClick: () -> Unit
 ) {
@@ -196,7 +196,7 @@ private fun SnoozeButton(
 }
 
 @Composable
-private fun ScheduleInfoSection(
+fun ScheduleInfoSection(
     snoozeInterval: Int,
     appointmentDate: String,
     appointmentTime: String,
@@ -240,7 +240,7 @@ private fun ScheduleInfoSection(
 }
 
 @Composable
-private fun AlarmSnoozedSection(
+fun AlarmSnoozedSection(
     snoozeInterval: Int
 ) {
     val composition by rememberLottieComposition {
