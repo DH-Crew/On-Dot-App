@@ -14,14 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -81,7 +77,9 @@ fun PreparationAlarmRingScreen(
             appointmentAt = uiState.alarmRingInfo.appointmentAt,
             scheduleTitle = uiState.alarmRingInfo.scheduleTitle,
             showPreparationStartAnimation = uiState.showPreparationStartAnimation,
-            onClickPreparationStartButton = { viewModel.onPreparationStart() }
+            showPreparationSnoozeAnimation = uiState.showPreparationSnoozeAnimation,
+            onClickPreparationStartButton = { viewModel.startPreparation() },
+            onSnoozePreparationAlarm = viewModel::snoozePreparationAlarm
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -94,18 +92,26 @@ fun PreparationAlarmRingContent(
     appointmentAt: String,
     scheduleTitle: String,
     showPreparationStartAnimation: Boolean,
-    onClickPreparationStartButton: () -> Unit
+    showPreparationSnoozeAnimation: Boolean,
+    onClickPreparationStartButton: () -> Unit,
+    onSnoozePreparationAlarm: () -> Unit
 ) {
     val formattedTime = DateTimeFormatter.formatHourMinuteSecond(alarmDetail.triggeredAt)
     val alarmRingTitle = alarmRingTitle(formattedTime)
     val appointmentDate = DateTimeFormatter.formatKoreanDate(appointmentAt)
     val appointmentTime = DateTimeFormatter.formatHourMinute(appointmentAt)
-    var isSnoozed by remember { mutableStateOf(false) }
-    val composition by rememberLottieComposition {
+    val startComposition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_start.json").decodeToString())
     }
-    val progress by animateLottieCompositionAsState(
-        composition,
+    val startProgress by animateLottieCompositionAsState(
+        startComposition,
+        iterations = Compottie.IterateForever
+    )
+    val snoozedComposition by rememberLottieComposition {
+        LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_alarm_snoozed.json").decodeToString())
+    }
+    val snoozedProgress by animateLottieCompositionAsState(
+        snoozedComposition,
         iterations = Compottie.IterateForever
     )
 
@@ -124,17 +130,13 @@ fun PreparationAlarmRingContent(
 
             AlarmRingTitle(alarmRingTitle, formattedTime)
 
-            if (isSnoozed) {
-                AlarmSnoozedSection(alarmDetail.snoozeInterval)
-            } else {
-                ScheduleInfoSection(
-                    snoozeInterval = alarmDetail.snoozeInterval,
-                    appointmentDate = appointmentDate,
-                    appointmentTime = appointmentTime,
-                    scheduleTitle = scheduleTitle,
-                    onClickSnooze = { isSnoozed = true }
-                )
-            }
+            ScheduleInfoSection(
+                snoozeInterval = alarmDetail.snoozeInterval,
+                appointmentDate = appointmentDate,
+                appointmentTime = appointmentTime,
+                scheduleTitle = scheduleTitle,
+                onClickSnooze = onSnoozePreparationAlarm
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -151,13 +153,29 @@ fun PreparationAlarmRingContent(
             ) {
                 Image(
                     painter = rememberLottiePainter(
-                        composition = composition,
-                        progress = { progress }
+                        composition = startComposition,
+                        progress = { startProgress }
                     ),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    modifier = Modifier.matchParentSize(),
                 )
+            }
+        }
+
+        if (showPreparationSnoozeAnimation) {
+            Box(
+                modifier = Modifier.fillMaxSize().background(Gray900)
+            ) {
+                Image(
+                    painter = rememberLottiePainter(
+                        composition = snoozedComposition,
+                        progress = { snoozedProgress }
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.matchParentSize(),
+                )
+
+                AlarmSnoozedSection(alarmDetail.snoozeInterval)
             }
         }
     }
@@ -240,16 +258,10 @@ fun ScheduleInfoSection(
 }
 
 @Composable
-fun AlarmSnoozedSection(
+private fun AlarmSnoozedSection(
     snoozeInterval: Int
 ) {
-    val composition by rememberLottieComposition {
-        LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_alarm_snoozed.json").decodeToString())
-    }
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = Compottie.IterateForever
-    )
+
     val totalSeconds = snoozeInterval * 60
     val timeLeftSecond by produceState(initialValue = totalSeconds) {
         var current = totalSeconds
@@ -268,15 +280,7 @@ fun AlarmSnoozedSection(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.TopCenter
     ) {
-        Image(
-            painter = rememberLottiePainter(
-                composition = composition,
-                progress = { progress }
-            ),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.Fit
-        )
+        Spacer(modifier = Modifier.height(148.dp))
 
         OnDotText(
             text = timeText,
