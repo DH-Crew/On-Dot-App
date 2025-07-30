@@ -39,6 +39,7 @@ const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
 const val CREATE_SCHEDULE = "일정 생성"
 const val PREPARATION_START_BUTTON_TEXT = "준비 시작하기"
+const val SHOW_ROUTE_INFORMATION_BUTTON_TEXT = "경로안내 보기"
 
 // ERROR
 const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
@@ -117,6 +118,7 @@ fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 �
 fun snoozeIntervalLabel(snoozeInterval: Int) = "${snoozeInterval}분 알람 미루기"
 fun formatRemainingSnoozeTime(minute: Int, second: Int) = "${minute}:${second}"
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
+const val TEMP_DEPARTURE_SNOOZED_TITLE = "출발까지 NN:NN 전\n어서 출발하세요!"
 
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"
