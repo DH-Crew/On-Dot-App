@@ -153,7 +153,7 @@ fun TimePicker(
 ) {
     val period = listOf(WORD_AM, WORD_PM)
     val hour = (1..12).toList().map { it.toString().padStart(2, '0') }
-    val minute = (0..55 step 5).toList().map { it.toString().padStart(2, '0') }
+    val minute = (0..59).toList().map { it.toString().padStart(2, '0') }
     var selPeriod by remember { mutableStateOf(period.first()) }
     var selHour   by remember { mutableStateOf(hour.first()) }
     var selMin    by remember { mutableStateOf(minute.first()) }
