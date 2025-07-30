@@ -37,6 +37,7 @@ class AppViewModel(
     }
 
     fun snoozeDepartureAlarm() {
+        soundPlayer.stopSound()
         updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
     }
 }
