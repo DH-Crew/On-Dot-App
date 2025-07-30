@@ -31,9 +31,14 @@ class AppViewModel(
         }
     }
 
-    fun onPreparationStart() {
+    fun startPreparation() {
         soundPlayer.stopSound()
         updateState(uiState.value.copy(showPreparationStartAnimation = true))
+    }
+
+    fun snoozePreparationAlarm() {
+        soundPlayer.stopSound()
+        updateState(uiState.value.copy(showPreparationSnoozeAnimation = true))
     }
 
     fun snoozeDepartureAlarm() {
