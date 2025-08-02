@@ -37,4 +37,10 @@ class IosAlarmStorage: AlarmStorage {
             emptyList()
         }
     }
+
+    override suspend fun addAlarm(alarm: AlarmRingInfo) {
+        val current = getAlarms().toMutableList()
+        current.add(alarm)
+        saveAlarms(current)
+    }
 }
