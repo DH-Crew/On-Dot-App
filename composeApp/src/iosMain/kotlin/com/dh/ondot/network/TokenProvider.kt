@@ -23,6 +23,11 @@ actual class TokenProvider {
         userDefaults.setValue(newToken.refreshToken, forKey = REFRESH_TOKEN_KEY)
     }
 
+    actual suspend fun clearToken() {
+        userDefaults.removeObjectForKey(ACCESS_TOKEN_KEY)
+        userDefaults.removeObjectForKey(REFRESH_TOKEN_KEY)
+    }
+
     companion object {
         private const val ACCESS_TOKEN_KEY = "access_token"
         private const val REFRESH_TOKEN_KEY = "refresh_token"
