@@ -258,6 +258,7 @@ private fun BottomSheetContent(
             OnDotButton(
                 buttonText = WORD_FINE,
                 buttonType = ButtonType.Gray400,
+                buttonHeight = 48.dp,
                 modifier = Modifier.weight(1f),
                 onClick = { onCreateSchedule(false, "") }
             )
@@ -267,6 +268,7 @@ private fun BottomSheetContent(
             OnDotButton(
                 buttonText = WORD_CONFIRM,
                 buttonType = ButtonType.Green500,
+                buttonHeight = 48.dp,
                 modifier = Modifier.weight(1f),
                 onClick = { onCreateSchedule(isMedicineChecked, input) }
             )

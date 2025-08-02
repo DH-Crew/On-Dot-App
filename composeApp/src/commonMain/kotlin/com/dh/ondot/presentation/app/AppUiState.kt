@@ -6,4 +6,6 @@ import com.dh.ondot.domain.model.ui.AlarmRingInfo
 data class AppUiState(
     val alarmRingInfo: AlarmRingInfo = AlarmRingInfo(),
     val showPreparationStartAnimation: Boolean = false,
+    val showPreparationSnoozeAnimation: Boolean = false,
+    val showDepartureSnoozeAnimation: Boolean = false
 ): UiState

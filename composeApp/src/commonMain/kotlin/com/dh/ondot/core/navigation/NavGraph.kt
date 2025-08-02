@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
+import com.dh.ondot.presentation.alarm.departure.DepartureAlarmRingScreen
 import com.dh.ondot.presentation.alarm.preparation.PreparationAlarmRingScreen
 import com.dh.ondot.presentation.edit.EditScheduleScreen
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
@@ -37,6 +38,24 @@ fun NavGraphBuilder.alarmNavGraph(
             val alarmId = args.alarmId
 
             PreparationAlarmRingScreen(
+                alarmId = alarmId,
+                navigateToSplash = {
+                    navController.navigate(NavRoutes.Splash.route) {
+                        popUpTo(NavRoutes.AlarmGraph.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(
+            NavRoutes.DepartureAlarm.ROUTE,
+            arguments = listOf(navArgument("alarmId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val args = backStackEntry.toRoute<NavRoutes.DepartureAlarm>()
+            val alarmId = args.alarmId
+
+            DepartureAlarmRingScreen(
                 alarmId = alarmId,
                 navigateToSplash = {
                     navController.navigate(NavRoutes.Splash.route) {

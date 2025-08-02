@@ -15,6 +15,13 @@ sealed class NavRoutes(@Transient val route: String = "") {
             fun createRoute(id: Long) = "preparationAlarm/$id"
         }
     }
+    @Serializable
+    data class DepartureAlarm(val alarmId: Long) : NavRoutes("departureAlarm/{alarmId}") {
+        companion object {
+            const val ROUTE: String = "departureAlarm/{alarmId}"
+            fun createRoute(id: Long) = "departureAlarm/$id"
+        }
+    }
 
     // Splash
     data object SplashGraph: NavRoutes("splashGraph")

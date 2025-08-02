@@ -32,4 +32,18 @@ class AndroidAlarmStorage(
             prefs[ALARMS_KEY] = json
         }
     }
+
+    override suspend fun addAlarm(alarm: AlarmRingInfo) {
+        dataStore.edit { prefs ->
+            val currentJson = prefs[ALARMS_KEY]
+            val currentList = currentJson
+                ?.let { Json.decodeFromString<List<AlarmRingInfo>>(it) }
+                ?.toMutableList()
+                ?: mutableListOf()
+
+            currentList.add(alarm)
+
+            prefs[ALARMS_KEY] = Json.encodeToString(currentList)
+        }
+    }
 }

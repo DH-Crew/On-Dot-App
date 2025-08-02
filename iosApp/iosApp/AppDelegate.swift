@@ -62,6 +62,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler()
     }
     
+    func userNotificationCenter(
+            _ center: UNUserNotificationCenter,
+            willPresent notification: UNNotification,
+            withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+        ) {
+            completionHandler([.banner, .sound])
+        }
+    
     // 권한을 거부한 경우 실행되는 콜백
     private func handleNotificationPermissionDenied() {
         let scenes = UIApplication.shared.connectedScenes

@@ -220,4 +220,19 @@ object DateTimeFormatter {
     /** ISO-8601 문자열에서 시간만 파싱 */
     fun String.toLocalTimeFromIso(): LocalTime =
         LocalTime.parse(substringAfter('T'))
+
+    /** LocalTime에 interval(분) 만큼 더하기 */
+    fun LocalTime.plusMinutes(interval: Int): LocalTime {
+        // 현재 시각을 초 단위로 환산
+        val totalSeconds = hour * 3600 + minute * 60 + second
+        // interval 분을 초로 더함
+        val addedSeconds = totalSeconds + interval * 60
+        // 하루(86400초)로 모듈로 연산해서 wrap-around 처리
+        val modSeconds = ((addedSeconds % 86400) + 86400) % 86400
+        // 초를 시, 분, 초로 분해
+        val newHour = (modSeconds / 3600).toInt()
+        val newMinute = ((modSeconds % 3600) / 60).toInt()
+        val newSecond = (modSeconds % 60).toInt()
+        return LocalTime(newHour, newMinute, newSecond)
+    }
 }
