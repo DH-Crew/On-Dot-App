@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.domain.model.enums.TopBarType
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_back
@@ -35,7 +37,7 @@ fun TopBar(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(if (getPlatform().name == ANDROID) 50.dp else 70.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
