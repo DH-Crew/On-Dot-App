@@ -20,6 +20,8 @@ class LoginViewModel(
 
     fun onKakaoLogin() {
         kakaoSignIn { token ->
+            if (token.isBlank()) return@kakaoSignIn
+
             viewModelScope.launch {
                 authRepository.login("KAKAO", token).collect { result ->
                     resultResponse(result, ::onSuccessKakaoLogin, ::onFailedKakaoLogin)
