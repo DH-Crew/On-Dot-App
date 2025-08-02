@@ -36,4 +36,16 @@ class MemberRepositoryImpl(
             onFailure = { emit(Result.failure(it)) }
         )
     }
+
+    override suspend fun withdrawUser(): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/members/deactivate",
+            method = HttpMethod.POST
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
 }

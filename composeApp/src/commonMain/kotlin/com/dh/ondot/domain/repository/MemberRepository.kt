@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface MemberRepository {
     suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<TokenModel>>
     suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>>
+    suspend fun withdrawUser(): Flow<Result<Unit>>
 }
