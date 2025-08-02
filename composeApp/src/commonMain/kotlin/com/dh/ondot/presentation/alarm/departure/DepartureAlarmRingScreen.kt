@@ -125,7 +125,7 @@ fun DepartureAlarmRingContent(
             OnDotButton(
                 buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
                 buttonType = ButtonType.Gradient,
-                onClick = onSnoozeDepartureAlarm
+                onClick = onShowRouteInfo
             )
         }
 
