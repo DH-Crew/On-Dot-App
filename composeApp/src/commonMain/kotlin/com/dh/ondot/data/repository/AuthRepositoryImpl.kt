@@ -26,6 +26,18 @@ class AuthRepositoryImpl(
         ))
     }
 
+    override suspend fun logout(): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            method = HttpMethod.POST,
+            path = "/auth/logout"
+        )
+
+        emit(response.fold(
+            onSuccess = { Result.success(it) },
+            onFailure = { Result.failure(it) }
+        ))
+    }
+
     override suspend fun saveToken(token: TokenModel) {
         tokenProvider.saveToken(token)
     }
