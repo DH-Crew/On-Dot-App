@@ -35,7 +35,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.SHOW_ROUTE_INFORMATION_BUTTON_TEXT
-import com.dh.ondot.presentation.ui.theme.TEMP_DEPARTURE_SNOOZED_TITLE
+import com.dh.ondot.presentation.ui.theme.departureSnoozedTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
@@ -179,7 +179,7 @@ private fun AlarmSnoozedSection(
         Spacer(modifier = Modifier.height(69.dp))
 
         OnDotHighlightText(
-            text = TEMP_DEPARTURE_SNOOZED_TITLE,
+            text = departureSnoozedTitle("NN:NN"),
             textColor = Gray0,
             highlight = "NN:NN",
             highlightColor = Green500,

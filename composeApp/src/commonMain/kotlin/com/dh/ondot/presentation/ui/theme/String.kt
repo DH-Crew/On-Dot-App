@@ -118,7 +118,7 @@ fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 �
 fun snoozeIntervalLabel(snoozeInterval: Int) = "${snoozeInterval}분 알람 미루기"
 fun formatRemainingSnoozeTime(minute: Int, second: Int) = "${minute}:${second}"
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
-const val TEMP_DEPARTURE_SNOOZED_TITLE = "출발까지 NN:NN 전\n어서 출발하세요!"
+fun departureSnoozedTitle(time: String) = "출발까지 $time 전\n어서 출발하세요!"
 
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"
