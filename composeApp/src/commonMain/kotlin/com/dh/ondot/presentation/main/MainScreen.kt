@@ -48,7 +48,7 @@ fun MainScreen(
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToWithdrawal: () -> Unit,
+    navigateToDeleteAccount: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -78,7 +78,7 @@ fun MainScreen(
                 )
                 BottomNavType.SETTING -> {
                     SettingScreen(
-                        navigateToWithdrawalScreen = navigateToWithdrawal,
+                        navigateToDeleteAccountScreen = navigateToDeleteAccount,
                         navigateToLoginScreen = navigateToLogin
                     )
                 }
