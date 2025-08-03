@@ -3,6 +3,8 @@ package com.dh.ondot.presentation.setting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,90 +16,139 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
+import com.dh.ondot.presentation.ui.components.OnDotDialog
 import com.dh.ondot.presentation.ui.components.OnDotText
+import com.dh.ondot.presentation.ui.theme.LOGOUT_DIALOG_CONTENT
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.dh.ondot.presentation.ui.theme.SETTING_ALARM_DEFAULT
 import com.dh.ondot.presentation.ui.theme.SETTING_CUSTOMER_SERVICE
-import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
-import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
-import com.dh.ondot.presentation.ui.theme.SETTING_PREPARE_TIME
 import com.dh.ondot.presentation.ui.theme.SETTING_SERVICE_POLICY
 import com.dh.ondot.presentation.ui.theme.WORD_ACCOUNT
-import com.dh.ondot.presentation.ui.theme.WORD_GENERAL
 import com.dh.ondot.presentation.ui.theme.WORD_HELP
 import com.dh.ondot.presentation.ui.theme.WORD_LOGOUT
+import com.dh.ondot.presentation.ui.theme.WORD_NO
 import com.dh.ondot.presentation.ui.theme.WORD_SETTING
 import com.dh.ondot.presentation.ui.theme.WORD_WITHDRAW
+import com.dh.ondot.presentation.ui.theme.WORD_YES
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_arrow_right_gray400
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SettingScreen(
-
+    navigateToDeleteAccountScreen: () -> Unit,
+    navigateToLoginScreen: () -> Unit,
+    viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
-    SettingContent()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(viewModel.eventFlow) {
+        viewModel.eventFlow.collect {
+            when(it) {
+                is SettingEvent.NavigateToLoginScreen -> navigateToLoginScreen()
+            }
+        }
+    }
+
+    SettingContent(
+        uiState = uiState,
+        interactionSource = interactionSource,
+        onToggleLogoutDialog = viewModel::toggleLogoutDialog,
+        onClickWithdraw = navigateToDeleteAccountScreen,
+        onLogout = viewModel::logout
+    )
 }
 
 @Composable
 fun SettingContent(
-
+    uiState: SettingUiState = SettingUiState(),
+    interactionSource: MutableInteractionSource,
+    onToggleLogoutDialog: () -> Unit = {},
+    onClickWithdraw: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray900)
-            .padding(horizontal = 22.dp)
-            .padding(top = 24.dp)
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        OnDotText(text = WORD_SETTING, style = OnDotTextStyle.TitleMediumSB, color = Gray0)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Gray900)
+                .padding(horizontal = 22.dp)
+                .padding(top = 24.dp)
+        ) {
+            OnDotText(text = WORD_SETTING, style = OnDotTextStyle.TitleMediumSB, color = Gray0)
 
-        Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
-        SettingSection(
-            header = WORD_GENERAL,
-            sections = listOf(
-                Pair(SETTING_HOME_ADDRESS, {}),
-                Pair(SETTING_NAV_MAP, {}),
-                Pair(SETTING_ALARM_DEFAULT, {}),
-                Pair(SETTING_PREPARE_TIME, {})
+//        SettingSection(
+//            header = WORD_GENERAL,
+//            sections = listOf(
+//                Pair(SETTING_HOME_ADDRESS, {}),
+//                Pair(SETTING_NAV_MAP, {}),
+//                Pair(SETTING_ALARM_DEFAULT, {}),
+//                Pair(SETTING_PREPARE_TIME, {})
+//            )
+//        )
+//
+//        Spacer(modifier = Modifier.height(16.dp))
+
+            SettingSection(
+                header = WORD_HELP,
+                sections = listOf(
+                    Pair(SETTING_CUSTOMER_SERVICE, {}),
+                    Pair(SETTING_SERVICE_POLICY, {})
+                ),
+                interactionSource = interactionSource
             )
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        SettingSection(
-            header = WORD_HELP,
-            sections = listOf(
-                Pair(SETTING_CUSTOMER_SERVICE, {}),
-                Pair(SETTING_SERVICE_POLICY, {})
+            SettingSection(
+                header = WORD_ACCOUNT,
+                sections = listOf(
+                    Pair(WORD_WITHDRAW, onClickWithdraw),
+                    Pair(WORD_LOGOUT, onToggleLogoutDialog)
+                ),
+                interactionSource = interactionSource,
             )
-        )
+        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        SettingSection(
-            header = WORD_ACCOUNT,
-            sections = listOf(
-                Pair(WORD_WITHDRAW, {}),
-                Pair(WORD_LOGOUT, null)
+        if (uiState.showLogoutDialog) {
+            OnDotDialog(
+                dialogTitle = WORD_LOGOUT,
+                dialogContent = LOGOUT_DIALOG_CONTENT,
+                positiveText = WORD_YES,
+                negativeText = WORD_NO,
+                onDismiss = onToggleLogoutDialog,
+                onNegativeClick = onToggleLogoutDialog,
+                onPositiveClick = {
+                    onLogout()
+                    onToggleLogoutDialog()
+                }
             )
-        )
+        }
     }
 }
 
 @Composable
 fun SettingSection(
     header: String,
-    sections: List<Pair<String, (() -> Unit)?>>
+    sections: List<Pair<String, (() -> Unit)>>,
+    interactionSource: MutableInteractionSource,
 ) {
     Column(
         modifier = Modifier
@@ -118,19 +169,23 @@ fun SettingSection(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource,
+                        onClick = { section.second.invoke() }
+                    )
                     .padding(horizontal = 20.dp)
             ) {
                 OnDotText(text = section.first, style = OnDotTextStyle.BodyLargeR1, color = Gray0)
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                if (section.second != null) {
+                if (section.first != WORD_LOGOUT) {
                     Image(
                         painter = painterResource(Res.drawable.ic_arrow_right_gray400),
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp)
-                            .clickable { section.second?.invoke() }
                     )
                 }
             }

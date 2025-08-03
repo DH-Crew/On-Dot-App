@@ -31,6 +31,14 @@ class OnDotDataStore(context: Context) {
         }
     }
 
+    suspend fun clearTokens() {
+        dataStore.edit { preferences ->
+            preferences.remove(ACCESS_TOKEN_KEY)
+            preferences.remove(REFRESH_TOKEN_KEY)
+            logger.i { "Access/Refresh Token cleared" }
+        }
+    }
+
     companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")

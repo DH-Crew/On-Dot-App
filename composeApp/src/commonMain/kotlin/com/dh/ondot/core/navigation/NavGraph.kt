@@ -21,6 +21,7 @@ import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
 import com.dh.ondot.presentation.main.MainScreen
 import com.dh.ondot.presentation.onboarding.OnboardingScreen
+import com.dh.ondot.presentation.setting.account_deletion.DeleteAccountScreen
 import com.dh.ondot.presentation.splash.SplashScreen
 
 fun NavGraphBuilder.alarmNavGraph(
@@ -117,7 +118,14 @@ fun NavGraphBuilder.onboardingNavGraph(navController: NavHostController) {
         route = NavRoutes.OnboardingGraph.route
     ) {
         composable(NavRoutes.Onboarding.route) {
-            OnboardingScreen()
+            OnboardingScreen(
+                navigateToMain = {
+                    navController.navigate(NavRoutes.Main.route) {
+                        popUpTo(NavRoutes.Onboarding.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
     }
 }
@@ -136,6 +144,17 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                 },
                 navigateToEditSchedule = { id ->
                     navController.navigate(NavRoutes.EditSchedule.createRoute(id)) {
+                        launchSingleTop = true
+                    }
+                },
+                navigateToLogin = {
+                    navController.navigate(NavRoutes.Login.route) {
+                        popUpTo(NavRoutes.Main.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                navigateToDeleteAccount = {
+                    navController.navigate(NavRoutes.DeleteAccountGraph.route) {
                         launchSingleTop = true
                     }
                 }
@@ -249,6 +268,25 @@ fun NavGraphBuilder.editScheduleNavGraph(navController: NavHostController) {
             EditScheduleScreen(
                 scheduleId = scheduleId,
                 popScreen = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.deleteAccountNavGraph(navController: NavHostController) {
+    navigation(
+        startDestination = NavRoutes.DeleteAccount.route,
+        route = NavRoutes.DeleteAccountGraph.route
+    ) {
+        composable(NavRoutes.DeleteAccount.route) {
+            DeleteAccountScreen(
+                popScreen = { navController.popBackStack() },
+                navigateToLoginScreen = {
+                    navController.navigate(NavRoutes.Login.route) {
+                        popUpTo(NavRoutes.DeleteAccountGraph.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }

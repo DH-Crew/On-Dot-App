@@ -58,4 +58,8 @@ sealed class NavRoutes(@Transient val route: String = "") {
             fun createRoute(id: Long) = "editSchedule/$id"
         }
     }
+
+    // DeleteAccount
+    data object DeleteAccountGraph: NavRoutes("deleteAccountGraph")
+    data object DeleteAccount: NavRoutes("deleteAccount")
 }

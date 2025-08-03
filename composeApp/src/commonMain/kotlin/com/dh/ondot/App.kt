@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.dh.ondot.core.navigation.NavRoutes
 import com.dh.ondot.core.navigation.alarmNavGraph
+import com.dh.ondot.core.navigation.deleteAccountNavGraph
 import com.dh.ondot.core.navigation.editScheduleNavGraph
 import com.dh.ondot.core.navigation.generalScheduleNavGraph
 import com.dh.ondot.core.navigation.loginNavGraph
@@ -90,6 +91,7 @@ fun App(
                     mainNavGraph(navController = navController)
                     generalScheduleNavGraph(navController = navController)
                     editScheduleNavGraph(navController = navController)
+                    deleteAccountNavGraph(navController = navController)
                 }
 
                 ToastHost()

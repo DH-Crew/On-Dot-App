@@ -92,7 +92,7 @@ private fun ToastItem(
     }
 
     Box(modifier = Modifier
-        .padding(bottom = 50.dp)
+        .padding(bottom = 90.dp)
         .padding(horizontal = 22.dp)
     ) {
         Row(
