@@ -4,7 +4,7 @@ import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.domain.model.enums.RingTone
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.ui.AlarmSound
-import com.dh.ondot.domain.model.ui.OnboardingAnswer
+import com.dh.ondot.domain.model.ui.UserAnswer
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
 import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER1
@@ -52,19 +52,19 @@ data class OnboardingUiState(
     val selectedSound: String? = null,
     val volume: Float = 0.5f,
     // Step4
-    val answer1: List<OnboardingAnswer> = listOf(
-        OnboardingAnswer(1, ONBOARDING4_ANSWER1),
-        OnboardingAnswer(2, ONBOARDING4_ANSWER2),
-        OnboardingAnswer(3, ONBOARDING4_ANSWER3),
-        OnboardingAnswer(4, ONBOARDING4_ANSWER4),
+    val answer1: List<UserAnswer> = listOf(
+        UserAnswer(1, ONBOARDING4_ANSWER1),
+        UserAnswer(2, ONBOARDING4_ANSWER2),
+        UserAnswer(3, ONBOARDING4_ANSWER3),
+        UserAnswer(4, ONBOARDING4_ANSWER4),
     ),
     val selectedAnswer1Index: Int = 0,
     // Step5
-    val answer2: List<OnboardingAnswer> = listOf(
-        OnboardingAnswer(5, ONBOARDING5_ANSWER1),
-        OnboardingAnswer(6, ONBOARDING5_ANSWER2),
-        OnboardingAnswer(7, ONBOARDING5_ANSWER3),
-        OnboardingAnswer(8, ONBOARDING5_ANSWER4),
+    val answer2: List<UserAnswer> = listOf(
+        UserAnswer(5, ONBOARDING5_ANSWER1),
+        UserAnswer(6, ONBOARDING5_ANSWER2),
+        UserAnswer(7, ONBOARDING5_ANSWER3),
+        UserAnswer(8, ONBOARDING5_ANSWER4),
     ),
     val selectedAnswer2Index: Int = 0,
 

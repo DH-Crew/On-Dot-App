@@ -23,4 +23,8 @@ actual class TokenProvider(private val context: Context) {
         dataStore.saveAccessToken(newToken.accessToken)
         dataStore.saveRefreshToken(newToken.refreshToken)
     }
+
+    actual suspend fun clearToken() {
+        dataStore.clearTokens()
+    }
 }

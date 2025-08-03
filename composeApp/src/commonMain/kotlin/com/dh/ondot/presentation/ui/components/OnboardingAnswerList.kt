@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.ui.OnboardingAnswer
+import com.dh.ondot.domain.model.ui.UserAnswer
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
@@ -24,7 +24,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
 
 @Composable
 fun OnboardingAnswerList(
-    answerList: List<OnboardingAnswer>,
+    answerList: List<UserAnswer>,
     selectedAnswerIndex: Int,
     interactionSource: MutableInteractionSource,
     onClickAnswer: (Int) -> Unit
@@ -52,7 +52,7 @@ fun OnboardingAnswerList(
 
 @Composable
 private fun OnboardingAnswerItem(
-    item: OnboardingAnswer,
+    item: UserAnswer,
     selected: Boolean,
     modifier: Modifier = Modifier
 ) {

@@ -6,6 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -19,6 +20,31 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor
 @Composable
 fun OnDotText(
     text: String,
+    style: OnDotTextStyle,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    textAlign: TextAlign? = null,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip
+) {
+    val textStyle = style.toTextStyle()
+
+    CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale = 1f)) {
+        Text(
+            text = text,
+            style = textStyle,
+            color = color,
+            modifier = modifier,
+            textAlign = textAlign,
+            maxLines = maxLines,
+            overflow = overflow
+        )
+    }
+}
+
+@Composable
+fun OnDotText(
+    text: AnnotatedString,
     style: OnDotTextStyle,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
