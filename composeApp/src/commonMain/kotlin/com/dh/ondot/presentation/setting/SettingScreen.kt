@@ -48,7 +48,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SettingScreen(
-    navigateToWithdrawalScreen: () -> Unit,
+    navigateToDeleteAccountScreen: () -> Unit,
     navigateToLoginScreen: () -> Unit,
     viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
@@ -67,7 +67,7 @@ fun SettingScreen(
         uiState = uiState,
         interactionSource = interactionSource,
         onToggleLogoutDialog = viewModel::toggleLogoutDialog,
-        onClickWithdraw = navigateToWithdrawalScreen,
+        onClickWithdraw = navigateToDeleteAccountScreen,
         onLogout = viewModel::logout
     )
 }
