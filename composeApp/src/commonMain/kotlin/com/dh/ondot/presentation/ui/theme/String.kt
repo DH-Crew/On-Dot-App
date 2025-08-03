@@ -31,6 +31,7 @@ const val WORD_SAVE = "저장"
 const val WORD_DELETE = "삭제"
 const val WORD_YES = "예"
 const val WORD_NO = "아니요"
+const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -136,3 +137,14 @@ const val DELETION_ANSWER2 = "일정 등록이나 사용이 번거로웠어요."
 const val DELETION_ANSWER3 = "알림이 너무 많거나 타이밍이 맞지 않았어요."
 const val DELETION_ANSWER4 = "제 생활에 딱히 쓸 일이 없었어요."
 const val LOGOUT_DIALOG_CONTENT = "정말 로그아웃 하시겠어요?"
+
+// DeleteAccount
+const val DELETE_ACCOUNT_CAUTION_TITLE = "회원탈퇴를 하기 전\n안내 사항을 확인해주세요."
+const val DELETE_ACCOUNT_GUIDE1 = "회원탈퇴를 진행한 뒤, 다시 온닷을 가입해도\n이전 계정 데이터는 복원되지 않아요."
+const val DELETE_ACCOUNT_GUIDE2 = "탈퇴 시 회원님의 개인정보는 개인정보처리방침에\n따라 탈퇴일로부터 30일간 보관 후 삭제돼요."
+const val DELETE_ACCOUNT_GUIDE3 = "탈퇴 사유를 선택해주세요."
+const val DELETE_ACCOUNT_GUIDE_BOLD1 = "다시 온닷을 가입해도"
+const val DELETE_ACCOUNT_GUIDE_BOLD2 = "이전 계정 데이터는 복원되지 않아요."
+const val DELETE_ACCOUNT_GUIDE_BOLD3 = "탈퇴일로부터 30일간 보관 후 삭제돼요."
+const val DELETE_ACCOUNT_DIALOG_TITLE = "회원탈퇴 완료"
+const val DELETE_ACCOUNT_DIALOG_CONTENT = "그동안 온닷을 이용해주셔서\n감사합니다. 더 좋은 서비스를 \n제공하기 위해 노력하겠습니다."
