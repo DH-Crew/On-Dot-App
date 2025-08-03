@@ -6,7 +6,6 @@ import com.dh.ondot.core.di.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.data.model.TokenModel
-import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.domain.model.enums.AlarmMode
 import com.dh.ondot.domain.model.enums.RingTone
 import com.dh.ondot.domain.model.enums.SoundCategory
@@ -16,6 +15,7 @@ import com.dh.ondot.domain.model.request.QuestionAnswer
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
+import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 import kotlinx.coroutines.launch
 
@@ -232,6 +232,7 @@ class OnboardingViewModel(
 
     private fun onSuccessCompleteOnboarding(result: TokenModel) {
         viewModelScope.launch { tokenProvider.saveToken(result) }
+        emitEventFlow(OnboardingEvent.NavigateToMainScreen)
     }
 
     private fun onFailedCompleteOnboarding(e: Throwable) {

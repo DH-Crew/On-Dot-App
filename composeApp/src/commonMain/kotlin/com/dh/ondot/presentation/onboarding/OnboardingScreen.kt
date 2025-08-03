@@ -33,7 +33,8 @@ import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 
 @Composable
 fun OnboardingScreen(
-    viewModel: OnboardingViewModel = viewModel { OnboardingViewModel() }
+    viewModel: OnboardingViewModel = viewModel { OnboardingViewModel() },
+    navigateToMain: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -42,6 +43,14 @@ fun OnboardingScreen(
 
     LaunchedEffect(uiState.totalStep) {
         if (uiState.totalStep == 0) viewModel.initStep()
+    }
+
+    LaunchedEffect(viewModel.eventFlow) {
+        viewModel.eventFlow.collect {
+            when(it) {
+                is OnboardingEvent.NavigateToMainScreen -> navigateToMain()
+            }
+        }
     }
 
     OnboardingContent(
