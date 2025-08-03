@@ -67,6 +67,6 @@ class SettingViewModel(
 
     // 탈퇴 버튼 활성화
     fun isButtonEnabled(): Boolean {
-        return uiState.value.selectedWithdrawalReasonIndex != 5 || uiState.value.userInput.isNotEmpty()
+        return uiState.value.selectedReasonIndex != 5 || uiState.value.userInput.isNotEmpty()
     }
 }
