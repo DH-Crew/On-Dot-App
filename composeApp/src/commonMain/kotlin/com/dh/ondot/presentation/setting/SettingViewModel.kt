@@ -6,6 +6,7 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.domain.model.enums.ToastType
+import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.repository.AuthRepository
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGOUT
@@ -47,8 +48,12 @@ class SettingViewModel(
     /**--------------------------------------------회원 탈퇴-----------------------------------------------*/
 
     fun withdrawUser() {
+        val selectedReason = uiState.value.accountDeletionReasons[uiState.value.selectedReasonIndex]
+
         viewModelScope.launch {
-            memberRepository.withdrawUser().collect {
+            memberRepository.withdrawUser(
+                request = DeleteAccountRequest(withdrawalReasonId = selectedReason.id, customReason = "")
+            ).collect {
                 resultResponse(it, ::onSuccessWithdraw, ::onFailWithdraw)
             }
         }
@@ -56,11 +61,20 @@ class SettingViewModel(
 
     private fun onSuccessWithdraw(result: Unit) {
         viewModelScope.launch { ToastManager.show(WITHDRAW_SUCCESS_MESSAGE, ToastType.INFO) }
+        emitEventFlow(SettingEvent.NavigateToLoginScreen)
     }
 
     private fun onFailWithdraw(e: Throwable) {
         logger.e { "onFailWithdraw: ${e.message}" }
         viewModelScope.launch { ToastManager.show(ERROR_WITHDRAW, ToastType.ERROR) }
+    }
+
+    fun onReasonClick(index: Int) {
+        updateState(uiState.value.copy(selectedReasonIndex = index))
+    }
+
+    fun toggleDeleteAccountDialog() {
+        updateState(uiState.value.copy(showDeleteAccountDialog = !uiState.value.showDeleteAccountDialog))
     }
 
     /**--------------------------------------------상태 처리-----------------------------------------------*/
