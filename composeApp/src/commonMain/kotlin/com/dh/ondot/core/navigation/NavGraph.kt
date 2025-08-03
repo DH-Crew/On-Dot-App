@@ -138,6 +138,17 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.EditSchedule.createRoute(id)) {
                         launchSingleTop = true
                     }
+                },
+                navigateToLogin = {
+                    navController.navigate(NavRoutes.Login.route) {
+                        popUpTo(NavRoutes.Main.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                navigateToWithdrawal = {
+//                    navController.navigate(NavRoutes.Withdrawal.route) {
+//                        launchSingleTop = true
+//                    }
                 }
             )
         }

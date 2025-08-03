@@ -46,7 +46,9 @@ import org.jetbrains.compose.resources.painterResource
 fun MainScreen(
     viewModel: MainViewModel = viewModel { MainViewModel() },
     navigateToGeneralSchedule: () -> Unit,
-    navigateToEditSchedule: (Long) -> Unit
+    navigateToEditSchedule: (Long) -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToWithdrawal: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,7 +77,10 @@ fun MainScreen(
                     navigateToEditSchedule = navigateToEditSchedule
                 )
                 BottomNavType.SETTING -> {
-                    SettingScreen()
+                    SettingScreen(
+                        navigateToWithdrawalScreen = navigateToWithdrawal,
+                        navigateToLoginScreen = navigateToLogin
+                    )
                 }
                 BottomNavType.DEFAULT -> {}
             }
