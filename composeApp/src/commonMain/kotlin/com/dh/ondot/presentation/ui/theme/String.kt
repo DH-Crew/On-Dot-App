@@ -29,6 +29,8 @@ const val WORD_COMPETE = "완료"
 const val WORD_CANCEL = "취소"
 const val WORD_SAVE = "저장"
 const val WORD_DELETE = "삭제"
+const val WORD_YES = "예"
+const val WORD_NO = "아니요"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -50,6 +52,8 @@ const val ERROR_CREATE_SCHEDULE = "일정 생성에 실패했습니다."
 const val ERROR_GET_SCHEDULE_DETAIL = "일정 상세 조회에 실패했습니다."
 const val ERROR_DELETE_SCHEDULE = "일정 삭제에 실패했습니다."
 const val ERROR_EDIT_SCHEDULE = "일정 수정에 실패했습니다."
+const val ERROR_LOGOUT = "로그아웃에 실패했습니다."
+const val ERROR_WITHDRAW = "회원탈퇴에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -123,3 +127,12 @@ fun departureSnoozedTitle(time: String) = "출발까지 $time 전\n어서 출발
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"
 const val DELETE_ALARM_CONTENT = "정말 알람을 삭제하시겠어요?"
+
+// Setting
+const val LOGOUT_SUCCESS_MESSAGE = "정상적으로 로그아웃되었습니다."
+const val WITHDRAW_SUCCESS_MESSAGE = "정상적으로 탈퇴되었습니다."
+const val WITHDRAWAL_ANSWER1 = "지각 방지에 효과를 못 느꼈어요."
+const val WITHDRAWAL_ANSWER2 = "일정 등록이나 사용이 번거로웠어요."
+const val WITHDRAWAL_ANSWER3 = "알림이 너무 많거나 타이밍이 맞지 않았어요."
+const val WITHDRAWAL_ANSWER4 = "제 생활에 딱히 쓸 일이 없었어요."
+const val LOGOUT_DIALOG_CONTENT = "정말 로그아웃 하시겠어요?"
