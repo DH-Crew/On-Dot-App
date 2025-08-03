@@ -13,12 +13,13 @@ data class SettingUiState(
     val showLogoutDialog: Boolean = false,
 
     // 회원탈퇴
+    val showDeleteAccountDialog: Boolean = false,
     val accountDeletionReasons: List<UserAnswer> = listOf(
         UserAnswer(1, DELETION_ANSWER1),
         UserAnswer(2, DELETION_ANSWER2),
         UserAnswer(3, DELETION_ANSWER3),
         UserAnswer(4, DELETION_ANSWER4)
     ),
-    val selectedReasonIndex: Int = 1,
+    val selectedReasonIndex: Int = 0,
     val userInput: String = "",
 ): UiState
