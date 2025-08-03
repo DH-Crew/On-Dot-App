@@ -1,6 +1,7 @@
 package com.dh.ondot.data.repository
 
 import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.model.request.OnboardingRequest
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
@@ -37,10 +38,11 @@ class MemberRepositoryImpl(
         )
     }
 
-    override suspend fun withdrawUser(): Flow<Result<Unit>> = flow {
+    override suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>> = flow {
         val response = networkClient.request<Unit>(
             path = "/members/deactivate",
-            method = HttpMethod.POST
+            method = HttpMethod.POST,
+            body = request
         )
 
         response.fold(
