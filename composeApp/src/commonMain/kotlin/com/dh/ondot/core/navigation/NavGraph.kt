@@ -157,6 +157,11 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.DeleteAccountGraph.route) {
                         launchSingleTop = true
                     }
+                },
+                navigateToServiceTerms = {
+                    navController.navigate(NavRoutes.ServiceTermsGraph.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -287,6 +292,19 @@ fun NavGraphBuilder.deleteAccountNavGraph(navController: NavHostController) {
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.serviceTermsNavGraph(navController: NavHostController) {
+    navigation(
+        startDestination = NavRoutes.ServiceTerms.route,
+        route = NavRoutes.ServiceTermsGraph.route
+    ) {
+        composable(NavRoutes.ServiceTerms.route) {
+            com.dh.ondot.presentation.setting.term.ServiceTermsScreen(
+                popScreen = { navController.popBackStack() }
             )
         }
     }

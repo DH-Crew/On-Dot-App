@@ -62,4 +62,8 @@ sealed class NavRoutes(@Transient val route: String = "") {
     // DeleteAccount
     data object DeleteAccountGraph: NavRoutes("deleteAccountGraph")
     data object DeleteAccount: NavRoutes("deleteAccount")
+
+    // ServiceTerms
+    data object ServiceTermsGraph: NavRoutes("serviceTermsGraph")
+    data object ServiceTerms: NavRoutes("serviceTerms")
 }
