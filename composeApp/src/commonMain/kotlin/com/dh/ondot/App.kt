@@ -19,6 +19,7 @@ import com.dh.ondot.core.navigation.generalScheduleNavGraph
 import com.dh.ondot.core.navigation.loginNavGraph
 import com.dh.ondot.core.navigation.mainNavGraph
 import com.dh.ondot.core.navigation.onboardingNavGraph
+import com.dh.ondot.core.navigation.serviceTermsNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
@@ -92,6 +93,7 @@ fun App(
                     generalScheduleNavGraph(navController = navController)
                     editScheduleNavGraph(navController = navController)
                     deleteAccountNavGraph(navController = navController)
+                    serviceTermsNavGraph(navController = navController)
                 }
 
                 ToastHost()
