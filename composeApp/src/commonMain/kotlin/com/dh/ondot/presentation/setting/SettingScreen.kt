@@ -50,6 +50,7 @@ import org.jetbrains.compose.resources.painterResource
 fun SettingScreen(
     navigateToDeleteAccountScreen: () -> Unit,
     navigateToLoginScreen: () -> Unit,
+    navigateToServiceTermsScreen: () -> Unit,
     viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -67,7 +68,8 @@ fun SettingScreen(
         uiState = uiState,
         interactionSource = interactionSource,
         onToggleLogoutDialog = viewModel::toggleLogoutDialog,
-        onClickWithdraw = navigateToDeleteAccountScreen,
+        onWithdrawClick = navigateToDeleteAccountScreen,
+        onServiceTermsClick = navigateToServiceTermsScreen,
         onLogout = viewModel::logout
     )
 }
@@ -77,7 +79,8 @@ fun SettingContent(
     uiState: SettingUiState = SettingUiState(),
     interactionSource: MutableInteractionSource,
     onToggleLogoutDialog: () -> Unit = {},
-    onClickWithdraw: () -> Unit = {},
+    onWithdrawClick: () -> Unit = {},
+    onServiceTermsClick: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
     Box(
@@ -110,7 +113,7 @@ fun SettingContent(
                 header = WORD_HELP,
                 sections = listOf(
                     Pair(SETTING_CUSTOMER_SERVICE, {}),
-                    Pair(SETTING_SERVICE_POLICY, {})
+                    Pair(SETTING_SERVICE_POLICY, onServiceTermsClick)
                 ),
                 interactionSource = interactionSource
             )
@@ -120,7 +123,7 @@ fun SettingContent(
             SettingSection(
                 header = WORD_ACCOUNT,
                 sections = listOf(
-                    Pair(WORD_WITHDRAW, onClickWithdraw),
+                    Pair(WORD_WITHDRAW, onWithdrawClick),
                     Pair(WORD_LOGOUT, onToggleLogoutDialog)
                 ),
                 interactionSource = interactionSource,
