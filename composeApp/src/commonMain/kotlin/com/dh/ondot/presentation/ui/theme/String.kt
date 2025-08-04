@@ -148,3 +148,6 @@ const val DELETE_ACCOUNT_GUIDE_BOLD2 = "이전 계정 데이터는 복원되지 
 const val DELETE_ACCOUNT_GUIDE_BOLD3 = "탈퇴일로부터 30일간 보관 후 삭제돼요."
 const val DELETE_ACCOUNT_DIALOG_TITLE = "회원탈퇴 완료"
 const val DELETE_ACCOUNT_DIALOG_CONTENT = "그동안 온닷을 이용해주셔서\n감사합니다. 더 좋은 서비스를 \n제공하기 위해 노력하겠습니다."
+
+// ServiceTerms
+const val SERVICE_TERMS_TITLE = "서비스 정책"
