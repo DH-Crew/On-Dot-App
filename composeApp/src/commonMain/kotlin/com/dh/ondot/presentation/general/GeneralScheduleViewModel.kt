@@ -166,7 +166,7 @@ class GeneralScheduleViewModel(
     }
 
     fun onSelectDate(date: LocalDate) {
-        updateState(uiState.value.copy(selectedDate = date))
+        updateState(uiState.value.copy(selectedDate = date, isActiveDial = true))
     }
 
     fun onToggleDial() {
