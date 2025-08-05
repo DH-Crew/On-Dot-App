@@ -130,6 +130,13 @@ fun PlacePickerContent(
 
             Spacer(modifier = Modifier.height(48.dp))
 
+            HomeDepartureOption(
+                isChecked = uiState.isChecked,
+                onClick = onClickCheckBox
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
             RouteInputSection(
                 departurePlaceInput = uiState.departurePlaceInput,
                 arrivalPlaceInput = uiState.arrivalPlaceInput,
@@ -137,13 +144,6 @@ fun PlacePickerContent(
                 arrivalFocusRequester = arrivalFocusRequester,
                 onRouteInputChanged = onRouteInputChanged,
                 onRouteInputFocused = onRouteInputFocused
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            HomeDepartureOption(
-                isChecked = uiState.isChecked,
-                onClick = onClickCheckBox
             )
 
             Spacer(modifier = Modifier.height(24.dp))
