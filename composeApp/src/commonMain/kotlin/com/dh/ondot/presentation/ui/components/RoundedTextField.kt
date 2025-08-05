@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -43,7 +44,8 @@ fun RoundedTextField(
     onClickWhenReadOnly: () -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(
         keyboardType = KeyboardType.Number
-    )
+    ),
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
@@ -99,6 +101,7 @@ fun RoundedTextField(
                     singleLine = singleLine,
                     textStyle = OnDotTypo().bodyLargeR1.copy(color = OnDotColor.Gray0),
                     keyboardOptions = keyboardOptions,
+                    keyboardActions = keyboardActions,
                     cursorBrush = SolidColor(OnDotColor.Gray0),
                     readOnly = readOnly,
                     modifier = Modifier.focusRequester(focusRequester)
