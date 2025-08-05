@@ -244,6 +244,10 @@ class GeneralScheduleViewModel(
         )
     }
 
+    fun updateInitialPlacePicker(value: Boolean) {
+        updateState(uiState.value.copy(isInitialPlacePicker = value))
+    }
+
     /**--------------------------------------------RouteLoading-----------------------------------------------*/
 
     private fun getScheduleAlarms() {

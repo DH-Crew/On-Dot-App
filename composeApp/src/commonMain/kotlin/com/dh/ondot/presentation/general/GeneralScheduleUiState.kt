@@ -34,6 +34,7 @@ data class GeneralScheduleUiState(
     val selectedTime: LocalTime? = null,
 
     // PlacePicker
+    val isInitialPlacePicker: Boolean = true,
     val isChecked: Boolean = false,
     val placeList: List<AddressInfo> = emptyList(),
     val lastFocusedTextField: RouterType = RouterType.Departure,
