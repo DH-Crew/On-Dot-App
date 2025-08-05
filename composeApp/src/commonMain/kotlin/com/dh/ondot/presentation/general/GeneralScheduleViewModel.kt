@@ -346,6 +346,14 @@ class GeneralScheduleViewModel(
         }
     }
 
+    fun onClickBackButton() {
+        when (uiState.value.currentStep) {
+            2 -> {
+                updateState(uiState.value.copy(currentStep = uiState.value.currentStep - 1))
+            }
+        }
+    }
+
     private fun validateScheduleInputs() : Triple<LocalDate, LocalTime, Pair<AddressInfo, AddressInfo>> {
         val date = requireNotNull(uiState.value.selectedDate) {
             "selectedDate가 null입니다."
