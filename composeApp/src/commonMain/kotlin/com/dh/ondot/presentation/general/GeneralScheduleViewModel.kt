@@ -180,7 +180,6 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------PlacePicker-----------------------------------------------*/
 
     fun onRouteInputFieldFocused(type: RouterType) {
-        logger.d { "onRouteInputFieldFocused: $type" }
         updateStateSync(uiState.value.copy(lastFocusedTextField = type))
     }
 
@@ -207,13 +206,17 @@ class GeneralScheduleViewModel(
 
     fun onPlaceSelected(place: AddressInfo) {
         when (uiState.value.lastFocusedTextField) {
-            RouterType.Departure -> updateState(
-                uiState.value.copy(
-                    selectedDeparturePlace = place,
-                    placeList = emptyList(),
-                    departurePlaceInput = place.title
+            RouterType.Departure -> {
+                updateState(
+                    uiState.value.copy(
+                        selectedDeparturePlace = place,
+                        placeList = emptyList(),
+                        departurePlaceInput = place.title
+                    )
                 )
-            )
+                emitEventFlow(GeneralScheduleEvent.ActiveArrivalFocusRequester)
+                onRouteInputFieldFocused(RouterType.Arrival)
+            }
             RouterType.Arrival -> updateState(
                 uiState.value.copy(
                     selectedArrivalPlace = place,
