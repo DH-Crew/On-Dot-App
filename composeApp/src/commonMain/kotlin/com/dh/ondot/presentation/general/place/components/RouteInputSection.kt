@@ -1,7 +1,9 @@
 package com.dh.ondot.presentation.general.place.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
@@ -30,6 +33,7 @@ import com.dh.ondot.presentation.ui.theme.ARRIVAL_INPUT_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.DEPARTURE_INPUT_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
@@ -37,6 +41,9 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
+import ondot.composeapp.generated.resources.Res
+import ondot.composeapp.generated.resources.ic_close
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RouteInputSection(
@@ -140,5 +147,18 @@ fun RouteInputTextField(
                     if (it.isFocused) onRouteInputFocused(type)
                 }
         )
+
+        if (!readOnly && input.isNotEmpty()) {
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Image(
+                painter = painterResource(Res.drawable.ic_close),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = Gray400),
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable { onValueChanged("") }
+            )
+        }
     }
 }
