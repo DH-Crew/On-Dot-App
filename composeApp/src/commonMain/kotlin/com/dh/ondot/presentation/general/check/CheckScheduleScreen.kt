@@ -229,7 +229,8 @@ private fun BottomSheetContent(
             OnDotText(
                 text = GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE,
                 style = OnDotTextStyle.BodyLargeR1,
-                color = Gray200
+                color = Gray200,
+                modifier = Modifier.clickable { isMedicineChecked = !isMedicineChecked }
             )
         }
 
