@@ -55,6 +55,7 @@ const val ERROR_DELETE_SCHEDULE = "일정 삭제에 실패했습니다."
 const val ERROR_EDIT_SCHEDULE = "일정 수정에 실패했습니다."
 const val ERROR_LOGOUT = "로그아웃에 실패했습니다."
 const val ERROR_WITHDRAW = "회원탈퇴에 실패했습니다."
+const val ERROR_LOGIN = "로그인에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
