@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.util.DateTimeFormatter
+import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.domain.model.response.Schedule
@@ -28,8 +30,11 @@ import com.dh.ondot.presentation.ui.theme.EMPTY_PREPARATION_ALARM
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
+import com.dh.ondot.presentation.ui.theme.WORD_DEPARTURE
+import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION
 
 @Composable
 fun ScheduleList(
@@ -67,7 +72,6 @@ fun ScheduleListItem(
             .fillMaxWidth()
             .background(color = Gray700, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
-            .padding(horizontal = 20.dp, vertical = 16.dp)
             .clickable(
                 indication = null,
                 interactionSource = interactionSource,
@@ -75,24 +79,138 @@ fun ScheduleListItem(
             ),
         horizontalAlignment = Alignment.Start
     ) {
-        ScheduleTitleDateRow(
-            title = item.scheduleTitle,
-            date = item.appointmentAt,
-            isRepeat = item.isRepeat,
-            repeatDays = item.repeatDays
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Gray700, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
+            ScheduleInfoToggleSection(
+                date = item.appointmentAt,
+                title = item.scheduleTitle,
+                isEnabled = item.isEnabled,
+                isRepeat = item.isRepeat,
+                repeatDays = item.repeatDays,
+                onToggleClick = {
+                    onClickSwitch(item.scheduleId, it)
+                }
+            )
+        }
 
-        DepartureAlarmInfoRow(
-            alarmDetail = item.departureAlarm,
-            isEnabled = item.isEnabled,
-            onClickSwitch = {
-                onClickSwitch(item.scheduleId, it)
-            }
-        )
-
-        PreparationAlarmText(item.preparationAlarm)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Gray600, RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
+            AlarmInfoSection(
+                preparationAlarm = item.preparationAlarm,
+                departureAlarm = item.departureAlarm
+            )
+        }
     }
 }
+
+@Composable
+private fun ScheduleInfoToggleSection(
+    date: String,
+    title: String,
+    isEnabled: Boolean,
+    isRepeat: Boolean,
+    repeatDays: List<Int>,
+    onToggleClick: (Boolean) -> Unit
+) {
+    val formattedDate = DateTimeFormatter.formatDate(date, ".")
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.Top
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            if (isRepeat) {
+                val dayLabels = listOf("일", "월", "화", "수", "목", "금", "토")
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    dayLabels.forEachIndexed { index, label ->
+                        val isActive = repeatDays.contains(index + 1)
+                        OnDotText(
+                            text = label,
+                            style = OnDotTextStyle.BodySmallR1,
+                            color = if (isActive) Green500 else Gray400,
+                            modifier = Modifier.padding(horizontal = 3.dp, vertical = (1.5).dp)
+                        )
+                    }
+                }
+            } else {
+                OnDotText(text = formattedDate, style = OnDotTextStyle.BodySmallR1, color = Green500)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OnDotText(text = title, style = OnDotTextStyle.BodyLargeR1, color = Gray200)
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        OnDotSwitch(
+            checked = isEnabled,
+            onClick = onToggleClick
+        )
+    }
+}
+
+@Composable
+private fun AlarmInfoSection(
+    preparationAlarm: AlarmDetail,
+    departureAlarm: AlarmDetail
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        AlarmItem(type = AlarmType.Preparation, alarm = preparationAlarm)
+        Spacer(modifier = Modifier.weight(1f))
+        AlarmItem(type = AlarmType.Departure, alarm = departureAlarm)
+    }
+}
+
+@Composable
+private fun AlarmItem(
+    type: AlarmType,
+    alarm: AlarmDetail
+) {
+    Row(
+        verticalAlignment = Alignment.Bottom
+    ) {
+        val leadingText = when(type) {
+            AlarmType.Departure -> WORD_DEPARTURE
+            AlarmType.Preparation -> WORD_PREPARATION
+        }
+        val hourText = DateTimeFormatter.formatHourMinute(alarm.triggeredAt)
+        val fontColor = if (alarm.enabled) Gray0 else Gray400
+
+        OnDotText(
+            text = leadingText,
+            style = OnDotTextStyle.TitleMediumR,
+            color = fontColor,
+            modifier = Modifier.alignBy(FirstBaseline)
+        )
+        Spacer(Modifier.width(8.dp))
+        OnDotText(
+            text = hourText,
+            style = OnDotTextStyle.TitleLargeR,
+            color = fontColor,
+            modifier = Modifier.alignBy(FirstBaseline)
+        )
+    }
+}
+
+/**-----------------------Legacy----------------------*/
 
 @Composable
 private fun ScheduleTitleDateRow(
