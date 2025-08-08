@@ -126,7 +126,11 @@ const val SETTING_SERVICE_POLICY = "서비스 정책"
 // Alarm
 fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 시작하세요!"
 fun snoozeIntervalLabel(snoozeInterval: Int) = "${snoozeInterval}분 알람 미루기"
-fun formatRemainingSnoozeTime(minute: Int, second: Int) = "${minute}:${second}"
+fun formatRemainingSnoozeTime(minute: Int, second: Int): String {
+    val minuteString = minute.toString().padStart(2, '0')
+    val secondString = second.toString().padStart(2, '0')
+    return "$minuteString:$secondString"
+}
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
 fun departureSnoozedTitle(time: String) = "출발까지 $time 전\n어서 출발하세요!"
 
