@@ -17,7 +17,8 @@ class NetworkClient(
         pathParams: Map<String, Any> = emptyMap(),
         queryParams: Map<String, Any> = emptyMap(),
         body: Any? = null,
-        addAuthHeader: Boolean = true
+        addAuthHeader: Boolean = true,
+        isReissue: Boolean = false
     ): Result<T> {
         return try {
             val resolvedPath = pathParams.entries.fold(path) { acc, (key, value) ->
@@ -43,7 +44,7 @@ class NetworkClient(
 
                 if (addAuthHeader) {
                     tokenProvider.getToken()?.let { token ->
-                        header("Authorization", "Bearer ${token.accessToken}")
+                        header("Authorization", "Bearer ${if (isReissue) token.refreshToken else token.accessToken}")
                     }
                 }
             }
