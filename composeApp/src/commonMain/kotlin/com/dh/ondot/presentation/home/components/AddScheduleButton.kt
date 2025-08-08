@@ -112,7 +112,7 @@ private fun AddScheduleMenu(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        AddScheduleMenuItem(type = ScheduleMenuType.Quick, onClick = onQuickAdd)
+//        AddScheduleMenuItem(type = ScheduleMenuType.Quick, onClick = onQuickAdd)
         AddScheduleMenuItem(type = ScheduleMenuType.General, onClick = onGeneralAdd)
     }
 }
