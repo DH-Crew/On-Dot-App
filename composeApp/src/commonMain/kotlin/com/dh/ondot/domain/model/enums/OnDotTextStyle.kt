@@ -3,6 +3,7 @@ package com.dh.ondot.domain.model.enums
 enum class OnDotTextStyle {
     TitleLargeL,
     TitleLargeM,
+    TitleLargeR,
     TitleMediumSB,
     TitleMediumM,
     TitleMediumL,
