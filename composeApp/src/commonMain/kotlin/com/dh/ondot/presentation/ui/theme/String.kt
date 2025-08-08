@@ -31,6 +31,8 @@ const val WORD_SAVE = "저장"
 const val WORD_DELETE = "삭제"
 const val WORD_YES = "예"
 const val WORD_NO = "아니요"
+const val WORD_PREPARATION = "준비"
+const val WORD_DEPARTURE = "출발"
 const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
 
 // 알람 카테고리
