@@ -216,6 +216,7 @@ class GeneralScheduleViewModel(
                 )
                 emitEventFlow(GeneralScheduleEvent.RuquestArrivalFocus)
                 onRouteInputFieldFocused(RouterType.Arrival)
+                _query.value = ""
             }
             RouterType.Arrival -> updateState(
                 uiState.value.copy(
