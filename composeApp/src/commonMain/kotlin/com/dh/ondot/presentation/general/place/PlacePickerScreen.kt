@@ -85,7 +85,7 @@ fun PlacePickerScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(uiState.isInitialPlacePicker) {
         if (uiState.isInitialPlacePicker) {
             departureFocusRequester.requestFocus()
             viewModel.updateInitialPlacePicker(false)
