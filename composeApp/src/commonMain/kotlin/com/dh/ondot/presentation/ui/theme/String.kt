@@ -93,6 +93,7 @@ const val QUICK_ADD = "빠른 일정 생성"
 const val GENERAL_ADD = "일반 일정 생성"
 const val ADD_SCHEDULE = "알람 추가"
 const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
+const val CREATE_SCHEDULE_GUIDE = "일정을 등록해 보세요"
 
 // General
 const val SCHEDULE_REPEAT_TITLE = "스케줄 날짜와 시간을 선택해주세요."
