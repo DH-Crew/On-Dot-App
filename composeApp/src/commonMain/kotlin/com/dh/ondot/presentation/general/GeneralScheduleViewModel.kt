@@ -214,7 +214,7 @@ class GeneralScheduleViewModel(
                         departurePlaceInput = place.title
                     )
                 )
-                emitEventFlow(GeneralScheduleEvent.ActiveArrivalFocusRequester)
+                emitEventFlow(GeneralScheduleEvent.RuquestArrivalFocus)
                 onRouteInputFieldFocused(RouterType.Arrival)
             }
             RouterType.Arrival -> updateState(

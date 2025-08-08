@@ -80,7 +80,7 @@ fun PlacePickerScreen(
         viewModel.eventFlow.collect {
             when (it) {
                 GeneralScheduleEvent.NavigateToRouteLoading -> navigateToRouteLoading()
-                GeneralScheduleEvent.ActiveArrivalFocusRequester -> arrivalFocusRequester.requestFocus()
+                GeneralScheduleEvent.RuquestArrivalFocus -> arrivalFocusRequester.requestFocus()
             }
         }
     }

@@ -6,5 +6,5 @@ sealed class GeneralScheduleEvent: Event {
     data object NavigateToPlacePicker: GeneralScheduleEvent()
     data object NavigateToRouteLoading: GeneralScheduleEvent()
     data object NavigateToMain: GeneralScheduleEvent()
-    data object ActiveArrivalFocusRequester: GeneralScheduleEvent()
+    data object RuquestArrivalFocus: GeneralScheduleEvent()
 }
