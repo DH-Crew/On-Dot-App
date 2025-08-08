@@ -64,7 +64,7 @@ fun DateSettingSection(
             onToggleCalendar = onToggleCalendar
         )
 
-        if (uiState.isActiveCalendar) {
+        if (uiState.isActiveCalendar && !uiState.isRepeat) {
             Spacer(modifier = Modifier.height(16.dp))
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 4.dp), thickness = (0.5).dp, color = Gray600)

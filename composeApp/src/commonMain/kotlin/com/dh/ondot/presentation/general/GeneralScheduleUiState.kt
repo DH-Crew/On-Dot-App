@@ -21,7 +21,7 @@ data class GeneralScheduleUiState(
     val activeWeekDays: Set<Int> = emptySet(),
 
     // ScheduleDate
-    val isActiveCalendar: Boolean = false,
+    val isActiveCalendar: Boolean = true,
     val isActiveDial: Boolean = false,
     val calendarMonth: LocalDate = Clock.System
         .now()
@@ -34,6 +34,7 @@ data class GeneralScheduleUiState(
     val selectedTime: LocalTime? = null,
 
     // PlacePicker
+    val isInitialPlacePicker: Boolean = true,
     val isChecked: Boolean = false,
     val placeList: List<AddressInfo> = emptyList(),
     val lastFocusedTextField: RouterType = RouterType.Departure,

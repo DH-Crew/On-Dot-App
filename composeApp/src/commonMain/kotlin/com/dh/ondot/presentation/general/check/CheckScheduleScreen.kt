@@ -34,6 +34,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -228,7 +229,8 @@ private fun BottomSheetContent(
             OnDotText(
                 text = GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE,
                 style = OnDotTextStyle.BodyLargeR1,
-                color = Gray200
+                color = Gray200,
+                modifier = Modifier.clickable { isMedicineChecked = !isMedicineChecked }
             )
         }
 
@@ -246,7 +248,8 @@ private fun BottomSheetContent(
                 .fillMaxWidth()
                 .height(120.dp),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
             )
         )
 

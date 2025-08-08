@@ -19,11 +19,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dh.ondot.core.di.BackPressHandler
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.RouterType
@@ -49,6 +51,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.PLACE_PICKER_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PlacePickerScreen(
     viewModel: GeneralScheduleViewModel,
@@ -60,6 +63,13 @@ fun PlacePickerScreen(
     val arrivalFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
+    BackPressHandler(
+        onBack = {
+            viewModel.onClickBackButton()
+            popScreen()
+        }
+    )
+
     LaunchedEffect(Unit) {
         if (uiState.homeAddress.title.isBlank() && !uiState.isHomeAddressInitialized) {
             viewModel.initHomeAddress()
@@ -70,7 +80,15 @@ fun PlacePickerScreen(
         viewModel.eventFlow.collect {
             when (it) {
                 GeneralScheduleEvent.NavigateToRouteLoading -> navigateToRouteLoading()
+                GeneralScheduleEvent.RuquestArrivalFocus -> arrivalFocusRequester.requestFocus()
             }
+        }
+    }
+
+    LaunchedEffect(uiState.isInitialPlacePicker) {
+        if (uiState.isInitialPlacePicker) {
+            departureFocusRequester.requestFocus()
+            viewModel.updateInitialPlacePicker(false)
         }
     }
 
@@ -87,7 +105,10 @@ fun PlacePickerScreen(
         },
         onClickCheckBox = viewModel::onClickCheckBox,
         onClickButton = viewModel::onClickNextButton,
-        popScreen = popScreen
+        popScreen = {
+            viewModel.onClickBackButton()
+            popScreen()
+        }
     )
 }
 
@@ -130,6 +151,13 @@ fun PlacePickerContent(
 
             Spacer(modifier = Modifier.height(48.dp))
 
+            HomeDepartureOption(
+                isChecked = uiState.isChecked,
+                onClick = onClickCheckBox
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
             RouteInputSection(
                 departurePlaceInput = uiState.departurePlaceInput,
                 arrivalPlaceInput = uiState.arrivalPlaceInput,
@@ -137,13 +165,6 @@ fun PlacePickerContent(
                 arrivalFocusRequester = arrivalFocusRequester,
                 onRouteInputChanged = onRouteInputChanged,
                 onRouteInputFocused = onRouteInputFocused
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            HomeDepartureOption(
-                isChecked = uiState.isChecked,
-                onClick = onClickCheckBox
             )
 
             Spacer(modifier = Modifier.height(24.dp))
