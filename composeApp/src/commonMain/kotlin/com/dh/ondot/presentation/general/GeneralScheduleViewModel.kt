@@ -166,7 +166,7 @@ class GeneralScheduleViewModel(
     }
 
     fun onSelectDate(date: LocalDate) {
-        updateState(uiState.value.copy(selectedDate = date))
+        updateState(uiState.value.copy(selectedDate = date, isActiveDial = true))
     }
 
     fun onToggleDial() {
@@ -180,7 +180,6 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------PlacePicker-----------------------------------------------*/
 
     fun onRouteInputFieldFocused(type: RouterType) {
-        logger.d { "onRouteInputFieldFocused: $type" }
         updateStateSync(uiState.value.copy(lastFocusedTextField = type))
     }
 
@@ -207,13 +206,18 @@ class GeneralScheduleViewModel(
 
     fun onPlaceSelected(place: AddressInfo) {
         when (uiState.value.lastFocusedTextField) {
-            RouterType.Departure -> updateState(
-                uiState.value.copy(
-                    selectedDeparturePlace = place,
-                    placeList = emptyList(),
-                    departurePlaceInput = place.title
+            RouterType.Departure -> {
+                updateState(
+                    uiState.value.copy(
+                        selectedDeparturePlace = place,
+                        placeList = emptyList(),
+                        departurePlaceInput = place.title
+                    )
                 )
-            )
+                emitEventFlow(GeneralScheduleEvent.RuquestArrivalFocus)
+                onRouteInputFieldFocused(RouterType.Arrival)
+                _query.value = ""
+            }
             RouterType.Arrival -> updateState(
                 uiState.value.copy(
                     selectedArrivalPlace = place,
@@ -239,6 +243,10 @@ class GeneralScheduleViewModel(
                 departurePlaceInput = if (!curValue) uiState.value.homeAddress.roadAddress else ""
             )
         )
+    }
+
+    fun updateInitialPlacePicker(value: Boolean) {
+        updateState(uiState.value.copy(isInitialPlacePicker = value))
     }
 
     /**--------------------------------------------RouteLoading-----------------------------------------------*/
@@ -339,6 +347,14 @@ class GeneralScheduleViewModel(
             2 -> {
                 getScheduleAlarms()
                 emitEventFlow(GeneralScheduleEvent.NavigateToRouteLoading)
+            }
+        }
+    }
+
+    fun onClickBackButton() {
+        when (uiState.value.currentStep) {
+            2 -> {
+                updateState(uiState.value.copy(currentStep = uiState.value.currentStep - 1))
             }
         }
     }

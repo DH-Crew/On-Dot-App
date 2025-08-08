@@ -63,6 +63,12 @@ fun ScheduleRepeatSettingScreen(
         }
     }
 
+    LaunchedEffect(uiState.isActiveDial) {
+        if (uiState.isActiveDial) {
+            scrollState.animateScrollTo(scrollState.maxValue)
+        }
+    }
+
     ScheduleRepeatSettingContent(
         uiState = uiState,
         interactionSource = interactionSource,

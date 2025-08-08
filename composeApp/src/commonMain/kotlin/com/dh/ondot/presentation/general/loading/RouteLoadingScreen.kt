@@ -62,7 +62,7 @@ fun RouteLoadingScreen(
 
         OnDotText(
             text = ROUTE_CALCULATE_LABEL,
-            style = OnDotTextStyle.BodyLargeR1,
+            style = OnDotTextStyle.BodyLargeSB,
             color = Gray0,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 230.dp)
