@@ -26,7 +26,8 @@ import ondot.composeapp.generated.resources.Res
 @Composable
 fun SplashScreen(
     viewModel: SplashViewModel = viewModel { SplashViewModel() },
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val composition by rememberLottieComposition {
@@ -39,7 +40,8 @@ fun SplashScreen(
 
     LaunchedEffect(Unit) {
         delay(2000L)
-        navigateToLogin()
+        if (uiState.skipLogin) navigateToHome()
+        else navigateToLogin()
     }
 
     Box(
