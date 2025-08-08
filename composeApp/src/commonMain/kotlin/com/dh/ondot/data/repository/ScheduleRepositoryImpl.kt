@@ -2,6 +2,7 @@ package com.dh.ondot.data.repository
 
 import com.dh.ondot.domain.model.request.CreateScheduleRequest
 import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
+import com.dh.ondot.domain.model.request.ToggleAlarmRequest
 import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
 import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.model.response.ScheduleListResponse
@@ -86,6 +87,20 @@ class ScheduleRepositoryImpl(
             path = "/schedules/$scheduleId",
             pathParams = mapOf("scheduleId" to scheduleId.toString()),
             method = HttpMethod.PUT,
+            body = request
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun toggleAlarm(scheduleId: Long, request: ToggleAlarmRequest): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/schedules/$scheduleId/alarm",
+            pathParams = mapOf("scheduleId" to scheduleId.toString()),
+            method = HttpMethod.PATCH,
             body = request
         )
 
