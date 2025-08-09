@@ -12,6 +12,7 @@ fun OnDotTextStyle.toTextStyle(): TextStyle {
     return when (this) {
         OnDotTextStyle.TitleLargeL -> typo.titleLargeL
         OnDotTextStyle.TitleLargeM -> typo.titleLargeM
+        OnDotTextStyle.TitleLargeR -> typo.titleLargeR
         OnDotTextStyle.TitleMediumSB -> typo.titleMediumSB
         OnDotTextStyle.TitleMediumM -> typo.titleMediumM
         OnDotTextStyle.TitleMediumL -> typo.titleMediumL

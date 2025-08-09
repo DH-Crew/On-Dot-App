@@ -19,11 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.home.components.AddScheduleButton
 import com.dh.ondot.presentation.home.components.EmptyScheduleContent
 import com.dh.ondot.presentation.home.components.RemainingTimeText
 import com.dh.ondot.presentation.home.components.ScheduleList
 import com.dh.ondot.presentation.home.components.UserBadgeBanner
+import com.dh.ondot.presentation.ui.components.OnDotText
+import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE_GUIDE
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_banner
@@ -75,14 +79,16 @@ fun HomeContent(
 
             UserBadgeBanner()
 
-            if (uiState.remainingTime.first != -1) {
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+            if (uiState.remainingTime.first != -1) {
                 RemainingTimeText(
                     day = uiState.remainingTime.first,
                     hour = uiState.remainingTime.second,
                     minute = uiState.remainingTime.third
                 )
+            } else {
+                OnDotText(text = CREATE_SCHEDULE_GUIDE, style = OnDotTextStyle.TitleMediumSB, color = Gray0)
             }
 
             Spacer(modifier = Modifier.height(36.dp))
