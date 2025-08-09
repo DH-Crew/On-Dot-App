@@ -67,6 +67,8 @@ class AndroidSoundPlayer(
                     onComplete()
                 }
 
+                setVolume(1f, 1f)
+
                 prepare()
                 start()
             }
