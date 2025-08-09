@@ -31,6 +31,8 @@ const val WORD_SAVE = "저장"
 const val WORD_DELETE = "삭제"
 const val WORD_YES = "예"
 const val WORD_NO = "아니요"
+const val WORD_PREPARATION = "준비"
+const val WORD_DEPARTURE = "출발"
 const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
 
 // 알람 카테고리
@@ -55,6 +57,7 @@ const val ERROR_DELETE_SCHEDULE = "일정 삭제에 실패했습니다."
 const val ERROR_EDIT_SCHEDULE = "일정 수정에 실패했습니다."
 const val ERROR_LOGOUT = "로그아웃에 실패했습니다."
 const val ERROR_WITHDRAW = "회원탈퇴에 실패했습니다."
+const val ERROR_LOGIN = "로그인에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -93,6 +96,8 @@ const val QUICK_ADD = "빠른 일정 생성"
 const val GENERAL_ADD = "일반 일정 생성"
 const val ADD_SCHEDULE = "알람 추가"
 const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
+const val CREATE_SCHEDULE_GUIDE = "일정을 등록해 보세요"
+const val ALARM_IMMINENT = "곧 알람이 울려요"
 
 // General
 const val SCHEDULE_REPEAT_TITLE = "스케줄 날짜와 시간을 선택해주세요."
@@ -121,7 +126,11 @@ const val SETTING_SERVICE_POLICY = "서비스 정책"
 // Alarm
 fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 시작하세요!"
 fun snoozeIntervalLabel(snoozeInterval: Int) = "${snoozeInterval}분 알람 미루기"
-fun formatRemainingSnoozeTime(minute: Int, second: Int) = "${minute}:${second}"
+fun formatRemainingSnoozeTime(minute: Int, second: Int): String {
+    val minuteString = minute.toString().padStart(2, '0')
+    val secondString = second.toString().padStart(2, '0')
+    return "$minuteString:$secondString"
+}
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
 fun departureSnoozedTitle(time: String) = "출발까지 $time 전\n어서 출발하세요!"
 

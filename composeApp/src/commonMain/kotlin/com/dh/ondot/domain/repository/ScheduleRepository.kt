@@ -2,6 +2,7 @@ package com.dh.ondot.domain.repository
 
 import com.dh.ondot.domain.model.request.CreateScheduleRequest
 import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
+import com.dh.ondot.domain.model.request.ToggleAlarmRequest
 import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
 import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.model.response.ScheduleListResponse
@@ -14,4 +15,5 @@ interface ScheduleRepository {
     suspend fun getScheduleDetail(scheduleId: Long): Flow<Result<ScheduleDetail>>
     suspend fun deleteSchedule(scheduleId: Long): Flow<Result<Unit>>
     suspend fun editSchedule(scheduleId: Long, request: ScheduleDetail): Flow<Result<Unit>>
+    suspend fun toggleAlarm(scheduleId: Long, request: ToggleAlarmRequest): Flow<Result<Unit>>
 }

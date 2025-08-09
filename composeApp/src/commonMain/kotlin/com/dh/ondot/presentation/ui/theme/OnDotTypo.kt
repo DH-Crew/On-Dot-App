@@ -6,7 +6,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import ondot.composeapp.generated.resources.Res
-import ondot.composeapp.generated.resources.*
+import ondot.composeapp.generated.resources.pretendard_black
+import ondot.composeapp.generated.resources.pretendard_bold
+import ondot.composeapp.generated.resources.pretendard_extra_bold
+import ondot.composeapp.generated.resources.pretendard_extra_light
+import ondot.composeapp.generated.resources.pretendard_light
+import ondot.composeapp.generated.resources.pretendard_medium
+import ondot.composeapp.generated.resources.pretendard_regular
+import ondot.composeapp.generated.resources.pretendard_semi_bold
+import ondot.composeapp.generated.resources.pretendard_thin
 import org.jetbrains.compose.resources.Font
 
 @Composable
@@ -25,6 +33,7 @@ fun OnDotFontFamily() = FontFamily(
 data class OnDotTypography(
     val titleLargeL: TextStyle,
     val titleLargeM: TextStyle,
+    val titleLargeR: TextStyle,
     val titleMediumSB: TextStyle,
     val titleMediumM: TextStyle,
     val titleMediumL: TextStyle,
@@ -52,6 +61,7 @@ fun OnDotTypo(): OnDotTypography {
     return OnDotTypography(
         titleLargeL = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Light, fontSize = 42.sp, lineHeight = lh(42)),
         titleLargeM = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Medium, fontSize = 60.sp, lineHeight = lh(60)),
+        titleLargeR = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 32.sp, lineHeight = lh(32)),
 
         titleMediumSB = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 24.sp, lineHeight = lh(24)),
         titleMediumM = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Medium, fontSize = 24.sp, lineHeight = lh(24)),

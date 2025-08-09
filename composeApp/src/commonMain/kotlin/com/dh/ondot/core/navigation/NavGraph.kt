@@ -81,7 +81,12 @@ fun NavGraphBuilder.splashNavGraph(navController: NavHostController) {
                         popUpTo(NavRoutes.Splash.route) { inclusive = true }
                         launchSingleTop = true
                     }
-
+                },
+                navigateToHome = {
+                    navController.navigate(NavRoutes.Main.route) {
+                        popUpTo(NavRoutes.Splash.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
                 }
             )
         }

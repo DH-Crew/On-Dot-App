@@ -41,4 +41,17 @@ class AuthRepositoryImpl(
     override suspend fun saveToken(token: TokenModel) {
         tokenProvider.saveToken(token)
     }
+
+    override suspend fun reissueToken(): Flow<Result<TokenModel>> = flow {
+        val response = networkClient.request<TokenModel>(
+            method = HttpMethod.POST,
+            path = "/auth/reissue",
+            isReissue = true
+        )
+
+        emit(response.fold(
+            onSuccess = { Result.success(it) },
+            onFailure = { Result.failure(it) }
+        ))
+    }
 }

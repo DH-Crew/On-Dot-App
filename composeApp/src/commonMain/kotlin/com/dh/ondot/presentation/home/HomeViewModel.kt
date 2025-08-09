@@ -8,6 +8,7 @@ import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ToastType
+import com.dh.ondot.domain.model.request.ToggleAlarmRequest
 import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.domain.model.response.ScheduleListResponse
 import com.dh.ondot.domain.model.ui.AlarmRingInfo
@@ -31,11 +32,20 @@ class HomeViewModel(
     fun onClickAlarmSwitch(id: Long, isEnabled: Boolean) {
         updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.map {
             if (it.scheduleId == id) {
-                it.copy(isEnabled = isEnabled)
+                it.copy(
+                    isEnabled = isEnabled,
+                    departureAlarm = it.departureAlarm.copy(enabled = isEnabled)
+                )
             } else {
                 it
             }
         }))
+
+        viewModelScope.launch {
+            scheduleRepository.toggleAlarm(scheduleId = id, request = ToggleAlarmRequest(isEnabled = isEnabled)).collect {
+                resultResponse(it, {})
+            }
+        }
     }
 
     fun getScheduleList() {
