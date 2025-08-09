@@ -67,7 +67,20 @@ class AndroidSoundPlayer(
                     onComplete()
                 }
 
+                // 상대 볼륨 최대화
                 setVolume(1f, 1f)
+
+                // 시스템 알람 볼륨 최대화
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_ALARM,
+                    audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
+                    0
+                )
+
+                // 예외 발생 시 오디오 포커스 해제
+                if (::audioFocusRequest.isInitialized) {
+                    audioManager.abandonAudioFocusRequest(audioFocusRequest)
+                }
 
                 prepare()
                 start()
