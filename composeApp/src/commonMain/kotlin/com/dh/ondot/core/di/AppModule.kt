@@ -16,5 +16,5 @@ val appModule: Module = module {
     single { NetworkClient(get()) }
     single<ScheduleRepository> { ScheduleRepositoryImpl(get()) }
     single<PlaceRepository> { PlaceRepositoryImpl(get()) }
-    single<MemberRepository> { MemberRepositoryImpl(get()) }
+    single<MemberRepository> { MemberRepositoryImpl(get(), get()) }
 }

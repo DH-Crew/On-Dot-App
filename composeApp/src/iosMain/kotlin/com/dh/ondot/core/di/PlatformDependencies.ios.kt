@@ -7,11 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
 import com.dh.ondot.core.util.IosAlarmScheduler
 import com.dh.ondot.core.util.IosAlarmStorage
+import com.dh.ondot.core.util.IosMapProviderStorage
 import com.dh.ondot.core.util.IosSoundPlayer
 import com.dh.ondot.core.util.toUtf8
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 import platform.Foundation.NSBundle
@@ -61,13 +63,13 @@ actual fun openDirections(
     }
 
     when (provider) {
-        MapProvider.Kakao -> {
+        MapProvider.KAKAO -> {
             val mode = "publictransit"
             val url = "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
             val web = "https://m.map.kakao.com/scheme/route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
             open(url, web)
         }
-        MapProvider.Naver -> {
+        MapProvider.NAVER -> {
             val mode = "public"
             val bundleId = NSBundle.mainBundle.bundleIdentifier ?: "com.dh.ondot.iosApp"
             val url = "nmap://route/$mode" +
@@ -77,7 +79,7 @@ actual fun openDirections(
             // 네이버맵 미설치
             open(url, "http://itunes.apple.com/app/id311867728?mt=8")
         }
-        MapProvider.Apple -> {
+        MapProvider.APPLE -> {
             val dir = "r"
             // Apple 공식 Map Links
             val url = "http://maps.apple.com/?saddr=$startLat,$startLng&daddr=$endLat,$endLng&dirflg=$dir"
@@ -87,6 +89,8 @@ actual fun openDirections(
 }
 
 actual fun stopService(alarmId: Long) {} // Ios에서는 무시
+
+actual fun provideMapProvider(): MapProviderStorage = IosMapProviderStorage()
 
 @Composable
 actual fun BackPressHandler(onBack: () -> Unit) {} // Ios에서는 무시
