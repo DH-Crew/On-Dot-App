@@ -125,6 +125,8 @@ class AlarmService : Service() {
                         }
                     } else {
                         stopSelf()
+                        stopForeground(STOP_FOREGROUND_REMOVE)
+                        stopSelf()
                     }
                 }
             }
