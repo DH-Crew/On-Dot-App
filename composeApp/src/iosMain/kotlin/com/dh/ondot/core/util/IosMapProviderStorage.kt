@@ -15,7 +15,7 @@ class IosMapProviderStorage: MapProviderStorage {
     private val flagKey = "map_provider_confirm"
 
     private val state = MutableStateFlow(load())
-    private val flagState = MutableStateFlow(loadFlag())
+    private val needsState = MutableStateFlow(loadNeedsChoose())
 
     init {
         NSNotificationCenter.defaultCenter.addObserverForName(
@@ -24,12 +24,13 @@ class IosMapProviderStorage: MapProviderStorage {
             queue = NSOperationQueue.mainQueue
         ) { _ ->
             state.value = load()
+            needsState.value = loadNeedsChoose()
         }
     }
 
     override fun getMapProvider(): Flow<MapProvider> = state
 
-    override fun needsChooseProvider(): Flow<Boolean> = flagState
+    override fun needsChooseProvider(): Flow<Boolean> = needsState
 
     override suspend fun setMapProvider(mapProvider: MapProvider) {
         defaults.setObject(mapProvider.name, forKey = key)
@@ -42,8 +43,8 @@ class IosMapProviderStorage: MapProviderStorage {
             defaults.stringForKey(key)?.let { enumValueOf<MapProvider>(it) }
         }.getOrNull() ?: MapProvider.KAKAO
 
-    private fun loadFlag(): Boolean =
-        kotlin.runCatching {
-            defaults.boolForKey(flagKey)
-        }.getOrNull() ?: true
+    private fun loadNeedsChoose(): Boolean {
+        val confirmed = defaults.boolForKey(flagKey)
+        return !confirmed
+    }
 }
