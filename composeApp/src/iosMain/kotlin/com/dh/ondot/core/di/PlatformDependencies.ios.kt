@@ -76,6 +76,8 @@ actual fun openDirections(
     }
 }
 
+actual fun stopService(alarmId: Long) {} // Ios에서는 무시
+
 @Composable
 actual fun BackPressHandler(onBack: () -> Unit) {} // Ios에서는 무시
 

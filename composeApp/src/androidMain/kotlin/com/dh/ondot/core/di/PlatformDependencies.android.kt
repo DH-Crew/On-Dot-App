@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
+import co.touchlab.kermit.Logger
+import com.dh.ondot.core.util.AlarmService
 import com.dh.ondot.core.util.AndroidAlarmScheduler
 import com.dh.ondot.core.util.AndroidAlarmStorage
 import com.dh.ondot.core.util.AndroidSoundPlayer
@@ -77,6 +79,8 @@ actual fun openDirections(
     val pm: PackageManager = context.packageManager
     val canHandle = intent.resolveActivity(pm) != null
 
+    Logger.e { "canHandle: $canHandle" }
+
     if (canHandle) {
         context.startActivity(intent.addCategory(Intent.CATEGORY_BROWSABLE).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     } else {
@@ -87,6 +91,17 @@ actual fun openDirections(
         }
         context.startActivity(Intent(Intent.ACTION_VIEW, storeUri.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
+}
+
+actual fun stopService(alarmId: Long) {
+    val context = runCatching { AppContextHolder.context }
+        .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
+    val stopIntent = Intent(context, AlarmService::class.java).apply {
+        action = AlarmService.ACTION_STOP
+        putExtra("alarmId", alarmId)
+    }
+
+    context.startService(stopIntent)
 }
 
 @Composable
