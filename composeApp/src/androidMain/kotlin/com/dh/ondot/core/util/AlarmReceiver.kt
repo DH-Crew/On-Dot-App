@@ -29,6 +29,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // AlarmService 실행해서 사운드 재생 + 화면 전환
         val svcIntent = Intent(context, AlarmService::class.java).apply {
+            action = AlarmService.ACTION_START
             putExtra("alarmId", alarmId)
             putExtra("type", type)
         }

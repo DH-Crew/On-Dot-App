@@ -12,6 +12,8 @@ import ComposeApp
 // UIApplicationDelegate: iOS 앱 라이프사이클 이벤트(didFinishLaunching, willTerminate 등)를 받아 처리할 수 있도록 해주는 프로토콜
 // UNUserNotificationCenterDelegate: 사용자에게 도달한 로컬/원격 알림(Notification)을 앱 내부에서 직접 다룰 수 있게 해 주는 델리게이트 프로토콜
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    private var handledNotificationIds = Set<String>()
+    
     func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
@@ -48,14 +50,37 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     didReceive response: UNNotificationResponse,
     withCompletionHandler completionHandler: @escaping () -> Void
     ) {
+        let req = response.notification.request
+        
+        NSLog("[AppDelegate] didReceive id=\(req.identifier) userInfo=\(req.content.userInfo)")
+        
+        if handledNotificationIds.contains(req.identifier) {
+            NSLog("[AppDelegate] didReceive ignored (already handled in willPresent)")
+            completionHandler(); return
+        }
+        handledNotificationIds.insert(req.identifier)
       
         // 알림 페이로드(userInfo 딕셔너리)에 담긴 추가 데이터를 꺼낼 수 있음
         // 실제로 userInfo에 정보를 추가하는 로직은 iosMain에 존재함
         let info = response.notification.request.content.userInfo
 
-        if let idStr = info["alarmId"] as? String, let id = Int64(idStr), let typeName = info["type"] as? String {
-            // KMP AlarmNotifier 에 이벤트 흘리기
-            ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+        if let typeName = info["type"] as? String {
+            var id: Int64?
+            
+            if let n = info["alarmId"] as? NSNumber {
+                id = n.int64Value
+            } else if let s = info["alarmId"] as? String, let v = Int64(s) {
+                id = v
+            }
+            
+            if let id = id {
+                NSLog("[AppDelegate] didReceive emit alarmId=\(id) type=\(typeName)")
+                
+                // KMP AlarmNotifier 에 이벤트 흘리기
+                ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+            }
+        } else {
+            NSLog("[AppDelegate] didReceive userInfo parse FAIL")
         }
 
         // 알림 클릭 처리가 끝났음을 시스템에 알려주는 콜백
@@ -63,12 +88,39 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
     
     func userNotificationCenter(
-            _ center: UNUserNotificationCenter,
-            willPresent notification: UNNotification,
-            withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-        ) {
-            completionHandler([.banner, .sound])
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        let info = notification.request.content.userInfo
+        let req = notification.request
+        let state = UIApplication.shared.applicationState
+        
+        NSLog("[AppDelegate] willPresent id=\(req.identifier) state=\(state.rawValue) userInfo=\(info)")
+        
+        if state == .active {
+            var id: Int64?
+            var typeName: String?
+            
+            if let n = info["alarmId"] as? NSNumber { id = n.int64Value }
+            else if let s = info["alarmId"] as? String, let v = Int64(s) { id = v }
+            
+            if let t = info["type"] as? String { typeName = t }
+            
+            // 포그라운드면 바로 이벤트 방출 -> Compose 네비게이션 트리거
+            if let id = id, let typeName = typeName {
+                NSLog("[AppDelegate] willPresent emit alarmId=\(id) type=\(typeName)")
+                
+                // KMP AlarmNotifier 에 이벤트 흘리기
+                ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+                handledNotificationIds.insert(req.identifier)
+            } else {
+                NSLog("[AppDelegate] willPresent userInfo parse FAIL")
+            }
         }
+        
+        completionHandler([.banner, .sound])
+    }
     
     // 권한을 거부한 경우 실행되는 콜백
     private func handleNotificationPermissionDenied() {
