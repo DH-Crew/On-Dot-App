@@ -39,6 +39,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.PREPARATION_START_BUTTON_TEXT
+import com.dh.ondot.presentation.ui.theme.SHOW_ROUTE_INFORMATION_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.alarmRingTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.dh.ondot.presentation.ui.theme.snoozeIntervalLabel
@@ -164,7 +165,10 @@ fun PreparationAlarmRingContent(
 
         if (showPreparationSnoozeAnimation) {
             Box(
-                modifier = Modifier.fillMaxSize().background(Gray900)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Gray900),
+                contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = rememberLottiePainter(
@@ -175,7 +179,12 @@ fun PreparationAlarmRingContent(
                     modifier = Modifier.matchParentSize(),
                 )
 
-                AlarmSnoozedSection(alarmDetail.snoozeInterval)
+                AlarmSnoozedSection(
+                    alarmRingTitle = alarmRingTitle,
+                    formattedText = formattedTime,
+                    snoozeInterval = alarmDetail.snoozeInterval,
+                    onStartPreparation = onClickPreparationStartButton
+                )
             }
         }
     }
@@ -259,9 +268,11 @@ fun ScheduleInfoSection(
 
 @Composable
 private fun AlarmSnoozedSection(
-    snoozeInterval: Int
+    alarmRingTitle: String,
+    formattedText: String,
+    snoozeInterval: Int,
+    onStartPreparation: () -> Unit
 ) {
-
     val totalSeconds = snoozeInterval * 60
     val timeLeftSecond by produceState(initialValue = totalSeconds) {
         var current = totalSeconds
@@ -276,16 +287,32 @@ private fun AlarmSnoozedSection(
     val seconds = timeLeftSecond % 60
     val timeText = formatRemainingSnoozeTime(minutes, seconds)
 
-    Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.TopCenter
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 22.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(148.dp))
+        Spacer(modifier = Modifier.height(69.dp))
+
+        AlarmRingTitle(alarmRingTitle, formattedText)
+
+        Spacer(modifier = Modifier.height(79.dp))
 
         OnDotText(
             text = timeText,
             style = OnDotTextStyle.TitleLargeM,
             color = Red
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        OnDotButton(
+            buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
+            buttonType = ButtonType.Gradient,
+            onClick = onStartPreparation
+        )
+
+        Spacer(modifier = if (getPlatform().name == ANDROID) Modifier.height(16.dp) else Modifier.height(37.dp))
     }
 }
