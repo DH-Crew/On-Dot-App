@@ -33,8 +33,8 @@ class AlarmService : Service() {
         private const val CHANNEL_ID = "channel_alarm"
         private const val NOTIFICATION_ID = 1001
 
-        const val ACTION_START  = "com.ondot.alarm.ACTION_START"
-        const val ACTION_STOP   = "com.ondot.alarm.ACTION_STOP"
+        const val ACTION_START  = "com.dh.ondot.alarm.ACTION_START"
+        const val ACTION_STOP   = "com.dh.ondot.alarm.ACTION_STOP"
     }
 
     private val logger = Logger.withTag("AlarmService")
