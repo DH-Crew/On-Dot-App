@@ -137,6 +137,8 @@ fun departureSnoozedTitle(time: String) = "출발까지 $time 전\n어서 출발
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"
 const val DELETE_ALARM_CONTENT = "정말 알람을 삭제하시겠어요?"
+const val MAP_PROVIDER_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
+const val MAP_PROVIDER_CONTENT = "길 안내에 사용될 예정이예요."
 
 // Setting
 const val LOGOUT_SUCCESS_MESSAGE = "정상적으로 로그아웃되었습니다."
