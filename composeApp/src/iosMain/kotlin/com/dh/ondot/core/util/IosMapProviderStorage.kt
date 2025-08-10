@@ -42,7 +42,6 @@ class IosMapProviderStorage: MapProviderStorage {
     override suspend fun clear() {
         defaults.removeObjectForKey(key)
         defaults.removeObjectForKey(flagKey)
-        defaults.synchronize()
         state.value = MapProvider.KAKAO
         needsState.value = true
     }
