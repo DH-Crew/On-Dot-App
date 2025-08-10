@@ -39,7 +39,6 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.PREPARATION_START_BUTTON_TEXT
-import com.dh.ondot.presentation.ui.theme.SHOW_ROUTE_INFORMATION_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.alarmRingTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.dh.ondot.presentation.ui.theme.snoozeIntervalLabel
@@ -69,6 +68,12 @@ fun PreparationAlarmRingScreen(
         if (uiState.showPreparationStartAnimation) {
             delay(2000L)
             navigateToSplash()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (uiState.showPreparationSnoozeAnimation || uiState.showDepartureSnoozeAnimation) {
+            viewModel.initAnimationFlags()
         }
     }
 
@@ -308,8 +313,8 @@ private fun AlarmSnoozedSection(
         Spacer(modifier = Modifier.weight(1f))
 
         OnDotButton(
-            buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
-            buttonType = ButtonType.Gradient,
+            buttonText = PREPARATION_START_BUTTON_TEXT,
+            buttonType = ButtonType.Green500,
             onClick = onStartPreparation
         )
 
