@@ -7,11 +7,14 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.AlarmType
+import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.enums.ToastType
+import com.dh.ondot.domain.model.request.MapProviderRequest
 import com.dh.ondot.domain.model.request.ToggleAlarmRequest
 import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.domain.model.response.ScheduleListResponse
 import com.dh.ondot.domain.model.ui.AlarmRingInfo
+import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
@@ -20,10 +23,24 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
+    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
     private val alarmStorage: AlarmStorage = ServiceLocator.provideAlarmStorage(),
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler()
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
+
+    init {
+        needsChooseProvider()
+    }
+
+    private fun needsChooseProvider() {
+        viewModelScope.launch {
+            memberRepository.needsChooseProvider().collect {
+                logger.e { "needsChooseProvider: $it" }
+                updateState(uiState.value.copy(needsChooseProvider = it))
+            }
+        }
+    }
 
     fun onToggle() {
         updateState(uiState.value.copy(isExpanded = !uiState.value.isExpanded))
@@ -121,5 +138,13 @@ class HomeViewModel(
         logger.e { throwable.message.toString() }
 
         viewModelScope.launch { ToastManager.show(message = ERROR_GET_SCHEDULE_LIST, type = ToastType.ERROR) }
+    }
+
+    fun setMapProvider(mapProvider: MapProvider) {
+        viewModelScope.launch {
+            memberRepository.updateMapProvider(request = MapProviderRequest(mapProvider)).collect {
+                resultResponse(it, { updateState(uiState.value.copy(needsChooseProvider = false)) }, {})
+            }
+        }
     }
 }
