@@ -34,8 +34,12 @@ fun App() {
     LaunchedEffect(Unit) {
         AlarmNotifier.events.collect { event ->
             when(event.type) {
-                AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(event.alarmId))
-                AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(event.alarmId))
+                AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(event.alarmId)) {
+                    launchSingleTop = true
+                }
+                AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(event.alarmId)) {
+                    launchSingleTop = true
+                }
             }
         }
     }
