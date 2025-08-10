@@ -38,6 +38,14 @@ class IosMapProviderStorage: MapProviderStorage {
         state.value = mapProvider
     }
 
+    override suspend fun clear() {
+        defaults.removeObjectForKey(key)
+        defaults.removeObjectForKey(flagKey)
+        defaults.synchronize()
+        state.value = MapProvider.KAKAO
+        needsState.value = true
+    }
+
     private fun load(): MapProvider =
         runCatching {
             defaults.stringForKey(key)?.let { enumValueOf<MapProvider>(it) }
