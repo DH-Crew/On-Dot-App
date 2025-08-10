@@ -61,13 +61,13 @@ actual fun openDirections(
     }
 
     when (provider) {
-        MapProvider.Kakao -> {
+        MapProvider.KAKAO -> {
             val mode = "publictransit"
             val url = "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
             val web = "https://m.map.kakao.com/scheme/route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
             open(url, web)
         }
-        MapProvider.Naver -> {
+        MapProvider.NAVER -> {
             val mode = "public"
             val bundleId = NSBundle.mainBundle.bundleIdentifier ?: "com.dh.ondot.iosApp"
             val url = "nmap://route/$mode" +
@@ -77,7 +77,7 @@ actual fun openDirections(
             // 네이버맵 미설치
             open(url, "http://itunes.apple.com/app/id311867728?mt=8")
         }
-        MapProvider.Apple -> {
+        MapProvider.APPLE -> {
             val dir = "r"
             // Apple 공식 Map Links
             val url = "http://maps.apple.com/?saddr=$startLat,$startLng&daddr=$endLat,$endLng&dirflg=$dir"
