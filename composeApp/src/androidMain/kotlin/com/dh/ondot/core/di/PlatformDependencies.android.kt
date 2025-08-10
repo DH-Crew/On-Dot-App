@@ -62,9 +62,9 @@ actual fun openDirections(
     val context = runCatching { AppContextHolder.context }
         .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
     val mode = when (provider) {
-        MapProvider.Kakao -> "publictransit"
+        MapProvider.Kakao -> "PUBLICTRANSIT"
         MapProvider.Naver -> "public"
-        MapProvider.Apple -> TODO()
+        MapProvider.Apple -> error("unreachable")
     }
     val intent = when(provider) {
         MapProvider.Kakao -> Intent(Intent.ACTION_VIEW,
@@ -73,7 +73,7 @@ actual fun openDirections(
                 "?slat=$startLat&slng=$startLng&sname=${Uri.encode(startName)}" +
                 "&dlat=$endLat&dlng=$endLng&dname=${Uri.encode(endName)}" +
                 "&appname=${context.packageName}").toUri()).apply { `package` = "com.nhn.android.nmap" }
-        MapProvider.Apple -> TODO()
+        MapProvider.Apple -> error("unreachable")
     }
 
     val pm: PackageManager = context.packageManager
@@ -82,14 +82,33 @@ actual fun openDirections(
     Logger.e { "canHandle: $canHandle" }
 
     if (canHandle) {
-        context.startActivity(intent.addCategory(Intent.CATEGORY_BROWSABLE).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        runCatching {
+            context.startActivity(intent.addCategory(Intent.CATEGORY_BROWSABLE).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }.onFailure {
+            Logger.w { "지도 앱 실행 실패. 스토어로 fallback합니다." }
+
+            val storeHttp = when (provider) {
+                MapProvider.Kakao -> "https://play.google.com/store/apps/details?id=net.daum.android.map"
+                MapProvider.Naver -> "https://play.google.com/store/apps/details?id=com.nhn.android.nmap"
+                MapProvider.Apple -> error("unreachable")
+            }
+
+            context.startActivity(Intent(Intent.ACTION_VIEW, storeHttp.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
     } else {
         val storeUri = when (provider) {
             MapProvider.Kakao -> "market://details?id=net.daum.android.map"
             MapProvider.Naver -> "market://details?id=com.nhn.android.nmap"
-            MapProvider.Apple -> TODO()
+            MapProvider.Apple -> error("unreachable")
         }
-        context.startActivity(Intent(Intent.ACTION_VIEW, storeUri.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        val started = runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, storeUri.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }.isSuccess
+
+        if (!started) {
+            val storeHttp = storeUri.replace("market://details?id=", "https://play.google.com/store/apps/details?id=")
+            context.startActivity(Intent(Intent.ACTION_VIEW, storeHttp.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
     }
 }
 
