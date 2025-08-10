@@ -98,7 +98,7 @@ object DateTimeFormatter {
                 period == WORD_AM && hour12 == 12 -> 0
                 period == WORD_AM -> hour12
                 period == WORD_PM && hour12 == 12 -> 12
-                else -> hour12
+                else -> hour12 + 12
             }
             return "${hour24.pad2()}:${minute.pad2()}"
         }
@@ -131,6 +131,8 @@ object DateTimeFormatter {
 
         return AmPmTime(period, hour12, minute)
     }
+
+
 
     /** "오전 01:05" 같은 형태로 포맷 */
     fun formatAmPmTime(iso: String): String = parseAmPmTime(iso).format()
