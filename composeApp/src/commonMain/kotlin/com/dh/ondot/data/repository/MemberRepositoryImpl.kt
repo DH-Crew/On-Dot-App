@@ -11,6 +11,7 @@ import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.network.HttpMethod
 import com.dh.ondot.network.NetworkClient
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
 class MemberRepositoryImpl(
@@ -59,7 +60,7 @@ class MemberRepositoryImpl(
         mapProviderStorage.setMapProvider(request.mapProvider)
 
         val response = networkClient.request<Unit>(
-            path = "/members/map_provider",
+            path = "/members/map-provider",
             method = HttpMethod.PATCH,
             body = request
         )
@@ -71,6 +72,10 @@ class MemberRepositoryImpl(
     }
 
     override fun getLocalMapProvider(): Flow<MapProvider> = flow {
-        mapProviderStorage.getMapProvider()
+        emitAll(mapProviderStorage.getMapProvider())
+    }
+
+    override fun needsChooseProvider(): Flow<Boolean> = flow {
+        emitAll(mapProviderStorage.needsChooseProvider())
     }
 }
