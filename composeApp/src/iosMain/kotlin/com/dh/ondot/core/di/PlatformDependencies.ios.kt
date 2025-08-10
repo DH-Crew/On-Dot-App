@@ -7,11 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
 import com.dh.ondot.core.util.IosAlarmScheduler
 import com.dh.ondot.core.util.IosAlarmStorage
+import com.dh.ondot.core.util.IosMapProviderStorage
 import com.dh.ondot.core.util.IosSoundPlayer
 import com.dh.ondot.core.util.toUtf8
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 import platform.Foundation.NSBundle
@@ -87,6 +89,8 @@ actual fun openDirections(
 }
 
 actual fun stopService(alarmId: Long) {} // Ios에서는 무시
+
+actual fun provideMapProvider(): MapProviderStorage = IosMapProviderStorage()
 
 @Composable
 actual fun BackPressHandler(onBack: () -> Unit) {} // Ios에서는 무시
