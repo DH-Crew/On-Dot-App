@@ -83,7 +83,11 @@ class HomeViewModel(
                                 alarmType = AlarmType.Preparation,
                                 appointmentAt = schedule.appointmentAt,
                                 scheduleTitle = schedule.scheduleTitle,
-                                scheduleId = schedule.scheduleId
+                                scheduleId = schedule.scheduleId,
+                                startLat = schedule.startLatitude,
+                                startLng = schedule.startLongitude,
+                                endLat = schedule.endLatitude,
+                                endLng = schedule.endLongitude
                             )
                         )
                     }
@@ -93,7 +97,11 @@ class HomeViewModel(
                             alarmType = AlarmType.Departure,
                             appointmentAt = schedule.appointmentAt,
                             scheduleTitle = schedule.scheduleTitle,
-                            scheduleId = schedule.scheduleId
+                            scheduleId = schedule.scheduleId,
+                            startLat = schedule.startLatitude,
+                            startLng = schedule.startLongitude,
+                            endLat = schedule.endLatitude,
+                            endLng = schedule.endLongitude
                         )
                     )
                 }
