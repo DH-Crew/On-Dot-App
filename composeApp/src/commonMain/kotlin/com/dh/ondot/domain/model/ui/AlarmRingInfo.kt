@@ -10,5 +10,9 @@ data class AlarmRingInfo(
     val alarmType: AlarmType = AlarmType.Departure,
     val appointmentAt: String = "",
     val scheduleTitle: String = "",
-    val scheduleId: Long = -1L
+    val scheduleId: Long = -1L,
+    val startLng: Double = 127.0276,
+    val startLat: Double = 37.4979,
+    val endLat: Double = 37.501,
+    val endLng: Double = 127.029,
 )
