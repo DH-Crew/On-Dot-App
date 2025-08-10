@@ -60,11 +60,11 @@ class AlarmService : Service() {
                 return START_NOT_STICKY
             }
             ACTION_START -> {
-                val alarmId = intent?.getLongExtra("alarmId", -1L) ?: -1L
-                val typeName = intent?.getStringExtra("type")
+                val alarmId = intent.getLongExtra("alarmId", -1L)
+                val typeName = intent.getStringExtra("type")
                 val type = typeName?.let { AlarmType.valueOf(it) } ?: AlarmType.Departure
 
-                if (alarmId == -1L && typeName == null) {
+                if (alarmId == -1L) {
                     logger.e { "Invalid extras, stopSelfResult($startId)" }
                     stopSelfResult(startId)
                     return START_NOT_STICKY
