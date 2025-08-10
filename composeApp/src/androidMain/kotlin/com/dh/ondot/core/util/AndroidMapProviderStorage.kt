@@ -1,6 +1,7 @@
 package com.dh.ondot.core.util
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -29,13 +30,21 @@ class AndroidMapProviderStorage(
             .distinctUntilChanged()
     }
 
+    override fun needsChooseProvider(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[KEY_CONFIRM] != true
+        }
+    }
+
     override suspend fun setMapProvider(mapProvider: MapProvider) {
         dataStore.edit { prefs ->
             prefs[KEY] = mapProvider.name
+            prefs[KEY_CONFIRM] = true
         }
     }
 
     private companion object {
         val KEY = stringPreferencesKey("map_provider")
+        val KEY_CONFIRM = booleanPreferencesKey("map_provider_confirm")
     }
 }
