@@ -60,8 +60,6 @@ class MemberRepositoryImpl(
     }
 
     override suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>> = flow {
-        mapProviderStorage.setMapProvider(request.mapProvider)
-
         val response = networkClient.request<Unit>(
             path = "/members/map-provider",
             method = HttpMethod.PATCH,
@@ -69,7 +67,10 @@ class MemberRepositoryImpl(
         )
 
         response.fold(
-            onSuccess = { emit(Result.success(it)) },
+            onSuccess = {
+                emit(Result.success(it))
+                mapProviderStorage.setMapProvider(request.mapProvider)
+            },
             onFailure = { emit(Result.failure(it)) }
         )
     }
