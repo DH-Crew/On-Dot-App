@@ -2,6 +2,7 @@ package com.dh.ondot.core.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.SoundPlayer
@@ -14,6 +15,16 @@ expect fun provideSoundPlayer(): SoundPlayer
 expect fun provideAlarmStorage(): AlarmStorage
 
 expect fun provideAlarmScheduler(): AlarmScheduler
+
+expect fun openDirections(
+    startLat: Double,
+    startLng: Double,
+    endLat: Double,
+    endLng: Double,
+    provider: MapProvider,
+    startName: String,
+    endName: String
+)
 
 @Composable
 expect fun BackPressHandler(onBack: () -> Unit)
