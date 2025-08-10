@@ -64,12 +64,21 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // 실제로 userInfo에 정보를 추가하는 로직은 iosMain에 존재함
         let info = response.notification.request.content.userInfo
 
-        if let id = info["alarmId"] as? Int64, let typeName = info["type"] as? String {
+        if let typeName = info["type"] as? String {
+            var id: Int64?
             
-            NSLog("[AppDelegate] didReceive emit alarmId=\(id) type=\(typeName)")
+            if let n = info["alarmId"] as? NSNumber {
+                id = n.int64Value
+            } else if let s = info["alarmId"] as? String, let v = Int64(s) {
+                id = v
+            }
             
-            // KMP AlarmNotifier 에 이벤트 흘리기
-            ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+            if let id = id {
+                NSLog("[AppDelegate] didReceive emit alarmId=\(id) type=\(typeName)")
+                
+                // KMP AlarmNotifier 에 이벤트 흘리기
+                ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+            }
         } else {
             NSLog("[AppDelegate] didReceive userInfo parse FAIL")
         }
@@ -90,9 +99,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         NSLog("[AppDelegate] willPresent id=\(req.identifier) state=\(state.rawValue) userInfo=\(info)")
         
         if state == .active {
+            var id: Int64?
+            var typeName: String?
+            
+            if let n = info["alarmId"] as? NSNumber { id = n.int64Value }
+            else if let s = info["alarmId"] as? String, let v = Int64(s) { id = v }
+            
+            if let t = info["type"] as? String { typeName = t }
+            
             // 포그라운드면 바로 이벤트 방출 -> Compose 네비게이션 트리거
-            if let id = info["alarmId"] as? Int64, let typeName = info["type"] as? String {
-                
+            if let id = id, let typeName = typeName {
                 NSLog("[AppDelegate] willPresent emit alarmId=\(id) type=\(typeName)")
                 
                 // KMP AlarmNotifier 에 이벤트 흘리기
