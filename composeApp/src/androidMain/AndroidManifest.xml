@@ -61,4 +61,20 @@
 
     </application>
 
+    <queries>
+        <!-- 특정 패키지를 직접 지정해서 쿼리할 수 있게 -->
+        <package android:name="net.daum.android.map" />
+        <package android:name="com.nhn.android.nmap" />
+
+        <!-- 혹시 패키지명을 지정하지 않고 스킴으로도 쿼리할 경우 대비 -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="kakaomap" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="nmap" />
+        </intent>
+    </queries>
+
 </manifest>

@@ -25,29 +25,22 @@ import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
 import com.dh.ondot.core.util.AlarmNotifier
 import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.ui.AlarmEvent
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 
 @Composable
-fun App(
-    initialAlarm: AlarmEvent? = null
-) {
+fun App() {
     val navController = rememberNavController()
 
-    // android 에서 MainActivity 로부터 전달된 이벤트 처리
-    LaunchedEffect(initialAlarm) {
-        initialAlarm?.let { (alarmId, type) ->
-            when(type) {
-                AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(alarmId))
-                AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(alarmId))
-            }
-        }
-    }
-
-    // ios 에서 AlarmNotifier 로부터 전달된 이벤트 처리
     LaunchedEffect(Unit) {
         AlarmNotifier.events.collect { event ->
-            TODO("네비게이션 로직 구현")
+            when(event.type) {
+                AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(event.alarmId)) {
+                    launchSingleTop = true
+                }
+                AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(event.alarmId)) {
+                    launchSingleTop = true
+                }
+            }
         }
     }
 
