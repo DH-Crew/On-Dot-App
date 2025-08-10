@@ -19,6 +19,7 @@ import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
+import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -143,7 +144,16 @@ class HomeViewModel(
     fun setMapProvider(mapProvider: MapProvider) {
         viewModelScope.launch {
             memberRepository.updateMapProvider(request = MapProviderRequest(mapProvider)).collect {
-                resultResponse(it, { updateState(uiState.value.copy(needsChooseProvider = false)) }, {})
+                resultResponse(
+                    it,
+                    {
+                        updateState(uiState.value.copy(needsChooseProvider = false))
+                    },
+                    {
+                        logger.e { it.message.toString() }
+                        viewModelScope.launch { ToastManager.show(message = ERROR_SET_MAP_PROVIDER, type = ToastType.ERROR) }
+                    }
+                )
             }
         }
     }
