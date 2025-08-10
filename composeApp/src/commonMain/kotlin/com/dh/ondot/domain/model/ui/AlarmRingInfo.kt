@@ -11,8 +11,8 @@ data class AlarmRingInfo(
     val appointmentAt: String = "",
     val scheduleTitle: String = "",
     val scheduleId: Long = -1L,
-    val startLng: Double = 127.0276,
-    val startLat: Double = 37.4979,
-    val endLat: Double = 37.501,
-    val endLng: Double = 127.029,
+    val startLng: Double = 0.0,
+    val startLat: Double = 0.0,
+    val endLat: Double = 0.0,
+    val endLng: Double = 0.0,
 )
