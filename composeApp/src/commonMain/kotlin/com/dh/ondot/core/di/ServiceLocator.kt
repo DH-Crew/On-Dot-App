@@ -10,6 +10,7 @@ import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.NetworkClient
 import com.dh.ondot.network.TokenProvider
@@ -20,6 +21,7 @@ object ServiceLocator {
     private lateinit var alarmStorage: AlarmStorage
     private lateinit var alarmScheduler: AlarmScheduler
     private lateinit var soundPlayer: SoundPlayer
+    private lateinit var mapProviderStorage: MapProviderStorage
 
     val authRepository: AuthRepository by lazy {
         AuthRepositoryImpl(networkClient, tokenProvider)
@@ -30,7 +32,7 @@ object ServiceLocator {
     }
 
     val memberRepository: MemberRepository by lazy {
-        MemberRepositoryImpl(networkClient)
+        MemberRepositoryImpl(networkClient, mapProviderStorage)
     }
 
     val scheduleRepository: ScheduleRepository by lazy {
@@ -41,13 +43,15 @@ object ServiceLocator {
         tokenProvider: TokenProvider,
         alarmStorage: AlarmStorage,
         alarmScheduler: AlarmScheduler,
-        soundPlayer: SoundPlayer
+        soundPlayer: SoundPlayer,
+        mapProviderStorage: MapProviderStorage
     ) {
         this.tokenProvider = tokenProvider
         this.networkClient = NetworkClient(tokenProvider)
         this.alarmStorage = alarmStorage
         this.alarmScheduler = alarmScheduler
         this.soundPlayer = soundPlayer
+        this.mapProviderStorage = mapProviderStorage
     }
 
     fun provideNetworkClient(): NetworkClient = networkClient
@@ -55,4 +59,6 @@ object ServiceLocator {
     fun provideAlarmStorage(): AlarmStorage = alarmStorage
     fun provideAlarmScheduler(): AlarmScheduler = alarmScheduler
     fun provideSoundPlayer(): SoundPlayer = soundPlayer
+    fun provideMapProviderStorage(): MapProviderStorage = mapProviderStorage
+
 }

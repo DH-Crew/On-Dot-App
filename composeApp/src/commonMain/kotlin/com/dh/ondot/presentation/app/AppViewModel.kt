@@ -9,7 +9,7 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
-import com.dh.ondot.domain.model.enums.MapProvider
+import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.SoundPlayer
@@ -24,9 +24,22 @@ import kotlinx.datetime.toLocalDateTime
 class AppViewModel(
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
     private val alarmStorage: AlarmStorage = ServiceLocator.provideAlarmStorage(),
-    private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer()
+    private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer(),
+    private val memberRepository: MemberRepository = ServiceLocator.memberRepository
 ): BaseViewModel<AppUiState>(AppUiState()) {
     private val logger = Logger.withTag("AppViewModel")
+
+    init {
+        initMapProvider()
+    }
+
+    private fun initMapProvider() {
+        viewModelScope.launch {
+            memberRepository.getLocalMapProvider().collect {
+                updateState(uiState.value.copy(mapProvider = it))
+            }
+        }
+    }
 
     fun getAlarmInfo(alarmId: Long) {
         viewModelScope.launch {
@@ -80,8 +93,15 @@ class AppViewModel(
             endLng = uiState.value.alarmRingInfo.endLng,
             startName = "출발지",
             endName = "도착지",
-            provider = MapProvider.Kakao
+            provider = uiState.value.mapProvider
         )
+    }
+
+    fun initAnimationFlags() {
+        updateState(uiState.value.copy(
+            showPreparationSnoozeAnimation = false,
+            showDepartureSnoozeAnimation = false
+        ))
     }
 
     private fun processAlarm() {

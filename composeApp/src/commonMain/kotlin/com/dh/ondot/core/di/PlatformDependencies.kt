@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 
@@ -28,6 +29,8 @@ expect fun openDirections(
 
 // 안드로이드에서 알람 서비스를 정리하기 위한 메서드
 expect fun stopService(alarmId: Long)
+
+expect fun provideMapProvider(): MapProviderStorage
 
 @Composable
 expect fun BackPressHandler(onBack: () -> Unit)

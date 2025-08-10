@@ -58,6 +58,7 @@ const val ERROR_EDIT_SCHEDULE = "일정 수정에 실패했습니다."
 const val ERROR_LOGOUT = "로그아웃에 실패했습니다."
 const val ERROR_WITHDRAW = "회원탈퇴에 실패했습니다."
 const val ERROR_LOGIN = "로그인에 실패했습니다."
+const val ERROR_SET_MAP_PROVIDER = "지도 공급자 저장에 실패했습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -132,11 +133,13 @@ fun formatRemainingSnoozeTime(minute: Int, second: Int): String {
     return "$minuteString:$secondString"
 }
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
-fun departureSnoozedTitle(time: String) = "출발까지 $time 전\n어서 출발하세요!"
+fun departureSnoozedTitle(time: String) = "일정까지 $time 전\n어서 출발하세요!"
 
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"
 const val DELETE_ALARM_CONTENT = "정말 알람을 삭제하시겠어요?"
+const val MAP_PROVIDER_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
+const val MAP_PROVIDER_CONTENT = "길 안내에 사용될 예정이예요."
 
 // Setting
 const val LOGOUT_SUCCESS_MESSAGE = "정상적으로 로그아웃되었습니다."
