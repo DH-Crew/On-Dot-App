@@ -20,16 +20,16 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.App
+import com.dh.ondot.core.util.AlarmNotifier
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.ui.AlarmEvent
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -48,8 +48,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-
-    private var initialAlarmEvent by mutableStateOf<AlarmEvent?>(null)
 
     private val exactAlarmLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -89,8 +87,6 @@ class MainActivity : ComponentActivity() {
 
         ensureExactAlarmPermission()
 
-        initialAlarmEvent = parseAlarmEvent(intent)
-
         setContent {
             Box(
                 modifier = Modifier
@@ -98,7 +94,7 @@ class MainActivity : ComponentActivity() {
                         WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
                     )
             ) {
-                App(initialAlarm = initialAlarmEvent)
+                App()
             }
         }
     }
@@ -108,7 +104,7 @@ class MainActivity : ComponentActivity() {
 
         parseAlarmEvent(intent)?.let { event ->
             logger.d { "onNewIntent: $event" }
-            initialAlarmEvent = event
+            lifecycleScope.launch { AlarmNotifier.notify(event) }
         }
     }
 
