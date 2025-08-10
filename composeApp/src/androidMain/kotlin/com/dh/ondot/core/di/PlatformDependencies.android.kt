@@ -18,10 +18,12 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.core.util.AlarmService
 import com.dh.ondot.core.util.AndroidAlarmScheduler
 import com.dh.ondot.core.util.AndroidAlarmStorage
+import com.dh.ondot.core.util.AndroidMapProviderStorage
 import com.dh.ondot.core.util.AndroidSoundPlayer
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 import com.dh.ondot.util.AppContextHolder
@@ -121,6 +123,12 @@ actual fun stopService(alarmId: Long) {
     }
 
     context.startService(stopIntent)
+}
+
+actual fun provideMapProvider(): MapProviderStorage {
+    val context = runCatching { AppContextHolder.context }
+        .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
+    return AndroidMapProviderStorage(context)
 }
 
 @Composable
