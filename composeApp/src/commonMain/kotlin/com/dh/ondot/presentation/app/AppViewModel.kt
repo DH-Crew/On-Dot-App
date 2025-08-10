@@ -97,6 +97,13 @@ class AppViewModel(
         )
     }
 
+    fun initAnimationFlags() {
+        updateState(uiState.value.copy(
+            showPreparationSnoozeAnimation = false,
+            showDepartureSnoozeAnimation = false
+        ))
+    }
+
     private fun processAlarm() {
         var newAlarmInfo = uiState.value.alarmRingInfo
         val currentTriggeredDate = newAlarmInfo.alarmDetail.triggeredAt.toLocalDateFromIso()
