@@ -3,13 +3,18 @@ package com.dh.ondot.presentation.app
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.core.di.openDirections
+import com.dh.ondot.core.di.stopService
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
+import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.SoundPlayer
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -52,6 +57,21 @@ class AppViewModel(
         soundPlayer.stopSound()
         processAlarm()
         updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
+    }
+
+    fun startDeparture() {
+        if (getPlatform().name == ANDROID) stopService(uiState.value.alarmRingInfo.alarmDetail.alarmId)
+
+        emitEventFlow(AppEvent.NavigateToSplash)
+        openDirections(
+            startLat = uiState.value.alarmRingInfo.startLat,
+            startLng = uiState.value.alarmRingInfo.startLng,
+            endLat = uiState.value.alarmRingInfo.endLat,
+            endLng = uiState.value.alarmRingInfo.endLng,
+            startName = "출발지",
+            endName = "도착지",
+            provider = MapProvider.Kakao
+        )
     }
 
     private fun processAlarm() {
