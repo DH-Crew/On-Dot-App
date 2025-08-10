@@ -43,6 +43,13 @@ class AndroidMapProviderStorage(
         }
     }
 
+    override suspend fun clear() {
+        dataStore.edit { prefs ->
+            prefs.remove(KEY)
+            prefs.remove(KEY_CONFIRM)
+        }
+    }
+
     private companion object {
         val KEY = stringPreferencesKey("map_provider")
         val KEY_CONFIRM = booleanPreferencesKey("map_provider_confirm")

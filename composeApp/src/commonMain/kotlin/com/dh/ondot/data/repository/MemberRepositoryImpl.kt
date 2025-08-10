@@ -51,7 +51,10 @@ class MemberRepositoryImpl(
         )
 
         response.fold(
-            onSuccess = { emit(Result.success(it)) },
+            onSuccess = {
+                emit(Result.success(it))
+                mapProviderStorage.clear()
+            },
             onFailure = { emit(Result.failure(it)) }
         )
     }
