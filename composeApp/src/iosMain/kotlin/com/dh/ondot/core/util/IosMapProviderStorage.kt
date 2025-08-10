@@ -12,8 +12,10 @@ import platform.Foundation.NSUserDefaultsDidChangeNotification
 class IosMapProviderStorage: MapProviderStorage {
     private val defaults = NSUserDefaults.standardUserDefaults
     private val key = "map_provider"
+    private val flagKey = "map_provider_confirm"
 
     private val state = MutableStateFlow(load())
+    private val flagState = MutableStateFlow(loadFlag())
 
     init {
         NSNotificationCenter.defaultCenter.addObserverForName(
@@ -27,6 +29,8 @@ class IosMapProviderStorage: MapProviderStorage {
 
     override fun getMapProvider(): Flow<MapProvider> = state
 
+    override fun needsChooseProvider(): Flow<Boolean> = flagState
+
     override suspend fun setMapProvider(mapProvider: MapProvider) {
         defaults.setObject(mapProvider.name, forKey = key)
         defaults.synchronize() // 즉시 디스크 반영
@@ -37,4 +41,9 @@ class IosMapProviderStorage: MapProviderStorage {
         runCatching {
             defaults.stringForKey(key)?.let { enumValueOf<MapProvider>(it) }
         }.getOrNull() ?: MapProvider.KAKAO
+
+    private fun loadFlag(): Boolean =
+        kotlin.runCatching {
+            defaults.boolForKey(flagKey)
+        }.getOrNull() ?: true
 }
