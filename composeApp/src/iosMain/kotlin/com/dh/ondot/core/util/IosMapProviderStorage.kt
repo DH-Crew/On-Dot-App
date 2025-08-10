@@ -34,8 +34,9 @@ class IosMapProviderStorage: MapProviderStorage {
 
     override suspend fun setMapProvider(mapProvider: MapProvider) {
         defaults.setObject(mapProvider.name, forKey = key)
-        defaults.synchronize() // 즉시 디스크 반영
+        defaults.setBool(true, forKey = flagKey)
         state.value = mapProvider
+        needsState.value = false
     }
 
     override suspend fun clear() {
