@@ -24,6 +24,7 @@ import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.alarm.preparation.ScheduleInfoSection
+import com.dh.ondot.presentation.app.AppEvent
 import com.dh.ondot.presentation.app.AppViewModel
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
@@ -59,6 +60,14 @@ fun DepartureAlarmRingScreen(
         }
     }
 
+    LaunchedEffect(viewModel.eventFlow) {
+        viewModel.eventFlow.collect {
+            when(it) {
+                is AppEvent.NavigateToSplash -> navigateToSplash()
+            }
+        }
+    }
+
     if (uiState.alarmRingInfo.appointmentAt.isNotBlank()) {
         DepartureAlarmRingContent(
             alarmDetail = uiState.alarmRingInfo.alarmDetail,
@@ -66,7 +75,7 @@ fun DepartureAlarmRingScreen(
             scheduleTitle = uiState.alarmRingInfo.scheduleTitle,
             showDepartureSnoozeAnimation = uiState.showDepartureSnoozeAnimation,
             onSnoozeDepartureAlarm = viewModel::snoozeDepartureAlarm,
-            onShowRouteInfo = {}
+            onShowRouteInfo = viewModel::startDeparture
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
