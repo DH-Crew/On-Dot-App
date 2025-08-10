@@ -60,7 +60,17 @@ class AppViewModel(
     }
 
     fun startDeparture() {
+        soundPlayer.stopSound()
+
         if (getPlatform().name == ANDROID) stopService(uiState.value.alarmRingInfo.alarmDetail.alarmId)
+
+        val info = uiState.value.alarmRingInfo
+        val invalidCoords = listOf(info.startLat, info.startLng, info.endLat, info.endLng).any { it.isNaN() }
+                || ((info.startLat == 0.0 && info.startLng == 0.0) || (info.endLat == 0.0 && info.endLng == 0.0))
+        if (invalidCoords) {
+            logger.e { "Invalid coords: $invalidCoords" }
+            return
+        }
 
         emitEventFlow(AppEvent.NavigateToSplash)
         openDirections(
