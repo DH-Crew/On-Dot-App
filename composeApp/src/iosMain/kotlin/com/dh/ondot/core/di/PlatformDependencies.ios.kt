@@ -16,9 +16,12 @@ import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.network.TokenProvider
 import platform.Foundation.NSBundle
 import platform.Foundation.NSMutableURLRequest
+import platform.Foundation.NSThread
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 import platform.WebKit.WKWebView
+import platform.darwin.dispatch_async
+import platform.darwin.dispatch_get_main_queue
 
 actual fun provideTokenProvider(): TokenProvider = TokenProvider()
 
@@ -27,6 +30,10 @@ actual fun provideSoundPlayer(): SoundPlayer = IosSoundPlayer()
 actual fun provideAlarmStorage(): AlarmStorage = IosAlarmStorage()
 
 actual fun provideAlarmScheduler(): AlarmScheduler = IosAlarmScheduler()
+
+private fun ensureMain(block: () -> Unit) {
+    if (NSThread.isMainThread) block() else dispatch_async(dispatch_get_main_queue()) { block() }
+}
 
 actual fun openDirections(
     startLat: Double,
@@ -42,10 +49,14 @@ actual fun openDirections(
     fun open(url: String, fallback: String? = null) {
         val u = NSURL.URLWithString(url) ?: return
 
-        if (app.canOpenURL(u)) {
-            app.openURL(u)
-        } else if (fallback != null) {
-            app.openURL(NSURL.URLWithString(fallback)!!)
+        ensureMain {
+            app.openURL(u, options = emptyMap<Any?, Any?>()) { success ->
+                if (!success && fallback != null) {
+                    NSURL.URLWithString(fallback)?.let {
+                        app.openURL(it, options = emptyMap<Any?, Any?>()) { /* ignore */ }
+                    }
+                }
+            }
         }
     }
 
@@ -53,13 +64,12 @@ actual fun openDirections(
         MapProvider.Kakao -> {
             val mode = "publictransit"
             val url = "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
-            // 카카오맵 미설치면 모바일웹 스킴으로 우회 가능
-            val web = "http://m.map.kakao.com/scheme/route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
+            val web = "https://m.map.kakao.com/scheme/route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
             open(url, web)
         }
         MapProvider.Naver -> {
             val mode = "public"
-            val bundleId = NSBundle.mainBundle.bundleIdentifier ?: "com.example.app"
+            val bundleId = NSBundle.mainBundle.bundleIdentifier ?: "com.dh.ondot.iosApp"
             val url = "nmap://route/$mode" +
                     "?slat=$startLat&slng=$startLng&sname=${startName.toUtf8()}" +
                     "&dlat=$endLat&dlng=$endLng&dname=${endName.toUtf8()}" +
