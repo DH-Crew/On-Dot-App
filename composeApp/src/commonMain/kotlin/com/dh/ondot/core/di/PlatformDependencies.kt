@@ -26,6 +26,9 @@ expect fun openDirections(
     endName: String
 )
 
+// 안드로이드에서 알람 서비스를 정리하기 위한 메서드
+expect fun stopService(alarmId: Long)
+
 @Composable
 expect fun BackPressHandler(onBack: () -> Unit)
 
