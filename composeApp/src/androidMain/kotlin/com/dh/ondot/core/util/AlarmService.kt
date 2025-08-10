@@ -32,6 +32,9 @@ class AlarmService : Service() {
     companion object {
         private const val CHANNEL_ID = "channel_alarm"
         private const val NOTIFICATION_ID = 1001
+
+        const val ACTION_START  = "com.ondot.alarm.ACTION_START"
+        const val ACTION_STOP   = "com.ondot.alarm.ACTION_STOP"
     }
 
     private val logger = Logger.withTag("AlarmService")
@@ -48,71 +51,82 @@ class AlarmService : Service() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("ForegroundServiceType")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val alarmId = intent?.getLongExtra("alarmId", -1L) ?: -1L
-        val typeName = intent?.getStringExtra("type")
-        val type = typeName?.let { AlarmType.valueOf(it) } ?: AlarmType.Departure
-
-        if (alarmId == -1L && typeName == null) {
-            logger.e { "Invalid extras, stopSelfResult($startId)" }
-            stopSelfResult(startId)
-            return START_NOT_STICKY
-        }
-        logger.d { "AlarmService onStartCommand: $alarmId, $type" }
-
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        val isInteractive = pm.isInteractive
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OnDot:AlarmWakeLock")
-        wakeLock.acquire(2 * 60 * 1000L)
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(CHANNEL_ID, "알람 재생 채널", NotificationManager.IMPORTANCE_HIGH).apply {
-            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        }
-        notificationManager.createNotificationChannel(channel)
-
-        val mainIntent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtra("alarmId", alarmId)
-            putExtra("type", type.name)
-        }
-        val pendingIntent = PendingIntent.getActivity(this, alarmId.toInt(), mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("알람 재생 중")
-            .setContentText("잠시만 기다려주세요")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setFullScreenIntent(pendingIntent, true)
-            .setOnlyAlertOnce(true)
-            .setOngoing(true)
-            .build()
-
-        ServiceCompat.startForeground(
-            this,
-            NOTIFICATION_ID,
-            notification,
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-        )
-
-        startActivity(mainIntent)
-
-        serviceScope.launch {
-            val alarmList = storage.alarmsFlow.first()
-            val alarm = alarmList.firstOrNull { it.alarmDetail.alarmId == alarmId }
-
-            logger.d { "Alarm RingTone: ${alarm?.alarmDetail?.ringTone?.lowercase()}" }
-
-            if (alarm != null && alarm.alarmDetail.enabled) {
-                soundPlayer.playSound(alarm.alarmDetail.ringTone.lowercase()) {
-                    if (wakeLock.isHeld) wakeLock.release()
-                    stopForeground(STOP_FOREGROUND_DETACH)
-                    stopSelf()
-                }
-            } else {
+        when(intent?.action) {
+            ACTION_STOP -> {
+                soundPlayer.stopSound()
+                if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
+                stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
+                return START_NOT_STICKY
+            }
+            ACTION_START -> {
+                val alarmId = intent?.getLongExtra("alarmId", -1L) ?: -1L
+                val typeName = intent?.getStringExtra("type")
+                val type = typeName?.let { AlarmType.valueOf(it) } ?: AlarmType.Departure
+
+                if (alarmId == -1L && typeName == null) {
+                    logger.e { "Invalid extras, stopSelfResult($startId)" }
+                    stopSelfResult(startId)
+                    return START_NOT_STICKY
+                }
+                logger.d { "AlarmService onStartCommand: $alarmId, $type" }
+
+                val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+
+                wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OnDot:AlarmWakeLock")
+                wakeLock.acquire(2 * 60 * 1000L)
+
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val channel = NotificationChannel(CHANNEL_ID, "알람 재생 채널", NotificationManager.IMPORTANCE_HIGH).apply {
+                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                }
+                notificationManager.createNotificationChannel(channel)
+
+                val mainIntent = Intent(this, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    putExtra("alarmId", alarmId)
+                    putExtra("type", type.name)
+                }
+                val pendingIntent = PendingIntent.getActivity(this, alarmId.toInt(), mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+                val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("알람 재생 중")
+                    .setContentText("잠시만 기다려주세요")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_ALARM)
+                    .setFullScreenIntent(pendingIntent, true)
+                    .setOnlyAlertOnce(true)
+                    .setOngoing(true)
+                    .build()
+
+                ServiceCompat.startForeground(
+                    this,
+                    NOTIFICATION_ID,
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                )
+
+                startActivity(mainIntent)
+
+                serviceScope.launch {
+                    val alarmList = storage.alarmsFlow.first()
+                    val alarm = alarmList.firstOrNull { it.alarmDetail.alarmId == alarmId }
+
+                    logger.d { "Alarm RingTone: ${alarm?.alarmDetail?.ringTone?.lowercase()}" }
+
+                    if (alarm != null && alarm.alarmDetail.enabled) {
+                        soundPlayer.playSound(alarm.alarmDetail.ringTone.lowercase()) {
+                            if (wakeLock.isHeld) wakeLock.release()
+                            stopForeground(STOP_FOREGROUND_DETACH)
+                            stopSelf()
+                        }
+                    } else {
+                        stopSelf()
+                    }
+                }
             }
         }
 
