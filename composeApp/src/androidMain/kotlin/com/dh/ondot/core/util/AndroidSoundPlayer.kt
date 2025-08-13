@@ -103,4 +103,8 @@ class AndroidSoundPlayer(
         player = null
         onComplete()
     }
+
+    override fun setVolume(volume: Float) {
+        player?.setVolume(volume, volume)
+    }
 }

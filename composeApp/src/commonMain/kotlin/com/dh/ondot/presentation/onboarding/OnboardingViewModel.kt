@@ -175,6 +175,7 @@ class OnboardingViewModel(
 
     fun onVolumeChange(newVolume: Float) {
         updateState(uiState.value.copy(volume = newVolume))
+        soundPlayer.setVolume(newVolume)
     }
 
     // ----------------------------------------- OnboardingStep4 ----------------------------
