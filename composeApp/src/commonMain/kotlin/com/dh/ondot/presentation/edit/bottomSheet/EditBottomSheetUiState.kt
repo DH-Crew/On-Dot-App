@@ -26,10 +26,7 @@ data class EditBottomSheetUiState(
     /**
      * EditTimeBottomSheet
      * */
-    val currentTime: LocalTime = Clock.System
-        .now()
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .time,
+    val currentTime: LocalTime? = null
 
 
 ): UiState

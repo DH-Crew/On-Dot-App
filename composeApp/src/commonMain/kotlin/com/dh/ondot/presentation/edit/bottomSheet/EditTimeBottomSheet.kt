@@ -37,8 +37,8 @@ fun EditTimeBottomSheet(
     val interactionSource = remember { MutableInteractionSource() }
 
     val periodState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
-    val hourState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
-    val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
+    val hourState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.hour)
+    val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.minute)
 
     LaunchedEffect(Unit) {
         viewModel.initTime(currentTime)
@@ -48,45 +48,47 @@ fun EditTimeBottomSheet(
         onDispose { viewModel.clear() }
     }
 
-    OnDotBottomSheet(
-        onDismiss = onDismiss,
-        contentPaddingTop = 16.dp,
-        contentPaddingBottom = 16.dp,
-        content = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Spacer(modifier = Modifier.height(16.dp))
+    if (uiState.currentTime != null) {
+        OnDotBottomSheet(
+            onDismiss = onDismiss,
+            contentPaddingTop = 16.dp,
+            contentPaddingBottom = 16.dp,
+            content = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                TimeSectionHeader(
-                    selectedTime = uiState.currentTime,
-                    isActiveDial = true,
-                    interactionSource = interactionSource,
-                    onToggleDial = {}
-                )
+                    TimeSectionHeader(
+                        selectedTime = uiState.currentTime,
+                        isActiveDial = true,
+                        interactionSource = interactionSource,
+                        onToggleDial = {}
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 4.dp), thickness = (0.5).dp, color = Gray600)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 4.dp), thickness = (0.5).dp, color = Gray600)
 
-                TimePicker(
-                    periodState = periodState,
-                    hourState = hourState,
-                    minuteState = minuteState,
-                    onTimeSelected = viewModel::onTimeSelected
-                )
+                    TimePicker(
+                        periodState = periodState,
+                        hourState = hourState,
+                        minuteState = minuteState,
+                        onTimeSelected = viewModel::onTimeSelected
+                    )
 
-                Spacer(modifier = Modifier.height(26.dp))
+                    Spacer(modifier = Modifier.height(26.dp))
 
-                OnDotButton(
-                    buttonText = WORD_COMPETE,
-                    buttonType = ButtonType.Green500,
-                    onClick = {
-                        onTimeSelected(uiState.currentTime)
-                    }
-                )
+                    OnDotButton(
+                        buttonText = WORD_COMPETE,
+                        buttonType = ButtonType.Green500,
+                        onClick = {
+                            uiState.currentTime?.let { onTimeSelected(it) }
+                        }
+                    )
+                }
             }
-        }
-    )
+        )
+    }
 }
