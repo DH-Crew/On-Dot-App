@@ -134,6 +134,7 @@ fun formatRemainingSnoozeTime(minute: Int, second: Int): String {
 }
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
 fun departureSnoozedTitle(time: String) = "일정까지 $time 전\n어서 출발하세요!"
+const val YESTERDAY_LABEL = "약속 전 날"
 
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"
