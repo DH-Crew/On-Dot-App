@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -135,13 +136,14 @@ fun EditScheduleContent(
     onDeleteSchedule: () -> Unit,
     onDismissDialog: () -> Unit,
     onEditDate: (Boolean, Set<Int>, LocalDate?) -> Unit,
-    onEditTime: (LocalTime) -> Unit,
+    onEditTime: (LocalDate, LocalTime) -> Unit,
     onShowDateBottomSheet: () -> Unit,
     onShowTimeBottomSheet: (TimeType) -> Unit,
     onDismissDateBottomSheet: () -> Unit,
     onDismissTimeBottomSheet: () -> Unit
 ) {
     val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
+    val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -248,9 +250,9 @@ fun EditScheduleContent(
             }
         }
 
-        if (uiState.showTimeBottomSheet) {
+        if (uiState.showScheduleTimeBottomSheet) {
             AnimatedVisibility(
-                visible = uiState.showTimeBottomSheet,
+                visible = uiState.showScheduleTimeBottomSheet,
                 modifier = Modifier.fillMaxSize(),
                 enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
                 exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
@@ -260,8 +262,30 @@ fun EditScheduleContent(
                     onDismiss = {
                         onDismissTimeBottomSheet()
                     },
-                    onTimeSelected = {
-                        onEditTime(it)
+                    onTimeSelected = { date, time ->
+                        onEditTime(date, time)
+                        onDismissTimeBottomSheet()
+                    }
+                )
+            }
+        }
+
+        if (uiState.showAlarmTimeBottomSheet) {
+            AnimatedVisibility(
+                visible = uiState.showAlarmTimeBottomSheet,
+                modifier = Modifier.fillMaxSize(),
+                enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+            ) {
+                EditTimeBottomSheet(
+                    currentTime = uiState.selectedTime,
+                    currentAlarmDate = uiState.selectedAlarmDate,
+                    isAlarm = true,
+                    onDismiss = {
+                        onDismissTimeBottomSheet()
+                    },
+                    onTimeSelected = { date, time ->
+                        onEditTime(date, time)
                         onDismissTimeBottomSheet()
                     }
                 )
