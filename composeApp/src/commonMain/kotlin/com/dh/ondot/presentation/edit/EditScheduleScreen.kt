@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,6 +45,7 @@ import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
+import com.dh.ondot.domain.model.enums.TimeBottomSheet
 import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
@@ -58,6 +61,7 @@ import com.dh.ondot.presentation.ui.components.TopBar
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.DELETE_ALARM_CONTENT
 import com.dh.ondot.presentation.ui.theme.DELETE_ALARM_TITLE
+import com.dh.ondot.presentation.ui.theme.OnDotColor.GradientGreenBottom
 import com.dh.ondot.presentation.ui.theme.OnDotColor.GradientGreenTop
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
@@ -135,15 +139,17 @@ fun EditScheduleContent(
     onDeleteSchedule: () -> Unit,
     onDismissDialog: () -> Unit,
     onEditDate: (Boolean, Set<Int>, LocalDate?) -> Unit,
-    onEditTime: (LocalTime) -> Unit,
+    onEditTime: (LocalDate, LocalTime) -> Unit,
     onShowDateBottomSheet: () -> Unit,
     onShowTimeBottomSheet: (TimeType) -> Unit,
     onDismissDateBottomSheet: () -> Unit,
     onDismissTimeBottomSheet: () -> Unit
 ) {
     val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
+    val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -152,73 +158,98 @@ fun EditScheduleContent(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(GradientGreenTop)
-                    .padding(horizontal = 22.dp)
+                    .weight(1f)
             ) {
-                TopBarSection(
-                    scheduleTitle = uiState.schedule.title,
-                    focusRequester = focusRequester,
-                    onClickClose = onClickClose,
-                    onValueChanged = onValueChanged
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(GradientGreenTop)
+                        .padding(horizontal = 22.dp)
+                ) {
+                    TopBarSection(
+                        scheduleTitle = uiState.schedule.title,
+                        focusRequester = focusRequester,
+                        onClickClose = onClickClose,
+                        onValueChanged = onValueChanged
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
-                DateTimeInfoBar(
-                    repeatDays = uiState.schedule.repeatDays,
-                    date = uiState.selectedDate,
-                    time = appointmentDate,
-                    interactionSource = interactionSource,
-                    onClickDate = onShowDateBottomSheet,
-                    onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) }
-                )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
 
-                Spacer(modifier = Modifier.height(16.dp))
-                RouteInputSection(
-                    departurePlaceInput = uiState.schedule.departurePlace.title,
-                    arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
-                    readOnly = true
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(GradientGreenBottom)
+                            .padding(horizontal = 22.dp)
+                    ) {
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                        DateTimeInfoBar(
+                            repeatDays = uiState.schedule.repeatDays,
+                            date = uiState.selectedDate,
+                            time = appointmentDate,
+                            interactionSource = interactionSource,
+                            onClickDate = onShowDateBottomSheet,
+                            onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) }
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        RouteInputSection(
+                            departurePlaceInput = uiState.schedule.departurePlace.title,
+                            arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
+                            readOnly = true
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 22.dp)
+                    ) {
+                        AlarmInfoItem(
+                            info = uiState.schedule.preparationAlarm,
+                            type = AlarmType.Preparation,
+                            scheduleDate = uiState.schedule.appointmentAt,
+                            interactionSource = interactionSource,
+                            onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
+                            onToggleSwitch = onToggleSwitch
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        AlarmInfoItem(
+                            info = uiState.schedule.departureAlarm,
+                            type = AlarmType.Departure,
+                            scheduleDate = uiState.schedule.appointmentAt,
+                            interactionSource = interactionSource,
+                            onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) }
+                        )
+
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        DeleteScheduleButton(onClick = onShowDeleteDialog)
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 22.dp)
-            ) {
-                AlarmInfoItem(
-                    info = uiState.schedule.preparationAlarm,
-                    type = AlarmType.Preparation,
-                    interactionSource = interactionSource,
-                    onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
-                    onToggleSwitch = onToggleSwitch
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                AlarmInfoItem(
-                    info = uiState.schedule.departureAlarm,
-                    type = AlarmType.Departure,
-                    interactionSource = interactionSource,
-                    onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) }
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                DeleteScheduleButton(onClick = onShowDeleteDialog)
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                OnDotButton(
-                    buttonText = WORD_SAVE,
-                    buttonType = ButtonType.Green500,
-                    onClick = onSaveSchedule
-                )
-            }
+            OnDotButton(
+                buttonText = WORD_SAVE,
+                buttonType = ButtonType.Green500,
+                modifier = Modifier.padding(horizontal = 22.dp),
+                onClick = onSaveSchedule
+            )
         }
 
         if (uiState.showDeleteDialog) {
@@ -248,20 +279,23 @@ fun EditScheduleContent(
             }
         }
 
-        if (uiState.showTimeBottomSheet) {
+        if (uiState.activeTimeBottomSheet != null) {
             AnimatedVisibility(
-                visible = uiState.showTimeBottomSheet,
+                visible = true,
                 modifier = Modifier.fillMaxSize(),
                 enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
                 exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
             ) {
                 EditTimeBottomSheet(
                     currentTime = uiState.selectedTime,
+                    currentAlarmDate = uiState.selectedAlarmDate,
+                    isAlarm = uiState.activeTimeBottomSheet == TimeBottomSheet.Alarm,
+                    scheduleDate = uiState.selectedDate,
                     onDismiss = {
                         onDismissTimeBottomSheet()
                     },
-                    onTimeSelected = {
-                        onEditTime(it)
+                    onTimeSelected = { date, time ->
+                        onEditTime(date, time)
                         onDismissTimeBottomSheet()
                     }
                 )

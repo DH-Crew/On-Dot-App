@@ -29,7 +29,7 @@ import org.jetbrains.compose.resources.painterResource
 fun OnDotButton(
     buttonText: String,
     buttonType: ButtonType,
-    buttonHeight: Dp = 60.dp,
+    buttonHeight: Dp = 52.dp,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {

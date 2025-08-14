@@ -52,7 +52,8 @@ class HomeViewModel(
             if (it.scheduleId == id) {
                 it.copy(
                     isEnabled = isEnabled,
-                    departureAlarm = it.departureAlarm.copy(enabled = isEnabled)
+                    departureAlarm = it.departureAlarm.copy(enabled = isEnabled),
+                    preparationAlarm = it.preparationAlarm.copy(enabled = isEnabled)
                 )
             } else {
                 it

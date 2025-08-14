@@ -29,11 +29,14 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class GeneralScheduleViewModel(
@@ -252,9 +255,15 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------RouteLoading-----------------------------------------------*/
 
     private fun getScheduleAlarms() {
-        val (date, time, places) = validateScheduleInputs()
+        val (dateRepeat, time, places) = validateScheduleInputs()
+        val (date, repeatDays) = dateRepeat
         val (departurePlace, arrivalPlace) = places
-        val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
+
+        val zone = TimeZone.currentSystemDefault()
+        val today = Clock.System.now().toLocalDateTime(zone).date
+        val dateOrToday = date ?: today
+
+        val appointmentAt = DateTimeFormatter.formatIsoDateTime(dateOrToday, time)
 
         viewModelScope.launch {
             scheduleRepository.getScheduleAlarms(
@@ -283,9 +292,15 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------CheckSchedule-----------------------------------------------*/
 
     fun createSchedule(isChecked: Boolean, input: String) {
-        val (date, time, places) = validateScheduleInputs()
+        val (dateRepeat, time, places) = validateScheduleInputs()
+        val (date, repeatDays) = dateRepeat
         val (departurePlace, arrivalPlace) = places
-        val appointmentAt = DateTimeFormatter.formatIsoDateTime(date, time)
+
+        val zone = TimeZone.currentSystemDefault()
+        val today = Clock.System.now().toLocalDateTime(zone).date
+        val dateOrToday = date ?: today
+
+        val appointmentAt = DateTimeFormatter.formatIsoDateTime(dateOrToday, time)
 
         val request = CreateScheduleRequest(
             title = uiState.value.scheduleTitle,
@@ -359,20 +374,16 @@ class GeneralScheduleViewModel(
         }
     }
 
-    private fun validateScheduleInputs() : Triple<LocalDate, LocalTime, Pair<AddressInfo, AddressInfo>> {
-        val date = requireNotNull(uiState.value.selectedDate) {
-            "selectedDate가 null입니다."
-        }
-        val time = requireNotNull(uiState.value.selectedTime) {
-            "selectedTime가 null입니다."
-        }
-        val departurePlace = requireNotNull(uiState.value.selectedDeparturePlace) {
-            "selectedDeparturePlace가 null입니다."
-        }
-        val arrivalPlace = requireNotNull(uiState.value.selectedArrivalPlace) {
-            "selectedArrivalPlace가 null입니다."
-        }
+    private fun validateScheduleInputs(): Triple<Pair<LocalDate?, Set<Int>>, LocalTime, Pair<AddressInfo, AddressInfo>> {
+        val time = requireNotNull(uiState.value.selectedTime) { "selectedTime가 null입니다." }
+        val from = requireNotNull(uiState.value.selectedDeparturePlace) { "selectedDeparturePlace가 null입니다." }
+        val to   = requireNotNull(uiState.value.selectedArrivalPlace)   { "selectedArrivalPlace가 null입니다." }
 
-        return Triple(date, time, departurePlace to arrivalPlace)
+        val date = uiState.value.selectedDate
+        val repeatDays = uiState.value.activeWeekDays
+
+        require(!(date == null && repeatDays.isEmpty())) { "date가 null이면 repeatDays는 비어 있으면 안 됩니다." }
+
+        return Triple(date to repeatDays, time, from to to)
     }
 }

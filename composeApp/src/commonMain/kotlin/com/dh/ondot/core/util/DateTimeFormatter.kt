@@ -98,7 +98,7 @@ object DateTimeFormatter {
                 period == WORD_AM && hour12 == 12 -> 0
                 period == WORD_AM -> hour12
                 period == WORD_PM && hour12 == 12 -> 12
-                else -> hour12
+                else -> hour12 + 12
             }
             return "${hour24.pad2()}:${minute.pad2()}"
         }
@@ -131,6 +131,8 @@ object DateTimeFormatter {
 
         return AmPmTime(period, hour12, minute)
     }
+
+
 
     /** "오전 01:05" 같은 형태로 포맷 */
     fun formatAmPmTime(iso: String): String = parseAmPmTime(iso).format()
@@ -234,5 +236,20 @@ object DateTimeFormatter {
         val newMinute = ((modSeconds % 3600) / 60).toInt()
         val newSecond = (modSeconds % 60).toInt()
         return LocalTime(newHour, newMinute, newSecond)
+    }
+
+    /**----------------------------------------------기타---------------------------------------------*/
+
+    /** 두개의 ISO8601 날짜가 하루 차이인지 판단하는 메서드 */
+    fun isYesterday(scheduleDate: String, alarmDate: String): Boolean {
+        if (scheduleDate.isBlank() || alarmDate.isBlank()) return false
+
+        return try {
+            val scheduleLocalDate = scheduleDate.toLocalDateFromIso()
+            val alarmLocalDate = alarmDate.toLocalDateFromIso()
+            return scheduleLocalDate == alarmLocalDate.plus(DatePeriod(days = 1))
+        } catch (_: Throwable) {
+            false
+        }
     }
 }

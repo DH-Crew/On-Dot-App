@@ -56,7 +56,7 @@ class IosAlarmScheduler: AlarmScheduler {
         // 트리거 생성 (한 번만)
         val trigger = UNCalendarNotificationTrigger.triggerWithDateMatchingComponents(
             dateComponents = comps,
-            repeats = false
+            repeats = true
         )
 
         // 요청 빌드

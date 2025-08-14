@@ -116,21 +116,19 @@ fun HomeContent(
 
             Spacer(modifier = Modifier.height(36.dp))
 
-            Image(
-                painter = painterResource(Res.drawable.ic_banner),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(349f/100f)
-            )
-
             if (uiState.scheduleList.isEmpty()) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_banner),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(349f/100f)
+                )
+
                 Spacer(modifier = Modifier.height(120.dp))
 
                 EmptyScheduleContent()
             } else {
-                Spacer(modifier = Modifier.height(24.dp))
-
                 ScheduleList(
                     scheduleList = uiState.scheduleList,
                     interactionSource = interactionSource,

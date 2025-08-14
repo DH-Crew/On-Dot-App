@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dh.ondot.core.util.DateTimeFormatter.toIsoDateString
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
@@ -159,6 +160,7 @@ fun CheckScheduleContent(
                 AlarmInfoItem(
                     info = uiState.preparationAlarm,
                     type = AlarmType.Preparation,
+                    scheduleDate = uiState.selectedDate?.toIsoDateString() ?: "",
                     onToggleSwitch = onToggleSwitch
                 )
 
@@ -166,7 +168,8 @@ fun CheckScheduleContent(
 
                 AlarmInfoItem(
                     info = uiState.departureAlarm,
-                    type = AlarmType.Departure
+                    type = AlarmType.Departure,
+                    scheduleDate = uiState.selectedDate?.toIsoDateString() ?: ""
                 )
 
                 Spacer(modifier = Modifier.weight(1f))

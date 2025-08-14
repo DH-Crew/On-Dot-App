@@ -152,20 +152,15 @@ fun TimePicker(
     onTimeSelected: (LocalTime) -> Unit
 ) {
     val period = listOf(WORD_AM, WORD_PM)
-    val hour = (1..12).toList().map { it.toString().padStart(2, '0') }
+    val hour = (0..23).toList().map { it.toString().padStart(2, '0') }
     val minute = (0..59).toList().map { it.toString().padStart(2, '0') }
     var selPeriod by remember { mutableStateOf(period.first()) }
-    var selHour   by remember { mutableStateOf(hour.first()) }
-    var selMin    by remember { mutableStateOf(minute.first()) }
+    var selHour   by remember { mutableStateOf(hour[hourState.firstVisibleItemIndex]) }
+    var selMin    by remember { mutableStateOf(minute[minuteState.firstVisibleItemIndex]) }
 
     // 값이 하나라도 바뀌면 onTimeSelected 콜백 호출
-    LaunchedEffect(selPeriod, selHour, selMin) {
-        val h = selHour.toInt().let { hh ->
-            when (selPeriod) {
-                WORD_PM -> (hh % 12) + 12
-                else -> hh % 12
-            }
-        }
+    LaunchedEffect(selHour, selMin) {
+        val h = selHour.toInt()
         val m = selMin.toInt()
         onTimeSelected(LocalTime(h, m))
     }
@@ -188,26 +183,28 @@ fun TimePicker(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            DialPicker(
-                items = period,
-                listState = periodState,
-                infinite = false,
-                onValueChange = { selPeriod = it }
-            )
-
-            Spacer(modifier = Modifier.width(46.dp))
+//            DialPicker(
+//                items = period,
+//                listState = periodState,
+//                infinite = false,
+//                onValueChange = { selPeriod = it }
+//            )
+//
+//            Spacer(modifier = Modifier.width(46.dp))
 
             DialPicker(
                 items = hour,
                 listState = hourState,
+                infinite = false,
                 onValueChange = { selHour = it }
             )
 
-            Spacer(modifier = Modifier.width(40.dp))
+            Spacer(modifier = Modifier.width(60.dp))
 
             DialPicker(
                 items = minute,
                 listState = minuteState,
+                infinite = false,
                 onValueChange = { selMin = it }
             )
         }

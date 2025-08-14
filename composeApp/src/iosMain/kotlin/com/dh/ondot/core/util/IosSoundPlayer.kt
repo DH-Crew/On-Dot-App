@@ -46,4 +46,8 @@ class IosSoundPlayer: SoundPlayer {
         player = null
         onComplete()
     }
+
+    override fun setVolume(volume: Float) {
+        player?.volume = volume.coerceIn(0f, 1f)
+    }
 }
