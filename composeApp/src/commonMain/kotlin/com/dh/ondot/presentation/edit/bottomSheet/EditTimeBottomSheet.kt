@@ -125,7 +125,12 @@ fun EditTimeBottomSheet(
                         buttonType = ButtonType.Green500,
                         onClick = {
                             uiState.currentTime?.let { time ->
-                                uiState.currentDate?.let { date ->
+                                if (isAlarm) {
+                                    uiState.currentDate?.let { date ->
+                                        onTimeSelected(date, time)
+                                    }
+                                } else {
+                                    val date = uiState.currentDate ?: scheduleDate ?: return@OnDotButton
                                     onTimeSelected(date, time)
                                 }
                             }
