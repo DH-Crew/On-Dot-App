@@ -242,6 +242,8 @@ object DateTimeFormatter {
 
     /** 두개의 ISO8601 날짜가 하루 차이인지 판단하는 메서드 */
     fun isYesterday(scheduleDate: String, alarmDate: String): Boolean {
+        if (scheduleDate.isBlank() || alarmDate.isBlank()) return false
+
         val scheduleLocalDate = scheduleDate.toLocalDateFromIso()
         val alarmLocalDate = alarmDate.toLocalDateFromIso()
         return scheduleLocalDate == alarmLocalDate.plus(DatePeriod(days = 1))
