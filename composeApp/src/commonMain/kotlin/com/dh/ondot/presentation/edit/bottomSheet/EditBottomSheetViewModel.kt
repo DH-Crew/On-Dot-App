@@ -90,6 +90,10 @@ class EditBottomSheetViewModel(
         updateState(uiState.value.copy(currentTime = time))
     }
 
+    fun onToggleCalendar() {
+        updateState(uiState.value.copy(isActiveCalendar = !uiState.value.isActiveCalendar))
+    }
+
     /**---------------------------------------------ETC-----------------------------------------------*/
 
     fun clear() {
