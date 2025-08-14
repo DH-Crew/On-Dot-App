@@ -218,6 +218,7 @@ fun EditScheduleContent(
                         AlarmInfoItem(
                             info = uiState.schedule.preparationAlarm,
                             type = AlarmType.Preparation,
+                            scheduleDate = uiState.schedule.appointmentAt,
                             interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
                             onToggleSwitch = onToggleSwitch
@@ -228,6 +229,7 @@ fun EditScheduleContent(
                         AlarmInfoItem(
                             info = uiState.schedule.departureAlarm,
                             type = AlarmType.Departure,
+                            scheduleDate = uiState.schedule.appointmentAt,
                             interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) }
                         )
