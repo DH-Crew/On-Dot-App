@@ -307,6 +307,7 @@ fun EditScheduleContent(
                     currentTime = uiState.selectedTime,
                     currentAlarmDate = uiState.selectedAlarmDate,
                     isAlarm = true,
+                    scheduleDate = uiState.selectedDate,
                     onDismiss = {
                         onDismissTimeBottomSheet()
                     },

@@ -33,6 +33,7 @@ import kotlinx.datetime.LocalTime
 fun EditTimeBottomSheet(
     currentTime: LocalTime,
     currentAlarmDate: LocalDate? = null,
+    scheduleDate: LocalDate? = null,
     isAlarm: Boolean = false,
     onDismiss: () -> Unit,
     onTimeSelected: (LocalDate, LocalTime) -> Unit,
@@ -83,6 +84,8 @@ fun EditTimeBottomSheet(
                                 month = uiState.calendarMonth,
                                 selectedDate = uiState.currentDate,
                                 isRepeat = uiState.isRepeat,
+                                isAlarm = isAlarm,
+                                scheduleDate = scheduleDate,
                                 activeWeekDays = uiState.repeatDays,
                                 onPrevMonth = viewModel::onPrevMonth,
                                 onNextMonth = viewModel::onNextMonth,
