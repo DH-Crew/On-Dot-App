@@ -26,11 +26,14 @@ import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray100
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.isoDayNumber
+import kotlinx.datetime.minus
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_arrow_left_small
 import ondot.composeapp.generated.resources.ic_arrow_right_small
@@ -41,11 +44,18 @@ fun Calendar(
     month: LocalDate,
     selectedDate: LocalDate?,
     isRepeat: Boolean,
+
+    // 알람 시간 수정
+    isAlarm: Boolean = false,
+    scheduleDate: LocalDate? = null,
+
     activeWeekDays: Set<Int>,
     onPrevMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onDateSelected: (LocalDate) -> Unit
 ) {
+    val possibleDate = scheduleDate?.minus(DatePeriod(days = 1))
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,8 +72,11 @@ fun Calendar(
         CalendarContent(
             month = month,
             selectedDate = selectedDate,
-            isRepeat        = isRepeat,
-            activeWeekDays  = activeWeekDays,
+            isRepeat = isRepeat,
+            isAlarm = isAlarm,
+            scheduleDate = scheduleDate,
+            possibleDate = possibleDate,
+            activeWeekDays = activeWeekDays,
             onDateSelected = onDateSelected
         )
     }
@@ -136,6 +149,12 @@ fun CalendarContent(
     month: LocalDate,
     selectedDate: LocalDate?,
     isRepeat: Boolean,
+
+    // 알람 시간 수정
+    isAlarm: Boolean,
+    scheduleDate: LocalDate?,
+    possibleDate: LocalDate?,
+
     activeWeekDays: Set<Int>,
     onDateSelected: (LocalDate) -> Unit
 ) {
@@ -159,16 +178,17 @@ fun CalendarContent(
                     val date = if (cellIndex in offset until offset + days.size) {
                         days[cellIndex - offset]
                     } else null
-
                     val isSelected = when {
                         date == null -> false
                         isRepeat -> activeWeekDays.contains(date.dayOfWeek.isoDayNumber % 7)
                         else -> date == selectedDate
                     }
+                    val isPossible = date == possibleDate || date == scheduleDate
 
                     DayCell(
                         date = date,
                         isSelected = isSelected,
+                        isPossible = if (isAlarm) isPossible else true,
                         onClick = { if (!isRepeat && date != null) onDateSelected(date) }
                     )
                 }
@@ -181,6 +201,7 @@ fun CalendarContent(
 fun DayCell(
     date: LocalDate?,
     isSelected: Boolean,
+    isPossible: Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -191,13 +212,15 @@ fun DayCell(
                 if (isSelected) Green900
                 else Color.Transparent
             )
-            .clickable(enabled = date != null) { onClick() },
+            .clickable(enabled = date != null && isPossible) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         OnDotText(
             text = date?.dayOfMonth?.toString().orEmpty(),
             style = OnDotTextStyle.BodyLargeR2,
-            color = if (isSelected) Green400 else Gray100
+            color =
+                if (isPossible) { if (isSelected) Green400 else Gray100 }
+                else Gray500
         )
     }
 }
