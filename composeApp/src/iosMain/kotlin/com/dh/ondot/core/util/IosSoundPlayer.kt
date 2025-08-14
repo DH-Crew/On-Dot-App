@@ -48,6 +48,6 @@ class IosSoundPlayer: SoundPlayer {
     }
 
     override fun setVolume(volume: Float) {
-        player?.volume = volume
+        player?.volume = volume.coerceIn(0f, 1f)
     }
 }
