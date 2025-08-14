@@ -20,7 +20,9 @@ import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green1000
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_check_green
@@ -36,15 +38,21 @@ fun TextChip(
         ChipStyle.Active -> Green500
         ChipStyle.Normal, ChipStyle.Info -> Gray50
         ChipStyle.Inactive -> Gray400
+        ChipStyle.Yesterday -> Green1000
     }
     val backgroundColor = when (chipStyle) {
         ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Gray500
         ChipStyle.Info -> Green800
+        ChipStyle.Yesterday -> Green600
+    }
+    val fontStyle = when(chipStyle) {
+        ChipStyle.Yesterday -> OnDotTextStyle.BodyMediumSB
+        else -> OnDotTextStyle.BodyMediumR
     }
 
     OnDotText(
         text = text,
-        style = OnDotTextStyle.BodyMediumR,
+        style = fontStyle,
         color = fontColor,
         modifier = Modifier
             .background(backgroundColor, shape = RoundedCornerShape(6.dp))
@@ -64,10 +72,12 @@ fun CheckTextChip(
         ChipStyle.Active -> Green500
         ChipStyle.Normal, ChipStyle.Info -> Gray50
         ChipStyle.Inactive -> Gray400
+        else -> Gray50 // 체크 칩에는 없읍
     }
     val backgroundColor = when (chipStyle) {
         ChipStyle.Active, ChipStyle.Normal, ChipStyle.Inactive -> Gray500
         ChipStyle.Info -> Green800
+        else -> Gray50 // 체크 칩에는 없음
     }
 
     Row(
