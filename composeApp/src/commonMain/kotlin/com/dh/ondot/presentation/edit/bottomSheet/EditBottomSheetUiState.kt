@@ -26,7 +26,7 @@ data class EditBottomSheetUiState(
     /**
      * EditTimeBottomSheet
      * */
-    val currentTime: LocalTime? = null
-
+    val currentTime: LocalTime? = null,
+    val isActiveCalendar: Boolean = false,
 
 ): UiState
