@@ -244,8 +244,12 @@ object DateTimeFormatter {
     fun isYesterday(scheduleDate: String, alarmDate: String): Boolean {
         if (scheduleDate.isBlank() || alarmDate.isBlank()) return false
 
-        val scheduleLocalDate = scheduleDate.toLocalDateFromIso()
-        val alarmLocalDate = alarmDate.toLocalDateFromIso()
-        return scheduleLocalDate == alarmLocalDate.plus(DatePeriod(days = 1))
+        return try {
+            val scheduleLocalDate = scheduleDate.toLocalDateFromIso()
+            val alarmLocalDate = alarmDate.toLocalDateFromIso()
+            return scheduleLocalDate == alarmLocalDate.plus(DatePeriod(days = 1))
+        } catch (_: Throwable) {
+            false
+        }
     }
 }
