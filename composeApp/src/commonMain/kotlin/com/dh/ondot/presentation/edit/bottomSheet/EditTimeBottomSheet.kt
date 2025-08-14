@@ -43,8 +43,8 @@ fun EditTimeBottomSheet(
     val interactionSource = remember { MutableInteractionSource() }
 
     val periodState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
-    val hourState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.hour)
-    val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.minute)
+    val hourState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.hour.coerceIn(0, 23))
+    val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.minute.coerceIn(0, 59))
 
     LaunchedEffect(Unit) {
         viewModel.initTime(currentTime)
