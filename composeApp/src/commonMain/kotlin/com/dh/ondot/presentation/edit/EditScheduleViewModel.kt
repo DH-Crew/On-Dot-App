@@ -199,8 +199,8 @@ class EditScheduleViewModel(
             TimeType.PREPARATION -> uiState.value.schedule.preparationAlarm.triggeredAt.toLocalTimeFromIso()
         }
         val selectedAlarmDate = when(timeType) {
-            TimeType.DEPARTURE -> uiState.value.schedule.departureAlarm.triggeredAt.toLocalDateFromIso()
-            TimeType.PREPARATION -> uiState.value.schedule.preparationAlarm.triggeredAt.toLocalDateFromIso()
+            TimeType.DEPARTURE -> runCatching { uiState.value.schedule.departureAlarm.triggeredAt.toLocalDateFromIso() }.getOrNull()
+            TimeType.PREPARATION -> runCatching { uiState.value.schedule.preparationAlarm.triggeredAt.toLocalDateFromIso() }.getOrNull()
             else -> null
         }
         val bottomSheetType = when(timeType) {
