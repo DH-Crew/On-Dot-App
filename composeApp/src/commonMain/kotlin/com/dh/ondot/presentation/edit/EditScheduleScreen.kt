@@ -45,6 +45,7 @@ import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
+import com.dh.ondot.domain.model.enums.TimeBottomSheet
 import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
@@ -278,29 +279,9 @@ fun EditScheduleContent(
             }
         }
 
-        if (uiState.showScheduleTimeBottomSheet) {
+        if (uiState.activeTimeBottomSheet != null) {
             AnimatedVisibility(
-                visible = uiState.showScheduleTimeBottomSheet,
-                modifier = Modifier.fillMaxSize(),
-                enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
-                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
-            ) {
-                EditTimeBottomSheet(
-                    currentTime = uiState.selectedTime,
-                    onDismiss = {
-                        onDismissTimeBottomSheet()
-                    },
-                    onTimeSelected = { date, time ->
-                        onEditTime(date, time)
-                        onDismissTimeBottomSheet()
-                    }
-                )
-            }
-        }
-
-        if (uiState.showAlarmTimeBottomSheet) {
-            AnimatedVisibility(
-                visible = uiState.showAlarmTimeBottomSheet,
+                visible = true,
                 modifier = Modifier.fillMaxSize(),
                 enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
                 exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
@@ -308,7 +289,7 @@ fun EditScheduleContent(
                 EditTimeBottomSheet(
                     currentTime = uiState.selectedTime,
                     currentAlarmDate = uiState.selectedAlarmDate,
-                    isAlarm = true,
+                    isAlarm = uiState.activeTimeBottomSheet == TimeBottomSheet.Alarm,
                     scheduleDate = uiState.selectedDate,
                     onDismiss = {
                         onDismissTimeBottomSheet()

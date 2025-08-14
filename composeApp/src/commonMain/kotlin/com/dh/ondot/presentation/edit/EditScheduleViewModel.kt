@@ -9,6 +9,7 @@ import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.toIsoTimeString
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
+import com.dh.ondot.domain.model.enums.TimeBottomSheet
 import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.ScheduleDetail
@@ -202,11 +203,15 @@ class EditScheduleViewModel(
             TimeType.PREPARATION -> uiState.value.schedule.preparationAlarm.triggeredAt.toLocalDateFromIso()
             else -> null
         }
+        val bottomSheetType = when(timeType) {
+            TimeType.APPOINTMENT -> TimeBottomSheet.Schedule
+            TimeType.DEPARTURE -> TimeBottomSheet.Alarm
+            TimeType.PREPARATION -> TimeBottomSheet.Alarm
+        }
 
         updateStateSync(
             uiState.value.copy(
-                showScheduleTimeBottomSheet = timeType == TimeType.APPOINTMENT,
-                showAlarmTimeBottomSheet = timeType == TimeType.DEPARTURE || timeType == TimeType.PREPARATION,
+                activeTimeBottomSheet = bottomSheetType,
                 selectedTimeType = timeType,
                 selectedTime = selectedTime,
                 selectedAlarmDate = selectedAlarmDate
@@ -215,6 +220,6 @@ class EditScheduleViewModel(
     }
 
     fun hideTimeBottomSheet() {
-        updateState(uiState.value.copy(showScheduleTimeBottomSheet = false, showAlarmTimeBottomSheet = false))
+        updateState(uiState.value.copy(activeTimeBottomSheet = null))
     }
 }
