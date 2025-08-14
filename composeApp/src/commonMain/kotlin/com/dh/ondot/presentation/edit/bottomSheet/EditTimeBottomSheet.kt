@@ -18,19 +18,24 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.domain.model.enums.ButtonType
+import com.dh.ondot.presentation.general.repeat.components.Calendar
+import com.dh.ondot.presentation.general.repeat.components.DateSectionHeader
 import com.dh.ondot.presentation.general.repeat.components.TimePicker
 import com.dh.ondot.presentation.general.repeat.components.TimeSectionHeader
 import com.dh.ondot.presentation.ui.components.OnDotBottomSheet
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
 @Composable
 fun EditTimeBottomSheet(
     currentTime: LocalTime,
+    currentAlarmDate: LocalDate? = null,
+    isAlarm: Boolean = false,
     onDismiss: () -> Unit,
-    onTimeSelected: (LocalTime) -> Unit,
+    onTimeSelected: (LocalDate, LocalTime) -> Unit,
 ) {
     val viewModel: EditBottomSheetViewModel = viewModel { EditBottomSheetViewModel() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,6 +47,7 @@ fun EditTimeBottomSheet(
 
     LaunchedEffect(Unit) {
         viewModel.initTime(currentTime)
+        currentAlarmDate?.let { viewModel.initDate(isRepeat = false, repeatDays = emptySet(), currentDate = it) }
     }
 
     DisposableEffect(Unit) {
@@ -51,13 +57,44 @@ fun EditTimeBottomSheet(
     if (uiState.currentTime != null) {
         OnDotBottomSheet(
             onDismiss = onDismiss,
-            contentPaddingTop = 16.dp,
+            contentPaddingTop = if (isAlarm) 32.dp else 16.dp,
             contentPaddingBottom = 16.dp,
             content = {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
+                    if (isAlarm) {
+                        DateSectionHeader(
+                            selectedDate = uiState.currentDate,
+                            isActiveCalendar = uiState.isActiveCalendar,
+                            isRepeat = false,
+                            activeWeekDays = emptySet(),
+                            interactionSource = interactionSource,
+                            onToggleCalendar = viewModel::onToggleCalendar
+                        )
+
+                        if (uiState.isActiveCalendar) {
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            HorizontalDivider(thickness = (0.5).dp, color = Gray600, modifier = Modifier.fillMaxWidth())
+
+                            Calendar(
+                                month = uiState.calendarMonth,
+                                selectedDate = uiState.currentDate,
+                                isRepeat = uiState.isRepeat,
+                                activeWeekDays = uiState.repeatDays,
+                                onPrevMonth = viewModel::onPrevMonth,
+                                onNextMonth = viewModel::onNextMonth,
+                                onDateSelected = viewModel::onDateSelected
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 4.dp), thickness = (0.5).dp, color = Gray600)
+                    }
+
                     Spacer(modifier = Modifier.height(16.dp))
 
                     TimeSectionHeader(
@@ -84,7 +121,11 @@ fun EditTimeBottomSheet(
                         buttonText = WORD_COMPETE,
                         buttonType = ButtonType.Green500,
                         onClick = {
-                            uiState.currentTime?.let { onTimeSelected(it) }
+                            uiState.currentTime?.let { time ->
+                                uiState.currentDate?.let { date ->
+                                    onTimeSelected(date, time)
+                                }
+                            }
                         }
                     )
                 }
