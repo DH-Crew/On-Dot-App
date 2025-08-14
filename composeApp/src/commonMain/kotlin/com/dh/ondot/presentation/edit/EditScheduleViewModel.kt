@@ -157,7 +157,7 @@ class EditScheduleViewModel(
         updateState(uiState.value.copy(showDateBottomSheet = false))
     }
 
-    fun editTime(newTime: LocalTime) {
+    fun editTime(newDate: LocalDate, newTime: LocalTime) {
         when(uiState.value.selectedTimeType) {
             TimeType.APPOINTMENT -> updateState(
                 uiState.value.copy(
@@ -166,12 +166,26 @@ class EditScheduleViewModel(
             )
             TimeType.DEPARTURE -> updateState(
                 uiState.value.copy(
-                    schedule = uiState.value.schedule.copy(departureAlarm = uiState.value.schedule.departureAlarm.copy(triggeredAt = newTime.toIsoTimeString()))
+                    schedule = uiState.value.schedule.copy(
+                        departureAlarm = uiState.value.schedule.departureAlarm.copy(
+                            triggeredAt = DateTimeFormatter.formatIsoDateTime(
+                                date = newDate,
+                                time = newTime
+                            )
+                        )
+                    )
                 )
             )
             TimeType.PREPARATION -> updateState(
                 uiState.value.copy(
-                    schedule = uiState.value.schedule.copy(preparationAlarm = uiState.value.schedule.preparationAlarm.copy(triggeredAt = newTime.toIsoTimeString()))
+                    schedule = uiState.value.schedule.copy(
+                        preparationAlarm = uiState.value.schedule.preparationAlarm.copy(
+                            triggeredAt = DateTimeFormatter.formatIsoDateTime(
+                                date = newDate,
+                                time = newTime
+                            )
+                        )
+                    )
                 )
             )
         }
@@ -183,17 +197,24 @@ class EditScheduleViewModel(
             TimeType.DEPARTURE -> uiState.value.schedule.departureAlarm.triggeredAt.toLocalTimeFromIso()
             TimeType.PREPARATION -> uiState.value.schedule.preparationAlarm.triggeredAt.toLocalTimeFromIso()
         }
+        val selectedAlarmDate = when(timeType) {
+            TimeType.DEPARTURE -> uiState.value.schedule.departureAlarm.triggeredAt.toLocalDateFromIso()
+            TimeType.PREPARATION -> uiState.value.schedule.preparationAlarm.triggeredAt.toLocalDateFromIso()
+            else -> null
+        }
 
         updateStateSync(
             uiState.value.copy(
-                showTimeBottomSheet = true,
+                showScheduleTimeBottomSheet = timeType == TimeType.APPOINTMENT,
+                showAlarmTimeBottomSheet = timeType == TimeType.DEPARTURE || timeType == TimeType.PREPARATION,
                 selectedTimeType = timeType,
-                selectedTime = selectedTime
+                selectedTime = selectedTime,
+                selectedAlarmDate = selectedAlarmDate
             )
         )
     }
 
     fun hideTimeBottomSheet() {
-        updateState(uiState.value.copy(showTimeBottomSheet = false))
+        updateState(uiState.value.copy(showScheduleTimeBottomSheet = false, showAlarmTimeBottomSheet = false))
     }
 }
