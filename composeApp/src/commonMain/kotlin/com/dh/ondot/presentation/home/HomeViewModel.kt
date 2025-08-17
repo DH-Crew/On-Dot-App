@@ -18,8 +18,10 @@ import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
+import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -157,5 +159,24 @@ class HomeViewModel(
                 )
             }
         }
+    }
+
+    fun deleteSchedule(scheduleId: Long) {
+        viewModelScope.launch {
+            scheduleRepository.deleteSchedule(scheduleId).collect {
+                resultResponse(it, { onSuccessDeleteSchedule(scheduleId) }, ::onFailDeleteSchedule)
+            }
+        }
+    }
+
+    private fun onSuccessDeleteSchedule(scheduleId: Long) {
+        updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }))
+        getScheduleList()
+        viewModelScope.launch { ToastManager.show(SUCCESS_DELETE_SCHEDULE, ToastType.DELETE) }
+    }
+
+    private fun onFailDeleteSchedule(e: Throwable) {
+        logger.e { e.message.toString() }
+        viewModelScope.launch { ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR) }
     }
 }
