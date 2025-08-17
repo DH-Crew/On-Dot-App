@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.components.OnDotButton
+import com.dh.ondot.presentation.ui.theme.APPLE_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.IOS
 import com.dh.ondot.presentation.ui.theme.KAKAO_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
@@ -41,13 +42,15 @@ fun LoginScreen(
     }
 
     LoginContent(
-        onKakaoLogin = { viewModel.onKakaoLogin() }
+        onKakaoLogin = { viewModel.performKakaoLogin() },
+        onAppleLogin = { viewModel.performAppleLogin() }
     )
 }
 
 @Composable
 fun LoginContent(
-    onKakaoLogin: () -> Unit
+    onKakaoLogin: () -> Unit,
+    onAppleLogin: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -72,7 +75,8 @@ fun LoginContent(
         )
 
         LoginButtons(
-            onKakaoLogin = onKakaoLogin
+            onKakaoLogin = onKakaoLogin,
+            onAppleLogin = onAppleLogin
         )
     }
 }
@@ -96,7 +100,14 @@ fun LoginButtons(
         )
 
         if (getPlatform().name == IOS) {
-            // TODO: Apple Login Button
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OnDotButton(
+                buttonText = APPLE_LOGIN_BUTTON_TEXT,
+                buttonType = ButtonType.Apple,
+                onClick = onAppleLogin
+            )
+
             Spacer(modifier = Modifier.height(21.dp))
         }
 

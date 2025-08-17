@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 import ComposeApp
+import KakaoSDKAuth
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
@@ -14,7 +15,13 @@ struct ContentView: View {
     var body: some View {
         ComposeView()
                 .ignoresSafeArea() // Compose has own keyboard handler
+                .onOpenURL { url in
+                    if AuthApi.isKakaoTalkLoginUrl(url) {
+                        _ = AuthController.handleOpenUrl(url: url, options: [:])
+                    }
+                }
     }
+    
 }
 
 
