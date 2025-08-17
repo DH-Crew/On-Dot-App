@@ -61,6 +61,9 @@ const val ERROR_WITHDRAW = "회원탈퇴에 실패했습니다."
 const val ERROR_LOGIN = "로그인에 실패했습니다."
 const val ERROR_SET_MAP_PROVIDER = "지도 공급자 저장에 실패했습니다."
 
+// SUCCESS
+const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
+
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
 const val ONBOARDING1_TITLE_HIGHLIGHT = "외출 준비"
