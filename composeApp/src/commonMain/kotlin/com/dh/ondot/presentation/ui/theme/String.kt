@@ -42,7 +42,7 @@ const val CATEGORY_FAST_INTENSE = "빠르고 강렬한"
 
 // 버튼 텍스트
 const val KAKAO_LOGIN_BUTTON_TEXT = "카카오로 계속하기"
-const val APPLE_LOGIN_BUTTON_TEXT = "Apple로 계속하기"
+const val APPLE_LOGIN_BUTTON_TEXT = "Apple로 로그인"
 const val CREATE_SCHEDULE = "일정 생성"
 const val PREPARATION_START_BUTTON_TEXT = "준비 시작하기"
 const val SHOW_ROUTE_INFORMATION_BUTTON_TEXT = "경로안내 보기"
