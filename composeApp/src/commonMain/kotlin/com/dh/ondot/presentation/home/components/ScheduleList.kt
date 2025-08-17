@@ -28,6 +28,7 @@ import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
+import com.dh.ondot.presentation.ui.components.SwipableDeleteItem
 import com.dh.ondot.presentation.ui.theme.EMPTY_PREPARATION_ALARM
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
@@ -46,7 +47,8 @@ fun ScheduleList(
     scheduleList: List<Schedule>,
     interactionSource: MutableInteractionSource,
     onClickSwitch: (Long, Boolean) -> Unit,
-    onClickSchedule: (Long) -> Unit
+    onClickSchedule: (Long) -> Unit,
+    onDelete: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -65,12 +67,16 @@ fun ScheduleList(
         }
 
         items(scheduleList, key = { it.scheduleId }) {
-            ScheduleListItem(
-                item = it,
-                interactionSource = interactionSource,
-                onClickSwitch = onClickSwitch,
-                onClickSchedule = onClickSchedule
-            )
+            SwipableDeleteItem(
+                onDelete = { onDelete(it.scheduleId) }
+            ) {
+                ScheduleListItem(
+                    item = it,
+                    interactionSource = interactionSource,
+                    onClickSwitch = onClickSwitch,
+                    onClickSchedule = onClickSchedule
+                )
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
         }
