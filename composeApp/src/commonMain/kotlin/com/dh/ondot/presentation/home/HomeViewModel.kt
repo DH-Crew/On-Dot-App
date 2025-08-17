@@ -171,6 +171,7 @@ class HomeViewModel(
 
     private fun onSuccessDeleteSchedule(scheduleId: Long) {
         updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }))
+        getScheduleList()
         viewModelScope.launch { ToastManager.show(SUCCESS_DELETE_SCHEDULE, ToastType.DELETE) }
     }
 
