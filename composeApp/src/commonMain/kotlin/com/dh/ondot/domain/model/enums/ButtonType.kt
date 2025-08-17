@@ -2,6 +2,7 @@ package com.dh.ondot.domain.model.enums
 
 enum class ButtonType {
     Kakao,
+    Apple,
     Green500,
     Green600,
     Gray300,
