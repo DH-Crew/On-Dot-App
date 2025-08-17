@@ -16,7 +16,6 @@ struct ContentView: View {
         ComposeView()
                 .ignoresSafeArea() // Compose has own keyboard handler
                 .onOpenURL { url in
-                    print("Received URL: \(url)")
                     if AuthApi.isKakaoTalkLoginUrl(url) {
                         _ = AuthController.handleOpenUrl(url: url, options: [:])
                     }
