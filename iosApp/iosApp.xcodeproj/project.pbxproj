@@ -11,7 +11,6 @@
 		E20636DE2E17E13B008529D5 /* ComposeApp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E20636DB2E17E129008529D5 /* ComposeApp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E284909F2E144579008FD76D /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284909E2E144579008FD76D /* KakaoSDKAuth */; };
 		E28490A12E144579008FD76D /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = E28490A02E144579008FD76D /* KakaoSDKUser */; };
-		E2A65AC32E51BF0E00B0D63E /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2A65AC22E51BF0800B0D63E /* info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +30,6 @@
 /* Begin PBXFileReference section */
 		B9DA97B12DC1472C00A4DA20 /* OnDot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnDot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20636DB2E17E129008529D5 /* ComposeApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ComposeApp.framework; path = "../composeApp/build/xcode-frameworks/Debug/iphoneos18.5/ComposeApp.framework"; sourceTree = SOURCE_ROOT; };
-		E2A65AC22E51BF0800B0D63E /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		F34D56CA6EFB0EC879F717C8 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -78,7 +76,6 @@
 				B9DA97B32DC1472C00A4DA20 /* iosApp */,
 				B9DA97B22DC1472C00A4DA20 /* Products */,
 				3258F94D5AE37B4F2304E3BB /* Frameworks */,
-				E2A65AC22E51BF0800B0D63E /* info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,7 +155,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2A65AC32E51BF0E00B0D63E /* info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
