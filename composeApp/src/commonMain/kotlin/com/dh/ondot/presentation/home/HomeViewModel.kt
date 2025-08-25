@@ -50,7 +50,7 @@ class HomeViewModel(
     }
 
     fun onClickAlarmSwitch(id: Long, isEnabled: Boolean) {
-        updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.map {
+        val newList = uiState.value.scheduleList.map {
             if (it.scheduleId == id) {
                 it.copy(
                     isEnabled = isEnabled,
@@ -60,7 +60,12 @@ class HomeViewModel(
             } else {
                 it
             }
-        }))
+        }
+
+        updateState(uiState.value.copy(scheduleList = newList))
+
+        if (isEnabled) processAlarms(newList)
+        else cancelAlarms(id)
 
         viewModelScope.launch {
             scheduleRepository.toggleAlarm(scheduleId = id, request = ToggleAlarmRequest(isEnabled = isEnabled)).collect {
@@ -162,6 +167,8 @@ class HomeViewModel(
     }
 
     fun deleteSchedule(scheduleId: Long) {
+        cancelAlarms(scheduleId)
+
         viewModelScope.launch {
             scheduleRepository.deleteSchedule(scheduleId).collect {
                 resultResponse(it, { onSuccessDeleteSchedule(scheduleId) }, ::onFailDeleteSchedule)
@@ -178,5 +185,16 @@ class HomeViewModel(
     private fun onFailDeleteSchedule(e: Throwable) {
         logger.e { e.message.toString() }
         viewModelScope.launch { ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR) }
+    }
+
+    /**--------------------------------------------알람 취소-----------------------------------------------*/
+
+    /**홈 화면에서 일정을 삭제할 때 스케줄링된 알람도 함께 삭제*/
+    private fun cancelAlarms(scheduleId: Long) {
+        val schedule = uiState.value.scheduleList.find { it.scheduleId == scheduleId }
+        schedule?.let {
+            alarmScheduler.cancelAlarm(it.departureAlarm.alarmId)
+            alarmScheduler.cancelAlarm(it.preparationAlarm.alarmId)
+        }
     }
 }
