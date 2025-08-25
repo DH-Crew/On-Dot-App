@@ -7,9 +7,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.RequiresPermission
 import co.touchlab.kermit.Logger
-import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.domain.service.AlarmScheduler
 
 class AndroidAlarmScheduler(
     private val context: Context
@@ -69,6 +69,8 @@ class AndroidAlarmScheduler(
     }
 
     override fun cancelAlarm(alarmId: Long) {
+        // AlarmManager는 안드로이드 OS에 알람을 등록하거나 취소할 수 있는 시스템 서비스
+        // 알람을 취소할 때는 등록할 때와 동일한 Intent 정보와 requestCode(alarmId.toInt())를 전달해서 취소 가능
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
