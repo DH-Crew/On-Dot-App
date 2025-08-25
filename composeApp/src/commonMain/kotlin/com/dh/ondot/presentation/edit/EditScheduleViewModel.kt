@@ -14,6 +14,7 @@ import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.repository.ScheduleRepository
+import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_EDIT_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
@@ -25,7 +26,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 class EditScheduleViewModel(
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository
+    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
+    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler()
 ) : BaseViewModel<EditScheduleUiState>(EditScheduleUiState()) {
 
     private val logger = Logger.withTag("EditScheduleViewModel")
@@ -71,6 +73,8 @@ class EditScheduleViewModel(
             repeatDays = uiState.value.schedule.repeatDays.map { it + 1 }
         )
 
+        if (!newSchedule.preparationAlarm.enabled) cancelAlarm(newSchedule.preparationAlarm.alarmId)
+
         viewModelScope.launch {
             scheduleRepository.editSchedule(uiState.value.scheduleId , newSchedule).collect {
                 resultResponse(it, ::onSuccessSaveSchedule, ::onFailSaveSchedule)
@@ -90,6 +94,8 @@ class EditScheduleViewModel(
     /**------------------------------------------일정 삭제-------------------------------------------------*/
 
     fun deleteSchedule() {
+        cancelAlarms()
+
         viewModelScope.launch {
             scheduleRepository.deleteSchedule(uiState.value.scheduleId).collect {
                 resultResponse(it, ::onSuccessDeleteSchedule, ::onFailDeleteSchedule)
@@ -104,6 +110,18 @@ class EditScheduleViewModel(
     private fun onFailDeleteSchedule(e: Throwable) {
         logger.e { "일정 삭제 실패: ${e.message}" }
         viewModelScope.launch { ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR) }
+    }
+
+    /**--------------------------------------------알람 취소-----------------------------------------------*/
+
+    /**일정을 삭제할 때 스케줄링된 알람도 함께 삭제*/
+    private fun cancelAlarms() {
+        cancelAlarm(uiState.value.schedule.preparationAlarm.alarmId)
+        cancelAlarm(uiState.value.schedule.departureAlarm.alarmId)
+    }
+
+    private fun cancelAlarm(alarmId: Long) {
+        alarmScheduler.cancelAlarm(alarmId)
     }
 
     /**------------------------------------------상태 변수 처리-------------------------------------------------*/
