@@ -66,4 +66,9 @@ sealed class NavRoutes(@Transient val route: String = "") {
     // ServiceTerms
     data object ServiceTermsGraph: NavRoutes("serviceTermsGraph")
     data object ServiceTerms: NavRoutes("serviceTerms")
+
+    // HomeAddressSetting
+    data object HomeAddressSettingGraph: NavRoutes("homeAddressSettingGraph")
+    data object HomeAddressSetting: NavRoutes("homeAddressSetting")
+    data object HomeAddressEdit: NavRoutes("homeAddressEdit")
 }
