@@ -7,8 +7,10 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
+import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.AuthRepository
 import com.dh.ondot.domain.repository.MemberRepository
+import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGOUT
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
@@ -20,6 +22,24 @@ class SettingViewModel(
     private val memberRepository: MemberRepository = ServiceLocator.memberRepository
 ): BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
+
+    /**--------------------------------------------집 주소 설정-----------------------------------------------*/
+    fun getHomeAddress() {
+        viewModelScope.launch {
+            memberRepository.getHomeAddress().collect {
+                resultResponse(it, ::onSuccessGetHomeAddress, ::onFailGetHomeAddress)
+            }
+        }
+    }
+
+    private fun onSuccessGetHomeAddress(result: HomeAddressInfo) {
+        updateState(uiState.value.copy(homeAddress = result))
+    }
+
+    private fun onFailGetHomeAddress(e: Throwable) {
+        logger.e { "onFailGetHomeAddress: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_GET_HOME_ADDRESS, ToastType.ERROR) }
+    }
 
     /**--------------------------------------------로그아웃-----------------------------------------------*/
 
