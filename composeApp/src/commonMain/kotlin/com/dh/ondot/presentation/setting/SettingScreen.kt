@@ -34,8 +34,10 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SETTING_CUSTOMER_SERVICE
+import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.SETTING_SERVICE_POLICY
 import com.dh.ondot.presentation.ui.theme.WORD_ACCOUNT
+import com.dh.ondot.presentation.ui.theme.WORD_GENERAL
 import com.dh.ondot.presentation.ui.theme.WORD_HELP
 import com.dh.ondot.presentation.ui.theme.WORD_LOGOUT
 import com.dh.ondot.presentation.ui.theme.WORD_NO
@@ -51,6 +53,7 @@ fun SettingScreen(
     navigateToDeleteAccountScreen: () -> Unit,
     navigateToLoginScreen: () -> Unit,
     navigateToServiceTermsScreen: () -> Unit,
+    navigateToHomeAddressSettingScreen: () -> Unit,
     viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -68,6 +71,7 @@ fun SettingScreen(
         uiState = uiState,
         interactionSource = interactionSource,
         onToggleLogoutDialog = viewModel::toggleLogoutDialog,
+        onEditAddressClick = navigateToHomeAddressSettingScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
         onLogout = viewModel::logout
@@ -79,6 +83,7 @@ fun SettingContent(
     uiState: SettingUiState = SettingUiState(),
     interactionSource: MutableInteractionSource,
     onToggleLogoutDialog: () -> Unit = {},
+    onEditAddressClick: () -> Unit = {},
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
     onLogout: () -> Unit = {}
@@ -97,17 +102,18 @@ fun SettingContent(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-//        SettingSection(
-//            header = WORD_GENERAL,
-//            sections = listOf(
-//                Pair(SETTING_HOME_ADDRESS, {}),
+        SettingSection(
+            header = WORD_GENERAL,
+            sections = listOf(
+                Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
 //                Pair(SETTING_NAV_MAP, {}),
 //                Pair(SETTING_ALARM_DEFAULT, {}),
 //                Pair(SETTING_PREPARE_TIME, {})
-//            )
-//        )
-//
-//        Spacer(modifier = Modifier.height(16.dp))
+            ),
+            interactionSource = interactionSource
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
             SettingSection(
                 header = WORD_HELP,
