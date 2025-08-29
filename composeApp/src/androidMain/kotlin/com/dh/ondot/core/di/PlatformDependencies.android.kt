@@ -131,6 +131,13 @@ actual fun provideMapProvider(): MapProviderStorage {
     return AndroidMapProviderStorage(context)
 }
 
+actual fun openUrl(url: String) {
+    val context = runCatching { AppContextHolder.context }
+        .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+    context.startActivity(intent)
+}
+
 @Composable
 actual fun BackPressHandler(onBack: () -> Unit) {
     BackHandler {
