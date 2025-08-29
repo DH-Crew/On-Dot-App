@@ -86,8 +86,6 @@ class SettingViewModel(
             longitude = uiState.value.selectedHomeAddress.longitude
         )
 
-        updateState(uiState.value.copy(homeAddress = newHomeAddress))
-
         viewModelScope.launch {
             memberRepository.updateHomeAddress(
                 request = HomeAddressRequest(
@@ -102,6 +100,16 @@ class SettingViewModel(
     }
 
     private fun onSuccessUpdateHomeAddress(result: Unit) {
+        updateState(
+            uiState.value.copy(
+                homeAddress = HomeAddressInfo(
+                    roadAddress = uiState.value.selectedHomeAddress.roadAddress,
+                    latitude = uiState.value.selectedHomeAddress.latitude,
+                    longitude = uiState.value.selectedHomeAddress.longitude
+                )
+            )
+        )
+
         emitEventFlow(SettingEvent.PopScreen)
     }
 
