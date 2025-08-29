@@ -7,19 +7,116 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
+import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
+import com.dh.ondot.domain.model.response.AddressInfo
+import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.AuthRepository
 import com.dh.ondot.domain.repository.MemberRepository
+import com.dh.ondot.domain.repository.PlaceRepository
+import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGOUT
+import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
+import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
 import com.dh.ondot.presentation.ui.theme.WITHDRAW_SUCCESS_MESSAGE
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
     private val authRepository: AuthRepository = ServiceLocator.authRepository,
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository
+    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
+    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository
 ): BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
+    private var searchJob: Job? = null
+
+    /**--------------------------------------------집 주소 설정-----------------------------------------------*/
+    fun getHomeAddress() {
+        viewModelScope.launch {
+            memberRepository.getHomeAddress().collect {
+                resultResponse(it, ::onSuccessGetHomeAddress, ::onFailGetHomeAddress)
+            }
+        }
+    }
+
+    private fun onSuccessGetHomeAddress(result: HomeAddressInfo) {
+        updateState(uiState.value.copy(homeAddress = result))
+    }
+
+    private fun onFailGetHomeAddress(e: Throwable) {
+        logger.e { "onFailGetHomeAddress: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_GET_HOME_ADDRESS, ToastType.ERROR) }
+    }
+
+    fun queryHomeAddress(query: String) {
+        if (query.isBlank()) {
+            updateState(uiState.value.copy(addressList = emptyList()))
+            return
+        }
+
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            delay(200)
+            placeRepository.searchPlace(query).collect {
+                resultResponse(it, ::onSuccessSearchPlace, ::onFailSearchPlace)
+            }
+        }
+    }
+
+    private fun onSuccessSearchPlace(result: List<AddressInfo>) {
+        updateState(uiState.value.copy(addressList = result))
+    }
+
+    private fun onFailSearchPlace(e: Throwable) {
+        logger.e { "onFailSearchPlace: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_SEARCH_PLACE, ToastType.ERROR) }
+    }
+
+    fun setSelectedAddress(address: AddressInfo) {
+        updateState(uiState.value.copy(selectedHomeAddress = address))
+    }
+
+    fun updateHomeAddress() {
+        val newHomeAddress = HomeAddressInfo(
+            roadAddress = uiState.value.selectedHomeAddress.roadAddress,
+            latitude = uiState.value.selectedHomeAddress.latitude,
+            longitude = uiState.value.selectedHomeAddress.longitude
+        )
+
+        viewModelScope.launch {
+            memberRepository.updateHomeAddress(
+                request = HomeAddressRequest(
+                    roadAddress = newHomeAddress.roadAddress,
+                    latitude = newHomeAddress.latitude,
+                    longitude = newHomeAddress.longitude
+                )
+            ).collect {
+                resultResponse(it, ::onSuccessUpdateHomeAddress, ::onFailUpdateHomeAddress)
+            }
+        }
+    }
+
+    private fun onSuccessUpdateHomeAddress(result: Unit) {
+        updateState(
+            uiState.value.copy(
+                homeAddress = HomeAddressInfo(
+                    roadAddress = uiState.value.selectedHomeAddress.roadAddress,
+                    latitude = uiState.value.selectedHomeAddress.latitude,
+                    longitude = uiState.value.selectedHomeAddress.longitude
+                )
+            )
+        )
+
+        emitEventFlow(SettingEvent.PopScreen)
+    }
+
+    private fun onFailUpdateHomeAddress(e: Throwable) {
+        logger.e { "onFailUpdateHomeAddress: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_UPDATE_HOME_ADDRESS, ToastType.ERROR) }
+    }
 
     /**--------------------------------------------로그아웃-----------------------------------------------*/
 

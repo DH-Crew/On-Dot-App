@@ -21,7 +21,10 @@ import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
 import com.dh.ondot.presentation.main.MainScreen
 import com.dh.ondot.presentation.onboarding.OnboardingScreen
+import com.dh.ondot.presentation.setting.SettingViewModel
 import com.dh.ondot.presentation.setting.account_deletion.DeleteAccountScreen
+import com.dh.ondot.presentation.setting.home_address.HomeAddressEditScreen
+import com.dh.ondot.presentation.setting.home_address.HomeAddressSettingScreen
 import com.dh.ondot.presentation.splash.SplashScreen
 
 fun NavGraphBuilder.alarmNavGraph(
@@ -167,6 +170,11 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.ServiceTermsGraph.route) {
                         launchSingleTop = true
                     }
+                },
+                navigateToHomeAddressSetting = {
+                    navController.navigate(NavRoutes.HomeAddressSettingGraph.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -310,6 +318,44 @@ fun NavGraphBuilder.serviceTermsNavGraph(navController: NavHostController) {
         composable(NavRoutes.ServiceTerms.route) {
             com.dh.ondot.presentation.setting.term.ServiceTermsScreen(
                 popScreen = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
+    navigation(
+        startDestination = NavRoutes.HomeAddressSetting.route,
+        route = NavRoutes.HomeAddressSettingGraph.route
+    ) {
+        composable(NavRoutes.HomeAddressSetting.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(NavRoutes.HomeAddressSettingGraph.route)
+            }
+            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry)
+
+            HomeAddressSettingScreen(
+                viewModel = viewModel,
+                popScreen = { navController.popBackStack() },
+                navigateToHomeAddressEditScreen = {
+                    navController.navigate(NavRoutes.HomeAddressEdit.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(NavRoutes.HomeAddressEdit.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(NavRoutes.HomeAddressSettingGraph.route)
+            }
+            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry)
+
+            HomeAddressEditScreen(
+                viewModel = viewModel,
+                popScreen = {
+                    navController.popBackStack()
+                }
             )
         }
     }

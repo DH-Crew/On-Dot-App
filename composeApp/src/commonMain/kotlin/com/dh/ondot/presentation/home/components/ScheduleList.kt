@@ -111,7 +111,7 @@ fun ScheduleListItem(
             ScheduleInfoToggleSection(
                 date = item.appointmentAt,
                 title = item.scheduleTitle,
-                isEnabled = item.isEnabled,
+                isEnabled = item.hasActiveAlarm,
                 isRepeat = item.isRepeat,
                 repeatDays = item.repeatDays,
                 onToggleClick = {

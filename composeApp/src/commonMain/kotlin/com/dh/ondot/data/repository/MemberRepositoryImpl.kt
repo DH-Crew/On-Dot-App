@@ -5,6 +5,7 @@ import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.model.request.MapProviderRequest
 import com.dh.ondot.domain.model.request.OnboardingRequest
+import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.service.MapProviderStorage
@@ -71,6 +72,19 @@ class MemberRepositoryImpl(
                 emit(Result.success(it))
                 mapProviderStorage.setMapProvider(request.mapProvider)
             },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/members/home-address",
+            method = HttpMethod.PATCH,
+            body = request
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
             onFailure = { emit(Result.failure(it)) }
         )
     }

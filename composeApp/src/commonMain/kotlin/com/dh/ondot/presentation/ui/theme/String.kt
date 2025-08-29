@@ -34,6 +34,7 @@ const val WORD_NO = "아니요"
 const val WORD_PREPARATION = "준비"
 const val WORD_DEPARTURE = "출발"
 const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
+const val WORD_HOME = "집"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -60,6 +61,7 @@ const val ERROR_LOGOUT = "로그아웃에 실패했습니다."
 const val ERROR_WITHDRAW = "회원탈퇴에 실패했습니다."
 const val ERROR_LOGIN = "로그인에 실패했습니다."
 const val ERROR_SET_MAP_PROVIDER = "지도 공급자 저장에 실패했습니다."
+const val ERROR_UPDATE_HOME_ADDRESS = "집 주소 변경에 실패했습니다."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
@@ -127,6 +129,7 @@ const val SETTING_ALARM_DEFAULT = "알람 초기값 설정"
 const val SETTING_PREPARE_TIME = "준비 시간 설정"
 const val SETTING_CUSTOMER_SERVICE = "고객센터"
 const val SETTING_SERVICE_POLICY = "서비스 정책"
+const val SETTING_HOME_ADDRESS_EDIT_TITLE = "주소를 입력해 주세요."
 
 // Alarm
 fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 시작하세요!"

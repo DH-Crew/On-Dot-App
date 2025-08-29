@@ -78,7 +78,7 @@ fun OnboardingStep2(
                 placeholder = ONBOARDING2_PLACEHOLDER,
                 modifier = Modifier.fillMaxWidth(),
                 maxLength = 100,
-                icon = {
+                leadingIcon = {
                     Image(
                         painter = painterResource(Res.drawable.ic_search),
                         contentDescription = null,
