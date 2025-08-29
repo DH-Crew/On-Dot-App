@@ -22,6 +22,7 @@ import com.dh.ondot.presentation.login.LoginScreen
 import com.dh.ondot.presentation.main.MainScreen
 import com.dh.ondot.presentation.onboarding.OnboardingScreen
 import com.dh.ondot.presentation.setting.account_deletion.DeleteAccountScreen
+import com.dh.ondot.presentation.setting.home_address.HomeAddressEditScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressSettingScreen
 import com.dh.ondot.presentation.splash.SplashScreen
 
@@ -333,6 +334,14 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.HomeAddressEdit.route) {
                         launchSingleTop = true
                     }
+                }
+            )
+        }
+
+        composable(NavRoutes.HomeAddressEdit.route) {
+            HomeAddressEditScreen(
+                popScreen = {
+                    navController.popBackStack()
                 }
             )
         }
