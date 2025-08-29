@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.domain.model.response.HomeAddressInfo
@@ -50,13 +49,13 @@ import org.jetbrains.compose.resources.painterResource
 fun HomeAddressSettingScreen(
     popScreen: () -> Unit,
     navigateToHomeAddressEditScreen: () -> Unit,
-    viewModel: SettingViewModel = viewModel { SettingViewModel() }
+    viewModel: SettingViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
-        viewModel.getHomeAddress()
+        if (uiState.homeAddress.roadAddress.isEmpty()) viewModel.getHomeAddress()
     }
 
     HomeAddressSettingContent(
