@@ -134,7 +134,9 @@ actual fun provideMapProvider(): MapProviderStorage {
 actual fun openUrl(url: String) {
     val context = runCatching { AppContextHolder.context }
         .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
-    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
     context.startActivity(intent)
 }
 

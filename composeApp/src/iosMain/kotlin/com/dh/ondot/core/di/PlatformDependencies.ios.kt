@@ -93,8 +93,8 @@ actual fun stopService(alarmId: Long) {} // Ios에서는 무시
 actual fun provideMapProvider(): MapProviderStorage = IosMapProviderStorage()
 
 actual fun openUrl(url: String) {
-    val parsedUrl = NSURL("https://open.kakao.com/o/someChatLink")
-    UIApplication.sharedApplication.openURL(parsedUrl)
+    val nsUrl = NSURL.URLWithString(url) ?: return
+    UIApplication.sharedApplication.openURL(nsUrl, emptyMap<Any?, Any?>(), completionHandler = null)
 }
 
 @Composable
