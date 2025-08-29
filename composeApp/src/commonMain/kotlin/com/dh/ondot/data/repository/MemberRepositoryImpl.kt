@@ -75,6 +75,19 @@ class MemberRepositoryImpl(
         )
     }
 
+    override suspend fun updateHomeAddress(request: HomeAddressInfo): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/members/home-address",
+            method = HttpMethod.PATCH,
+            body = request
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
     override fun getLocalMapProvider(): Flow<MapProvider> = flow {
         emitAll(mapProviderStorage.getMapProvider())
     }

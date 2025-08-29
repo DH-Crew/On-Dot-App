@@ -13,6 +13,7 @@ interface MemberRepository {
     suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>>
     suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>>
     suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>>
+    suspend fun updateHomeAddress(request: HomeAddressInfo): Flow<Result<Unit>>
     fun getLocalMapProvider(): Flow<MapProvider>
     fun needsChooseProvider(): Flow<Boolean>
 }
