@@ -1,6 +1,7 @@
 package com.dh.ondot.presentation.setting
 
 import com.dh.ondot.core.ui.base.UiState
+import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.model.ui.UserAnswer
 import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER1
@@ -12,6 +13,8 @@ data class SettingUiState(
 
     // 집 주소 설정
     val homeAddress: HomeAddressInfo = HomeAddressInfo(),
+    val addressList: List<AddressInfo> = listOf(),
+    val selectedHomeAddress: AddressInfo = AddressInfo(),
 
     // 로그아웃
     val showLogoutDialog: Boolean = false,
