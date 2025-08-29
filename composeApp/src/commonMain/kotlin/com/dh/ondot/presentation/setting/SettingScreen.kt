@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dh.ondot.core.di.openUrl
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotDialog
 import com.dh.ondot.presentation.ui.components.OnDotText
@@ -74,6 +75,7 @@ fun SettingScreen(
         onEditAddressClick = navigateToHomeAddressSettingScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
+        onCustomServiceClick = { openUrl("http://pf.kakao.com/_xfdLfn/chat") },
         onLogout = viewModel::logout
     )
 }
@@ -86,6 +88,7 @@ fun SettingContent(
     onEditAddressClick: () -> Unit = {},
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
+    onCustomServiceClick: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
     Box(
@@ -118,7 +121,7 @@ fun SettingContent(
             SettingSection(
                 header = WORD_HELP,
                 sections = listOf(
-                    Pair(SETTING_CUSTOMER_SERVICE, {}),
+                    Pair(SETTING_CUSTOMER_SERVICE, onCustomServiceClick),
                     Pair(SETTING_SERVICE_POLICY, onServiceTermsClick)
                 ),
                 interactionSource = interactionSource
