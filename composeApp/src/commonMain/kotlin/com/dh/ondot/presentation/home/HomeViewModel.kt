@@ -53,7 +53,7 @@ class HomeViewModel(
         val newList = uiState.value.scheduleList.map {
             if (it.scheduleId == id) {
                 it.copy(
-                    isEnabled = isEnabled,
+                    hasActiveAlarm = isEnabled,
                     departureAlarm = it.departureAlarm.copy(enabled = isEnabled),
                     preparationAlarm = it.preparationAlarm.copy(enabled = isEnabled)
                 )
