@@ -7,6 +7,7 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
+import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.AuthRepository
@@ -77,7 +78,13 @@ class SettingViewModel(
         updateState(uiState.value.copy(homeAddress = newHomeAddress))
 
         viewModelScope.launch {
-            memberRepository.updateHomeAddress(newHomeAddress).collect {
+            memberRepository.updateHomeAddress(
+                request = HomeAddressRequest(
+                    roadAddress = newHomeAddress.roadAddress,
+                    latitude = newHomeAddress.latitude,
+                    longitude = newHomeAddress.longitude
+                )
+            ).collect {
                 resultResponse(it, ::onSuccessUpdateHomeAddress, ::onFailUpdateHomeAddress)
             }
         }
