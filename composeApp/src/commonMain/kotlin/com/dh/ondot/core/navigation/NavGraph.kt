@@ -21,6 +21,7 @@ import com.dh.ondot.presentation.general.repeat.ScheduleRepeatSettingScreen
 import com.dh.ondot.presentation.login.LoginScreen
 import com.dh.ondot.presentation.main.MainScreen
 import com.dh.ondot.presentation.onboarding.OnboardingScreen
+import com.dh.ondot.presentation.setting.SettingViewModel
 import com.dh.ondot.presentation.setting.account_deletion.DeleteAccountScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressEditScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressSettingScreen
@@ -327,8 +328,14 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
         startDestination = NavRoutes.HomeAddressSetting.route,
         route = NavRoutes.HomeAddressSettingGraph.route
     ) {
-        composable(NavRoutes.HomeAddressSetting.route) {
+        composable(NavRoutes.HomeAddressSetting.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(NavRoutes.HomeAddressSettingGraph.route)
+            }
+            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry)
+
             HomeAddressSettingScreen(
+                viewModel = viewModel,
                 popScreen = { navController.popBackStack() },
                 navigateToHomeAddressEditScreen = {
                     navController.navigate(NavRoutes.HomeAddressEdit.route) {
@@ -338,8 +345,14 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
             )
         }
 
-        composable(NavRoutes.HomeAddressEdit.route) {
+        composable(NavRoutes.HomeAddressEdit.route) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(NavRoutes.HomeAddressSettingGraph.route)
+            }
+            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry)
+
             HomeAddressEditScreen(
+                viewModel = viewModel,
                 popScreen = {
                     navController.popBackStack()
                 }
