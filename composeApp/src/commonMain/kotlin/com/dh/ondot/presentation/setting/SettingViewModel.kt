@@ -20,6 +20,8 @@ import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
 import com.dh.ondot.presentation.ui.theme.WITHDRAW_SUCCESS_MESSAGE
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
@@ -28,6 +30,7 @@ class SettingViewModel(
     private val placeRepository: PlaceRepository = ServiceLocator.placeRepository
 ): BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
+    private var searchJob: Job? = null
 
     /**--------------------------------------------집 주소 설정-----------------------------------------------*/
     fun getHomeAddress() {
@@ -48,7 +51,15 @@ class SettingViewModel(
     }
 
     fun queryHomeAddress(query: String) {
-        viewModelScope.launch {
+        if (query.isBlank()) {
+            updateState(uiState.value.copy(addressList = emptyList()))
+            return
+        }
+
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            delay(200)
             placeRepository.searchPlace(query).collect {
                 resultResponse(it, ::onSuccessSearchPlace, ::onFailSearchPlace)
             }
