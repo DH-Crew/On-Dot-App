@@ -55,8 +55,8 @@ fun HomeAddressSettingScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
 
-    LaunchedEffect(uiState.homeAddress) {
-        if (uiState.homeAddress.roadAddress.isEmpty()) viewModel.getHomeAddress()
+    LaunchedEffect(Unit) {
+        viewModel.getHomeAddress()
     }
 
     HomeAddressSettingContent(
@@ -143,6 +143,7 @@ private fun HomeAddressInfoItem(
         Spacer(modifier = Modifier.width(16.dp))
 
         Column(
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
             OnDotText(text = WORD_HOME, style = OnDotTextStyle.BodyMediumM, color = Gray200)
@@ -155,8 +156,6 @@ private fun HomeAddressInfoItem(
 
             OnDotText(text = homeAddress.roadAddress, style = OnDotTextStyle.BodyMediumM, color = Gray200)
         }
-
-        Spacer(modifier = Modifier.weight(1f))
 
         Image(
             painter = painterResource(Res.drawable.ic_pencil_white),
