@@ -39,7 +39,8 @@ fun RoundedTextField(
     maxLength: Int = 5,
     maxLines: Int = 1,
     singleLine: Boolean = true,
-    icon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     readOnly: Boolean = false,
     onClickWhenReadOnly: () -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(
@@ -77,12 +78,14 @@ fun RoundedTextField(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon?.let {
+            leadingIcon?.let {
                 it.invoke()
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
-            Box {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
                 if (value.isEmpty()) {
                     OnDotText(
                         text = placeholder,
@@ -106,6 +109,11 @@ fun RoundedTextField(
                     readOnly = readOnly,
                     modifier = Modifier.focusRequester(focusRequester)
                 )
+            }
+
+            trailingIcon?.let {
+                Spacer(modifier = Modifier.width(8.dp))
+                it.invoke()
             }
         }
     }
