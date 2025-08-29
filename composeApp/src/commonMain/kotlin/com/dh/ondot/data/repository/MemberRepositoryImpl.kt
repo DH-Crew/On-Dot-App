@@ -5,6 +5,7 @@ import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.model.request.MapProviderRequest
 import com.dh.ondot.domain.model.request.OnboardingRequest
+import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.service.MapProviderStorage
@@ -75,7 +76,7 @@ class MemberRepositoryImpl(
         )
     }
 
-    override suspend fun updateHomeAddress(request: HomeAddressInfo): Flow<Result<Unit>> = flow {
+    override suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>> = flow {
         val response = networkClient.request<Unit>(
             path = "/members/home-address",
             method = HttpMethod.PATCH,
