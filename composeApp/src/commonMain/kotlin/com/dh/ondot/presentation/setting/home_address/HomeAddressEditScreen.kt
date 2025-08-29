@@ -192,7 +192,7 @@ private fun AddressList(
             .fillMaxWidth()
             .padding(horizontal = 22.dp)
     ) {
-        itemsIndexed(addressList, key = { _, item -> item.hashCode() }) { index, item ->
+        itemsIndexed(addressList, key = { _, item -> "${item.roadAddress}|${item.title}|${item.latitude}|${item.longitude}" }) { index, item ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
