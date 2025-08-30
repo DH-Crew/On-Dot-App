@@ -21,6 +21,7 @@ import com.dh.ondot.core.navigation.loginNavGraph
 import com.dh.ondot.core.navigation.mainNavGraph
 import com.dh.ondot.core.navigation.navMapSettingNavGraph
 import com.dh.ondot.core.navigation.onboardingNavGraph
+import com.dh.ondot.core.navigation.preparationTimeSettingGraph
 import com.dh.ondot.core.navigation.serviceTermsNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
@@ -91,6 +92,7 @@ fun App() {
                     serviceTermsNavGraph(navController = navController)
                     homeAddressSettingGraph(navController = navController)
                     navMapSettingNavGraph(navController = navController)
+                    preparationTimeSettingGraph(navController = navController)
                 }
 
                 ToastHost()
