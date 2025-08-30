@@ -156,6 +156,22 @@ class SettingViewModel(
         viewModelScope.launch { ToastManager.show(ERROR_SET_MAP_PROVIDER, ToastType.ERROR) }
     }
 
+    /**--------------------------------------------길 안내 지도 설정-----------------------------------------------*/
+
+    fun onHourInputChanged(newHourInput: String) {
+        updateState(uiState.value.copy(hourInput = newHourInput))
+    }
+
+    fun onMinuteInputChanged(newMinuteInput: String) {
+        updateState(uiState.value.copy(minuteInput = newMinuteInput))
+    }
+
+    fun updatePreparationTime() {
+        viewModelScope.launch {
+
+        }
+    }
+
     /**--------------------------------------------로그아웃-----------------------------------------------*/
 
     fun toggleLogoutDialog() {
