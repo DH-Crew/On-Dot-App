@@ -75,4 +75,8 @@ sealed class NavRoutes(@Transient val route: String = "") {
     // NavMapSetting
     data object NavMapSettingGraph: NavRoutes("navMapSettingGraph")
     data object NavMapSetting: NavRoutes("navMapSetting")
+
+    // PreparationTimeSetting
+    data object PreparationTimeSettingGraph: NavRoutes("preparationTimeSettingGraph")
+    data object PreparationTimeEdit: NavRoutes("preparationTimeEdit")
 }
