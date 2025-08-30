@@ -146,7 +146,7 @@ class SettingViewModel(
     }
 
     private fun onSuccessUpdateMapProvider(result: Unit) {
-        viewModelScope.launch { memberRepository.updateMapProvider(MapProviderRequest(mapProvider = uiState.value.selectedProvider)) }
+        viewModelScope.launch { memberRepository.setLocalMapProvider(uiState.value.selectedProvider) }
 
         emitEventFlow(SettingEvent.PopScreen)
     }
