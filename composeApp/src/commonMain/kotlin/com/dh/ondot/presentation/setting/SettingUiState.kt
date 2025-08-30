@@ -1,9 +1,12 @@
 package com.dh.ondot.presentation.setting
 
 import com.dh.ondot.core.ui.base.UiState
+import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.model.ui.UserAnswer
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER1
 import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER2
 import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER3
@@ -15,6 +18,19 @@ data class SettingUiState(
     val homeAddress: HomeAddressInfo = HomeAddressInfo(),
     val addressList: List<AddressInfo> = listOf(),
     val selectedHomeAddress: AddressInfo = AddressInfo(),
+
+    // 길 안내 지도 설정
+    val mapProviders: List<MapProvider> =
+        if (getPlatform().name == ANDROID) listOf(
+            MapProvider.KAKAO,
+            MapProvider.NAVER,
+        )
+        else  listOf(
+            MapProvider.KAKAO,
+            MapProvider.NAVER,
+            MapProvider.APPLE
+        ),
+    val selectedProvider: MapProvider = MapProvider.KAKAO,
 
     // 로그아웃
     val showLogoutDialog: Boolean = false,
