@@ -19,6 +19,7 @@ import com.dh.ondot.core.navigation.generalScheduleNavGraph
 import com.dh.ondot.core.navigation.homeAddressSettingGraph
 import com.dh.ondot.core.navigation.loginNavGraph
 import com.dh.ondot.core.navigation.mainNavGraph
+import com.dh.ondot.core.navigation.navMapSettingNavGraph
 import com.dh.ondot.core.navigation.onboardingNavGraph
 import com.dh.ondot.core.navigation.serviceTermsNavGraph
 import com.dh.ondot.core.navigation.splashNavGraph
@@ -89,6 +90,7 @@ fun App() {
                     deleteAccountNavGraph(navController = navController)
                     serviceTermsNavGraph(navController = navController)
                     homeAddressSettingGraph(navController = navController)
+                    navMapSettingNavGraph(navController = navController)
                 }
 
                 ToastHost()
