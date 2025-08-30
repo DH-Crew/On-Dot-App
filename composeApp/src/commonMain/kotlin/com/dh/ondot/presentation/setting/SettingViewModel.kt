@@ -5,8 +5,10 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
+import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
+import com.dh.ondot.domain.model.request.MapProviderRequest
 import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.HomeAddressInfo
@@ -16,6 +18,7 @@ import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGOUT
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
+import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
@@ -116,6 +119,41 @@ class SettingViewModel(
     private fun onFailUpdateHomeAddress(e: Throwable) {
         logger.e { "onFailUpdateHomeAddress: ${e.message}" }
         viewModelScope.launch { ToastManager.show(ERROR_UPDATE_HOME_ADDRESS, ToastType.ERROR) }
+    }
+
+    /**--------------------------------------------길 안내 지도 설정-----------------------------------------------*/
+
+    fun getUserMapProvider() {
+        viewModelScope.launch {
+            memberRepository.getLocalMapProvider().collect {
+                updateSelectedProvider(it)
+            }
+        }
+    }
+
+    fun updateSelectedProvider(newProvider: MapProvider) {
+        updateState(uiState.value.copy(selectedProvider = newProvider))
+    }
+
+    fun updateMapProvider() {
+        viewModelScope.launch {
+            memberRepository.updateMapProvider(
+                request = MapProviderRequest(mapProvider = uiState.value.selectedProvider)
+            ).collect {
+                resultResponse(it, ::onSuccessUpdateMapProvider, ::onFailUpdateMapProvider)
+            }
+        }
+    }
+
+    private fun onSuccessUpdateMapProvider(result: Unit) {
+        viewModelScope.launch { memberRepository.setLocalMapProvider(uiState.value.selectedProvider) }
+
+        emitEventFlow(SettingEvent.PopScreen)
+    }
+
+    private fun onFailUpdateMapProvider(e: Throwable) {
+        logger.e { "onFailUpdateMapProvider: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_SET_MAP_PROVIDER, ToastType.ERROR) }
     }
 
     /**--------------------------------------------로그아웃-----------------------------------------------*/

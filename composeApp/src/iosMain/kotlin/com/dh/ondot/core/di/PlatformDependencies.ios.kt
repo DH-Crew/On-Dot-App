@@ -92,6 +92,11 @@ actual fun stopService(alarmId: Long) {} // Ios에서는 무시
 
 actual fun provideMapProvider(): MapProviderStorage = IosMapProviderStorage()
 
+actual fun openUrl(url: String) {
+    val nsUrl = NSURL.URLWithString(url) ?: return
+    UIApplication.sharedApplication.openURL(nsUrl, emptyMap<Any?, Any?>(), completionHandler = null)
+}
+
 @Composable
 actual fun BackPressHandler(onBack: () -> Unit) {} // Ios에서는 무시
 

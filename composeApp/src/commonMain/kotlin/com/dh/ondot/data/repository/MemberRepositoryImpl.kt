@@ -93,6 +93,10 @@ class MemberRepositoryImpl(
         emitAll(mapProviderStorage.getMapProvider())
     }
 
+    override suspend fun setLocalMapProvider(mapProvider: MapProvider) {
+        mapProviderStorage.setMapProvider(mapProvider)
+    }
+
     override fun needsChooseProvider(): Flow<Boolean> = flow {
         emitAll(mapProviderStorage.needsChooseProvider())
     }

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dh.ondot.core.di.openUrl
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotDialog
 import com.dh.ondot.presentation.ui.components.OnDotText
@@ -35,6 +36,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SETTING_CUSTOMER_SERVICE
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
+import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
 import com.dh.ondot.presentation.ui.theme.SETTING_SERVICE_POLICY
 import com.dh.ondot.presentation.ui.theme.WORD_ACCOUNT
 import com.dh.ondot.presentation.ui.theme.WORD_GENERAL
@@ -54,6 +56,7 @@ fun SettingScreen(
     navigateToLoginScreen: () -> Unit,
     navigateToServiceTermsScreen: () -> Unit,
     navigateToHomeAddressSettingScreen: () -> Unit,
+    navigateToNavMapSettingScreen: () -> Unit,
     viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -72,8 +75,10 @@ fun SettingScreen(
         interactionSource = interactionSource,
         onToggleLogoutDialog = viewModel::toggleLogoutDialog,
         onEditAddressClick = navigateToHomeAddressSettingScreen,
+        onEditNavMapClick = navigateToNavMapSettingScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
+        onCustomServiceClick = { openUrl("http://pf.kakao.com/_xfdLfn/chat") },
         onLogout = viewModel::logout
     )
 }
@@ -84,8 +89,10 @@ fun SettingContent(
     interactionSource: MutableInteractionSource,
     onToggleLogoutDialog: () -> Unit = {},
     onEditAddressClick: () -> Unit = {},
+    onEditNavMapClick: () -> Unit = {},
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
+    onCustomServiceClick: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
     Box(
@@ -106,7 +113,7 @@ fun SettingContent(
             header = WORD_GENERAL,
             sections = listOf(
                 Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
-//                Pair(SETTING_NAV_MAP, {}),
+                Pair(SETTING_NAV_MAP, onEditNavMapClick),
 //                Pair(SETTING_ALARM_DEFAULT, {}),
 //                Pair(SETTING_PREPARE_TIME, {})
             ),
@@ -118,7 +125,7 @@ fun SettingContent(
             SettingSection(
                 header = WORD_HELP,
                 sections = listOf(
-                    Pair(SETTING_CUSTOMER_SERVICE, {}),
+                    Pair(SETTING_CUSTOMER_SERVICE, onCustomServiceClick),
                     Pair(SETTING_SERVICE_POLICY, onServiceTermsClick)
                 ),
                 interactionSource = interactionSource
