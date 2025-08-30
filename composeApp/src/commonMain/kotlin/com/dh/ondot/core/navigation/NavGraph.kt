@@ -26,6 +26,7 @@ import com.dh.ondot.presentation.setting.account_deletion.DeleteAccountScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressEditScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressSettingScreen
 import com.dh.ondot.presentation.setting.nav_map.NavMapSettingScreen
+import com.dh.ondot.presentation.setting.preparation_time.PreparationTimeEditScreen
 import com.dh.ondot.presentation.splash.SplashScreen
 
 fun NavGraphBuilder.alarmNavGraph(
@@ -182,6 +183,11 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                         launchSingleTop = true
                     }
                 },
+                navigateToPreparationTimeEdit = {
+                    navController.navigate(NavRoutes.PreparationTimeSettingGraph.route) {
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }
@@ -374,6 +380,19 @@ fun NavGraphBuilder.navMapSettingNavGraph(navController: NavHostController) {
     ) {
         composable(NavRoutes.NavMapSetting.route) {
             NavMapSettingScreen(
+                popScreen = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.preparationTimeSettingGraph(navController: NavHostController) {
+    navigation(
+        startDestination = NavRoutes.PreparationTimeEdit.route,
+        route = NavRoutes.PreparationTimeSettingGraph.route
+    ) {
+        composable(NavRoutes.PreparationTimeEdit.route) {
+            PreparationTimeEditScreen(
                 popScreen = { navController.popBackStack() }
             )
         }
