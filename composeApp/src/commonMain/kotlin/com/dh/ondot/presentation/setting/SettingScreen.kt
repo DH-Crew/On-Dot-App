@@ -37,6 +37,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SETTING_CUSTOMER_SERVICE
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
+import com.dh.ondot.presentation.ui.theme.SETTING_PREPARE_TIME
 import com.dh.ondot.presentation.ui.theme.SETTING_SERVICE_POLICY
 import com.dh.ondot.presentation.ui.theme.WORD_ACCOUNT
 import com.dh.ondot.presentation.ui.theme.WORD_GENERAL
@@ -57,6 +58,7 @@ fun SettingScreen(
     navigateToServiceTermsScreen: () -> Unit,
     navigateToHomeAddressSettingScreen: () -> Unit,
     navigateToNavMapSettingScreen: () -> Unit,
+    navigateToPreparationTimeEditScreen: () -> Unit,
     viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,6 +78,7 @@ fun SettingScreen(
         onToggleLogoutDialog = viewModel::toggleLogoutDialog,
         onEditAddressClick = navigateToHomeAddressSettingScreen,
         onEditNavMapClick = navigateToNavMapSettingScreen,
+        onEditPreparationTimeClick = navigateToPreparationTimeEditScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
         onCustomServiceClick = { openUrl("http://pf.kakao.com/_xfdLfn/chat") },
@@ -90,6 +93,7 @@ fun SettingContent(
     onToggleLogoutDialog: () -> Unit = {},
     onEditAddressClick: () -> Unit = {},
     onEditNavMapClick: () -> Unit = {},
+    onEditPreparationTimeClick: () -> Unit = {},
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
     onCustomServiceClick: () -> Unit = {},
@@ -115,7 +119,7 @@ fun SettingContent(
                 Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
                 Pair(SETTING_NAV_MAP, onEditNavMapClick),
 //                Pair(SETTING_ALARM_DEFAULT, {}),
-//                Pair(SETTING_PREPARE_TIME, {})
+                Pair(SETTING_PREPARE_TIME, onEditPreparationTimeClick)
             ),
             interactionSource = interactionSource
         )
