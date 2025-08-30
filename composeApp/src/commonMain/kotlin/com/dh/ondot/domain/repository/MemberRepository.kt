@@ -15,6 +15,7 @@ interface MemberRepository {
     suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>>
     suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>>
     suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>>
+    suspend fun setLocalMapProvider(mapProvider: MapProvider)
     fun getLocalMapProvider(): Flow<MapProvider>
     fun needsChooseProvider(): Flow<Boolean>
 }
