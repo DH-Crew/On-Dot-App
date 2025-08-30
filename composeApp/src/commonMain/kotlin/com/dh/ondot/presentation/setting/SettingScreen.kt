@@ -36,6 +36,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SETTING_CUSTOMER_SERVICE
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
+import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
 import com.dh.ondot.presentation.ui.theme.SETTING_SERVICE_POLICY
 import com.dh.ondot.presentation.ui.theme.WORD_ACCOUNT
 import com.dh.ondot.presentation.ui.theme.WORD_GENERAL
@@ -55,6 +56,7 @@ fun SettingScreen(
     navigateToLoginScreen: () -> Unit,
     navigateToServiceTermsScreen: () -> Unit,
     navigateToHomeAddressSettingScreen: () -> Unit,
+    navigateToNavMapSettingScreen: () -> Unit,
     viewModel: SettingViewModel = viewModel { SettingViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -73,6 +75,7 @@ fun SettingScreen(
         interactionSource = interactionSource,
         onToggleLogoutDialog = viewModel::toggleLogoutDialog,
         onEditAddressClick = navigateToHomeAddressSettingScreen,
+        onEditNavMapClick = navigateToNavMapSettingScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
         onCustomServiceClick = { openUrl("http://pf.kakao.com/_xfdLfn/chat") },
@@ -86,6 +89,7 @@ fun SettingContent(
     interactionSource: MutableInteractionSource,
     onToggleLogoutDialog: () -> Unit = {},
     onEditAddressClick: () -> Unit = {},
+    onEditNavMapClick: () -> Unit = {},
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
     onCustomServiceClick: () -> Unit = {},
@@ -109,7 +113,7 @@ fun SettingContent(
             header = WORD_GENERAL,
             sections = listOf(
                 Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
-//                Pair(SETTING_NAV_MAP, {}),
+                Pair(SETTING_NAV_MAP, onEditNavMapClick),
 //                Pair(SETTING_ALARM_DEFAULT, {}),
 //                Pair(SETTING_PREPARE_TIME, {})
             ),
