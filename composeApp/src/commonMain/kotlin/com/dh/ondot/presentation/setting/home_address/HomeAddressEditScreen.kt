@@ -130,12 +130,11 @@ fun HomeAddressEditContent(
         HorizontalDivider(thickness = 8.dp, modifier = Modifier.fillMaxWidth(), color = Gray800)
 
         AddressList(
+            modifier = Modifier.weight(1f),
             query = query,
             addressList = addressList,
             onClickAddress = onClickAddress
         )
-
-        Spacer(modifier = Modifier.weight(1f))
 
         OnDotButton(
             buttonText = WORD_SAVE,
@@ -183,12 +182,13 @@ private fun HomeAddressSearchTextField(
 
 @Composable
 private fun AddressList(
+    modifier: Modifier = Modifier,
     query: String,
     addressList: List<AddressInfo>,
     onClickAddress: (AddressInfo) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 22.dp)
     ) {

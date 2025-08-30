@@ -32,6 +32,8 @@ expect fun stopService(alarmId: Long)
 
 expect fun provideMapProvider(): MapProviderStorage
 
+expect fun openUrl(url: String)
+
 @Composable
 expect fun BackPressHandler(onBack: () -> Unit)
 
