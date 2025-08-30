@@ -130,6 +130,8 @@ const val SETTING_PREPARE_TIME = "준비 시간 설정"
 const val SETTING_CUSTOMER_SERVICE = "고객센터"
 const val SETTING_SERVICE_POLICY = "서비스 정책"
 const val SETTING_HOME_ADDRESS_EDIT_TITLE = "주소를 입력해 주세요."
+const val SETTING_NAV_MAP_PROVIDER_TITLE = "자주 사용하는\n지도를 설정해주세요"
+const val SETTING_NAV_MAP_PROVIDER_GUIDE = "출발 알람 이후 길 안내에 사용될 예정이에요."
 
 // Alarm
 fun alarmRingTitle(time: String) = "출발하기까지 $time\n어서 준비를 시작하세요!"
