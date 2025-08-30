@@ -25,6 +25,7 @@ import com.dh.ondot.presentation.setting.SettingViewModel
 import com.dh.ondot.presentation.setting.account_deletion.DeleteAccountScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressEditScreen
 import com.dh.ondot.presentation.setting.home_address.HomeAddressSettingScreen
+import com.dh.ondot.presentation.setting.nav_map.NavMapSettingScreen
 import com.dh.ondot.presentation.splash.SplashScreen
 
 fun NavGraphBuilder.alarmNavGraph(
@@ -175,7 +176,12 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     navController.navigate(NavRoutes.HomeAddressSettingGraph.route) {
                         launchSingleTop = true
                     }
-                }
+                },
+                navigateToNavMapSetting = {
+                    navController.navigate(NavRoutes.NavMapSettingGraph.route) {
+                        launchSingleTop = true
+                    }
+                },
             )
         }
     }
@@ -356,6 +362,19 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
                 popScreen = {
                     navController.popBackStack()
                 }
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.navMapSettingNavGraph(navController: NavHostController) {
+    navigation(
+        startDestination = NavRoutes.NavMapSetting.route,
+        route = NavRoutes.NavMapSettingGraph.route
+    ) {
+        composable(NavRoutes.NavMapSetting.route) {
+            NavMapSettingScreen(
+                popScreen = { navController.popBackStack() }
             )
         }
     }
