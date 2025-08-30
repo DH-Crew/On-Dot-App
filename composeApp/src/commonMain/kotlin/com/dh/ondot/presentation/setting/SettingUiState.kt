@@ -32,6 +32,10 @@ data class SettingUiState(
         ),
     val selectedProvider: MapProvider = MapProvider.KAKAO,
 
+    // 준비 시간 설정
+    val hourInput: String = "",
+    val minuteInput: String = "",
+
     // 로그아웃
     val showLogoutDialog: Boolean = false,
 
