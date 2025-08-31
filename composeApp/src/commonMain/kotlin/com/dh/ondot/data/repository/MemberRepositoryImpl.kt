@@ -6,6 +6,7 @@ import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.model.request.MapProviderRequest
 import com.dh.ondot.domain.model.request.OnboardingRequest
 import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
+import com.dh.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.service.MapProviderStorage
@@ -46,8 +47,8 @@ class MemberRepositoryImpl(
 
     override suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>> = flow {
         val response = networkClient.request<Unit>(
-            path = "/members/deactivate",
-            method = HttpMethod.POST,
+            path = "/members",
+            method = HttpMethod.DELETE,
             body = request
         )
 
@@ -79,6 +80,19 @@ class MemberRepositoryImpl(
     override suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>> = flow {
         val response = networkClient.request<Unit>(
             path = "/members/home-address",
+            method = HttpMethod.PATCH,
+            body = request
+        )
+
+        response.fold(
+            onSuccess = { emit(Result.success(it)) },
+            onFailure = { emit(Result.failure(it)) }
+        )
+    }
+
+    override suspend fun updatePreparationTime(request: PreparationTimeRequest): Flow<Result<Unit>> = flow {
+        val response = networkClient.request<Unit>(
+            path = "/members/preparation-time",
             method = HttpMethod.PATCH,
             body = request
         )
