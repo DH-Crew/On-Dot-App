@@ -10,6 +10,7 @@ import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.model.request.MapProviderRequest
 import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
+import com.dh.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.AuthRepository
@@ -20,6 +21,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_LOGOUT
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_HOME_ADDRESS
+import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_PREPARATION_TIME
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
 import com.dh.ondot.presentation.ui.theme.WITHDRAW_SUCCESS_MESSAGE
@@ -167,9 +169,22 @@ class SettingViewModel(
     }
 
     fun updatePreparationTime() {
-        viewModelScope.launch {
+        val preparationTime = uiState.value.hourInput.toInt() * 60 + uiState.value.minuteInput.toInt()
 
+        viewModelScope.launch {
+            memberRepository.updatePreparationTime(request = PreparationTimeRequest(preparationTime)).collect {
+                resultResponse(it, ::onSuccessUpdatePreparationTime, ::onFailUpdatePreparationTime)
+            }
         }
+    }
+
+    private fun onSuccessUpdatePreparationTime(result: Unit) {
+        emitEventFlow(SettingEvent.PopScreen)
+    }
+
+    private fun onFailUpdatePreparationTime(e: Throwable) {
+        logger.e { "onFailUpdatePreparationTime: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_UPDATE_PREPARATION_TIME, ToastType.ERROR) }
     }
 
     /**--------------------------------------------로그아웃-----------------------------------------------*/
