@@ -169,7 +169,9 @@ class SettingViewModel(
     }
 
     fun updatePreparationTime() {
-        val preparationTime = uiState.value.hourInput.toInt() * 60 + uiState.value.minuteInput.toInt()
+        val hours = uiState.value.hourInput.trim().toIntOrNull() ?: 0
+        val minutes = uiState.value.minuteInput.trim().toIntOrNull() ?: 0
+        val preparationTime = hours + minutes
 
         viewModelScope.launch {
             memberRepository.updatePreparationTime(request = PreparationTimeRequest(preparationTime)).collect {
