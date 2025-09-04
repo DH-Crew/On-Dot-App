@@ -51,7 +51,8 @@ fun MainScreen(
     navigateToDeleteAccount: () -> Unit,
     navigateToServiceTerms: () -> Unit,
     navigateToHomeAddressSetting: () -> Unit,
-    navigateToNavMapSetting: () -> Unit
+    navigateToNavMapSetting: () -> Unit,
+    navigateToPreparationTimeEdit: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -85,7 +86,8 @@ fun MainScreen(
                         navigateToLoginScreen = navigateToLogin,
                         navigateToServiceTermsScreen = navigateToServiceTerms,
                         navigateToHomeAddressSettingScreen = navigateToHomeAddressSetting,
-                        navigateToNavMapSettingScreen = navigateToNavMapSetting
+                        navigateToNavMapSettingScreen = navigateToNavMapSetting,
+                        navigateToPreparationTimeEditScreen = navigateToPreparationTimeEdit
                     )
                 }
                 BottomNavType.DEFAULT -> {}
