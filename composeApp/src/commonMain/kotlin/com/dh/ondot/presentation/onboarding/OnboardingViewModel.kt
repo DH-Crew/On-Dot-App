@@ -37,7 +37,7 @@ class OnboardingViewModel(
             1 -> {
                 val hour = uiState.value.hourInput.toIntOrNull() ?: 0
                 val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
-                hour >= 0 || minute >= 0
+                hour > 0 || minute > 0
             }
             2 -> {
                 uiState.value.selectedAddress != null
