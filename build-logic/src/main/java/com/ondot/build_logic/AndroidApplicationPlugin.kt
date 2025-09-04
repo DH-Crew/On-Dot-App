@@ -27,7 +27,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
                 applicationId = "com.dh.ondot"
                 minSdk = libs.findVersion("android-minSdk").get().requiredVersion.toInt()
                 targetSdk = libs.findVersion("android-targetSdk").get().requiredVersion.toInt()
-                versionCode = 2
+                versionCode = 3
                 versionName = "1.0.0"
             }
 

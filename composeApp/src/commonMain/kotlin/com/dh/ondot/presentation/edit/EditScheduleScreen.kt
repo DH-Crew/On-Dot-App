@@ -37,6 +37,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -333,6 +334,7 @@ private fun TopBarSection(
     onValueChanged: (String) -> Unit
 ) {
     var input by remember { mutableStateOf(scheduleTitle) }
+    val focusManager = LocalFocusManager.current
 
     TopBar(
         type = TopBarType.CLOSE,
@@ -354,7 +356,7 @@ private fun TopBarSection(
                     keyboardActions = KeyboardActions(
                         onDone = {
                             onValueChanged(input)
-                            focusRequester.freeFocus()
+                            focusManager.clearFocus()
                         }
                     ),
                     modifier = Modifier
