@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +39,9 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -333,7 +337,14 @@ private fun TopBarSection(
     onClickClose: () -> Unit,
     onValueChanged: (String) -> Unit
 ) {
-    var input by remember { mutableStateOf(scheduleTitle) }
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = scheduleTitle,
+                selection = TextRange(scheduleTitle.length) // 커서를 끝에
+            )
+        )
+    }
     val focusManager = LocalFocusManager.current
 
     TopBar(
@@ -346,16 +357,19 @@ private fun TopBarSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BasicTextField(
-                    value = input,
+                    value = textFieldValue,
                     onValueChange = {
-                        input = it
+                        textFieldValue = it
                     },
                     singleLine = true,
                     textStyle = OnDotTypo().titleSmallM.copy(color = Gray800),
                     cursorBrush = SolidColor(Gray0),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            onValueChanged(input)
+                            onValueChanged(textFieldValue.text)
                             focusManager.clearFocus()
                         }
                     ),
@@ -363,7 +377,10 @@ private fun TopBarSection(
                         .weight(1f)
                         .focusRequester(focusRequester)
                         .onFocusChanged {
-                            if (!it.isFocused) onValueChanged(input)
+                            if (!it.isFocused) onValueChanged(textFieldValue.text)
+                            else textFieldValue = textFieldValue.copy(
+                                selection = TextRange(textFieldValue.text.length)
+                            )
                         }
                 )
 
