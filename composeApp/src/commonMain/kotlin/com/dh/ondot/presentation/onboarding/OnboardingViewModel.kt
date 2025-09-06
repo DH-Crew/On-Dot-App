@@ -2,7 +2,7 @@ package com.dh.ondot.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.di.provideSoundPlayer
+import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.data.model.TokenModel
