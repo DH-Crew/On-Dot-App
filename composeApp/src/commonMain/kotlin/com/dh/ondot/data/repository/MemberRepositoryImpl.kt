@@ -1,5 +1,8 @@
 package com.dh.ondot.data.repository
 
+import com.dh.ondot.core.network.BaseRepository
+import com.dh.ondot.core.network.HttpMethod
+import com.dh.ondot.core.network.NetworkClient
 import com.dh.ondot.data.model.TokenModel
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
@@ -10,97 +13,44 @@ import com.dh.ondot.domain.model.request.settings.preparation_time.PreparationTi
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.service.MapProviderStorage
-import com.dh.ondot.core.network.HttpMethod
-import com.dh.ondot.core.network.NetworkClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
 class MemberRepositoryImpl(
-    private val networkClient: NetworkClient,
+    networkClient: NetworkClient,
     private val mapProviderStorage: MapProviderStorage
-) : MemberRepository {
+) : MemberRepository, BaseRepository(networkClient) {
     override suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<TokenModel>> = flow {
-        val response = networkClient.request<TokenModel>(
-            path = "/members/onboarding",
-            method = HttpMethod.POST,
-            body = request
-        )
-
-        response.fold(
-            onSuccess = { emit(Result.success(it)) },
-            onFailure = { emit(Result.failure(it)) }
-        )
+        emit(fetch(HttpMethod.POST, "/members/onboarding", body = request))
     }
 
     override suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>> = flow {
-        val response = networkClient.request<HomeAddressInfo>(
-            path = "/members/home-address",
-            method = HttpMethod.GET
-        )
-
-        response.fold(
-            onSuccess = { emit(Result.success(it)) },
-            onFailure = { emit(Result.failure(it)) }
-        )
+        emit(fetch(HttpMethod.GET, "/members/home-address"))
     }
 
     override suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>> = flow {
-        val response = networkClient.request<Unit>(
-            path = "/members",
-            method = HttpMethod.DELETE,
-            body = request
-        )
+        val result = fetch<Unit>(HttpMethod.DELETE, "/members", body = request)
+        emit(result)
 
-        response.fold(
-            onSuccess = {
-                emit(Result.success(it))
-                mapProviderStorage.clear()
-            },
-            onFailure = { emit(Result.failure(it)) }
-        )
+        // 성공했을 때만 local storage clear
+        result.onSuccess { mapProviderStorage.clear() }
     }
 
     override suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>> = flow {
-        val response = networkClient.request<Unit>(
-            path = "/members/map-provider",
-            method = HttpMethod.PATCH,
-            body = request
-        )
+        val result = fetch<Unit>(HttpMethod.PATCH, "/members/map-provider", body = request)
+        emit(result)
 
-        response.fold(
-            onSuccess = {
-                emit(Result.success(it))
-                mapProviderStorage.setMapProvider(request.mapProvider)
-            },
-            onFailure = { emit(Result.failure(it)) }
-        )
+        // 성공했을 때만 local storage 업데이트
+        result.onSuccess { mapProviderStorage.setMapProvider(request.mapProvider) }
     }
 
     override suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>> = flow {
-        val response = networkClient.request<Unit>(
-            path = "/members/home-address",
-            method = HttpMethod.PATCH,
-            body = request
-        )
-
-        response.fold(
-            onSuccess = { emit(Result.success(it)) },
-            onFailure = { emit(Result.failure(it)) }
-        )
+        emit(fetch(HttpMethod.PATCH, "/members/home-address", body = request))
     }
 
     override suspend fun updatePreparationTime(request: PreparationTimeRequest): Flow<Result<Unit>> = flow {
-        val response = networkClient.request<Unit>(
-            path = "/members/preparation-time",
-            method = HttpMethod.PATCH,
-            body = request
-        )
-
-        response.fold(
-            onSuccess = { emit(Result.success(it)) },
-            onFailure = { emit(Result.failure(it)) }
-        )
+        emit(fetch(HttpMethod.PATCH, "/members/preparation-time", body = request))
     }
 
     override fun getLocalMapProvider(): Flow<MapProvider> = flow {
