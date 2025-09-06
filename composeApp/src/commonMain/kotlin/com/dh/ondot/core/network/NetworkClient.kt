@@ -1,4 +1,4 @@
-package com.dh.ondot.network
+package com.dh.ondot.core.network
 
 import com.dh.ondot.core.di.httpClient
 import io.ktor.client.call.body

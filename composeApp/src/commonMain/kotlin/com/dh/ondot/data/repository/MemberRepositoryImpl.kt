@@ -10,8 +10,8 @@ import com.dh.ondot.domain.model.request.settings.preparation_time.PreparationTi
 import com.dh.ondot.domain.model.response.HomeAddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.service.MapProviderStorage
-import com.dh.ondot.network.HttpMethod
-import com.dh.ondot.network.NetworkClient
+import com.dh.ondot.core.network.HttpMethod
+import com.dh.ondot.core.network.NetworkClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow

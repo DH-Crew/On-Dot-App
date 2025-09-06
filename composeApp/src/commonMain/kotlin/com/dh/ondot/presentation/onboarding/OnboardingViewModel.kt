@@ -16,7 +16,7 @@ import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.network.TokenProvider
+import com.dh.ondot.core.network.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(

@@ -6,8 +6,8 @@ import com.dh.ondot.data.repository.ScheduleRepositoryImpl
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.network.NetworkClient
-import com.dh.ondot.network.TokenProvider
+import com.dh.ondot.core.network.NetworkClient
+import com.dh.ondot.core.network.TokenProvider
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
