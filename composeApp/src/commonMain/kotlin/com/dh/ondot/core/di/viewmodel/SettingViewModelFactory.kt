@@ -17,7 +17,7 @@ class SettingViewModelFactory(
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
         if (modelClass == SettingViewModel::class) {
-            @Suppress("Unchecked_cast")
+            @Suppress("UNCHECKED_CAST")
             return SettingViewModel(
                 authRepository,
                 memberRepository,
