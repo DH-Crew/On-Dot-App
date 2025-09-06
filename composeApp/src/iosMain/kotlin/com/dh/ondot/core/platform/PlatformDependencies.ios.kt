@@ -5,17 +5,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.util.IosAlarmScheduler
 import com.dh.ondot.core.util.IosAlarmStorage
 import com.dh.ondot.core.util.IosMapProviderStorage
 import com.dh.ondot.core.util.IosSoundPlayer
 import com.dh.ondot.core.util.toUtf8
+import com.dh.ondot.data.local.db.DatabaseFactory
+import com.dh.ondot.data.local.db.OndotDatabase
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.core.network.TokenProvider
 import platform.Foundation.NSBundle
 import platform.Foundation.NSMutableURLRequest
 import platform.Foundation.NSThread
@@ -32,6 +34,10 @@ actual fun provideSoundPlayer(): SoundPlayer = IosSoundPlayer()
 actual fun provideAlarmStorage(): AlarmStorage = IosAlarmStorage()
 
 actual fun provideAlarmScheduler(): AlarmScheduler = IosAlarmScheduler()
+
+actual fun provideDatabase(): OndotDatabase {
+    return DatabaseFactory(DriverFactory()).create()
+}
 
 private fun ensureMain(block: () -> Unit) {
     if (NSThread.isMainThread) block() else dispatch_async(dispatch_get_main_queue()) { block() }
