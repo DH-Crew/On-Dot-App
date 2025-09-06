@@ -1,8 +1,9 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
@@ -20,7 +21,11 @@ class GeneralScheduleViewModelFactory(
     ): T {
         if (modelClass == GeneralScheduleViewModel::class) {
             @Suppress("Unchecked_cast")
-            return GeneralScheduleViewModel(scheduleRepository, placeRepository, memberRepository) as T
+            return GeneralScheduleViewModel(
+                scheduleRepository,
+                placeRepository,
+                memberRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.simpleName}")
     }
