@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     id("ondot.compose.app")
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -24,6 +25,14 @@ kotlin {
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp"))
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/ThirdParty/KakaoSDKAuth/Headers"))
             }
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("OndotDatabase") {
+            packageName.set("com.ondot.database")
         }
     }
 }
