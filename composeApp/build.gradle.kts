@@ -32,7 +32,7 @@ kotlin {
 sqldelight {
     databases {
         create("OndotDatabase") {
-            packageName.set("com.ondot.database")
+            packageName.set("com.dh.ondot.data.local.db")
         }
     }
 }
