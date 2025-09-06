@@ -14,18 +14,13 @@ class NetworkClient(
     suspend inline fun <reified T> request(
         method: HttpMethod,
         path: String,
-        pathParams: Map<String, Any> = emptyMap(),
         queryParams: Map<String, Any> = emptyMap(),
         body: Any? = null,
         addAuthHeader: Boolean = true,
         isReissue: Boolean = false
     ): Result<T> {
         return try {
-            val resolvedPath = pathParams.entries.fold(path) { acc, (key, value) ->
-                acc.replace("{$key}", value.toString())
-            }
-
-            val response = httpClient.request("$BASE_URL$resolvedPath") {
+            val response = httpClient.request("$BASE_URL$path") {
                 this.method = when (method) {
                     HttpMethod.GET -> io.ktor.http.HttpMethod.Get
                     HttpMethod.POST -> io.ktor.http.HttpMethod.Post
