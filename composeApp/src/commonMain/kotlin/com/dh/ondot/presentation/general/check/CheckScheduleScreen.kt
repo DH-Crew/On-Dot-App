@@ -308,6 +308,10 @@ private fun TopBarSection(
                     singleLine = true,
                     textStyle = OnDotTypo().titleSmallM.copy(color = Gray800),
                     cursorBrush = SolidColor(Gray0),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             onValueChanged(input)

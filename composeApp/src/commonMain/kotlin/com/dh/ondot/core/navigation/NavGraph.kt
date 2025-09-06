@@ -9,7 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.dh.ondot.core.di.GeneralScheduleViewModelFactory
+import com.dh.ondot.core.di.viewmodel.GeneralScheduleViewModelFactory
+import com.dh.ondot.core.di.viewmodel.SettingViewModelFactory
 import com.dh.ondot.presentation.alarm.departure.DepartureAlarmRingScreen
 import com.dh.ondot.presentation.alarm.preparation.PreparationAlarmRingScreen
 import com.dh.ondot.presentation.edit.EditScheduleScreen
@@ -336,15 +337,20 @@ fun NavGraphBuilder.serviceTermsNavGraph(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
+    val graphRoute = NavRoutes.HomeAddressSettingGraph.route
+
     navigation(
         startDestination = NavRoutes.HomeAddressSetting.route,
-        route = NavRoutes.HomeAddressSettingGraph.route
+        route = graphRoute
     ) {
         composable(NavRoutes.HomeAddressSetting.route) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(NavRoutes.HomeAddressSettingGraph.route)
+                navController.getBackStackEntry(graphRoute)
             }
-            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry)
+            val factory = remember {
+                SettingViewModelFactory()
+            }
+            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
 
             HomeAddressSettingScreen(
                 viewModel = viewModel,
@@ -359,9 +365,12 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
 
         composable(NavRoutes.HomeAddressEdit.route) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(NavRoutes.HomeAddressSettingGraph.route)
+                navController.getBackStackEntry(graphRoute)
             }
-            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry)
+            val factory = remember {
+                SettingViewModelFactory()
+            }
+            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
 
             HomeAddressEditScreen(
                 viewModel = viewModel,
