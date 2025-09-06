@@ -11,14 +11,18 @@ abstract class BaseRepository(
         addAuthHeader: Boolean = true,
         retries: Int = 0,
         isReissue: Boolean = false
-    ): Result<T> = retryResult(retries = retries) {
-        network.request<T>(
-            path = path,
-            method = method,
-            body = body,
-            queryParams = query,
-            addAuthHeader = addAuthHeader,
-            isReissue = isReissue
-        )
+    ): Result<T> {
+        val client = network
+
+        return retryResult(retries = retries) {
+            client.request<T>(
+                path = path,
+                method = method,
+                body = body,
+                queryParams = query,
+                addAuthHeader = addAuthHeader,
+                isReissue = isReissue
+            )
+        }
     }
 }
