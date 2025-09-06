@@ -101,12 +101,15 @@ fun SettingContent(
     onCustomServiceClick: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
                 .background(Gray900)
                 .padding(horizontal = 22.dp)
                 .padding(top = 24.dp)
@@ -172,12 +175,9 @@ fun SettingSection(
     sections: List<Pair<String, (() -> Unit)>>,
     interactionSource: MutableInteractionSource,
 ) {
-    val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(scrollState)
             .background(Gray700, RoundedCornerShape(12.dp))
             .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.Start
