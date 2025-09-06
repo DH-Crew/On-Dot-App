@@ -4,6 +4,7 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.platform.appModule
 import com.dh.ondot.core.platform.provideAlarmScheduler
 import com.dh.ondot.core.platform.provideAlarmStorage
+import com.dh.ondot.core.platform.provideDatabase
 import com.dh.ondot.core.platform.provideMapProvider
 import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.platform.provideTokenProvider
@@ -15,7 +16,8 @@ fun initShared() {
         provideAlarmStorage(),
         provideAlarmScheduler(),
         provideSoundPlayer(),
-        provideMapProvider()
+        provideMapProvider(),
+        provideDatabase()
     )
 }
 
