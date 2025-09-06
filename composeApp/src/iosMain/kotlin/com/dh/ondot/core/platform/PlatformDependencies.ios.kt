@@ -1,4 +1,4 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

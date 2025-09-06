@@ -1,13 +1,13 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.core.network.TokenProvider
 
 expect fun provideTokenProvider(): TokenProvider
 

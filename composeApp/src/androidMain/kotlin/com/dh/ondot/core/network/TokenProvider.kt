@@ -1,4 +1,4 @@
-package com.dh.ondot.network
+package com.dh.ondot.core.network
 
 import android.content.Context
 import com.dh.ondot.data.OnDotDataStore

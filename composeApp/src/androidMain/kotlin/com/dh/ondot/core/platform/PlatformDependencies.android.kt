@@ -1,4 +1,4 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import co.touchlab.kermit.Logger
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.util.AlarmService
 import com.dh.ondot.core.util.AndroidAlarmScheduler
 import com.dh.ondot.core.util.AndroidAlarmStorage
@@ -25,7 +26,6 @@ import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.util.AppContextHolder
 
 actual fun provideTokenProvider(): TokenProvider {
@@ -69,8 +69,10 @@ actual fun openDirections(
         MapProvider.APPLE -> error("unreachable")
     }
     val intent = when(provider) {
-        MapProvider.KAKAO -> Intent(Intent.ACTION_VIEW,
-            "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode".toUri()).apply { `package` = "net.daum.android.map" }
+        MapProvider.KAKAO -> Intent(
+            Intent.ACTION_VIEW,
+            "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode".toUri()
+        ).apply { `package` = "net.daum.android.map" }
         MapProvider.NAVER -> Intent(Intent.ACTION_VIEW, ("nmap://route/$mode" +
                 "?slat=$startLat&slng=$startLng&sname=${Uri.encode(startName)}" +
                 "&dlat=$endLat&dlng=$endLng&dname=${Uri.encode(endName)}" +
