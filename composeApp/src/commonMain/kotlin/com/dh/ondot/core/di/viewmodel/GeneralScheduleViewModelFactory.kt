@@ -20,7 +20,7 @@ class GeneralScheduleViewModelFactory(
         extras: CreationExtras
     ): T {
         if (modelClass == GeneralScheduleViewModel::class) {
-            @Suppress("Unchecked_cast")
+            @Suppress("UNCHECKED_CAST")
             return GeneralScheduleViewModel(
                 scheduleRepository,
                 placeRepository,
