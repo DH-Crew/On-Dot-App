@@ -14,7 +14,7 @@ import org.koin.dsl.module
 val appModule: Module = module {
     single<TokenProvider> { provideTokenProvider() }
     single { NetworkClient(get()) }
-    single<ScheduleRepository> { ScheduleRepositoryImpl(get()) }
+    single<ScheduleRepository> { ScheduleRepositoryImpl(get(), get()) }
     single<PlaceRepository> { PlaceRepositoryImpl(get()) }
     single<MemberRepository> { MemberRepositoryImpl(get(), get()) }
 }
