@@ -7,7 +7,7 @@ import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.network.TokenProvider
+import com.dh.ondot.core.network.TokenProvider
 
 expect fun provideTokenProvider(): TokenProvider
 
