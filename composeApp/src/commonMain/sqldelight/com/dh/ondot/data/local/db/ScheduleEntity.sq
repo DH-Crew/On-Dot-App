@@ -1,0 +1,42 @@
+import com.dh.ondot.domain.model.response.AlarmDetail;
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlin.collections.List;
+
+CREATE TABLE schedule_entity (
+  scheduleId        INTEGER NOT NULL PRIMARY KEY,
+  startLongitude    REAL    NOT NULL,
+  startLatitude     REAL    NOT NULL,
+  endLongitude      REAL    NOT NULL,
+  endLatitude       REAL    NOT NULL,
+  scheduleTitle     TEXT    NOT NULL,
+  isRepeat          INTEGER AS Boolean NOT NULL,
+  repeatDays        TEXT    AS List<Int> NOT NULL,
+  appointmentAt     TEXT    NOT NULL,
+  preparationAlarm  TEXT AS AlarmDetail NOT NULL,
+  departureAlarm    TEXT AS AlarmDetail NOT NULL,
+  hasActiveAlarm    INTEGER AS Boolean NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_schedule_appointmentAt ON schedule_entity(appointmentAt);
+CREATE INDEX IF NOT EXISTS idx_schedule_hasActive ON schedule_entity(hasActiveAlarm);
+
+-- 기본 쿼리들
+getAll:
+SELECT * FROM schedule_entity ORDER BY appointmentAt ASC;
+
+getById:
+SELECT * FROM schedule_entity WHERE scheduleId = ?;
+
+upsert:
+INSERT OR REPLACE INTO schedule_entity(
+  scheduleId, startLongitude, startLatitude, endLongitude, endLatitude,
+  scheduleTitle, isRepeat, repeatDays, appointmentAt,
+  preparationAlarm, departureAlarm, hasActiveAlarm
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteById:
+DELETE FROM schedule_entity WHERE scheduleId = ?;
+
+clear:
+DELETE FROM schedule_entity;

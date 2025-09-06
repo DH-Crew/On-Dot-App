@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.core.di.BackPressHandler
+import com.dh.ondot.core.platform.BackPressHandler
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.getPlatform

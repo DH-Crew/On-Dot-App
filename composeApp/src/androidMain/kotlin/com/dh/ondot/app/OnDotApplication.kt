@@ -4,7 +4,7 @@ import android.app.Application
 import com.dh.ondot.BuildConfig
 import com.dh.ondot.core.initKoin
 import com.dh.ondot.core.initShared
-import com.dh.ondot.util.AppContextHolder
+import com.dh.ondot.core.util.AppContextHolder
 import com.kakao.sdk.common.KakaoSdk
 
 class OnDotApplication: Application() {

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.core.di.WebView
+import com.dh.ondot.core.platform.WebView
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform

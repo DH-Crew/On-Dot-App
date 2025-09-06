@@ -1,4 +1,4 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 import com.dh.ondot.kakaologin.KakaoLoginHelper
 import kotlinx.cinterop.ExperimentalForeignApi

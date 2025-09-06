@@ -73,6 +73,9 @@ kakao-login = "2.19.0"
 # kotlinx-io
 kotlinx-io = "0.3.0"
 
+# SQLdelight
+sqldelight = "2.1.0"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -82,6 +85,7 @@ composeMultiplatform    = { id = "org.jetbrains.compose",            version.ref
 composeCompiler         = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeHotReload        = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload"}
 serialization           = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+sqldelight              = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 [libraries]
 # Android Gradle Plugin
@@ -176,3 +180,12 @@ kakao-login                    = { module = "com.kakao.sdk:v2-user", version.ref
 # kotlinx-io
 kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 kotlinx-io-bytestring = { module = "org.jetbrains.kotlinx:kotlinx-io-bytestring", version.ref = "kotlinx-io" }
+
+# Coroutine Extensions
+coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+
+# AndroidDriver
+android-driver                         = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+
+# NativeDriver
+native-driver                          = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }

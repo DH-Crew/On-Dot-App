@@ -1,4 +1,4 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 actual fun appleSignIn(
     onSuccess: (identityToken: String?, authorizationCode: String?) -> Unit,

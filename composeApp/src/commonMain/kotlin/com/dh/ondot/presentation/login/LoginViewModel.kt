@@ -3,8 +3,8 @@ package com.dh.ondot.presentation.login
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.di.appleSignIn
-import com.dh.ondot.core.di.kakaoSignIn
+import com.dh.ondot.core.platform.appleSignIn
+import com.dh.ondot.core.platform.kakaoSignIn
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.core.ui.util.ToastManager

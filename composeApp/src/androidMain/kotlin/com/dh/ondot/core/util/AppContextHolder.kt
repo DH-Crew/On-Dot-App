@@ -1,4 +1,4 @@
-package com.dh.ondot.util
+package com.dh.ondot.core.util
 
 import android.app.Application
 import android.content.Context

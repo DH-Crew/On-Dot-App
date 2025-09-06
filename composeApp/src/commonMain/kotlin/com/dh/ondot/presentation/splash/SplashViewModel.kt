@@ -8,7 +8,7 @@ import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.data.model.TokenModel
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.repository.AuthRepository
-import com.dh.ondot.network.TokenProvider
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGIN
 import kotlinx.coroutines.launch
 

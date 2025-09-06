@@ -1,3 +1,3 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 expect fun kakaoSignIn(onResult: (String) -> Unit)

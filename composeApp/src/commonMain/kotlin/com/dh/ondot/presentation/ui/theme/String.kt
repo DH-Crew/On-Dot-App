@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.ui.theme
 // Platform
 const val ANDROID = "Android"
 const val IOS = "IOS"
+const val DATABASE_NAME = "ondot.db"
 
 // 단어
 const val WORD_NEXT = "다음"

@@ -1,4 +1,4 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -15,18 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import co.touchlab.kermit.Logger
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.util.AlarmService
 import com.dh.ondot.core.util.AndroidAlarmScheduler
 import com.dh.ondot.core.util.AndroidAlarmStorage
 import com.dh.ondot.core.util.AndroidMapProviderStorage
 import com.dh.ondot.core.util.AndroidSoundPlayer
+import com.dh.ondot.core.util.AppContextHolder
+import com.dh.ondot.data.local.db.DatabaseFactory
+import com.dh.ondot.data.local.db.OndotDatabase
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.network.TokenProvider
-import com.dh.ondot.util.AppContextHolder
 
 actual fun provideTokenProvider(): TokenProvider {
     val context = runCatching { AppContextHolder.context }
@@ -52,6 +54,12 @@ actual fun provideAlarmScheduler(): AlarmScheduler {
     return AndroidAlarmScheduler(context)
 }
 
+actual fun provideDatabase(): OndotDatabase {
+    val context = runCatching { AppContextHolder.context }
+        .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
+    return DatabaseFactory(DriverFactory(context)).create()
+}
+
 actual fun openDirections(
     startLat: Double,
     startLng: Double,
@@ -69,8 +77,10 @@ actual fun openDirections(
         MapProvider.APPLE -> error("unreachable")
     }
     val intent = when(provider) {
-        MapProvider.KAKAO -> Intent(Intent.ACTION_VIEW,
-            "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode".toUri()).apply { `package` = "net.daum.android.map" }
+        MapProvider.KAKAO -> Intent(
+            Intent.ACTION_VIEW,
+            "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode".toUri()
+        ).apply { `package` = "net.daum.android.map" }
         MapProvider.NAVER -> Intent(Intent.ACTION_VIEW, ("nmap://route/$mode" +
                 "?slat=$startLat&slng=$startLng&sname=${Uri.encode(startName)}" +
                 "&dlat=$endLat&dlng=$endLng&dname=${Uri.encode(endName)}" +
