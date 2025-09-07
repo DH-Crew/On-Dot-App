@@ -18,4 +18,5 @@ interface ScheduleRepository {
     suspend fun editSchedule(scheduleId: Long, request: ScheduleDetail): Flow<Result<Unit>>
     suspend fun toggleAlarm(scheduleId: Long, request: ToggleAlarmRequest): Flow<Result<Unit>>
     suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?>
+    suspend fun upsertLocalSchedule(schedule: Schedule)
 }
