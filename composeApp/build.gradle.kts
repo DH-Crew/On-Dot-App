@@ -1,11 +1,32 @@
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
+import java.util.Properties
 
 plugins {
     id("ondot.compose.app")
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.buildKonfig)
+}
+
+buildkonfig {
+    packageName = "com.dh.ondot"
+
+    val props = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+    val baseUrl = props.getProperty("BASE_URL")
+
+    defaultConfigs {
+        buildConfigField(
+            Type.STRING,
+            "BASE_URL",
+            baseUrl
+        )
+    }
 }
 
 kotlin {
