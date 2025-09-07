@@ -1,5 +1,6 @@
 package com.dh.ondot.core.network
 
+import com.dh.ondot.BuildKonfig
 import com.dh.ondot.core.di.httpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
@@ -20,7 +21,7 @@ class NetworkClient(
         isReissue: Boolean = false
     ): Result<T> {
         return try {
-            val response = httpClient.request("$BASE_URL$path") {
+            val response = httpClient.request("${BuildKonfig.BASE_URL}$path") {
                 this.method = when (method) {
                     HttpMethod.GET -> io.ktor.http.HttpMethod.Get
                     HttpMethod.POST -> io.ktor.http.HttpMethod.Post
