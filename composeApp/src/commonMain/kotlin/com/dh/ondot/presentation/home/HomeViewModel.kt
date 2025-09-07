@@ -132,13 +132,10 @@ class HomeViewModel(
                     )
                 }
             }
-
-            // 저장소에 저장
-            alarmStorage.saveAlarms(alarmRingInfos)
-
+            
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
-                alarmScheduler.scheduleAlarm(info.alarmDetail, info.alarmType)
+                alarmScheduler.scheduleAlarm(info.scheduleId, info.alarmDetail, info.alarmType)
             }
         }
     }
