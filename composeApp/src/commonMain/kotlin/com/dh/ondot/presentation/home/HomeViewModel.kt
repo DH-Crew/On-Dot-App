@@ -132,7 +132,7 @@ class HomeViewModel(
                     )
                 }
             }
-            
+
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
                 alarmScheduler.scheduleAlarm(info.scheduleId, info.alarmDetail, info.alarmType)
