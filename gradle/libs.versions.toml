@@ -1,6 +1,6 @@
 [versions]
 # Android / Kotlin 플랫폼
-agp = "8.6.1"
+agp = "8.12.2"
 android-compileSdk = "36"
 android-minSdk = "26"
 android-targetSdk = "36"
