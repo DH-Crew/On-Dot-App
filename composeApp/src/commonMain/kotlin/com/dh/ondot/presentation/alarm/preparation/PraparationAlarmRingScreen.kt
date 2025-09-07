@@ -26,6 +26,7 @@ import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.app.AppViewModel
 import com.dh.ondot.presentation.ui.components.OnDotButton
@@ -81,8 +82,7 @@ fun PreparationAlarmRingScreen(
     if (uiState.schedule.appointmentAt.isNotBlank()) {
         PreparationAlarmRingContent(
             alarmDetail = uiState.currentAlarm,
-            appointmentAt = uiState.schedule.appointmentAt,
-            scheduleTitle = uiState.schedule.scheduleTitle,
+            schedule = uiState.schedule,
             showPreparationStartAnimation = uiState.showPreparationStartAnimation,
             showPreparationSnoozeAnimation = uiState.showPreparationSnoozeAnimation,
             onClickPreparationStartButton = { viewModel.startPreparation() },
@@ -96,17 +96,17 @@ fun PreparationAlarmRingScreen(
 @Composable
 fun PreparationAlarmRingContent(
     alarmDetail: AlarmDetail,
-    appointmentAt: String,
-    scheduleTitle: String,
+    schedule: Schedule,
     showPreparationStartAnimation: Boolean,
     showPreparationSnoozeAnimation: Boolean,
     onClickPreparationStartButton: () -> Unit,
     onSnoozePreparationAlarm: () -> Unit
 ) {
-    val formattedTime = DateTimeFormatter.formatHourMinuteSecond(alarmDetail.triggeredAt)
-    val alarmRingTitle = alarmRingTitle(formattedTime)
-    val appointmentDate = DateTimeFormatter.formatKoreanDate(appointmentAt)
-    val appointmentTime = DateTimeFormatter.formatHourMinute(appointmentAt)
+    val remainingTime = DateTimeFormatter.diffBetweenIsoTimes(schedule.preparationAlarm.triggeredAt, schedule.departureAlarm.triggeredAt)
+    val formattedTime = "${remainingTime.second.toString().padStart(2, '0')}:${remainingTime.third.toString().padStart(2, '0')}"
+    val alarmRingTitle = alarmRingTitle(formattedTime)e
+    val appointmentDate = DateTimeFormatter.formatKoreanDate(schedule.appointmentAt)
+    val appointmentTime = DateTimeFormatter.formatHourMinute(schedule.appointmentAt)
     val startComposition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_start.json").decodeToString())
     }
@@ -141,7 +141,7 @@ fun PreparationAlarmRingContent(
                 snoozeInterval = alarmDetail.snoozeInterval,
                 appointmentDate = appointmentDate,
                 appointmentTime = appointmentTime,
-                scheduleTitle = scheduleTitle,
+                scheduleTitle = schedule.scheduleTitle,
                 onClickSnooze = onSnoozePreparationAlarm
             )
 
