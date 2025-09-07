@@ -1,7 +1,7 @@
 
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import java.util.Properties
 
 plugins {
@@ -13,6 +13,8 @@ plugins {
 
 buildkonfig {
     packageName = "com.dh.ondot"
+
+    exposeObjectWithName = "BuildKonfig"
 
     val props = Properties().apply {
         val file = rootProject.file("local.properties")
