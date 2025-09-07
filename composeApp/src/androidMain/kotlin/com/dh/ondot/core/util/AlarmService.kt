@@ -60,6 +60,7 @@ class AlarmService : Service() {
                 return START_NOT_STICKY
             }
             ACTION_START -> {
+                val scheduleId = intent.getLongExtra("scheduleId", -1L)
                 val alarmId = intent.getLongExtra("alarmId", -1L)
                 val typeName = intent.getStringExtra("type")
                 val type = typeName?.let { AlarmType.valueOf(it) } ?: AlarmType.Departure
@@ -86,6 +87,7 @@ class AlarmService : Service() {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    putExtra("scheduleId", scheduleId)
                     putExtra("alarmId", alarmId)
                     putExtra("type", type.name)
                 }
