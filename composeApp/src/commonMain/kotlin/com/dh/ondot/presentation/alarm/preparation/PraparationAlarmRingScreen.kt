@@ -104,7 +104,7 @@ fun PreparationAlarmRingContent(
 ) {
     val remainingTime = DateTimeFormatter.diffBetweenIsoTimes(schedule.preparationAlarm.triggeredAt, schedule.departureAlarm.triggeredAt)
     val formattedTime = "${remainingTime.second.toString().padStart(2, '0')}:${remainingTime.third.toString().padStart(2, '0')}"
-    val alarmRingTitle = alarmRingTitle(formattedTime)e
+    val alarmRingTitle = alarmRingTitle(formattedTime)
     val appointmentDate = DateTimeFormatter.formatKoreanDate(schedule.appointmentAt)
     val appointmentTime = DateTimeFormatter.formatHourMinute(schedule.appointmentAt)
     val startComposition by rememberLottieComposition {
