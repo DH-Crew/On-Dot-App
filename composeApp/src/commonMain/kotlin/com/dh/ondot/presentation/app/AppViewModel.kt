@@ -9,13 +9,14 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
+import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.repository.MemberRepository
+import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -25,7 +26,8 @@ class AppViewModel(
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
     private val alarmStorage: AlarmStorage = ServiceLocator.provideAlarmStorage(),
     private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer(),
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository
+    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
+    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository
 ): BaseViewModel<AppUiState>(AppUiState()) {
     private val logger = Logger.withTag("AppViewModel")
 
@@ -41,17 +43,18 @@ class AppViewModel(
         }
     }
 
-    fun getAlarmInfo(alarmId: Long) {
+    fun getAlarmInfo(scheduleId: Long, alarmId: Long) {
         viewModelScope.launch {
-            val allAlarms = alarmStorage.alarmsFlow.first()
+            scheduleRepository.getLocalScheduleById(scheduleId).collect { schedule ->
+                schedule?.let {
+                    val currentAlarm = if (schedule.preparationAlarm.alarmId == alarmId) schedule.preparationAlarm
+                    else schedule.departureAlarm
 
-            logger.d { "allAlarms: $allAlarms" }
-
-            val alarm = allAlarms.firstOrNull { it.alarmDetail.alarmId == alarmId } ?: return@launch
-
-            logger.d { "alarm: $alarm" }
-
-            updateStateSync(uiState.value.copy(alarmRingInfo = alarm))
+                    updateState(
+                        uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm)
+                    )
+                }
+            }
         }
     }
 
@@ -75,11 +78,11 @@ class AppViewModel(
     fun startDeparture() {
         soundPlayer.stopSound()
 
-        if (getPlatform().name == ANDROID) stopService(uiState.value.alarmRingInfo.alarmDetail.alarmId)
+        if (getPlatform().name == ANDROID) stopService(uiState.value.currentAlarm.alarmId)
 
-        val info = uiState.value.alarmRingInfo
-        val invalidCoords = listOf(info.startLat, info.startLng, info.endLat, info.endLng).any { it.isNaN() }
-                || ((info.startLat == 0.0 && info.startLng == 0.0) || (info.endLat == 0.0 && info.endLng == 0.0))
+        val info = uiState.value.schedule
+        val invalidCoords = listOf(info.startLatitude, info.startLongitude, info.endLatitude, info.endLongitude).any { it.isNaN() }
+                || ((info.startLatitude == 0.0 && info.startLongitude == 0.0) || (info.endLatitude == 0.0 && info.endLongitude == 0.0))
         if (invalidCoords) {
             logger.e { "Invalid coords: $invalidCoords" }
             return
@@ -87,10 +90,10 @@ class AppViewModel(
 
         emitEventFlow(AppEvent.NavigateToSplash)
         openDirections(
-            startLat = uiState.value.alarmRingInfo.startLat,
-            startLng = uiState.value.alarmRingInfo.startLng,
-            endLat = uiState.value.alarmRingInfo.endLat,
-            endLng = uiState.value.alarmRingInfo.endLng,
+            startLat = info.startLatitude,
+            startLng = info.startLongitude,
+            endLat = info.endLatitude,
+            endLng = info.endLongitude,
             startName = "출발지",
             endName = "도착지",
             provider = uiState.value.mapProvider
@@ -105,23 +108,33 @@ class AppViewModel(
     }
 
     private fun processAlarm() {
-        var newAlarmInfo = uiState.value.alarmRingInfo
-        val currentTriggeredDate = newAlarmInfo.alarmDetail.triggeredAt.toLocalDateFromIso()
-        val currentTriggeredTime = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Seoul")).time.plusMinutes(uiState.value.alarmRingInfo.alarmDetail.snoozeInterval)
+        var newSchedule = uiState.value.schedule
+        var currentAlarm = uiState.value.currentAlarm
+        val currentTriggeredDate = currentAlarm.triggeredAt.toLocalDateFromIso()
+        val currentTriggeredTime = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Seoul")).time.plusMinutes(currentAlarm.snoozeInterval)
         val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(currentTriggeredDate, currentTriggeredTime)
+        val type = if (currentAlarm.alarmId == newSchedule.preparationAlarm.alarmId) AlarmType.Preparation else AlarmType.Departure
 
-        newAlarmInfo = newAlarmInfo.copy(
-            alarmDetail = uiState.value.alarmRingInfo.alarmDetail.copy(
+        currentAlarm = when(type) {
+            AlarmType.Departure -> newSchedule.departureAlarm.copy(
                 triggeredAt = newTriggeredAt
             )
-        )
+            AlarmType.Preparation -> newSchedule.preparationAlarm.copy(
+                triggeredAt = newTriggeredAt
+            )
+        }
+
+        newSchedule = when(type) {
+            AlarmType.Departure -> newSchedule.copy(departureAlarm = currentAlarm)
+            AlarmType.Preparation -> newSchedule.copy(preparationAlarm = currentAlarm)
+        }
 
         viewModelScope.launch {
             // 저장소에 저장
-            alarmStorage.addAlarm(newAlarmInfo)
+            scheduleRepository.upsertLocalSchedule(newSchedule)
 
             // 스케줄러 예약
-            alarmScheduler.scheduleAlarm(newAlarmInfo.alarmDetail, newAlarmInfo.alarmType)
+            alarmScheduler.scheduleAlarm(newSchedule.scheduleId, currentAlarm, type)
         }
     }
 }
