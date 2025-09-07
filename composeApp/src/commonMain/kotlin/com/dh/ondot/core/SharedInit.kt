@@ -1,12 +1,13 @@
 package com.dh.ondot.core
 
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.di.appModule
-import com.dh.ondot.core.di.provideAlarmScheduler
-import com.dh.ondot.core.di.provideAlarmStorage
-import com.dh.ondot.core.di.provideMapProvider
-import com.dh.ondot.core.di.provideSoundPlayer
-import com.dh.ondot.core.di.provideTokenProvider
+import com.dh.ondot.core.platform.appModule
+import com.dh.ondot.core.platform.provideAlarmScheduler
+import com.dh.ondot.core.platform.provideAlarmStorage
+import com.dh.ondot.core.platform.provideDatabase
+import com.dh.ondot.core.platform.provideMapProvider
+import com.dh.ondot.core.platform.provideSoundPlayer
+import com.dh.ondot.core.platform.provideTokenProvider
 import org.koin.core.context.startKoin
 
 fun initShared() {
@@ -15,7 +16,8 @@ fun initShared() {
         provideAlarmStorage(),
         provideAlarmScheduler(),
         provideSoundPlayer(),
-        provideMapProvider()
+        provideMapProvider(),
+        provideDatabase()
     )
 }
 

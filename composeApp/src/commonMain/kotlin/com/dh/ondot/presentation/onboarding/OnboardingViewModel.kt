@@ -2,7 +2,7 @@ package com.dh.ondot.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.di.provideSoundPlayer
+import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.data.model.TokenModel
@@ -16,7 +16,7 @@ import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.network.TokenProvider
+import com.dh.ondot.core.network.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(

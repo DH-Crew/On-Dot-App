@@ -1,7 +1,7 @@
 package com.dh.ondot.domain.model.response
 
 import com.dh.ondot.domain.model.enums.AlarmMode
-import com.dh.ondot.network.DefaultOnNullLongSerializer
+import com.dh.ondot.core.network.DefaultOnNullLongSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package com.dh.ondot.network
+package com.dh.ondot.core.network
 
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.JsonElement
