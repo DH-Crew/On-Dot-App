@@ -1,10 +1,34 @@
 
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import java.util.Properties
 
 plugins {
     id("ondot.compose.app")
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.buildKonfig)
+}
+
+buildkonfig {
+    packageName = "com.dh.ondot"
+
+    exposeObjectWithName = "BuildKonfig"
+
+    val props = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+    val baseUrl = props.getProperty("BASE_URL")
+
+    defaultConfigs {
+        buildConfigField(
+            Type.STRING,
+            "BASE_URL",
+            baseUrl
+        )
+    }
 }
 
 kotlin {
@@ -24,6 +48,14 @@ kotlin {
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp"))
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/ThirdParty/KakaoSDKAuth/Headers"))
             }
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("OndotDatabase") {
+            packageName.set("com.dh.ondot.data.local.db")
         }
     }
 }

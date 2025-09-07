@@ -3,8 +3,8 @@ package com.dh.ondot.presentation.app
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.di.openDirections
-import com.dh.ondot.core.di.stopService
+import com.dh.ondot.core.platform.openDirections
+import com.dh.ondot.core.platform.stopService
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes

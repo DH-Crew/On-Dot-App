@@ -1,8 +1,8 @@
-package com.dh.ondot.core.di
+package com.dh.ondot.core.platform
 
 import android.content.Context
 import android.util.Log
-import com.dh.ondot.util.AppContextHolder
+import com.dh.ondot.core.util.AppContextHolder
 import com.kakao.sdk.user.UserApiClient
 
 actual fun kakaoSignIn(onResult: (String) -> Unit) {
