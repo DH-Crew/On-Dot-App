@@ -15,14 +15,18 @@ abstract class BaseRepository(
         val client = network
 
         return retryResult(retries = retries) {
-            client.request<T>(
-                path = path,
-                method = method,
-                body = body,
-                queryParams = query,
-                addAuthHeader = addAuthHeader,
-                isReissue = isReissue
-            )
+            try {
+                client.request<T>(
+                    path = path,
+                    method = method,
+                    body = body,
+                    queryParams = query,
+                    addAuthHeader = addAuthHeader,
+                    isReissue = isReissue
+                )
+            } catch (t: Throwable) {
+                Result.failure(t)
+            }
         }
     }
 }
