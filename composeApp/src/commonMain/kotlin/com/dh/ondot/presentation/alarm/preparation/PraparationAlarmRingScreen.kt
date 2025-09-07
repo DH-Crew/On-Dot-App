@@ -52,6 +52,7 @@ import ondot.composeapp.generated.resources.Res
 
 @Composable
 fun PreparationAlarmRingScreen(
+    scheduleId: Long,
     alarmId: Long,
     navigateToSplash: () -> Unit
 ) {
@@ -60,7 +61,7 @@ fun PreparationAlarmRingScreen(
 
     LaunchedEffect(alarmId) {
         if (alarmId != -1L) {
-            viewModel.getAlarmInfo(alarmId)
+            viewModel.getAlarmInfo(scheduleId, alarmId)
         }
     }
 
@@ -77,11 +78,11 @@ fun PreparationAlarmRingScreen(
         }
     }
 
-    if (uiState.alarmRingInfo.appointmentAt.isNotBlank()) {
+    if (uiState.schedule.appointmentAt.isNotBlank()) {
         PreparationAlarmRingContent(
-            alarmDetail = uiState.alarmRingInfo.alarmDetail,
-            appointmentAt = uiState.alarmRingInfo.appointmentAt,
-            scheduleTitle = uiState.alarmRingInfo.scheduleTitle,
+            alarmDetail = uiState.currentAlarm,
+            appointmentAt = uiState.schedule.appointmentAt,
+            scheduleTitle = uiState.schedule.scheduleTitle,
             showPreparationStartAnimation = uiState.showPreparationStartAnimation,
             showPreparationSnoozeAnimation = uiState.showPreparationSnoozeAnimation,
             onClickPreparationStartButton = { viewModel.startPreparation() },
