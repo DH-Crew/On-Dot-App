@@ -60,4 +60,8 @@ class ScheduleRepositoryImpl(
     override suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?> {
         return local.observeById(scheduleId)
     }
+
+    override suspend fun upsertLocalSchedule(schedule: Schedule) {
+        local.upsert(schedule)
+    }
 }
