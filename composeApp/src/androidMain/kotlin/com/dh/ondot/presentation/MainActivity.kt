@@ -109,7 +109,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun parseAlarmEvent(intent: Intent): AlarmEvent? {
-        val id = intent.getLongExtra("alarmId", -1L)
+        val scheduleId = intent.getLongExtra("scheduleId", -1L)
+        val alarmId = intent.getLongExtra("alarmId", -1L)
         val type = intent.getStringExtra("type")?.let {
             try {
                 AlarmType.valueOf(it)
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        return if (id != -1L && type != null) { AlarmEvent(id, type) } else null
+        return if (alarmId != -1L && type != null) { AlarmEvent(scheduleId, alarmId, type) } else null
     }
 
     private fun ensureExactAlarmPermission() {
