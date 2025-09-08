@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.domain.model.response.Schedule
+import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.alarm.preparation.ScheduleInfoSection
 import com.dh.ondot.presentation.app.AppEvent
@@ -74,6 +76,7 @@ fun DepartureAlarmRingScreen(
         DepartureAlarmRingContent(
             alarmDetail = uiState.currentAlarm,
             schedule = uiState.schedule,
+            schedulePreparation = uiState.schedulePreparation,
             showDepartureSnoozeAnimation = uiState.showDepartureSnoozeAnimation,
             onSnoozeDepartureAlarm = viewModel::snoozeDepartureAlarm,
             onShowRouteInfo = viewModel::startDeparture
@@ -87,6 +90,7 @@ fun DepartureAlarmRingScreen(
 fun DepartureAlarmRingContent(
     alarmDetail: AlarmDetail,
     schedule: Schedule,
+    schedulePreparation: SchedulePreparation,
     showDepartureSnoozeAnimation: Boolean,
     onSnoozeDepartureAlarm: () -> Unit,
     onShowRouteInfo: () -> Unit
@@ -109,27 +113,32 @@ fun DepartureAlarmRingContent(
                 .fillMaxSize()
                 .background(Gray900)
                 .padding(horizontal = 22.dp)
-                .padding(bottom = if (getPlatform().name == ANDROID) 16.dp else 37.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = if (getPlatform().name == ANDROID) 16.dp else 37.dp)
         ) {
-            Spacer(modifier = Modifier.height(69.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(69.dp))
 
-            OnDotText(
-                text = DEPARTURE_ALARM_RING_TITLE,
-                style = OnDotTextStyle.TitleMediumSB,
-                color = Gray0,
-                textAlign = TextAlign.Center
-            )
+                OnDotText(
+                    text = DEPARTURE_ALARM_RING_TITLE,
+                    style = OnDotTextStyle.TitleMediumSB,
+                    color = Gray0,
+                    textAlign = TextAlign.Center
+                )
 
-            ScheduleInfoSection(
-                snoozeInterval = alarmDetail.snoozeInterval,
-                appointmentDate = appointmentDate,
-                appointmentTime = appointmentTime,
-                scheduleTitle = schedule.scheduleTitle,
-                onClickSnooze = onSnoozeDepartureAlarm
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
+                ScheduleInfoSection(
+                    snoozeInterval = alarmDetail.snoozeInterval,
+                    appointmentDate = appointmentDate,
+                    appointmentTime = appointmentTime,
+                    scheduleTitle = schedule.scheduleTitle,
+                    schedulePreparation = schedulePreparation,
+                    onClickSnooze = onSnoozeDepartureAlarm
+                )
+            }
 
             OnDotButton(
                 buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
