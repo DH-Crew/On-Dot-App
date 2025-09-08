@@ -27,11 +27,13 @@ import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.domain.model.response.Schedule
+import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.app.AppViewModel
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
 import com.dh.ondot.presentation.ui.components.OnDotText
+import com.dh.ondot.presentation.ui.components.SchedulePreparationItem
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
@@ -40,8 +42,10 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.PREPARATION_START_BUTTON_TEXT
+import com.dh.ondot.presentation.ui.theme.SCHEDULE_MEDICINE
 import com.dh.ondot.presentation.ui.theme.alarmRingTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
+import com.dh.ondot.presentation.ui.theme.schedulePreparation
 import com.dh.ondot.presentation.ui.theme.snoozeIntervalLabel
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
@@ -50,6 +54,8 @@ import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import kotlinx.coroutines.delay
 import ondot.composeapp.generated.resources.Res
+import ondot.composeapp.generated.resources.ic_circle_check_green
+import ondot.composeapp.generated.resources.ic_pill
 
 @Composable
 fun PreparationAlarmRingScreen(
@@ -130,22 +136,26 @@ fun PreparationAlarmRingContent(
                 .fillMaxSize()
                 .background(Gray900)
                 .padding(horizontal = 22.dp)
-                .padding(bottom = if (getPlatform().name == ANDROID) 16.dp else 37.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = if (getPlatform().name == ANDROID) 16.dp else 37.dp)
         ) {
-            Spacer(modifier = Modifier.height(69.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(69.dp))
 
-            AlarmRingTitle(alarmRingTitle, formattedTime)
+                AlarmRingTitle(alarmRingTitle, formattedTime)
 
-            ScheduleInfoSection(
-                snoozeInterval = alarmDetail.snoozeInterval,
-                appointmentDate = appointmentDate,
-                appointmentTime = appointmentTime,
-                scheduleTitle = schedule.scheduleTitle,
-                onClickSnooze = onSnoozePreparationAlarm
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
+                ScheduleInfoSection(
+                    snoozeInterval = alarmDetail.snoozeInterval,
+                    appointmentDate = appointmentDate,
+                    appointmentTime = appointmentTime,
+                    scheduleTitle = schedule.scheduleTitle,
+                    onClickSnooze = onSnoozePreparationAlarm
+                )
+            }
 
             OnDotButton(
                 buttonText = PREPARATION_START_BUTTON_TEXT,
@@ -153,6 +163,7 @@ fun PreparationAlarmRingContent(
                 onClick = onClickPreparationStartButton
             )
         }
+
 
         if (showPreparationStartAnimation) {
             Box(
@@ -234,6 +245,7 @@ fun ScheduleInfoSection(
     appointmentDate: String,
     appointmentTime: String,
     scheduleTitle: String,
+    schedulePreparation: SchedulePreparation = SchedulePreparation(),
     onClickSnooze: () -> Unit
 ) {
     Column(
@@ -263,12 +275,32 @@ fun ScheduleInfoSection(
             color = Gray0
         )
 
-        Spacer(modifier = Modifier.height(213.dp))
+        Spacer(modifier = Modifier.weight(1f))
+
+        if (schedulePreparation.isMedicationRequired) {
+            SchedulePreparationItem(
+                content = SCHEDULE_MEDICINE,
+                resourceId = Res.drawable.ic_pill
+            )
+        }
+
+        if (schedulePreparation.preparationNote.isNotBlank()) {
+            if (schedulePreparation.isMedicationRequired) Spacer(modifier = Modifier.height(12.dp))
+
+            SchedulePreparationItem(
+                content = schedulePreparation(schedulePreparation.preparationNote),
+                resourceId = Res.drawable.ic_circle_check_green
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
 
         SnoozeButton(
             snoozeInterval = snoozeInterval,
             onClick = onClickSnooze
         )
+
+        Spacer(modifier = Modifier.height(64.dp))
     }
 }
 
