@@ -2,6 +2,7 @@ package com.dh.ondot.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
@@ -16,7 +17,6 @@ import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.core.network.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
@@ -206,7 +206,7 @@ class OnboardingViewModel(
                 roadAddress = address.roadAddress,
                 longitude = address.longitude,
                 latitude = address.latitude,
-                alarmMode = AlarmMode.SOUND,
+                alarmMode = if (uiState.value.isMuted) AlarmMode.SILENT else AlarmMode.SOUND,
                 isSnoozeEnabled = true,
                 snoozeInterval = 1,
                 snoozeCount = 3,
