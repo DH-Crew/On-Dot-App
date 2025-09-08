@@ -3,6 +3,7 @@ package com.dh.ondot.data.repository
 import com.dh.ondot.core.network.BaseRepository
 import com.dh.ondot.core.network.HttpMethod
 import com.dh.ondot.core.network.NetworkClient
+import com.dh.ondot.data.mapper.SchedulePreparationResponseMapper
 import com.dh.ondot.domain.datasource.ScheduleLocalDataSource
 import com.dh.ondot.domain.model.request.CreateScheduleRequest
 import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
@@ -11,6 +12,7 @@ import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
 import com.dh.ondot.domain.model.response.ScheduleDetail
 import com.dh.ondot.domain.model.response.ScheduleListResponse
+import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.domain.repository.ScheduleRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,6 +22,9 @@ class ScheduleRepositoryImpl(
     private val local: ScheduleLocalDataSource
 ) : ScheduleRepository, BaseRepository(networkClient) {
 
+    /**
+     * Remote
+     * */
     override suspend fun getScheduleList(): Flow<Result<ScheduleListResponse>> = flow {
         val remote = fetch<ScheduleListResponse>(HttpMethod.GET, "/schedules")
 
@@ -57,6 +62,13 @@ class ScheduleRepositoryImpl(
         emit(fetch(HttpMethod.PATCH, "/schedules/$scheduleId/alarm", body = request))
     }
 
+    override suspend fun getSchedulePreparationInfo(scheduleId: Long): Flow<Result<SchedulePreparation>> = flow {
+        emit(fetchMapped(HttpMethod.GET, "/schedules/$scheduleId/preparation", mapper = SchedulePreparationResponseMapper))
+    }
+
+    /**
+     * Local
+     * */
     override suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?> {
         return local.observeById(scheduleId)
     }
