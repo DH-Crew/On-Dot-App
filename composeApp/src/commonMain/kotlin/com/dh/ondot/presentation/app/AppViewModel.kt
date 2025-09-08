@@ -13,7 +13,6 @@ import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
@@ -24,7 +23,6 @@ import kotlinx.datetime.toLocalDateTime
 
 class AppViewModel(
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
-    private val alarmStorage: AlarmStorage = ServiceLocator.provideAlarmStorage(),
     private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer(),
     private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
     private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository
