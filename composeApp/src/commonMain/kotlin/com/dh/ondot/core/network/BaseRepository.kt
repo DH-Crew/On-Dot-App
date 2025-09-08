@@ -1,5 +1,7 @@
 package com.dh.ondot.core.network
 
+import com.dh.ondot.data.base.Mapper
+
 abstract class BaseRepository(
     protected val network: NetworkClient
 ) {
@@ -28,5 +30,27 @@ abstract class BaseRepository(
                 Result.failure(t)
             }
         }
+    }
+
+    protected suspend inline fun <reified R, M> fetchMapped(
+        method: HttpMethod,
+        path: String,
+        body: Any? = null,
+        query: Map<String, String> = emptyMap(),
+        addAuthHeader: Boolean = true,
+        retries: Int = 0,
+        isReissue: Boolean = false,
+        mapper: Mapper<R, M>
+    ): Result<M> {
+        val raw: Result<R> = fetch(
+            method = method,
+            path = path,
+            body = body,
+            query = query,
+            addAuthHeader = addAuthHeader,
+            retries = retries,
+            isReissue = isReissue
+        )
+        return raw.mapCatching { mapper.responseToModel(it) }
     }
 }
