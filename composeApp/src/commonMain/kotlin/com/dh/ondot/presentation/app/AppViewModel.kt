@@ -6,16 +6,20 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.platform.openDirections
 import com.dh.ondot.core.platform.stopService
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes
 import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
 import com.dh.ondot.domain.model.enums.AlarmType
+import com.dh.ondot.domain.model.enums.ToastType
+import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -47,6 +51,8 @@ class AppViewModel(
                 schedule?.let {
                     val currentAlarm = if (schedule.preparationAlarm.alarmId == alarmId) schedule.preparationAlarm
                     else schedule.departureAlarm
+
+                    getSchedulePreparation(scheduleId)
 
                     updateState(
                         uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm)
@@ -134,5 +140,24 @@ class AppViewModel(
             // 스케줄러 예약
             alarmScheduler.scheduleAlarm(newSchedule.scheduleId, currentAlarm, type)
         }
+    }
+
+    /**--------------------------------------------일정 준비 정보 조회-----------------------------------------------*/
+
+    fun getSchedulePreparation(scheduleId: Long) {
+        viewModelScope.launch {
+            scheduleRepository.getSchedulePreparationInfo(scheduleId = scheduleId).collect {
+                resultResponse(it, ::onSuccessGetSchedulePreparation, ::onFailGetSchedulePreparation)
+            }
+        }
+    }
+
+    private fun onSuccessGetSchedulePreparation(result: SchedulePreparation) {
+        updateState(uiState.value.copy(schedulePreparation = result))
+    }
+
+    private fun onFailGetSchedulePreparation(e: Throwable) {
+        logger.e { "onFailGetSchedulePreparation: $e" }
+        viewModelScope.launch { ToastManager.show(ERROR_GET_SCHEDULE_PREPARATION, ToastType.ERROR) }
     }
 }
