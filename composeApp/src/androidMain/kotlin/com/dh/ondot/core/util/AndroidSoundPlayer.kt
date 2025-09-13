@@ -78,11 +78,6 @@ class AndroidSoundPlayer(
                     0
                 )
 
-                // 예외 발생 시 오디오 포커스 해제
-                if (::audioFocusRequest.isInitialized) {
-                    audioManager.abandonAudioFocusRequest(audioFocusRequest)
-                }
-
                 prepare()
                 start()
             }
