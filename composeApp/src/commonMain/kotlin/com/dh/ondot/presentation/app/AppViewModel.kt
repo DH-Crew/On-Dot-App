@@ -8,8 +8,6 @@ import com.dh.ondot.core.platform.stopService
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes
-import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.schedule.SchedulePreparation
@@ -22,7 +20,9 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 class AppViewModel(
@@ -49,8 +49,14 @@ class AppViewModel(
         viewModelScope.launch {
             scheduleRepository.getLocalScheduleById(scheduleId).collect { schedule ->
                 schedule?.let {
-                    val currentAlarm = if (schedule.preparationAlarm.alarmId == alarmId) schedule.preparationAlarm
-                    else schedule.departureAlarm
+                    val currentAlarm = when(alarmId) {
+                        it.preparationAlarm.alarmId -> it.preparationAlarm
+                        it.departureAlarm.alarmId -> it.departureAlarm
+                        else -> {
+                            logger.e { "유효하지 않은 알람: $alarmId" }
+                            return@collect
+                        }
+                    }
 
                     getSchedulePreparation(scheduleId)
 
@@ -69,13 +75,13 @@ class AppViewModel(
 
     fun snoozePreparationAlarm() {
         soundPlayer.stopSound()
-        processAlarm()
+        snoozeAlarm()
         updateState(uiState.value.copy(showPreparationSnoozeAnimation = true))
     }
 
     fun snoozeDepartureAlarm() {
         soundPlayer.stopSound()
-        processAlarm()
+        snoozeAlarm()
         updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
     }
 
@@ -111,12 +117,14 @@ class AppViewModel(
         ))
     }
 
-    private fun processAlarm() {
+    private fun snoozeAlarm() {
         var newSchedule = uiState.value.schedule
         var currentAlarm = uiState.value.currentAlarm
-        val currentTriggeredDate = currentAlarm.triggeredAt.toLocalDateFromIso()
-        val currentTriggeredTime = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Seoul")).time.plusMinutes(currentAlarm.snoozeInterval)
-        val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(currentTriggeredDate, currentTriggeredTime)
+        val timeZone = TimeZone.of("Asia/Seoul")
+        val snoozedLocal = Clock.System.now()
+            .plus(currentAlarm.snoozeInterval.toLong(), DateTimeUnit.MINUTE, timeZone)
+            .toLocalDateTime(timeZone)
+        val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(snoozedLocal.date, snoozedLocal.time)
         val type = if (currentAlarm.alarmId == newSchedule.preparationAlarm.alarmId) AlarmType.Preparation else AlarmType.Departure
 
         currentAlarm = when(type) {
