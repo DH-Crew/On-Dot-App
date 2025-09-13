@@ -136,7 +136,7 @@ class AlarmService : Service() {
                             if (alarm.enabled && alarm.alarmMode == AlarmMode.SOUND) {
                                 soundPlayer.playSound(alarm.ringTone.lowercase()) {
                                     if (wakeLock.isHeld) wakeLock.release()
-                                    stopForeground(STOP_FOREGROUND_DETACH)
+                                    stopForeground(STOP_FOREGROUND_REMOVE)
                                     stopSelf()
                                 }
                             } else {
