@@ -35,7 +35,7 @@ fun App() {
     val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
-        AlarmNotifier.events.collect { event ->
+        AlarmNotifier.flow().collect { event ->
             when(event.type) {
                 AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(event.scheduleId, event.alarmId)) {
                     launchSingleTop = true
