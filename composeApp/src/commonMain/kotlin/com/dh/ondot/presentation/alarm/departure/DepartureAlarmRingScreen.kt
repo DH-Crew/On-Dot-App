@@ -163,7 +163,11 @@ fun DepartureAlarmRingContent(
                     modifier = Modifier.matchParentSize(),
                 )
 
-                AlarmSnoozedSection(schedule = schedule, alarmDetail.snoozeInterval, onShowRouteInfo = onShowRouteInfo)
+                AlarmSnoozedSection(
+                    schedule = schedule,
+                    snoozeInterval = alarmDetail.snoozeInterval,
+                    onShowRouteInfo = onShowRouteInfo
+                )
             }
         }
     }
