@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -22,6 +23,8 @@ import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.domain.model.response.Schedule
+import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.alarm.preparation.ScheduleInfoSection
 import com.dh.ondot.presentation.app.AppEvent
@@ -48,6 +51,7 @@ import ondot.composeapp.generated.resources.Res
 
 @Composable
 fun DepartureAlarmRingScreen(
+    scheduleId: Long,
     alarmId: Long,
     navigateToSplash: () -> Unit
 ) {
@@ -56,7 +60,7 @@ fun DepartureAlarmRingScreen(
 
     LaunchedEffect(alarmId) {
         if (alarmId != -1L) {
-            viewModel.getAlarmInfo(alarmId)
+            viewModel.getAlarmInfo(scheduleId, alarmId)
         }
     }
 
@@ -68,11 +72,11 @@ fun DepartureAlarmRingScreen(
         }
     }
 
-    if (uiState.alarmRingInfo.appointmentAt.isNotBlank()) {
+    if (uiState.schedule.appointmentAt.isNotBlank()) {
         DepartureAlarmRingContent(
-            alarmDetail = uiState.alarmRingInfo.alarmDetail,
-            appointmentAt = uiState.alarmRingInfo.appointmentAt,
-            scheduleTitle = uiState.alarmRingInfo.scheduleTitle,
+            alarmDetail = uiState.currentAlarm,
+            schedule = uiState.schedule,
+            schedulePreparation = uiState.schedulePreparation,
             showDepartureSnoozeAnimation = uiState.showDepartureSnoozeAnimation,
             onSnoozeDepartureAlarm = viewModel::snoozeDepartureAlarm,
             onShowRouteInfo = viewModel::startDeparture
@@ -85,14 +89,14 @@ fun DepartureAlarmRingScreen(
 @Composable
 fun DepartureAlarmRingContent(
     alarmDetail: AlarmDetail,
-    appointmentAt: String,
-    scheduleTitle: String,
+    schedule: Schedule,
+    schedulePreparation: SchedulePreparation,
     showDepartureSnoozeAnimation: Boolean,
     onSnoozeDepartureAlarm: () -> Unit,
     onShowRouteInfo: () -> Unit
 ) {
-    val appointmentDate = DateTimeFormatter.formatKoreanDate(appointmentAt)
-    val appointmentTime = DateTimeFormatter.formatHourMinute(appointmentAt)
+    val appointmentDate = DateTimeFormatter.formatKoreanDate(schedule.appointmentAt)
+    val appointmentTime = DateTimeFormatter.formatHourMinute(schedule.appointmentAt)
     val composition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/departure_alarm_snoozed.json").decodeToString())
     }
@@ -109,27 +113,32 @@ fun DepartureAlarmRingContent(
                 .fillMaxSize()
                 .background(Gray900)
                 .padding(horizontal = 22.dp)
-                .padding(bottom = if (getPlatform().name == ANDROID) 16.dp else 37.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = if (getPlatform().name == ANDROID) 16.dp else 37.dp)
         ) {
-            Spacer(modifier = Modifier.height(69.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(69.dp))
 
-            OnDotText(
-                text = DEPARTURE_ALARM_RING_TITLE,
-                style = OnDotTextStyle.TitleMediumSB,
-                color = Gray0,
-                textAlign = TextAlign.Center
-            )
+                OnDotText(
+                    text = DEPARTURE_ALARM_RING_TITLE,
+                    style = OnDotTextStyle.TitleMediumSB,
+                    color = Gray0,
+                    textAlign = TextAlign.Center
+                )
 
-            ScheduleInfoSection(
-                snoozeInterval = alarmDetail.snoozeInterval,
-                appointmentDate = appointmentDate,
-                appointmentTime = appointmentTime,
-                scheduleTitle = scheduleTitle,
-                onClickSnooze = onSnoozeDepartureAlarm
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
+                ScheduleInfoSection(
+                    snoozeInterval = alarmDetail.snoozeInterval,
+                    appointmentDate = appointmentDate,
+                    appointmentTime = appointmentTime,
+                    scheduleTitle = schedule.scheduleTitle,
+                    schedulePreparation = schedulePreparation,
+                    onClickSnooze = onSnoozeDepartureAlarm
+                )
+            }
 
             OnDotButton(
                 buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
@@ -154,7 +163,11 @@ fun DepartureAlarmRingContent(
                     modifier = Modifier.matchParentSize(),
                 )
 
-                AlarmSnoozedSection(alarmDetail.snoozeInterval, onShowRouteInfo = onShowRouteInfo)
+                AlarmSnoozedSection(
+                    schedule = schedule,
+                    snoozeInterval = alarmDetail.snoozeInterval,
+                    onShowRouteInfo = onShowRouteInfo
+                )
             }
         }
     }
@@ -162,9 +175,13 @@ fun DepartureAlarmRingContent(
 
 @Composable
 private fun AlarmSnoozedSection(
+    schedule: Schedule,
     snoozeInterval: Int,
     onShowRouteInfo: () -> Unit
 ) {
+    val remainingTime = DateTimeFormatter.diffBetweenIsoTimes(schedule.departureAlarm.triggeredAt, schedule.appointmentAt)
+    val formattedTime = "${remainingTime.second.toString().padStart(2, '0')}:${remainingTime.third.toString().padStart(2, '0')}"
+    val alarmRingTitle = departureSnoozedTitle(formattedTime)
     val totalSeconds = snoozeInterval * 60
     val timeLeftSecond by produceState(initialValue = totalSeconds) {
         var current = totalSeconds
@@ -188,9 +205,9 @@ private fun AlarmSnoozedSection(
         Spacer(modifier = Modifier.height(69.dp))
 
         OnDotHighlightText(
-            text = departureSnoozedTitle("NN:NN"),
+            text = alarmRingTitle,
             textColor = Gray0,
-            highlight = "NN:NN",
+            highlight = formattedTime,
             highlightColor = Green500,
             style = OnDotTextStyle.TitleMediumSB,
             textAlign = TextAlign.Center

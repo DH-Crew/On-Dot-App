@@ -25,7 +25,7 @@ import platform.UserNotifications.UNUserNotificationCenter
 class IosAlarmScheduler: AlarmScheduler {
     private val center = UNUserNotificationCenter.currentNotificationCenter()
 
-    override fun scheduleAlarm(alarm: AlarmDetail, type: AlarmType) {
+    override fun scheduleAlarm(scheduleId: Long, alarm: AlarmDetail, type: AlarmType) {
         // 사용자가 끄면 아무 것도 안 함
         if (!alarm.enabled) return
 
@@ -47,8 +47,8 @@ class IosAlarmScheduler: AlarmScheduler {
             setSound(UNNotificationSound.defaultSound())
             // NSDictionary 로 변환
             val userInfoDict = NSDictionary.dictionaryWithObjects(
-                objects = listOf(alarm.alarmId, type.name),
-                forKeys =   listOf("alarmId",      "type")
+                objects = listOf(scheduleId, alarm.alarmId, type.name),
+                forKeys =   listOf("scheduleId", "alarmId", "type")
             )
             setUserInfo(userInfoDict)
         }
