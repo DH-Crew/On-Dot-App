@@ -9,17 +9,17 @@ sealed class NavRoutes(@Transient val route: String = "") {
     @Serializable
     data object AlarmGraph: NavRoutes("alarmGraph")
     @Serializable
-    data class PreparationAlarm(val alarmId: Long) : NavRoutes("preparationAlarm/{alarmId}") {
+    data class PreparationAlarm(val scheduleId: Long, val alarmId: Long) : NavRoutes("preparationAlarm/{scheduleId}/{alarmId}") {
         companion object {
-            const val ROUTE: String = "preparationAlarm/{alarmId}"
-            fun createRoute(id: Long) = "preparationAlarm/$id"
+            const val ROUTE: String = "preparationAlarm/{scheduleId}/{alarmId}"
+            fun createRoute(scheduleId: Long, alarmId: Long) = "preparationAlarm/$scheduleId/$alarmId"
         }
     }
     @Serializable
-    data class DepartureAlarm(val alarmId: Long) : NavRoutes("departureAlarm/{alarmId}") {
+    data class DepartureAlarm(val scheduleId: Long, val alarmId: Long) : NavRoutes("departureAlarm/{scheduleId}/{alarmId}") {
         companion object {
-            const val ROUTE: String = "departureAlarm/{alarmId}"
-            fun createRoute(id: Long) = "departureAlarm/$id"
+            const val ROUTE: String = "departureAlarm/{scheduleId}/{alarmId}"
+            fun createRoute(scheduleId: Long, alarmId: Long) = "departureAlarm/$scheduleId/$alarmId"
         }
     }
 

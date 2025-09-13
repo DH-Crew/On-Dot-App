@@ -17,7 +17,6 @@ import com.dh.ondot.domain.model.ui.AlarmRingInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
@@ -27,7 +26,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
     private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val alarmStorage: AlarmStorage = ServiceLocator.provideAlarmStorage(),
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler()
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
@@ -133,12 +131,9 @@ class HomeViewModel(
                 }
             }
 
-            // 저장소에 저장
-            alarmStorage.saveAlarms(alarmRingInfos)
-
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
-                alarmScheduler.scheduleAlarm(info.alarmDetail, info.alarmType)
+                alarmScheduler.scheduleAlarm(info.scheduleId, info.alarmDetail, info.alarmType)
             }
         }
     }

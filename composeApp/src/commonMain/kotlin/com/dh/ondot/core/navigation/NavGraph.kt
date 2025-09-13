@@ -39,12 +39,17 @@ fun NavGraphBuilder.alarmNavGraph(
     ) {
         composable(
             NavRoutes.PreparationAlarm.ROUTE,
-            arguments = listOf(navArgument("alarmId") { type = NavType.LongType })
+            arguments = listOf(
+                navArgument("scheduleId") { type = NavType.LongType },
+                navArgument("alarmId") { type = NavType.LongType }
+            )
         ) { backStackEntry ->
             val args = backStackEntry.toRoute<NavRoutes.PreparationAlarm>()
+            val scheduleId = args.scheduleId
             val alarmId = args.alarmId
 
             PreparationAlarmRingScreen(
+                scheduleId = scheduleId,
                 alarmId = alarmId,
                 navigateToSplash = {
                     navController.navigate(NavRoutes.Splash.route) {
@@ -57,12 +62,17 @@ fun NavGraphBuilder.alarmNavGraph(
 
         composable(
             NavRoutes.DepartureAlarm.ROUTE,
-            arguments = listOf(navArgument("alarmId") { type = NavType.LongType })
+            arguments = listOf(
+                navArgument("scheduleId") { type = NavType.LongType },
+                navArgument("alarmId") { type = NavType.LongType }
+            )
         ) { backStackEntry ->
             val args = backStackEntry.toRoute<NavRoutes.DepartureAlarm>()
+            val scheduleId = args.scheduleId
             val alarmId = args.alarmId
 
             DepartureAlarmRingScreen(
+                scheduleId = scheduleId,
                 alarmId = alarmId,
                 navigateToSplash = {
                     navController.navigate(NavRoutes.Splash.route) {

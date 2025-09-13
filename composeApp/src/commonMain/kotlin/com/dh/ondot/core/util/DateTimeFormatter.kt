@@ -178,6 +178,28 @@ object DateTimeFormatter {
         return Triple(days, hours, minutes)
     }
 
+    /** 두 개의 ISO8601 문자열 간의 시간 차이를 계산 */
+    fun diffBetweenIsoTimes(iso1: String, iso2: String): Triple<Int, Int, Int> {
+        return try {
+            val dt1 = LocalDateTime.parse(iso1).toInstant(TimeZone.of("Asia/Seoul"))
+            val dt2 = LocalDateTime.parse(iso2).toInstant(TimeZone.of("Asia/Seoul"))
+
+            val diff: Duration = dt2 - dt1
+            if (diff.isNegative() || diff == Duration.ZERO) {
+                return Triple(0, 0, 0)
+            }
+            val totalSeconds = diff.inWholeSeconds
+
+            val days = (totalSeconds / (24 * 3600)).toInt()
+            val hours = ((totalSeconds % (24 * 3600)) / 3600).toInt()
+            val minutes = ((totalSeconds % 3600) / 60).toInt()
+
+            Triple(days, hours, minutes)
+        } catch (e: Exception) {
+            Triple(0, 0, 0)
+        }
+    }
+
     fun LocalTime.formatAmPmTime(): String {
         val period = if (hour < 12) WORD_AM else WORD_PM
         val hour12 = when (val h = hour % 12) {

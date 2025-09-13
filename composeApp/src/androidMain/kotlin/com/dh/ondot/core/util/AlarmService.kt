@@ -18,13 +18,17 @@ import androidx.core.app.ServiceCompat
 import co.touchlab.kermit.Logger
 import com.dh.ondot.R
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.domain.model.enums.AlarmMode
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.presentation.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class AlarmService : Service() {
@@ -41,8 +45,11 @@ class AlarmService : Service() {
 
     private lateinit var wakeLock: PowerManager.WakeLock
 
-    private val storage by lazy { AndroidAlarmStorage(this) }
+    private val scheduleRepository by lazy { ServiceLocator.scheduleRepository }
     private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer()
+
+    private var playJob: Job? = null
+    private var playingAlarmId: Long? = null
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
@@ -60,6 +67,7 @@ class AlarmService : Service() {
                 return START_NOT_STICKY
             }
             ACTION_START -> {
+                val scheduleId = intent.getLongExtra("scheduleId", -1L)
                 val alarmId = intent.getLongExtra("alarmId", -1L)
                 val typeName = intent.getStringExtra("type")
                 val type = typeName?.let { AlarmType.valueOf(it) } ?: AlarmType.Departure
@@ -86,6 +94,7 @@ class AlarmService : Service() {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    putExtra("scheduleId", scheduleId)
                     putExtra("alarmId", alarmId)
                     putExtra("type", type.name)
                 }
@@ -111,23 +120,31 @@ class AlarmService : Service() {
 
                 startActivity(mainIntent)
 
-                serviceScope.launch {
-                    val alarmList = storage.alarmsFlow.first()
-                    val alarm = alarmList.firstOrNull { it.alarmDetail.alarmId == alarmId }
-
-                    logger.d { "Alarm RingTone: ${alarm?.alarmDetail?.ringTone?.lowercase()}" }
-
-                    if (alarm != null && alarm.alarmDetail.enabled) {
-                        soundPlayer.playSound(alarm.alarmDetail.ringTone.lowercase()) {
-                            if (wakeLock.isHeld) wakeLock.release()
-                            stopForeground(STOP_FOREGROUND_DETACH)
-                            stopSelf()
+                playingAlarmId = alarmId
+                playJob?.cancel()
+                playJob = serviceScope.launch {
+                    scheduleRepository.getLocalScheduleById(scheduleId)
+                        .map { schedule ->
+                            schedule?.let {
+                                if (type == AlarmType.Preparation) it.preparationAlarm else it.departureAlarm
+                            }
                         }
-                    } else {
-                        stopSelf()
-                        stopForeground(STOP_FOREGROUND_REMOVE)
-                        stopSelf()
-                    }
+                        .filterNotNull()
+                        .take(1)
+                        .collect { alarm ->
+                            logger.d { "Alarm RingTone: ${alarm.ringTone.lowercase()}" }
+                            if (alarm.enabled && alarm.alarmMode == AlarmMode.SOUND) {
+                                soundPlayer.playSound(alarm.ringTone.lowercase()) {
+                                    if (wakeLock.isHeld) wakeLock.release()
+                                    stopForeground(STOP_FOREGROUND_REMOVE)
+                                    stopSelf()
+                                }
+                            } else {
+                                if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
+                                stopForeground(STOP_FOREGROUND_REMOVE)
+                                stopSelf()
+                            }
+                        }
                 }
             }
         }

@@ -6,26 +6,30 @@ import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.platform.openDirections
 import com.dh.ondot.core.platform.stopService
 import com.dh.ondot.core.ui.base.BaseViewModel
+import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.core.util.DateTimeFormatter.plusMinutes
-import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
+import com.dh.ondot.domain.model.enums.AlarmType
+import com.dh.ondot.domain.model.enums.ToastType
+import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.domain.repository.MemberRepository
+import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AlarmStorage
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import kotlinx.coroutines.flow.first
+import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 class AppViewModel(
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
-    private val alarmStorage: AlarmStorage = ServiceLocator.provideAlarmStorage(),
     private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer(),
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository
+    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
+    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository
 ): BaseViewModel<AppUiState>(AppUiState()) {
     private val logger = Logger.withTag("AppViewModel")
 
@@ -41,17 +45,26 @@ class AppViewModel(
         }
     }
 
-    fun getAlarmInfo(alarmId: Long) {
+    fun getAlarmInfo(scheduleId: Long, alarmId: Long) {
         viewModelScope.launch {
-            val allAlarms = alarmStorage.alarmsFlow.first()
+            scheduleRepository.getLocalScheduleById(scheduleId).collect { schedule ->
+                schedule?.let {
+                    val currentAlarm = when(alarmId) {
+                        it.preparationAlarm.alarmId -> it.preparationAlarm
+                        it.departureAlarm.alarmId -> it.departureAlarm
+                        else -> {
+                            logger.e { "유효하지 않은 알람: $alarmId" }
+                            return@collect
+                        }
+                    }
 
-            logger.d { "allAlarms: $allAlarms" }
+                    getSchedulePreparation(scheduleId)
 
-            val alarm = allAlarms.firstOrNull { it.alarmDetail.alarmId == alarmId } ?: return@launch
-
-            logger.d { "alarm: $alarm" }
-
-            updateStateSync(uiState.value.copy(alarmRingInfo = alarm))
+                    updateState(
+                        uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm)
+                    )
+                }
+            }
         }
     }
 
@@ -62,24 +75,24 @@ class AppViewModel(
 
     fun snoozePreparationAlarm() {
         soundPlayer.stopSound()
-        processAlarm()
+        snoozeAlarm()
         updateState(uiState.value.copy(showPreparationSnoozeAnimation = true))
     }
 
     fun snoozeDepartureAlarm() {
         soundPlayer.stopSound()
-        processAlarm()
+        snoozeAlarm()
         updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
     }
 
     fun startDeparture() {
         soundPlayer.stopSound()
 
-        if (getPlatform().name == ANDROID) stopService(uiState.value.alarmRingInfo.alarmDetail.alarmId)
+        if (getPlatform().name == ANDROID) stopService(uiState.value.currentAlarm.alarmId)
 
-        val info = uiState.value.alarmRingInfo
-        val invalidCoords = listOf(info.startLat, info.startLng, info.endLat, info.endLng).any { it.isNaN() }
-                || ((info.startLat == 0.0 && info.startLng == 0.0) || (info.endLat == 0.0 && info.endLng == 0.0))
+        val info = uiState.value.schedule
+        val invalidCoords = listOf(info.startLatitude, info.startLongitude, info.endLatitude, info.endLongitude).any { it.isNaN() }
+                || ((info.startLatitude == 0.0 && info.startLongitude == 0.0) || (info.endLatitude == 0.0 && info.endLongitude == 0.0))
         if (invalidCoords) {
             logger.e { "Invalid coords: $invalidCoords" }
             return
@@ -87,10 +100,10 @@ class AppViewModel(
 
         emitEventFlow(AppEvent.NavigateToSplash)
         openDirections(
-            startLat = uiState.value.alarmRingInfo.startLat,
-            startLng = uiState.value.alarmRingInfo.startLng,
-            endLat = uiState.value.alarmRingInfo.endLat,
-            endLng = uiState.value.alarmRingInfo.endLng,
+            startLat = info.startLatitude,
+            startLng = info.startLongitude,
+            endLat = info.endLatitude,
+            endLng = info.endLongitude,
             startName = "출발지",
             endName = "도착지",
             provider = uiState.value.mapProvider
@@ -104,24 +117,55 @@ class AppViewModel(
         ))
     }
 
-    private fun processAlarm() {
-        var newAlarmInfo = uiState.value.alarmRingInfo
-        val currentTriggeredDate = newAlarmInfo.alarmDetail.triggeredAt.toLocalDateFromIso()
-        val currentTriggeredTime = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Seoul")).time.plusMinutes(uiState.value.alarmRingInfo.alarmDetail.snoozeInterval)
-        val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(currentTriggeredDate, currentTriggeredTime)
+    private fun snoozeAlarm() {
+        var newSchedule = uiState.value.schedule
+        var currentAlarm = uiState.value.currentAlarm
+        val timeZone = TimeZone.of("Asia/Seoul")
+        val snoozedLocal = Clock.System.now()
+            .plus(currentAlarm.snoozeInterval.toLong(), DateTimeUnit.MINUTE, timeZone)
+            .toLocalDateTime(timeZone)
+        val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(snoozedLocal.date, snoozedLocal.time)
+        val type = if (currentAlarm.alarmId == newSchedule.preparationAlarm.alarmId) AlarmType.Preparation else AlarmType.Departure
 
-        newAlarmInfo = newAlarmInfo.copy(
-            alarmDetail = uiState.value.alarmRingInfo.alarmDetail.copy(
+        currentAlarm = when(type) {
+            AlarmType.Departure -> newSchedule.departureAlarm.copy(
                 triggeredAt = newTriggeredAt
             )
-        )
+            AlarmType.Preparation -> newSchedule.preparationAlarm.copy(
+                triggeredAt = newTriggeredAt
+            )
+        }
+
+        newSchedule = when(type) {
+            AlarmType.Departure -> newSchedule.copy(departureAlarm = currentAlarm)
+            AlarmType.Preparation -> newSchedule.copy(preparationAlarm = currentAlarm)
+        }
 
         viewModelScope.launch {
             // 저장소에 저장
-            alarmStorage.addAlarm(newAlarmInfo)
+            scheduleRepository.upsertLocalSchedule(newSchedule)
 
             // 스케줄러 예약
-            alarmScheduler.scheduleAlarm(newAlarmInfo.alarmDetail, newAlarmInfo.alarmType)
+            alarmScheduler.scheduleAlarm(newSchedule.scheduleId, currentAlarm, type)
         }
+    }
+
+    /**--------------------------------------------일정 준비 정보 조회-----------------------------------------------*/
+
+    fun getSchedulePreparation(scheduleId: Long) {
+        viewModelScope.launch {
+            scheduleRepository.getSchedulePreparationInfo(scheduleId = scheduleId).collect {
+                resultResponse(it, ::onSuccessGetSchedulePreparation, ::onFailGetSchedulePreparation)
+            }
+        }
+    }
+
+    private fun onSuccessGetSchedulePreparation(result: SchedulePreparation) {
+        updateState(uiState.value.copy(schedulePreparation = result))
+    }
+
+    private fun onFailGetSchedulePreparation(e: Throwable) {
+        logger.e { "onFailGetSchedulePreparation: $e" }
+        viewModelScope.launch { ToastManager.show(ERROR_GET_SCHEDULE_PREPARATION, ToastType.ERROR) }
     }
 }
