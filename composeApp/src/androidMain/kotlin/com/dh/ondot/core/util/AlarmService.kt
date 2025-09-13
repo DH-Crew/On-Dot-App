@@ -140,6 +140,7 @@ class AlarmService : Service() {
                                     stopSelf()
                                 }
                             } else {
+                                if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
                                 stopForeground(STOP_FOREGROUND_REMOVE)
                                 stopSelf()
                             }
