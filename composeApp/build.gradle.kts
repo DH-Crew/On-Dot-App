@@ -50,6 +50,12 @@ kotlin {
             }
         }
     }
+
+    targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.all {
+            linkerOpts("-lsqlite3")
+        }
+    }
 }
 
 sqldelight {

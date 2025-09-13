@@ -14,7 +14,7 @@ class AndroidSoundPlayer(
 ) : SoundPlayer {
     private val logger = Logger.withTag("AndroidSoundPlayer")
     private var player: MediaPlayer? = null
-    private var currentVolume: Float = 1f
+    private var currentVolume: Float = 0.8f
     private lateinit var audioFocusRequest: AudioFocusRequest
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -77,11 +77,6 @@ class AndroidSoundPlayer(
                     audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
                     0
                 )
-
-                // 예외 발생 시 오디오 포커스 해제
-                if (::audioFocusRequest.isInitialized) {
-                    audioManager.abandonAudioFocusRequest(audioFocusRequest)
-                }
 
                 prepare()
                 start()

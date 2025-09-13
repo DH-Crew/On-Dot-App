@@ -64,6 +64,7 @@ const val ERROR_LOGIN = "로그인에 실패했습니다."
 const val ERROR_SET_MAP_PROVIDER = "지도 공급자 저장에 실패했습니다."
 const val ERROR_UPDATE_HOME_ADDRESS = "집 주소 변경에 실패했습니다."
 const val ERROR_UPDATE_PREPARATION_TIME = "준비 시간 변경에 실패했습니다."
+const val ERROR_GET_SCHEDULE_PREPARATION = "준비 정보 조회에 실패했습니다."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
@@ -146,6 +147,8 @@ fun formatRemainingSnoozeTime(minute: Int, second: Int): String {
 const val DEPARTURE_ALARM_RING_TITLE = "지금 출발해야\n일정에 늦지 않을 수 있어요!"
 fun departureSnoozedTitle(time: String) = "일정까지 $time 전\n어서 출발하세요!"
 const val YESTERDAY_LABEL = "약속 전 날"
+const val SCHEDULE_MEDICINE = "출발 전, 약을 꼭 챙기세요!"
+fun schedulePreparation(content: String) = "출발 전, $content 꼭 챙기세요!"
 
 // Dialog
 const val DELETE_ALARM_TITLE = "알람 삭제"

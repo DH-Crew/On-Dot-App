@@ -65,19 +65,25 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         let info = response.notification.request.content.userInfo
 
         if let typeName = info["type"] as? String {
-            var id: Int64?
-            
-            if let n = info["alarmId"] as? NSNumber {
-                id = n.int64Value
-            } else if let s = info["alarmId"] as? String, let v = Int64(s) {
-                id = v
-            }
-            
-            if let id = id {
-                NSLog("[AppDelegate] didReceive emit alarmId=\(id) type=\(typeName)")
-                
+            var scheduleId: Int64?
+            var alarmId: Int64?
+
+            if let n = info["alarmId"] as? NSNumber { alarmId = n.int64Value }
+            else if let s = info["alarmId"] as? String, let v = Int64(s) { alarmId = v }
+
+            if let n = info["scheduleId"] as? NSNumber { scheduleId = n.int64Value }
+            else if let s = info["scheduleId"] as? String, let v = Int64(s) { scheduleId = v }
+
+            if let alarmId = alarmId, let scheduleId = scheduleId {
+                NSLog("[AppDelegate] didReceive emit scheduleId=\(scheduleId) alarmId=\(alarmId) type=\(typeName)")
                 // KMP AlarmNotifier 에 이벤트 흘리기
-                ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+                ComposeApp.SharedMethodKt.notifyAlarmEvent(
+                    scheduleId: scheduleId,
+                    alarmId: alarmId,
+                    type: typeName
+                )
+            } else {
+                NSLog("[AppDelegate] didReceive missing alarmId or scheduleId")
             }
         } else {
             NSLog("[AppDelegate] didReceive userInfo parse FAIL")
@@ -99,23 +105,29 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         NSLog("[AppDelegate] willPresent id=\(req.identifier) state=\(state.rawValue) userInfo=\(info)")
         
         if state == .active {
-            var id: Int64?
+            var scheduleId: Int64?
+            var alarmId: Int64?
             var typeName: String?
-            
-            if let n = info["alarmId"] as? NSNumber { id = n.int64Value }
-            else if let s = info["alarmId"] as? String, let v = Int64(s) { id = v }
-            
+
+            if let n = info["alarmId"] as? NSNumber { alarmId = n.int64Value }
+            else if let s = info["alarmId"] as? String, let v = Int64(s) { alarmId = v }
+
+            if let n = info["scheduleId"] as? NSNumber { scheduleId = n.int64Value }
+            else if let s = info["scheduleId"] as? String, let v = Int64(s) { scheduleId = v }
+
             if let t = info["type"] as? String { typeName = t }
             
             // 포그라운드면 바로 이벤트 방출 -> Compose 네비게이션 트리거
-            if let id = id, let typeName = typeName {
-                NSLog("[AppDelegate] willPresent emit alarmId=\(id) type=\(typeName)")
-                
-                // KMP AlarmNotifier 에 이벤트 흘리기
-                ComposeApp.SharedMethodKt.notifyAlarmEvent(alarmId: id, type: typeName)
+            if let alarmId = alarmId, let scheduleId = scheduleId, let typeName = typeName {
+                NSLog("[AppDelegate] willPresent emit scheduleId=\(scheduleId) alarmId=\(alarmId) type=\(typeName)")
+                ComposeApp.SharedMethodKt.notifyAlarmEvent(
+                    scheduleId: scheduleId,
+                    alarmId: alarmId,
+                    type: typeName
+                )
                 handledNotificationIds.insert(req.identifier)
             } else {
-                NSLog("[AppDelegate] willPresent userInfo parse FAIL")
+                NSLog("[AppDelegate] willPresent missing alarmId or scheduleId")
             }
         }
         
