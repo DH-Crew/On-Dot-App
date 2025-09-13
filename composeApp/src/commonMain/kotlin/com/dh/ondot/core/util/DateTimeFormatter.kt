@@ -185,6 +185,9 @@ object DateTimeFormatter {
             val dt2 = LocalDateTime.parse(iso2).toInstant(TimeZone.of("Asia/Seoul"))
 
             val diff: Duration = dt2 - dt1
+            if (diff.isNegative() || diff == Duration.ZERO) {
+                return Triple(0, 0, 0)
+            }
             val totalSeconds = diff.inWholeSeconds
 
             val days = (totalSeconds / (24 * 3600)).toInt()
