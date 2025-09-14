@@ -26,7 +26,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // 권한 요청 (배너, 사운드)
         // requestAuthorization 메서드로 배너와 사운드 알림 권한을 사용자에게 요구
         // 권한 승인, 거절 결과를 클로저의 granted, error로 전달됨
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted,error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .timeSensitive]) { granted,error in
             if granted {
                 // 원격(푸시) 알림 수신을 위해 APNs 서버에 디바이스 토큰 등록
                 // APNs(Apple Push Notification service) 서버로 디바이스 토큰을 요청
