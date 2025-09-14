@@ -44,7 +44,7 @@ class IosAlarmScheduler: AlarmScheduler {
         val content = UNMutableNotificationContent().apply {
             setTitle("⏰ 알람")
             setBody("예약된 알람 시간이 되었습니다.")
-            setSound(UNNotificationSound.defaultSound())
+            setSound(UNNotificationSound.soundNamed(extractSoundFileName(alarm.ringTone)))
             // NSDictionary 로 변환
             val userInfoDict = NSDictionary.dictionaryWithObjects(
                 objects = listOf(scheduleId, alarm.alarmId, type.name),
@@ -92,5 +92,11 @@ class IosAlarmScheduler: AlarmScheduler {
             timeZone = NSTimeZone.localTimeZone
         }
         return fmt.dateFromString(iso)
+    }
+
+    private fun extractSoundFileName(ringTone: String): String {
+        return ringTone
+            .substringBeforeLast('.')
+            .lowercase()
     }
 }
