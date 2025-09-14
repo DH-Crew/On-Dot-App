@@ -46,7 +46,7 @@ class IosAlarmScheduler: AlarmScheduler {
             setTitle("⏰ 알람")
             setBody("예약된 알람 시간이 되었습니다.")
             setInterruptionLevel(UNNotificationInterruptionLevel.UNNotificationInterruptionLevelTimeSensitive)
-            setSound(UNNotificationSound.soundNamed(extractSoundFileName(alarm.ringTone)))
+            setSound(notificationSound(alarm.ringTone))
             // NSDictionary 로 변환
             val userInfoDict = NSDictionary.dictionaryWithObjects(
                 objects = listOf(scheduleId, alarm.alarmId, type.name),
@@ -96,9 +96,9 @@ class IosAlarmScheduler: AlarmScheduler {
         return fmt.dateFromString(iso)
     }
 
-    private fun extractSoundFileName(ringTone: String): String {
-        return ringTone
-            .substringBeforeLast('.')
-            .lowercase()
+    private fun notificationSound(ringTone: String): UNNotificationSound {
+        val name = ringTone.substringBeforeLast(".") + ".caf"
+
+        return UNNotificationSound.soundNamed(name)
     }
 }
