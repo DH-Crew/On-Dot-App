@@ -97,7 +97,7 @@ class IosAlarmScheduler: AlarmScheduler {
     }
 
     private fun notificationSound(ringTone: String): UNNotificationSound {
-        val name = ringTone.substringBeforeLast(".") + ".caf"
+        val name = ringTone.substringBeforeLast(".").lowercase() + ".caf"
 
         return UNNotificationSound.soundNamed(name)
     }
