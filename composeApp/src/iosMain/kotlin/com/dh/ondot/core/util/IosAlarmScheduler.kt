@@ -18,6 +18,7 @@ import platform.Foundation.dictionaryWithObjects
 import platform.Foundation.localTimeZone
 import platform.UserNotifications.UNCalendarNotificationTrigger
 import platform.UserNotifications.UNMutableNotificationContent
+import platform.UserNotifications.UNNotificationInterruptionLevel
 import platform.UserNotifications.UNNotificationRequest
 import platform.UserNotifications.UNNotificationSound
 import platform.UserNotifications.UNUserNotificationCenter
@@ -44,7 +45,8 @@ class IosAlarmScheduler: AlarmScheduler {
         val content = UNMutableNotificationContent().apply {
             setTitle("⏰ 알람")
             setBody("예약된 알람 시간이 되었습니다.")
-            setSound(UNNotificationSound.defaultSound())
+            setInterruptionLevel(UNNotificationInterruptionLevel.UNNotificationInterruptionLevelTimeSensitive)
+            setSound(notificationSound(alarm.ringTone))
             // NSDictionary 로 변환
             val userInfoDict = NSDictionary.dictionaryWithObjects(
                 objects = listOf(scheduleId, alarm.alarmId, type.name),
@@ -56,7 +58,7 @@ class IosAlarmScheduler: AlarmScheduler {
         // 트리거 생성 (한 번만)
         val trigger = UNCalendarNotificationTrigger.triggerWithDateMatchingComponents(
             dateComponents = comps,
-            repeats = true
+            repeats = false
         )
 
         // 요청 빌드
@@ -92,5 +94,11 @@ class IosAlarmScheduler: AlarmScheduler {
             timeZone = NSTimeZone.localTimeZone
         }
         return fmt.dateFromString(iso)
+    }
+
+    private fun notificationSound(ringTone: String): UNNotificationSound {
+        val name = ringTone.substringBeforeLast(".").lowercase() + ".caf"
+
+        return UNNotificationSound.soundNamed(name)
     }
 }
