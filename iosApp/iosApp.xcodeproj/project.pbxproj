@@ -12,6 +12,16 @@
 		E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */; };
 		E284909F2E144579008FD76D /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284909E2E144579008FD76D /* KakaoSDKAuth */; };
 		E28490A12E144579008FD76D /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = E28490A02E144579008FD76D /* KakaoSDKUser */; };
+		E2962B6B2E76A53D00FC30F4 /* heating_sun.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B612E76A53D00FC30F4 /* heating_sun.caf */; };
+		E2962B6C2E76A53D00FC30F4 /* medal.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B622E76A53D00FC30F4 /* medal.caf */; };
+		E2962B6D2E76A53D00FC30F4 /* fractured_love.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B632E76A53D00FC30F4 /* fractured_love.caf */; };
+		E2962B6E2E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B642E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf */; };
+		E2962B6F2E76A53D00FC30F4 /* exciting_sports_competitions.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B652E76A53D00FC30F4 /* exciting_sports_competitions.caf */; };
+		E2962B702E76A53D00FC30F4 /* in_the_city_lights_mist.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B662E76A53D00FC30F4 /* in_the_city_lights_mist.caf */; };
+		E2962B712E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B672E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf */; };
+		E2962B722E76A53D00FC30F4 /* dancing_in_the_stardust.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B682E76A53D00FC30F4 /* dancing_in_the_stardust.caf */; };
+		E2962B732E76A53D00FC30F4 /* chasing_lights.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B692E76A53D00FC30F4 /* chasing_lights.caf */; };
+		E2962B742E76A53D00FC30F4 /* ashes_of_us.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B6A2E76A53D00FC30F4 /* ashes_of_us.caf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +42,16 @@
 		B9DA97B12DC1472C00A4DA20 /* OnDot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnDot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20636DB2E17E129008529D5 /* ComposeApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ComposeApp.framework; path = "../composeApp/build/xcode-frameworks/Debug/iphoneos18.5/ComposeApp.framework"; sourceTree = SOURCE_ROOT; };
 		E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		E2962B612E76A53D00FC30F4 /* heating_sun.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = heating_sun.caf; path = ../../heating_sun.caf; sourceTree = "<group>"; };
+		E2962B622E76A53D00FC30F4 /* medal.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = medal.caf; path = ../../medal.caf; sourceTree = "<group>"; };
+		E2962B632E76A53D00FC30F4 /* fractured_love.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = fractured_love.caf; path = ../../fractured_love.caf; sourceTree = "<group>"; };
+		E2962B642E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = energetic_happy_amp_upbeat_rock_music.caf; path = ../../energetic_happy_amp_upbeat_rock_music.caf; sourceTree = "<group>"; };
+		E2962B652E76A53D00FC30F4 /* exciting_sports_competitions.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = exciting_sports_competitions.caf; path = ../../exciting_sports_competitions.caf; sourceTree = "<group>"; };
+		E2962B662E76A53D00FC30F4 /* in_the_city_lights_mist.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = in_the_city_lights_mist.caf; path = ../../in_the_city_lights_mist.caf; sourceTree = "<group>"; };
+		E2962B672E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = energy_catcher_a_sport_rock.caf; path = ../../energy_catcher_a_sport_rock.caf; sourceTree = "<group>"; };
+		E2962B682E76A53D00FC30F4 /* dancing_in_the_stardust.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = dancing_in_the_stardust.caf; path = ../../dancing_in_the_stardust.caf; sourceTree = "<group>"; };
+		E2962B692E76A53D00FC30F4 /* chasing_lights.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = chasing_lights.caf; path = ../../chasing_lights.caf; sourceTree = "<group>"; };
+		E2962B6A2E76A53D00FC30F4 /* ashes_of_us.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ashes_of_us.caf; path = ../../ashes_of_us.caf; sourceTree = "<group>"; };
 		F34D56CA6EFB0EC879F717C8 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -88,6 +108,16 @@
 		B9DA97A82DC1472C00A4DA20 = {
 			isa = PBXGroup;
 			children = (
+				E2962B6A2E76A53D00FC30F4 /* ashes_of_us.caf */,
+				E2962B692E76A53D00FC30F4 /* chasing_lights.caf */,
+				E2962B682E76A53D00FC30F4 /* dancing_in_the_stardust.caf */,
+				E2962B642E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf */,
+				E2962B672E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf */,
+				E2962B652E76A53D00FC30F4 /* exciting_sports_competitions.caf */,
+				E2962B632E76A53D00FC30F4 /* fractured_love.caf */,
+				E2962B612E76A53D00FC30F4 /* heating_sun.caf */,
+				E2962B662E76A53D00FC30F4 /* in_the_city_lights_mist.caf */,
+				E2962B622E76A53D00FC30F4 /* medal.caf */,
 				E20636DB2E17E129008529D5 /* ComposeApp.framework */,
 				B9DA98002DC14AA900A4DA20 /* Configuration */,
 				B9DA97B32DC1472C00A4DA20 /* iosApp */,
@@ -172,6 +202,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2962B6B2E76A53D00FC30F4 /* heating_sun.caf in Resources */,
+				E2962B6C2E76A53D00FC30F4 /* medal.caf in Resources */,
+				E2962B6D2E76A53D00FC30F4 /* fractured_love.caf in Resources */,
+				E2962B6E2E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf in Resources */,
+				E2962B6F2E76A53D00FC30F4 /* exciting_sports_competitions.caf in Resources */,
+				E2962B702E76A53D00FC30F4 /* in_the_city_lights_mist.caf in Resources */,
+				E2962B712E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf in Resources */,
+				E2962B722E76A53D00FC30F4 /* dancing_in_the_stardust.caf in Resources */,
+				E2962B732E76A53D00FC30F4 /* chasing_lights.caf in Resources */,
+				E2962B742E76A53D00FC30F4 /* ashes_of_us.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
