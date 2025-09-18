@@ -23,10 +23,17 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import co.touchlab.kermit.Logger
 import com.dh.ondot.App
+import com.dh.ondot.core.di.AndroidServiceLocator
 import com.dh.ondot.core.util.AlarmNotifier
+import com.dh.ondot.domain.RingingState
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.ui.AlarmEvent
 import kotlinx.coroutines.launch
@@ -34,6 +41,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     private val logger = Logger.withTag("MainActivity")
+    private val dataStore by lazy { AndroidServiceLocator.provideDataStore() }
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -87,6 +95,21 @@ class MainActivity : ComponentActivity() {
 
         ensureExactAlarmPermission()
 
+        /**
+         * 알림 클릭으로 진입한 경우 현재 알람 재생 여부 확인 및 내비게이션
+         * */
+        handleAlarmIntent(intent)
+
+        /**
+         * 앱을 그냥 실행한 경우 현재 알람 재생 여부 확인 및 내비게이션
+         * */
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val state = dataStore.currentRinging()
+                if (state.isRinging) navigateToAlarm(state)
+            }
+        }
+
         setContent {
             Box(
                 modifier = Modifier
@@ -97,29 +120,26 @@ class MainActivity : ComponentActivity() {
                 App()
             }
         }
+
+        /**
+         * 백그라운드 -> 포그라운드로 돌아왔을 때 알람 재생 여부 확인 및 내비게이션
+         * */
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                super.onStart(owner)
+
+                lifecycleScope.launch {
+                    val state = dataStore.currentRinging()
+                    if (state.isRinging) navigateToAlarm(state)
+                }
+            }
+        })
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
-        parseAlarmEvent(intent)?.let { event ->
-            logger.d { "onNewIntent: $event" }
-            lifecycleScope.launch { AlarmNotifier.notify(event) }
-        }
-    }
-
-    private fun parseAlarmEvent(intent: Intent): AlarmEvent? {
-        val scheduleId = intent.getLongExtra("scheduleId", -1L)
-        val alarmId = intent.getLongExtra("alarmId", -1L)
-        val type = intent.getStringExtra("type")?.let {
-            try {
-                AlarmType.valueOf(it)
-            } catch (e: IllegalArgumentException) {
-                null
-            }
-        }
-
-        return if (alarmId != -1L && type != null) { AlarmEvent(scheduleId, alarmId, type) } else null
+        setIntent(intent)
+        handleAlarmIntent(intent)
     }
 
     private fun ensureExactAlarmPermission() {
@@ -132,5 +152,22 @@ class MainActivity : ComponentActivity() {
                 exactAlarmLauncher.launch(intent)
             }
         }
+    }
+
+    private fun handleAlarmIntent(intent: Intent?) {
+        intent ?: return
+
+        val sid  = intent.getLongExtra("scheduleId", -1L)
+        val aid  = intent.getLongExtra("alarmId", -1L)
+        val type = intent.getStringExtra("type") ?: return
+
+        if (sid > 0 && aid > 0) {
+            val t = AlarmType.valueOf(type)
+            navigateToAlarm(RingingState(true, sid, aid, t))
+        }
+    }
+
+    private fun navigateToAlarm(state: RingingState) {
+        AlarmNotifier.notify(AlarmEvent(state.scheduleId, state.alarmId, state.type))
     }
 }
