@@ -15,6 +15,7 @@ import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 
@@ -26,6 +27,7 @@ object ServiceLocator {
     private lateinit var soundPlayer: SoundPlayer
     private lateinit var mapProviderStorage: MapProviderStorage
     private lateinit var database: OndotDatabase
+    private lateinit var analyticsManager: AnalyticsManager
 
     val authRepository: AuthRepository by lazy {
         AuthRepositoryImpl(networkClient, tokenProvider)
@@ -53,7 +55,8 @@ object ServiceLocator {
         alarmScheduler: AlarmScheduler,
         soundPlayer: SoundPlayer,
         mapProviderStorage: MapProviderStorage,
-        database: OndotDatabase
+        database: OndotDatabase,
+        analyticsManager: AnalyticsManager
     ) {
         this.tokenProvider = tokenProvider
         this.networkClient = NetworkClient(tokenProvider)
@@ -62,6 +65,7 @@ object ServiceLocator {
         this.soundPlayer = soundPlayer
         this.mapProviderStorage = mapProviderStorage
         this.database = database
+        this.analyticsManager = analyticsManager
     }
 
     fun provideNetworkClient(): NetworkClient = networkClient
@@ -71,4 +75,5 @@ object ServiceLocator {
     fun provideSoundPlayer(): SoundPlayer = soundPlayer
     fun provideMapProviderStorage(): MapProviderStorage = mapProviderStorage
     fun provideDatabase(): OndotDatabase = database
+    fun provideAnalyticsManager(): AnalyticsManager = analyticsManager
 }
