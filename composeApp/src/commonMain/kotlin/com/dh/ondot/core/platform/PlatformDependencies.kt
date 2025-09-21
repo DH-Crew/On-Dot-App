@@ -7,6 +7,7 @@ import com.dh.ondot.data.local.db.OndotDatabase
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 
@@ -19,6 +20,8 @@ expect fun provideAlarmStorage(): AlarmStorage
 expect fun provideAlarmScheduler(): AlarmScheduler
 
 expect fun provideDatabase(): OndotDatabase
+
+expect fun provideAnalyticsManager(): AnalyticsManager
 
 expect fun openDirections(
     startLat: Double,
