@@ -14,6 +14,7 @@ import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
@@ -29,9 +30,15 @@ class AppViewModel(
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
     private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer(),
     private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository
+    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
+    private val analyticsManager: AnalyticsManager = ServiceLocator.provideAnalyticsManager()
 ): BaseViewModel<AppUiState>(AppUiState()) {
     private val logger = Logger.withTag("AppViewModel")
+
+    private fun logGA(name: String, vararg params: Pair<String, Any?>) {
+        val clean = params.toMap().filterValues { it != null }
+        analyticsManager.logEvent(name, clean)
+    }
 
     init {
         initMapProvider()
@@ -41,6 +48,8 @@ class AppViewModel(
         viewModelScope.launch {
             memberRepository.getLocalMapProvider().collect {
                 updateState(uiState.value.copy(mapProvider = it))
+
+                analyticsManager.setUserProperty("map_provider", it.toString())
             }
         }
     }
@@ -63,6 +72,15 @@ class AppViewModel(
                     updateState(
                         uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm)
                     )
+
+                    val type = if (alarmId == it.preparationAlarm.alarmId) "preparation" else "departure"
+                    logGA(
+                        "alarm_open",
+                        "schedule_id" to it.scheduleId,
+                        "alarm_id" to currentAlarm.alarmId,
+                        "alarm_type" to type,
+                        "triggered_at" to currentAlarm.triggeredAt
+                    )
                 }
             }
         }
@@ -71,18 +89,30 @@ class AppViewModel(
     fun startPreparation() {
         soundPlayer.stopSound()
         updateState(uiState.value.copy(showPreparationStartAnimation = true))
+
+        logGA("preparation_start")
     }
 
     fun snoozePreparationAlarm() {
         soundPlayer.stopSound()
         snoozeAlarm()
         updateState(uiState.value.copy(showPreparationSnoozeAnimation = true))
+
+        logGA(
+            "alarm_snooze_click",
+            "alarm_type" to "preparation",
+        )
     }
 
     fun snoozeDepartureAlarm() {
         soundPlayer.stopSound()
         snoozeAlarm()
         updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
+
+        logGA(
+            "alarm_snooze_click",
+            "alarm_type" to "departure",
+        )
     }
 
     fun startDeparture() {
@@ -97,6 +127,12 @@ class AppViewModel(
             logger.e { "Invalid coords: $invalidCoords" }
             return
         }
+
+        logGA(
+            "directions_open",
+            "schedule_id" to info.scheduleId,
+            "provider" to uiState.value.mapProvider.toString().lowercase()
+        )
 
         emitEventFlow(AppEvent.NavigateToSplash)
         openDirections(
@@ -148,6 +184,15 @@ class AppViewModel(
 
             // 스케줄러 예약
             alarmScheduler.scheduleAlarm(newSchedule.scheduleId, currentAlarm, type)
+
+            logGA(
+                "alarm_snoozed",
+                "schedule_id" to newSchedule.scheduleId,
+                "alarm_id" to currentAlarm.alarmId,
+                "alarm_type" to type.name.lowercase(),
+                "snooze_interval_min" to currentAlarm.snoozeInterval,
+                "next_triggered_at" to newTriggeredAt
+            )
         }
     }
 
