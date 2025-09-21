@@ -23,10 +23,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import co.touchlab.kermit.Logger
@@ -120,20 +117,18 @@ class MainActivity : ComponentActivity() {
                 App()
             }
         }
+    }
 
-        /**
-         * 백그라운드 -> 포그라운드로 돌아왔을 때 알람 재생 여부 확인 및 내비게이션
-         * */
-        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStart(owner: LifecycleOwner) {
-                super.onStart(owner)
+    /**
+     * 백그라운드 -> 포그라운드로 돌아왔을 때 알람 재생 여부 확인 및 내비게이션
+     * */
+    override fun onStart() {
+        super.onStart()
 
-                lifecycleScope.launch {
-                    val state = dataStore.currentRinging()
-                    if (state.isRinging) navigateToAlarm(state)
-                }
-            }
-        })
+        lifecycleScope.launch {
+            val state = dataStore.currentRinging()
+            if (state.isRinging) navigateToAlarm(state)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
