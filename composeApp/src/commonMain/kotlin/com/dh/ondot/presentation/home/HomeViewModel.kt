@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.home
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.core.platform.provideAnalyticsManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
@@ -17,6 +18,7 @@ import com.dh.ondot.domain.model.ui.AlarmRingInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
+import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
@@ -26,11 +28,19 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
     private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler()
+    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
+    private val analyticsManager: AnalyticsManager = provideAnalyticsManager()
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
 
+    private fun logGA(name: String, vararg params: Pair<String, Any?>) {
+        val clean = params.toMap().filterValues { it != null }
+        analyticsManager.logEvent(name, clean)
+    }
+
     init {
+        logGA("home_open")
+
         needsChooseProvider()
     }
 
@@ -48,6 +58,8 @@ class HomeViewModel(
     }
 
     fun onClickAlarmSwitch(id: Long, isEnabled: Boolean) {
+        logGA("schedule_alarm_toggle", "schedule_id" to id, "enabled" to isEnabled)
+
         val newList = uiState.value.scheduleList.map {
             if (it.scheduleId == id) {
                 it.copy(
@@ -73,6 +85,8 @@ class HomeViewModel(
     }
 
     fun getScheduleList() {
+        logGA("schedule_list_request")
+
         viewModelScope.launch {
             scheduleRepository.getScheduleList().collect {
                 resultResponse(it, ::onSuccessGetScheduleList, ::onFailureGetScheduleList)
@@ -145,6 +159,8 @@ class HomeViewModel(
     }
 
     fun setMapProvider(mapProvider: MapProvider) {
+        logGA("map_provider_select", "provider" to mapProvider.name.lowercase())
+
         viewModelScope.launch {
             memberRepository.updateMapProvider(request = MapProviderRequest(mapProvider)).collect {
                 resultResponse(
@@ -162,6 +178,8 @@ class HomeViewModel(
     }
 
     fun deleteSchedule(scheduleId: Long) {
+        logGA("schedule_delete_request", "schedule_id" to scheduleId)
+
         cancelAlarms(scheduleId)
 
         viewModelScope.launch {
@@ -190,6 +208,12 @@ class HomeViewModel(
         schedule?.let {
             alarmScheduler.cancelAlarm(it.departureAlarm.alarmId)
             alarmScheduler.cancelAlarm(it.preparationAlarm.alarmId)
+            logGA(
+                "alarms_cancelled_for_schedule",
+                "schedule_id" to scheduleId,
+                "departure_alarm_id" to it.departureAlarm.alarmId,
+                "preparation_alarm_id" to it.preparationAlarm.alarmId
+            )
         }
     }
 }
