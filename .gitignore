@@ -20,6 +20,7 @@ captures
 
 composeApp/src/commonMain/kotlin/com/dh/ondot/network/NetworkConfig.kt
 composeApp/release/
+composeApp/google-services.json
 
 # CocoaPods
 iosApp/Pods/

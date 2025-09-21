@@ -9,15 +9,15 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import co.touchlab.kermit.Logger
 import com.dh.ondot.R
+import com.dh.ondot.core.di.AndroidServiceLocator
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.data.OnDotDataStore
 import com.dh.ondot.domain.model.enums.AlarmMode
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.service.SoundPlayer
@@ -47,6 +47,7 @@ class AlarmService : Service() {
 
     private val scheduleRepository by lazy { ServiceLocator.scheduleRepository }
     private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer()
+    private val dataStore: OnDotDataStore by lazy { AndroidServiceLocator.provideDataStore() }
 
     private var playJob: Job? = null
     private var playingAlarmId: Long? = null
@@ -55,12 +56,24 @@ class AlarmService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun markRinging(scheduleId: Long, alarmId: Long, type: AlarmType) {
+        serviceScope.launch {
+            dataStore.setRinging(scheduleId, alarmId, type)
+        }
+    }
+
+    private fun clearRinging() {
+        serviceScope.launch {
+            dataStore.clearRinging()
+        }
+    }
+
     @SuppressLint("ForegroundServiceType")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when(intent?.action) {
             ACTION_STOP -> {
                 soundPlayer.stopSound()
+                clearRinging()
                 if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
@@ -118,8 +131,6 @@ class AlarmService : Service() {
                     ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
                 )
 
-                startActivity(mainIntent)
-
                 playingAlarmId = alarmId
                 playJob?.cancel()
                 playJob = serviceScope.launch {
@@ -134,14 +145,18 @@ class AlarmService : Service() {
                         .collect { alarm ->
                             logger.d { "Alarm RingTone: ${alarm.ringTone.lowercase()}" }
                             if (alarm.enabled && alarm.alarmMode == AlarmMode.SOUND) {
+                                markRinging(scheduleId, alarmId, type)
+
                                 soundPlayer.playSound(alarm.ringTone.lowercase()) {
                                     if (wakeLock.isHeld) wakeLock.release()
                                     stopForeground(STOP_FOREGROUND_REMOVE)
+                                    clearRinging()
                                     stopSelf()
                                 }
                             } else {
                                 if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
                                 stopForeground(STOP_FOREGROUND_REMOVE)
+                                clearRinging()
                                 stopSelf()
                             }
                         }
@@ -154,9 +169,8 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         soundPlayer.stopSound()
+        clearRinging()
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
-        stopForeground(STOP_FOREGROUND_DETACH)
-        stopSelf()
         super.onDestroy()
     }
 }
