@@ -17,11 +17,14 @@ class AndroidSoundPlayer(
     private var currentVolume: Float = 0.4f
     private lateinit var audioFocusRequest: AudioFocusRequest
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private var _onComplete: () -> Unit = {}
 
     @SuppressLint("DiscouragedApi")
     override fun playSound(soundResId: String, onComplete: () -> Unit) {
         // 이전 재생 정리
         stopSound()
+
+        _onComplete = onComplete
 
         // AudioAttributes 생성 (알람용)
         val audioAttributes = AudioAttributes.Builder()
@@ -97,7 +100,7 @@ class AndroidSoundPlayer(
             it.release()
         }
         player = null
-        onComplete()
+        _onComplete()
     }
 
     override fun setVolume(volume: Float) {
