@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class AlarmService : Service() {
 
@@ -62,9 +63,12 @@ class AlarmService : Service() {
         }
     }
 
-    private fun clearRinging() {
-        serviceScope.launch {
+    private suspend fun clearRingingSync() {
+        try {
             dataStore.clearRinging()
+            logger.i { "[DS] clearRinging() OK" }
+        } catch (e: Exception) {
+            logger.e(e) { "[DS] clearRinging() FAIL: ${e.message}" }
         }
     }
 
@@ -73,10 +77,7 @@ class AlarmService : Service() {
         when(intent?.action) {
             ACTION_STOP -> {
                 soundPlayer.stopSound()
-                clearRinging()
-                if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
-                stopForeground(STOP_FOREGROUND_REMOVE)
-                stopSelf()
+                serviceScope.launch { stopAndClear() }
                 return START_NOT_STICKY
             }
             ACTION_START -> {
@@ -148,16 +149,10 @@ class AlarmService : Service() {
                                 markRinging(scheduleId, alarmId, type)
 
                                 soundPlayer.playSound(alarm.ringTone.lowercase()) {
-                                    if (wakeLock.isHeld) wakeLock.release()
-                                    stopForeground(STOP_FOREGROUND_REMOVE)
-                                    clearRinging()
-                                    stopSelf()
+                                    serviceScope.launch { stopAndClear() }
                                 }
                             } else {
-                                if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
-                                stopForeground(STOP_FOREGROUND_REMOVE)
-                                clearRinging()
-                                stopSelf()
+                                serviceScope.launch { stopAndClear() }
                             }
                         }
                 }
@@ -169,8 +164,16 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         soundPlayer.stopSound()
-        clearRinging()
+        runCatching { runBlocking { clearRingingSync() } }
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
         super.onDestroy()
+    }
+
+    private suspend fun stopAndClear() {
+        if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        clearRingingSync()
+        stopSelf()
     }
 }
