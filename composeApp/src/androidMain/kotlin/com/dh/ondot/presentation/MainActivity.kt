@@ -33,12 +33,33 @@ import com.dh.ondot.core.util.AlarmNotifier
 import com.dh.ondot.domain.RingingState
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.ui.AlarmEvent
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
     private val logger = Logger.withTag("MainActivity")
     private val dataStore by lazy { AndroidServiceLocator.provideDataStore() }
+    private var lastNavKey: Pair<Long, Long>? = null
+
+    /**
+     * LOG: 인텐트 요약 출력
+     * */
+    private fun Intent?.dump(prefix: String = "intent"): String {
+        if (this == null) return "$prefix=null"
+        val keys = extras?.keySet()?.joinToString() ?: "extra 없음"
+        val sid  = getLongExtra("scheduleId", -1L)
+        val aid  = getLongExtra("alarmId", -1L)
+        val type = getStringExtra("type")
+        return "$prefix: action=$action, data=$data, extras=[$keys], scheduleId=$sid, alarmId=$aid, type=$type"
+    }
+
+    /**
+     * Log: RingingState 출력
+     * */
+    private fun logRingingState(source: String, state: RingingState?) {
+        logger.i { "[SoT][$source] state=$state (isRinging=${state?.isRinging}, scheduleId=${state?.scheduleId}, alarmId=${state?.alarmId}, type=${state?.type})" }
+    }
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -72,6 +93,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        logger.i { "[Lifecycle] onCreate() start, ${intent.dump("launchIntent")}" }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val has = ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
@@ -102,8 +125,21 @@ class MainActivity : ComponentActivity() {
          * */
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val state = dataStore.currentRinging()
-                if (state.isRinging) navigateToAlarm(state)
+                dataStore.flow()
+                    .distinctUntilChanged { old, new ->
+                        old.isRinging == new.isRinging &&
+                                old.scheduleId == new.scheduleId &&
+                                old.alarmId == new.alarmId
+                    }
+                    .collect { state ->
+                        if (state.isRinging) {
+                            val key = state.scheduleId to state.alarmId
+                            if (lastNavKey != key) {
+                                lastNavKey = key
+                                navigateToAlarm(state)
+                            }
+                        }
+                    }
             }
         }
 
@@ -119,20 +155,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * 백그라운드 -> 포그라운드로 돌아왔을 때 알람 재생 여부 확인 및 내비게이션
-     * */
-    override fun onStart() {
-        super.onStart()
-
-        lifecycleScope.launch {
-            val state = dataStore.currentRinging()
-            if (state.isRinging) navigateToAlarm(state)
-        }
-    }
-
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        logger.i { "[Lifecycle] onNewIntent(): ${intent.dump("newIntent")}" }
         setIntent(intent)
         handleAlarmIntent(intent)
     }
@@ -150,6 +175,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleAlarmIntent(intent: Intent?) {
+        logger.i { "[INTENT] handleAlarmIntent(): ${intent.dump()}" }
         intent ?: return
 
         val sid  = intent.getLongExtra("scheduleId", -1L)
@@ -158,6 +184,7 @@ class MainActivity : ComponentActivity() {
 
         if (sid > 0 && aid > 0) {
             val t = AlarmType.valueOf(type)
+            logger.i { "[NAV] navigateToAlarm via intent (sid=$sid, aid=$aid, type=$type)" }
             navigateToAlarm(RingingState(true, sid, aid, t))
         }
     }
