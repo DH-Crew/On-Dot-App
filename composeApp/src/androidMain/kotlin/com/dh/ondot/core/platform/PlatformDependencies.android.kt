@@ -19,6 +19,7 @@ import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.util.AlarmService
 import com.dh.ondot.core.util.AndroidAlarmScheduler
 import com.dh.ondot.core.util.AndroidAlarmStorage
+import com.dh.ondot.core.util.AndroidAnalyticsManager
 import com.dh.ondot.core.util.AndroidMapProviderStorage
 import com.dh.ondot.core.util.AndroidSoundPlayer
 import com.dh.ondot.core.util.AppContextHolder
@@ -27,6 +28,7 @@ import com.dh.ondot.data.local.db.OndotDatabase
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.domain.service.AlarmStorage
+import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.domain.service.MapProviderStorage
 import com.dh.ondot.domain.service.SoundPlayer
 
@@ -58,6 +60,12 @@ actual fun provideDatabase(): OndotDatabase {
     val context = runCatching { AppContextHolder.context }
         .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
     return DatabaseFactory(DriverFactory(context)).create()
+}
+
+actual fun provideAnalyticsManager(): AnalyticsManager {
+    val context = runCatching { AppContextHolder.context }
+        .getOrElse { error("AppContextHolder.context가 아직 초기화되지 않았습니다.") }
+    return AndroidAnalyticsManager(context)
 }
 
 actual fun openDirections(

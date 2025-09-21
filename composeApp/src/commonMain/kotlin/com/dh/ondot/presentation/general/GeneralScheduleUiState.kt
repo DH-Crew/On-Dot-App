@@ -5,13 +5,13 @@ import com.dh.ondot.domain.model.enums.RouterType
 import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
-data class GeneralScheduleUiState(
+data class GeneralScheduleUiState @OptIn(ExperimentalTime::class) constructor(
     val currentStep: Int = 0,
     val totalStep: Int = 0,
 
@@ -23,7 +23,7 @@ data class GeneralScheduleUiState(
     // ScheduleDate
     val isActiveCalendar: Boolean = true,
     val isActiveDial: Boolean = false,
-    val calendarMonth: LocalDate = Clock.System
+    val calendarMonth: LocalDate = kotlin.time.Clock.System
         .now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date

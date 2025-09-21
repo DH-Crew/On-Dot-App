@@ -2,10 +2,8 @@ package com.dh.ondot.core.util
 
 import com.dh.ondot.presentation.ui.theme.WORD_AM
 import com.dh.ondot.presentation.ui.theme.WORD_PM
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -15,6 +13,8 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 object DateTimeFormatter {
 
@@ -158,11 +158,12 @@ object DateTimeFormatter {
         return period to "${hour12.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}"
     }
 
+    @OptIn(ExperimentalTime::class)
     fun calculateRemainingTime(iso: String): Triple<Int, Int, Int> {
         val localDt = LocalDateTime.parse(iso)
         val alarmInstant = localDt.toInstant(TimeZone.currentSystemDefault())
 
-        val nowInstant: Instant = Clock.System.now()
+        val nowInstant: Instant = kotlin.time.Clock.System.now()
         val nowInSeoul: Instant = nowInstant
             .toLocalDateTime(TimeZone.of("Asia/Seoul"))
             .toInstant(TimeZone.of("Asia/Seoul"))
@@ -179,6 +180,7 @@ object DateTimeFormatter {
     }
 
     /** 두 개의 ISO8601 문자열 간의 시간 차이를 계산 */
+    @OptIn(ExperimentalTime::class)
     fun diffBetweenIsoTimes(iso1: String, iso2: String): Triple<Int, Int, Int> {
         return try {
             val dt1 = LocalDateTime.parse(iso1).toInstant(TimeZone.of("Asia/Seoul"))
@@ -229,6 +231,7 @@ object DateTimeFormatter {
     /**----------------------------------------------ISO8601 변환---------------------------------------------*/
 
     /** Iso8601 기반의 문자열을 밀리초로 변환하는 메서드 */
+    @OptIn(ExperimentalTime::class)
     fun isoStringToEpochMillis(iso: String): Long {
         // 타임존 없는 ISO 문자열은 "로컬 시간"으로 그대로 해석
         val localDt: LocalDateTime = LocalDateTime.parse(iso)

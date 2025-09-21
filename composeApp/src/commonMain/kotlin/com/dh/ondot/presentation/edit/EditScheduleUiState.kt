@@ -4,19 +4,19 @@ import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.domain.model.enums.TimeBottomSheet
 import com.dh.ondot.domain.model.enums.TimeType
 import com.dh.ondot.domain.model.response.ScheduleDetail
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
-data class EditScheduleUiState(
+data class EditScheduleUiState @OptIn(ExperimentalTime::class) constructor(
     val scheduleId: Long = -1,
     val isInitialized: Boolean = false,
     val schedule: ScheduleDetail = ScheduleDetail(),
     val selectedDate: LocalDate? = null,
     val selectedTime: LocalTime =
-        Clock.System.now()
+        kotlin.time.Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault())
             .time,
     val selectedAlarmDate: LocalDate? = null,

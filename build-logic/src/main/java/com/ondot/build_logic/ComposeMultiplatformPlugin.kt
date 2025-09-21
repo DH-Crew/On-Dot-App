@@ -61,6 +61,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("ktor-client-okhttp").get())
                     implementation(libs.findLibrary("kakao-login").get())
                     implementation(libs.findLibrary("android-driver").get())
+                    implementation(libs.findLibrary("firebase-analytics").get())
                     implementation("io.insert-koin:koin-android:4.0.3")
                 }
 
