@@ -51,7 +51,7 @@ timber = "5.0.1"
 # Image loading
 coil = "2.7.0"
 
-# Compose Resources (if still needed separately)
+# Compose Resources
 resources = "1.8.2"
 
 # Logging
@@ -80,9 +80,11 @@ sqldelight = "2.1.0"
 buildkonfig = "0.17.1"
 
 # Firebase
-firebase = "33.2.0"
+firebase = "34.3.0"
+firebase-analytics = "17.4.1"
 
-# Google-Services = "4.4.2
+# Google-Services
+google-services = "4.4.3"
 
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
@@ -95,6 +97,7 @@ composeHotReload        = { id = "org.jetbrains.compose.hot-reload", version.ref
 serialization           = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight              = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 buildKonfig             = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+google-services         = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 [libraries]
 # Android Gradle Plugin
@@ -198,3 +201,7 @@ android-driver                         = { module = "app.cash.sqldelight:android
 
 # NativeDriver
 native-driver                          = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+
+# Firebase
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
