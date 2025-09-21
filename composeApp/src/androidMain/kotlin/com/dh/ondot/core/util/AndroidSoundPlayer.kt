@@ -14,7 +14,7 @@ class AndroidSoundPlayer(
 ) : SoundPlayer {
     private val logger = Logger.withTag("AndroidSoundPlayer")
     private var player: MediaPlayer? = null
-    private var currentVolume: Float = 0.8f
+    private var currentVolume: Float = 0.4f
     private lateinit var audioFocusRequest: AudioFocusRequest
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -72,11 +72,11 @@ class AndroidSoundPlayer(
                 setVolume(currentVolume, currentVolume)
 
                 // 시스템 알람 볼륨 최대화
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_ALARM,
-                    audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
-                    0
-                )
+//                audioManager.setStreamVolume(
+//                    AudioManager.STREAM_ALARM,
+//                    audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
+//                    0
+//                )
 
                 prepare()
                 start()
