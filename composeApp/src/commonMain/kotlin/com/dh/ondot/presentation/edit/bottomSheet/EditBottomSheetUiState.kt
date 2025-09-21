@@ -1,13 +1,13 @@
 package com.dh.ondot.presentation.edit.bottomSheet
 
 import com.dh.ondot.core.ui.base.UiState
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
-data class EditBottomSheetUiState(
+data class EditBottomSheetUiState @OptIn(ExperimentalTime::class) constructor(
     /**
      * EditDateBottomSheet
      * */
@@ -15,7 +15,7 @@ data class EditBottomSheetUiState(
     val activeCheckChip: Int? = null,
     val repeatDays: Set<Int> = emptySet(),
     val currentDate: LocalDate? = null,
-    val calendarMonth: LocalDate = Clock.System
+    val calendarMonth: LocalDate = kotlin.time.Clock.System
         .now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date

@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -37,6 +36,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class GeneralScheduleViewModel(
@@ -254,13 +254,14 @@ class GeneralScheduleViewModel(
 
     /**--------------------------------------------RouteLoading-----------------------------------------------*/
 
+    @OptIn(ExperimentalTime::class)
     private fun getScheduleAlarms() {
         val (dateRepeat, time, places) = validateScheduleInputs()
         val (date, repeatDays) = dateRepeat
         val (departurePlace, arrivalPlace) = places
 
         val zone = TimeZone.currentSystemDefault()
-        val today = Clock.System.now().toLocalDateTime(zone).date
+        val today = kotlin.time.Clock.System.now().toLocalDateTime(zone).date
         val dateOrToday = date ?: today
 
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(dateOrToday, time)
@@ -291,13 +292,14 @@ class GeneralScheduleViewModel(
 
     /**--------------------------------------------CheckSchedule-----------------------------------------------*/
 
+    @OptIn(ExperimentalTime::class)
     fun createSchedule(isChecked: Boolean, input: String) {
         val (dateRepeat, time, places) = validateScheduleInputs()
         val (date, repeatDays) = dateRepeat
         val (departurePlace, arrivalPlace) = places
 
         val zone = TimeZone.currentSystemDefault()
-        val today = Clock.System.now().toLocalDateTime(zone).date
+        val today = kotlin.time.Clock.System.now().toLocalDateTime(zone).date
         val dateOrToday = date ?: today
 
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(dateOrToday, time)

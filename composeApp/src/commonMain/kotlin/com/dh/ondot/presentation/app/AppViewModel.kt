@@ -19,11 +19,11 @@ import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 class AppViewModel(
     private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
@@ -117,11 +117,12 @@ class AppViewModel(
         ))
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun snoozeAlarm() {
         var newSchedule = uiState.value.schedule
         var currentAlarm = uiState.value.currentAlarm
         val timeZone = TimeZone.of("Asia/Seoul")
-        val snoozedLocal = Clock.System.now()
+        val snoozedLocal = kotlin.time.Clock.System.now()
             .plus(currentAlarm.snoozeInterval.toLong(), DateTimeUnit.MINUTE, timeZone)
             .toLocalDateTime(timeZone)
         val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(snoozedLocal.date, snoozedLocal.time)

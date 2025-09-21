@@ -19,11 +19,11 @@ import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_EDIT_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 class EditScheduleViewModel(
     private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
@@ -63,9 +63,10 @@ class EditScheduleViewModel(
 
     /**------------------------------------------일정 수정-------------------------------------------------*/
 
+    @OptIn(ExperimentalTime::class)
     fun saveSchedule() {
         val newDate = DateTimeFormatter.formatIsoDateTime(
-            date = uiState.value.selectedDate ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            date = uiState.value.selectedDate ?: kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
             time = uiState.value.schedule.appointmentAt.toLocalTimeFromIso()
         )
         val newSchedule = uiState.value.schedule.copy(
