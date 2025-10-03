@@ -8,6 +8,7 @@ import androidx.compose.ui.viewinterop.UIKitView
 import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.util.IosAlarmScheduler
 import com.dh.ondot.core.util.IosAlarmStorage
+import com.dh.ondot.core.util.IosAnalyticsManager
 import com.dh.ondot.core.util.IosMapProviderStorage
 import com.dh.ondot.core.util.IosSoundPlayer
 import com.dh.ondot.core.util.toUtf8
@@ -44,9 +45,7 @@ private fun ensureMain(block: () -> Unit) {
     if (NSThread.isMainThread) block() else dispatch_async(dispatch_get_main_queue()) { block() }
 }
 
-actual fun provideAnalyticsManager(): AnalyticsManager {
-    TODO("Not yet implemented")
-}
+actual fun provideAnalyticsManager(): AnalyticsManager = IosAnalyticsManager()
 
 actual fun openDirections(
     startLat: Double,
