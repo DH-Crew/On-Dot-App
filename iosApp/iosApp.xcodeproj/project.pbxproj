@@ -10,21 +10,40 @@
 		E20636DD2E17E13B008529D5 /* ComposeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E20636DB2E17E129008529D5 /* ComposeApp.framework */; };
 		E20636DE2E17E13B008529D5 /* ComposeApp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E20636DB2E17E129008529D5 /* ComposeApp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */; };
-		E284909F2E144579008FD76D /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284909E2E144579008FD76D /* KakaoSDKAuth */; };
-		E28490A12E144579008FD76D /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = E28490A02E144579008FD76D /* KakaoSDKUser */; };
-		E2962B6B2E76A53D00FC30F4 /* heating_sun.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B612E76A53D00FC30F4 /* heating_sun.caf */; };
-		E2962B6C2E76A53D00FC30F4 /* medal.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B622E76A53D00FC30F4 /* medal.caf */; };
-		E2962B6D2E76A53D00FC30F4 /* fractured_love.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B632E76A53D00FC30F4 /* fractured_love.caf */; };
-		E2962B6E2E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B642E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf */; };
-		E2962B6F2E76A53D00FC30F4 /* exciting_sports_competitions.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B652E76A53D00FC30F4 /* exciting_sports_competitions.caf */; };
-		E2962B702E76A53D00FC30F4 /* in_the_city_lights_mist.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B662E76A53D00FC30F4 /* in_the_city_lights_mist.caf */; };
-		E2962B712E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B672E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf */; };
-		E2962B722E76A53D00FC30F4 /* dancing_in_the_stardust.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B682E76A53D00FC30F4 /* dancing_in_the_stardust.caf */; };
-		E2962B732E76A53D00FC30F4 /* chasing_lights.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B692E76A53D00FC30F4 /* chasing_lights.caf */; };
-		E2962B742E76A53D00FC30F4 /* ashes_of_us.caf in Resources */ = {isa = PBXBuildFile; fileRef = E2962B6A2E76A53D00FC30F4 /* ashes_of_us.caf */; };
+		E23379422E87D74C004F2E5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */; };
+		E23379432E87D74C004F2E5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */; };
+		E23379542E87D74E004F2E5A /* OnDotAlarmWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E234126D2E8EFD8100098BCC /* OnDotAlarmKitBridge in Frameworks */ = {isa = PBXBuildFile; productRef = E234126C2E8EFD8100098BCC /* OnDotAlarmKitBridge */; };
+		E23412752E8EFE4B00098BCC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E23412742E8EFE4B00098BCC /* Alamofire */; };
+		E23412772E8EFE5700098BCC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E23412762E8EFE5700098BCC /* FirebaseAnalytics */; };
+		E23412792E8EFE5700098BCC /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = E23412782E8EFE5700098BCC /* FirebaseCore */; };
+		E23412932E8F025100098BCC /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E23412922E8F025100098BCC /* KakaoSDKAuth */; };
+		E23412952E8F025100098BCC /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = E23412942E8F025100098BCC /* KakaoSDKCommon */; };
+		E23412972E8F025100098BCC /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = E23412962E8F025100098BCC /* KakaoSDKUser */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E23379522E87D74E004F2E5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B9DA97A92DC1472C00A4DA20 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E23379402E87D74C004F2E5A;
+			remoteInfo = OnDotAlarmWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		E23379592E87D74E004F2E5A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E23379542E87D74E004F2E5A /* OnDotAlarmWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E28490C32E151243008FD76D /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,6 +61,7 @@
 		B9DA97B12DC1472C00A4DA20 /* OnDot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnDot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20636DB2E17E129008529D5 /* ComposeApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ComposeApp.framework; path = "../composeApp/build/xcode-frameworks/Debug/iphoneos18.5/ComposeApp.framework"; sourceTree = SOURCE_ROOT; };
 		E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OnDotAlarmWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2962B612E76A53D00FC30F4 /* heating_sun.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = heating_sun.caf; path = ../../heating_sun.caf; sourceTree = "<group>"; };
 		E2962B622E76A53D00FC30F4 /* medal.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = medal.caf; path = ../../medal.caf; sourceTree = "<group>"; };
 		E2962B632E76A53D00FC30F4 /* fractured_love.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = fractured_love.caf; path = ../../fractured_love.caf; sourceTree = "<group>"; };
@@ -52,14 +72,36 @@
 		E2962B682E76A53D00FC30F4 /* dancing_in_the_stardust.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = dancing_in_the_stardust.caf; path = ../../dancing_in_the_stardust.caf; sourceTree = "<group>"; };
 		E2962B692E76A53D00FC30F4 /* chasing_lights.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = chasing_lights.caf; path = ../../chasing_lights.caf; sourceTree = "<group>"; };
 		E2962B6A2E76A53D00FC30F4 /* ashes_of_us.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ashes_of_us.caf; path = ../../ashes_of_us.caf; sourceTree = "<group>"; };
+		E2BE6DAF2E8D849C005916BD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F34D56CA6EFB0EC879F717C8 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E2CBF28C2E5206800025DD77 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
+		E23379582E87D74E004F2E5A /* Exceptions for "OnDotAlarmWidget" folder in "OnDotAlarmWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+			);
+			target = E23379402E87D74C004F2E5A /* OnDotAlarmWidgetExtension */;
+		};
+		E2BE6FEF2E8ED9AE005916BD /* Exceptions for "iosApp" folder in "iosApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				Resources/ashes_of_us.mp3,
+				Resources/chasing_lights.mp3,
+				Resources/dancing_in_the_stardust.mp3,
+				Resources/energetic_happy_upbeat_rock_music.mp3,
+				Resources/energy_catcher.mp3,
+				Resources/exciting_sports_competitions.mp3,
+				Resources/fractured_love.mp3,
+				Resources/heating_sun.mp3,
+				Resources/in_the_city_lights_mist.mp3,
+				Resources/medal.mp3,
+				Resources/positive_way.mp3,
+				Resources/ringtone.mp3,
 			);
 			target = B9DA97B02DC1472C00A4DA20 /* iosApp */;
 		};
@@ -69,7 +111,7 @@
 		B9DA97B32DC1472C00A4DA20 /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E2CBF28C2E5206800025DD77 /* Exceptions for "iosApp" folder in "iosApp" target */,
+				E2BE6FEF2E8ED9AE005916BD /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -79,6 +121,14 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		E23379442E87D74C004F2E5A /* OnDotAlarmWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E23379582E87D74E004F2E5A /* Exceptions for "OnDotAlarmWidget" folder in "OnDotAlarmWidgetExtension" target */,
+			);
+			path = OnDotAlarmWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +136,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E28490A12E144579008FD76D /* KakaoSDKUser in Frameworks */,
+				E23412952E8F025100098BCC /* KakaoSDKCommon in Frameworks */,
+				E23412932E8F025100098BCC /* KakaoSDKAuth in Frameworks */,
+				E234126D2E8EFD8100098BCC /* OnDotAlarmKitBridge in Frameworks */,
+				E23412752E8EFE4B00098BCC /* Alamofire in Frameworks */,
+				E23412772E8EFE5700098BCC /* FirebaseAnalytics in Frameworks */,
 				E20636DD2E17E13B008529D5 /* ComposeApp.framework in Frameworks */,
 				E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */,
-				E284909F2E144579008FD76D /* KakaoSDKAuth in Frameworks */,
+				E23412792E8EFE5700098BCC /* FirebaseCore in Frameworks */,
+				E23412972E8F025100098BCC /* KakaoSDKUser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E233793E2E87D74C004F2E5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E23379432E87D74C004F2E5A /* SwiftUI.framework in Frameworks */,
+				E23379422E87D74C004F2E5A /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +165,8 @@
 			children = (
 				E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */,
 				F34D56CA6EFB0EC879F717C8 /* Pods_iosApp.framework */,
+				E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */,
+				E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -108,6 +174,7 @@
 		B9DA97A82DC1472C00A4DA20 = {
 			isa = PBXGroup;
 			children = (
+				E2BE6DAF2E8D849C005916BD /* GoogleService-Info.plist */,
 				E2962B6A2E76A53D00FC30F4 /* ashes_of_us.caf */,
 				E2962B692E76A53D00FC30F4 /* chasing_lights.caf */,
 				E2962B682E76A53D00FC30F4 /* dancing_in_the_stardust.caf */,
@@ -121,6 +188,7 @@
 				E20636DB2E17E129008529D5 /* ComposeApp.framework */,
 				B9DA98002DC14AA900A4DA20 /* Configuration */,
 				B9DA97B32DC1472C00A4DA20 /* iosApp */,
+				E23379442E87D74C004F2E5A /* OnDotAlarmWidget */,
 				B9DA97B22DC1472C00A4DA20 /* Products */,
 				3258F94D5AE37B4F2304E3BB /* Frameworks */,
 			);
@@ -130,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				B9DA97B12DC1472C00A4DA20 /* OnDot.app */,
+				E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -144,12 +213,14 @@
 				B9DA97F42DC1497100A4DA20 /* Compile Kotlin Framework */,
 				B9DA97AD2DC1472C00A4DA20 /* Sources */,
 				B9DA97AE2DC1472C00A4DA20 /* Frameworks */,
-				B9DA97AF2DC1472C00A4DA20 /* Resources */,
 				E28490C32E151243008FD76D /* Embed Frameworks */,
+				E23379592E87D74E004F2E5A /* Embed Foundation Extensions */,
+				E2BE6FEE2E8ED9AE005916BD /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E23379532E87D74E004F2E5A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				B9DA97B32DC1472C00A4DA20 /* iosApp */,
@@ -159,6 +230,28 @@
 			productReference = B9DA97B12DC1472C00A4DA20 /* OnDot.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E23379402E87D74C004F2E5A /* OnDotAlarmWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E23379552E87D74E004F2E5A /* Build configuration list for PBXNativeTarget "OnDotAlarmWidgetExtension" */;
+			buildPhases = (
+				E233793D2E87D74C004F2E5A /* Sources */,
+				E233793E2E87D74C004F2E5A /* Frameworks */,
+				E233793F2E87D74C004F2E5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E23379442E87D74C004F2E5A /* OnDotAlarmWidget */,
+			);
+			name = OnDotAlarmWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = OnDotAlarmWidgetExtension;
+			productReference = E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -166,11 +259,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					B9DA97B02DC1472C00A4DA20 = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 2600;
+					};
+					E23379402E87D74C004F2E5A = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
 			};
@@ -184,8 +281,10 @@
 			mainGroup = B9DA97A82DC1472C00A4DA20;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E284909D2E144579008FD76D /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				E28490EF2E151E01008FD76D /* XCRemoteSwiftPackageReference "Alamofire" */,
+				E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				E234126B2E8EFD6F00098BCC /* XCLocalSwiftPackageReference "../OnDotAlarmKitBridge" */,
+				E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9DA97B22DC1472C00A4DA20 /* Products */;
@@ -193,25 +292,23 @@
 			projectRoot = "";
 			targets = (
 				B9DA97B02DC1472C00A4DA20 /* iosApp */,
+				E23379402E87D74C004F2E5A /* OnDotAlarmWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		B9DA97AF2DC1472C00A4DA20 /* Resources */ = {
+		E233793F2E87D74C004F2E5A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2962B6B2E76A53D00FC30F4 /* heating_sun.caf in Resources */,
-				E2962B6C2E76A53D00FC30F4 /* medal.caf in Resources */,
-				E2962B6D2E76A53D00FC30F4 /* fractured_love.caf in Resources */,
-				E2962B6E2E76A53D00FC30F4 /* energetic_happy_amp_upbeat_rock_music.caf in Resources */,
-				E2962B6F2E76A53D00FC30F4 /* exciting_sports_competitions.caf in Resources */,
-				E2962B702E76A53D00FC30F4 /* in_the_city_lights_mist.caf in Resources */,
-				E2962B712E76A53D00FC30F4 /* energy_catcher_a_sport_rock.caf in Resources */,
-				E2962B722E76A53D00FC30F4 /* dancing_in_the_stardust.caf in Resources */,
-				E2962B732E76A53D00FC30F4 /* chasing_lights.caf in Resources */,
-				E2962B742E76A53D00FC30F4 /* ashes_of_us.caf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2BE6FEE2E8ED9AE005916BD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,7 +344,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E233793D2E87D74C004F2E5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E23379532E87D74E004F2E5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E23379402E87D74C004F2E5A /* OnDotAlarmWidgetExtension */;
+			targetProxy = E23379522E87D74E004F2E5A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B9DA97BD2DC1472D00A4DA20 /* Debug */ = {
@@ -303,7 +415,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -361,7 +473,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -376,6 +488,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -397,7 +510,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -411,6 +524,8 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -421,6 +536,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -442,7 +558,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -456,8 +572,71 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E23379562E87D74E004F2E5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OnDotAlarmWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OnDotAlarmWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dh.ondot.iosApp.OnDotAlarmWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E23379572E87D74E004F2E5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OnDotAlarmWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OnDotAlarmWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dh.ondot.iosApp.OnDotAlarmWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -482,15 +661,39 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		E23379552E87D74E004F2E5A /* Build configuration list for PBXNativeTarget "OnDotAlarmWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E23379562E87D74E004F2E5A /* Debug */,
+				E23379572E87D74E004F2E5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		E234126B2E8EFD6F00098BCC /* XCLocalSwiftPackageReference "../OnDotAlarmKitBridge" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../OnDotAlarmKitBridge;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
-		E284909D2E144579008FD76D /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+		E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.3.0;
+			};
+		};
+		E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.24.4;
+				minimumVersion = 2.25.0;
 			};
 		};
 		E28490EF2E151E01008FD76D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
@@ -504,14 +707,39 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E284909E2E144579008FD76D /* KakaoSDKAuth */ = {
+		E234126C2E8EFD8100098BCC /* OnDotAlarmKitBridge */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E284909D2E144579008FD76D /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			package = E234126B2E8EFD6F00098BCC /* XCLocalSwiftPackageReference "../OnDotAlarmKitBridge" */;
+			productName = OnDotAlarmKitBridge;
+		};
+		E23412742E8EFE4B00098BCC /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E28490EF2E151E01008FD76D /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		E23412762E8EFE5700098BCC /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		E23412782E8EFE5700098BCC /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		E23412922E8F025100098BCC /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKAuth;
 		};
-		E28490A02E144579008FD76D /* KakaoSDKUser */ = {
+		E23412942E8F025100098BCC /* KakaoSDKCommon */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E284909D2E144579008FD76D /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			package = E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKCommon;
+		};
+		E23412962E8F025100098BCC /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKUser;
 		};
 /* End XCSwiftPackageProductDependency section */
