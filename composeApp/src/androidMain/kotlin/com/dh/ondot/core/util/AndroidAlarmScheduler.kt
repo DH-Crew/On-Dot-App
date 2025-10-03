@@ -7,8 +7,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.RequiresPermission
 import co.touchlab.kermit.Logger
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.domain.model.enums.MapProvider
+import com.dh.ondot.domain.model.ui.AlarmRingInfo
 import com.dh.ondot.domain.service.AlarmScheduler
 
 class AndroidAlarmScheduler(
@@ -18,7 +18,9 @@ class AndroidAlarmScheduler(
     private val logger = Logger.withTag("AndroidAlarmScheduler")
 
     @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
-    override fun scheduleAlarm(scheduleId: Long, alarm: AlarmDetail, type: AlarmType) {
+    override fun scheduleAlarm(info: AlarmRingInfo, mapProvider: MapProvider) {
+        val alarm = info.alarmDetail
+
         // 사용자가 알람을 꺼두었다면 리턴
         if (!alarm.enabled) return
 
@@ -39,9 +41,9 @@ class AndroidAlarmScheduler(
         // AlarmReceiver(BroadcastReceiver)를 깨우기 위한 Intent
         // putExtra 를 통해 alarmId와 type을 전달
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("scheduleId", scheduleId)
+            putExtra("scheduleId", info.scheduleId)
             putExtra("alarmId", alarm.alarmId)
-            putExtra("type", type.name)
+            putExtra("type", info.alarmType.name)
         }
 
         // PendingIntent 를 생성
