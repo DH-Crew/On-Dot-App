@@ -11,6 +11,7 @@ import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.schedule.SchedulePreparation
+import com.dh.ondot.domain.model.ui.AlarmRingInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.domain.service.AlarmScheduler
@@ -183,7 +184,20 @@ class AppViewModel(
             scheduleRepository.upsertLocalSchedule(newSchedule)
 
             // 스케줄러 예약
-            alarmScheduler.scheduleAlarm(newSchedule.scheduleId, currentAlarm, type)
+            alarmScheduler.scheduleAlarm(
+                AlarmRingInfo(
+                    scheduleId = newSchedule.scheduleId,
+                    alarmDetail = currentAlarm,
+                    alarmType = type,
+                    startLat = newSchedule.startLatitude,
+                    startLng = newSchedule.startLongitude,
+                    endLat = newSchedule.endLatitude,
+                    endLng = newSchedule.endLongitude,
+                    scheduleTitle = newSchedule.scheduleTitle,
+                    appointmentAt = newSchedule.appointmentAt
+                ),
+                mapProvider = uiState.value.mapProvider
+            )
 
             logGA(
                 "alarm_snoozed",

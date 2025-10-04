@@ -14,7 +14,7 @@ class AndroidSoundPlayer(
 ) : SoundPlayer {
     private val logger = Logger.withTag("AndroidSoundPlayer")
     private var player: MediaPlayer? = null
-    private var currentVolume: Float = 0.4f
+    private var currentVolume: Float = 0.8f
     private lateinit var audioFocusRequest: AudioFocusRequest
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private var _onComplete: () -> Unit = {}
