@@ -9,10 +9,9 @@ import WidgetKit
 import AppIntents
 
 struct ConfigurationAppIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource { "Configuration" }
-    static var description: IntentDescription { "This is an example widget." }
+    static var title: LocalizedStringResource { "알람 위젯 설정" }
+    static var description: IntentDescription { "OnDot 알람 위젯 구성" }
 
-    // An example configurable parameter.
-    @Parameter(title: "Favorite Emoji", default: "😃")
-    var favoriteEmoji: String
+    @Parameter(title: "알람 타입", default: "출발")
+    var alarmType: String
 }
