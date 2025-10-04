@@ -8,6 +8,8 @@
 import UIKit
 import UserNotifications
 import ComposeApp
+import FirebaseCore
+import FirebaseAnalytics
 
 // UIApplicationDelegate: iOS 앱 라이프사이클 이벤트(didFinishLaunching, willTerminate 등)를 받아 처리할 수 있도록 해주는 프로토콜
 // UNUserNotificationCenterDelegate: 사용자에게 도달한 로컬/원격 알림(Notification)을 앱 내부에서 직접 다룰 수 있게 해 주는 델리게이트 프로토콜
@@ -18,6 +20,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
+        
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
       
         // 알림 센터 델리게이트 지정
         // 앱이 실행 중일 때(포그라운드/백그라운드) 전달되는 알림도 이 클래스에서 처리하도록 지정
@@ -26,7 +32,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // 권한 요청 (배너, 사운드)
         // requestAuthorization 메서드로 배너와 사운드 알림 권한을 사용자에게 요구
         // 권한 승인, 거절 결과를 클로저의 granted, error로 전달됨
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .timeSensitive]) { granted,error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted,error in
             if granted {
                 // 원격(푸시) 알림 수신을 위해 APNs 서버에 디바이스 토큰 등록
                 // APNs(Apple Push Notification service) 서버로 디바이스 토큰을 요청

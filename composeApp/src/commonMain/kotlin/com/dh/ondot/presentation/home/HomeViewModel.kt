@@ -32,6 +32,7 @@ class HomeViewModel(
     private val analyticsManager: AnalyticsManager = provideAnalyticsManager()
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
+    private var mapProvider = MapProvider.KAKAO
 
     private fun logGA(name: String, vararg params: Pair<String, Any?>) {
         val clean = params.toMap().filterValues { it != null }
@@ -49,6 +50,9 @@ class HomeViewModel(
             memberRepository.needsChooseProvider().collect {
                 logger.e { "needsChooseProvider: $it" }
                 updateState(uiState.value.copy(needsChooseProvider = it))
+            }
+            memberRepository.getLocalMapProvider().collect {
+                mapProvider = it
             }
         }
     }
@@ -147,7 +151,7 @@ class HomeViewModel(
 
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
-                alarmScheduler.scheduleAlarm(info.scheduleId, info.alarmDetail, info.alarmType)
+                alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
             }
         }
     }

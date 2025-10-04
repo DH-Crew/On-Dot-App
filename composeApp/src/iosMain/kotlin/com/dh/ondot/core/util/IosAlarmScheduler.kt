@@ -1,90 +1,88 @@
 package com.dh.ondot.core.util
 
+import co.touchlab.kermit.Logger
+import com.dh.ondot.alarmkit.ONDAlarmKit
 import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.response.AlarmDetail
+import com.dh.ondot.domain.model.enums.MapProvider
+import com.dh.ondot.domain.model.ui.AlarmRingInfo
 import com.dh.ondot.domain.service.AlarmScheduler
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
 import platform.Foundation.NSCalendarUnitHour
 import platform.Foundation.NSCalendarUnitMinute
 import platform.Foundation.NSCalendarUnitMonth
-import platform.Foundation.NSCalendarUnitSecond
 import platform.Foundation.NSCalendarUnitYear
-import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
 import platform.Foundation.NSDateFormatter
-import platform.Foundation.NSDictionary
+import platform.Foundation.NSNumber
 import platform.Foundation.NSTimeZone
-import platform.Foundation.dictionaryWithObjects
 import platform.Foundation.localTimeZone
-import platform.UserNotifications.UNCalendarNotificationTrigger
-import platform.UserNotifications.UNMutableNotificationContent
-import platform.UserNotifications.UNNotificationInterruptionLevel
-import platform.UserNotifications.UNNotificationRequest
-import platform.UserNotifications.UNNotificationSound
-import platform.UserNotifications.UNUserNotificationCenter
+import platform.Foundation.numberWithDouble
 
-class IosAlarmScheduler: AlarmScheduler {
-    private val center = UNUserNotificationCenter.currentNotificationCenter()
+@OptIn(ExperimentalForeignApi::class)
+class IosAlarmScheduler(): AlarmScheduler {
+    private val logger = Logger.withTag("IOSAlarmScheduler")
 
-    override fun scheduleAlarm(scheduleId: Long, alarm: AlarmDetail, type: AlarmType) {
-        // 사용자가 끄면 아무 것도 안 함
+    override fun scheduleAlarm(info: AlarmRingInfo, mapProvider: MapProvider) {
+        val alarm = info.alarmDetail
+
         if (!alarm.enabled) return
 
-        // ISO 문자열 → NSDate
-        val fireDate = isoStringToNSDate(alarm.triggeredAt) ?: return
-
-        // NSDate → NSDateComponents
-        val calendar = NSCalendar.currentCalendar
-        val comps = calendar.components(
-            NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay or
-                    NSCalendarUnitHour or NSCalendarUnitMinute or NSCalendarUnitSecond,
-            fromDate = fireDate
-        )
-
-        // 노티 콘텐츠 설정
-        val content = UNMutableNotificationContent().apply {
-            setTitle("⏰ 알람")
-            setBody("예약된 알람 시간이 되었습니다.")
-            setInterruptionLevel(UNNotificationInterruptionLevel.UNNotificationInterruptionLevelTimeSensitive)
-            setSound(notificationSound(alarm.ringTone))
-            // NSDictionary 로 변환
-            val userInfoDict = NSDictionary.dictionaryWithObjects(
-                objects = listOf(scheduleId, alarm.alarmId, type.name),
-                forKeys =   listOf("scheduleId", "alarmId", "type")
-            )
-            setUserInfo(userInfoDict)
+        logger.d {
+            "startLat: ${info.startLat}, startLng: ${info.startLng}, endLat: ${info.endLat}, endLng: ${info.endLng}"
         }
 
-        // 트리거 생성 (한 번만)
-        val trigger = UNCalendarNotificationTrigger.triggerWithDateMatchingComponents(
-            dateComponents = comps,
-            repeats = false
-        )
+        ONDAlarmKit.requestAuthorization { ok ->
+            if (!ok) {
+                println("AlarmKit: authorization denied")
+                return@requestAuthorization
+            }
 
-        // 요청 빌드
-        val request = UNNotificationRequest.requestWithIdentifier(
-            /* id = */ alarm.alarmId.toString(),
-            /* content = */ content,
-            /* trigger = */ trigger
-        )
+            // ISO → DateComponents
+            val comps = isoStringToDateComponents(alarm.triggeredAt) ?: run {
+                println("AlarmKit: invalid date: ${alarm.triggeredAt}")
+                return@requestAuthorization
+            }
 
-        // 스케줄 등록
-        center.addNotificationRequest(request) { error ->
-            error?.let {
-                println("IosAlarmScheduler: 알람 등록 실패: ${it.localizedDescription}")
+            // 타이틀/타입
+            val title = when (info.alarmType) {
+                AlarmType.Preparation -> "준비 알람"
+                AlarmType.Departure -> "출발 알람"
+                else -> "알람"
+            }
+
+            ONDAlarmKit.scheduleCalendarWithId(
+                alarmUUID = alarm.alarmId.toString(),
+                dateComponents = comps,
+                title = title,
+                scheduleId = info.scheduleId,
+                alarmId = alarm.alarmId,
+                alarmType = info.alarmType.name.lowercase(),
+                tintHex = null,
+                openMapsOnSecondary = info.alarmType == AlarmType.Departure,
+                startLat = info.startLat.toNSNumber(),
+                startLng = info.startLng.toNSNumber(),
+                endLat = info.endLat.toNSNumber(),
+                endLng = info.endLng.toNSNumber(),
+                mapProvider = mapProvider.name.lowercase()
+            ) { uuid, err ->
+                if (err != null) println("AlarmKit schedule FAIL: $err")
+                else println("AlarmKit scheduled: $uuid")
             }
         }
     }
 
     override fun cancelAlarm(alarmId: Long) {
-        center.removePendingNotificationRequestsWithIdentifiers(listOf(alarmId.toString()))
+        ONDAlarmKit.cancelWithId(alarmId.toString()) { ok ->
+            logger.d { "[알람 삭제 여부] alarmId: $alarmId, ok: $ok" }
+        }
     }
 
     override fun snoozeAlarm(alarmId: Long) {
-        TODO("Not yet implemented")
     }
 
-    private fun isoStringToNSDate(iso: String): NSDate? {
+    private fun isoStringToDateComponents(iso: String): NSDateComponents? {
         val fmt = NSDateFormatter().apply {
             dateFormat = if (iso.contains("Z") || iso.contains("+")) {
                 "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -93,12 +91,14 @@ class IosAlarmScheduler: AlarmScheduler {
             }
             timeZone = NSTimeZone.localTimeZone
         }
-        return fmt.dateFromString(iso)
+        val date = fmt.dateFromString(iso) ?: return null
+        val cal = NSCalendar.currentCalendar
+        return cal.components(
+            NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay or
+                    NSCalendarUnitHour or NSCalendarUnitMinute,
+            fromDate = date
+        )
     }
 
-    private fun notificationSound(ringTone: String): UNNotificationSound {
-        val name = ringTone.substringBeforeLast(".").lowercase() + ".caf"
-
-        return UNNotificationSound.soundNamed(name)
-    }
+    private fun Double?.toNSNumber(): NSNumber? = this?.let { NSNumber.numberWithDouble(it) }
 }
