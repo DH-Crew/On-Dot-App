@@ -50,7 +50,7 @@ struct OnDotAlarmWidgetEntryView : View {
             Text(entry.date, style: .time)
 
             Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
+            Text(entry.configuration.alarmType)
         }
     }
 }
@@ -69,13 +69,13 @@ struct OnDotAlarmWidget: Widget {
 extension ConfigurationAppIntent {
     fileprivate static var smiley: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
+        intent.alarmType = "departure"
         return intent
     }
     
     fileprivate static var starEyes: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
+        intent.alarmType = "departure"
         return intent
     }
 }
