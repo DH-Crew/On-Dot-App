@@ -6,7 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.IBinder
@@ -93,12 +92,12 @@ class AlarmService : Service() {
                 }
                 logger.d { "AlarmService onStartCommand: $alarmId, $type" }
 
-                val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+                val pm = getSystemService(POWER_SERVICE) as PowerManager
 
                 wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OnDot:AlarmWakeLock")
                 wakeLock.acquire(2 * 60 * 1000L)
 
-                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 val channel = NotificationChannel(CHANNEL_ID, "알람 재생 채널", NotificationManager.IMPORTANCE_HIGH).apply {
                     lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 }
@@ -120,7 +119,7 @@ class AlarmService : Service() {
                     .setContentText("잠시만 기다려주세요")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setCategory(NotificationCompat.CATEGORY_ALARM)
-                    .setFullScreenIntent(pendingIntent, true)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setOnlyAlertOnce(true)
                     .setOngoing(true)
                     .build()
