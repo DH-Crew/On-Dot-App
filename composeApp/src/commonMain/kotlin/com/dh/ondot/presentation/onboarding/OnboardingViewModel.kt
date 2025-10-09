@@ -17,6 +17,8 @@ import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.domain.repository.MemberRepository
 import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.domain.service.SoundPlayer
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
@@ -28,71 +30,128 @@ class OnboardingViewModel(
 
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
     fun initStep() {
-        updateState(uiState.value.copy(currentStep = 1, totalStep = 5))
+        updateState(
+            uiState.value.copy(
+                currentStep = 1,
+                totalStep = if (getPlatform().name == ANDROID) 5 else 4
+            )
+        )
     }
 
     // 다음 버튼의 활성화 여부를 판단하는 메서드
     fun isButtonEnabled(): Boolean {
-        return when (uiState.value.currentStep) {
-            1 -> {
-                val hour = uiState.value.hourInput.toIntOrNull() ?: 0
-                val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
-                hour > 0 || minute > 0
+        if (getPlatform().name == ANDROID) {
+            return when (uiState.value.currentStep) {
+                1 -> {
+                    val hour = uiState.value.hourInput.toIntOrNull() ?: 0
+                    val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
+                    hour > 0 || minute > 0
+                }
+                2 -> {
+                    uiState.value.selectedAddress != null
+                }
+                3 -> {
+                    uiState.value.isMuted || uiState.value.selectedSound != null
+                }
+                4, 5 -> true
+                else -> {
+                    false
+                }
             }
-            2 -> {
-                uiState.value.selectedAddress != null
-            }
-            3 -> {
-                uiState.value.isMuted || uiState.value.selectedSound != null
-            }
-            4, 5 -> true
-            else -> {
-                false
+        } else {
+            return when (uiState.value.currentStep) {
+                1 -> {
+                    val hour = uiState.value.hourInput.toIntOrNull() ?: 0
+                    val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
+                    hour > 0 || minute > 0
+                }
+                2 -> {
+                    uiState.value.selectedAddress != null
+                }
+                3, 4 -> true
+                else -> {
+                    false
+                }
             }
         }
     }
 
     // 다음 버튼을 클릭했을 때 호출되는 메서드
     fun onClickNext() {
-        when (uiState.value.currentStep) {
-            1 -> {
-                updateState(uiState.value.copy(currentStep = 2))
-                calculatePreparationTime()
+        if (getPlatform().name == ANDROID) {
+            when (uiState.value.currentStep) {
+                1 -> {
+                    updateState(uiState.value.copy(currentStep = 2))
+                    calculatePreparationTime()
+                }
+                2 -> {
+                    updateState(uiState.value.copy(currentStep = 3))
+                }
+                3 -> {
+                    updateState(uiState.value.copy(currentStep = 4))
+                    soundPlayer.stopSound()
+                }
+                4 -> {
+                    updateState(uiState.value.copy(currentStep = 5))
+                }
+                5 -> {
+                    completeOnboarding()
+                }
             }
-            2 -> {
-                updateState(uiState.value.copy(currentStep = 3))
-            }
-            3 -> {
-                updateState(uiState.value.copy(currentStep = 4))
-                soundPlayer.stopSound()
-            }
-            4 -> {
-                updateState(uiState.value.copy(currentStep = 5))
-            }
-            5 -> {
-                completeOnboarding()
+        } else {
+            when (uiState.value.currentStep) {
+                1 -> {
+                    updateState(uiState.value.copy(currentStep = 2))
+                    calculatePreparationTime()
+                }
+                2 -> {
+                    updateState(uiState.value.copy(currentStep = 3))
+                }
+                3 -> {
+                    updateState(uiState.value.copy(currentStep = 4))
+                }
+                4 -> {
+                    completeOnboarding()
+                }
             }
         }
     }
 
     // 뒤로가기 버튼을 클릭했을 때 호출되는 메서드
     fun onClickBack() {
-        when (uiState.value.currentStep) {
-            2 -> {
-                updateState(uiState.value.copy(currentStep = 1))
+        if (getPlatform().name == ANDROID) {
+            when (uiState.value.currentStep) {
+                2 -> {
+                    updateState(uiState.value.copy(currentStep = 1))
+                }
+                3 -> {
+                    updateState(uiState.value.copy(currentStep = 2))
+                    soundPlayer.stopSound()
+                }
+                4 -> {
+                    updateState(uiState.value.copy(currentStep = 3))
+                }
+                5 -> {
+                    updateState(uiState.value.copy(currentStep = 4))
+                }
+                else -> {
+                    return
+                }
             }
-            3 -> {
-                updateState(uiState.value.copy(currentStep = 2))
-                soundPlayer.stopSound()
-            }
-            4 -> {
-                updateState(uiState.value.copy(currentStep = 3))
-            }
-            5 -> {
-                updateState(uiState.value.copy(currentStep = 4))
-            }
-            else -> {
-                return
+        } else {
+            when (uiState.value.currentStep) {
+                2 -> {
+                    updateState(uiState.value.copy(currentStep = 1))
+                }
+                3 -> {
+                    updateState(uiState.value.copy(currentStep = 2))
+                }
+                4 -> {
+                    updateState(uiState.value.copy(currentStep = 3))
+                }
+                else -> {
+                    return
+                }
             }
         }
     }
