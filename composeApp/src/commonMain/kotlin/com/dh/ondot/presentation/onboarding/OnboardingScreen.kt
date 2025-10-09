@@ -110,43 +110,72 @@ fun OnboardingContent(
 
         Spacer(modifier = Modifier.height(34.dp))
 
-        when (uiState.currentStep) {
-            1 -> OnboardingStep1(
-                hourInput = uiState.hourInput,
-                minuteInput = uiState.minuteInput,
-                onHourInputChanged = onHourInputChanged,
-                onMinuteInputChanged = onMinuteInputChanged
-            )
-            2 -> OnboardingStep2(
-                addressInput = uiState.addressInput,
-                onAddressInputChanged = onAddressInputChanged,
-                addressList = uiState.addressList,
-                onClickPlace = onClickPlace
-            )
-            3 -> OnboardingStep3(
-                isMuted = uiState.isMuted,
-                categories = uiState.categories,
-                selectedCategoryIndex = uiState.selectedCategoryIndex,
-                filteredSounds = uiState.filteredSounds,
-                selectedSoundId = uiState.selectedSound,
-                volume = uiState.volume,
-                onToggleMute = onToggleMute,
-                onCategorySelected = onCategorySelected,
-                onSelectSound = onSelectSound,
-                onVolumeChange = onVolumeChange,
-            )
-            4 -> OnboardingStep4(
-                answerList = uiState.answer1,
-                selectedAnswerIndex = uiState.selectedAnswer1Index,
-                interactionSource = interactionSource,
-                onClickAnswer = onClickAnswer1
-            )
-            5 -> OnboardingStep5(
-                answerList = uiState.answer2,
-                selectedAnswerIndex = uiState.selectedAnswer2Index,
-                interactionSource = interactionSource,
-                onClickAnswer = onClickAnswer2
-            )
+        if (getPlatform().name == ANDROID) {
+            when (uiState.currentStep) {
+                1 -> OnboardingStep1(
+                    hourInput = uiState.hourInput,
+                    minuteInput = uiState.minuteInput,
+                    onHourInputChanged = onHourInputChanged,
+                    onMinuteInputChanged = onMinuteInputChanged
+                )
+                2 -> OnboardingStep2(
+                    addressInput = uiState.addressInput,
+                    onAddressInputChanged = onAddressInputChanged,
+                    addressList = uiState.addressList,
+                    onClickPlace = onClickPlace
+                )
+                3 -> OnboardingStep3(
+                    isMuted = uiState.isMuted,
+                    categories = uiState.categories,
+                    selectedCategoryIndex = uiState.selectedCategoryIndex,
+                    filteredSounds = uiState.filteredSounds,
+                    selectedSoundId = uiState.selectedSound,
+                    volume = uiState.volume,
+                    onToggleMute = onToggleMute,
+                    onCategorySelected = onCategorySelected,
+                    onSelectSound = onSelectSound,
+                    onVolumeChange = onVolumeChange,
+                )
+                4 -> OnboardingStep4(
+                    answerList = uiState.answer1,
+                    selectedAnswerIndex = uiState.selectedAnswer1Index,
+                    interactionSource = interactionSource,
+                    onClickAnswer = onClickAnswer1
+                )
+                5 -> OnboardingStep5(
+                    answerList = uiState.answer2,
+                    selectedAnswerIndex = uiState.selectedAnswer2Index,
+                    interactionSource = interactionSource,
+                    onClickAnswer = onClickAnswer2
+                )
+            }
+        } else {
+            when (uiState.currentStep) {
+                1 -> OnboardingStep1(
+                    hourInput = uiState.hourInput,
+                    minuteInput = uiState.minuteInput,
+                    onHourInputChanged = onHourInputChanged,
+                    onMinuteInputChanged = onMinuteInputChanged
+                )
+                2 -> OnboardingStep2(
+                    addressInput = uiState.addressInput,
+                    onAddressInputChanged = onAddressInputChanged,
+                    addressList = uiState.addressList,
+                    onClickPlace = onClickPlace
+                )
+                3 -> OnboardingStep4(
+                    answerList = uiState.answer1,
+                    selectedAnswerIndex = uiState.selectedAnswer1Index,
+                    interactionSource = interactionSource,
+                    onClickAnswer = onClickAnswer1
+                )
+                4 -> OnboardingStep5(
+                    answerList = uiState.answer2,
+                    selectedAnswerIndex = uiState.selectedAnswer2Index,
+                    interactionSource = interactionSource,
+                    onClickAnswer = onClickAnswer2
+                )
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))
