@@ -8,9 +8,13 @@ assignees: ''
 ---
 
 ## Description
-> 어떤 작업에 대한 이슈인지 적어주세요. ex) 프로젝트 초기 세팅
 
 ## TODO
-> 이슈에서 해야 할 일을 적어주세요.
+### commonMain
+- [ ] 할일
 
+### androidMain
+- [ ] 할일
+
+### iosMain
 - [ ] 할일
