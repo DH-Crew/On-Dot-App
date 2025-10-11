@@ -47,5 +47,10 @@ gradlePlugin {
             id = "ondot.compose.multiplatform.convention"
             implementationClass = "com.ondot.build_logic.convention.ComposeMultiplatformConventionPlugin"
         }
+
+        register("kmp-domain") {
+            id = "ondot.kmp.domain"
+            implementationClass = "com.ondot.build_logic.convention.KmpDomainConventionPlugin"
+        }
     }
 }
