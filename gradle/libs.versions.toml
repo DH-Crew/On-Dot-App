@@ -12,6 +12,7 @@ jetbrainsKotlinJvm = "2.2.20"
 # Compose Multiplatform
 composeMultiplatform = "1.8.2"
 composeHotReload = "1.0.0-alpha11"
+lifecycle = "2.9.4"
 
 # AndroidX
 androidx-core = "1.16.0"
@@ -86,6 +87,9 @@ firebase-analytics = "17.4.1"
 # Google-Services
 google-services = "4.4.3"
 
+# Koin
+koin = "4.1.1"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -132,6 +136,10 @@ compose-uiTooling              = { group = "org.jetbrains.compose.ui",          
 compose-ui-tooling-preview     = { group = "org.jetbrains.compose.ui",          name = "ui-tooling-preview",   version.ref = "composeMultiplatform" }
 compose-components-resources   = { group = "org.jetbrains.compose.components",  name = "components-resources", version.ref = "resources" }
 
+lifecycleViewModel                = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
+lifecycleViewModelCompose         = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycleRuntimeCompose           = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+
 # Network & JSON
 retrofit                       = { module = "com.squareup.retrofit2:retrofit",             version.ref = "retrofit" }
 retrofit-gson                  = { module = "com.squareup.retrofit2:converter-gson",      version.ref = "retrofit" }
@@ -173,13 +181,11 @@ androidx-test-ext-junit        = { module = "androidx.test.ext:junit",          
 androidx-espresso-core         = { module = "androidx.test.espresso:espresso-core",        version.ref = "androidx-espresso" }
 mockk                          = { module = "io.mockk:mockk",                             version.ref = "mockk" }
 
-
 # Logging
 kermit                         = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 # Jetbrains Androidx
 navigation                     = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
-viewmodel                      = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
 
 # Compottie
 compottie                      = { module = "io.github.alexzhirkevich:compottie",        version.ref = "compottie" }
@@ -205,3 +211,8 @@ native-driver                          = { module = "app.cash.sqldelight:native-
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
+
+# Koin
+koinCore                          = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koinCompose                       = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koinComposeViewModel              = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
