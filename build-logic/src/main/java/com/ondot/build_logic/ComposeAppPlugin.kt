@@ -1,13 +1,15 @@
 package com.ondot.build_logic
 
+import com.ondot.build_logic.convention.AndroidApplicationConventionPlugin
+import com.ondot.build_logic.convention.ComposeMultiplatformConventionPlugin
+import com.ondot.build_logic.convention.KotlinMultiplatformConventionPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
 
 class ComposeAppPlugin : Plugin<Project> {
-    override fun apply(project: Project) {
-        project.pluginManager.apply(AndroidApplicationPlugin::class.java)
-        project.pluginManager.apply(KotlinMultiplatformPlugin::class.java)
-        project.pluginManager.apply(ComposeMultiplatformPlugin::class.java)
+    override fun apply(project: Project) = with(project) {
+        pluginManager.apply(AndroidApplicationConventionPlugin::class.java)
+        pluginManager.apply(KotlinMultiplatformConventionPlugin::class.java)
+        pluginManager.apply(ComposeMultiplatformConventionPlugin::class.java)
     }
 }
