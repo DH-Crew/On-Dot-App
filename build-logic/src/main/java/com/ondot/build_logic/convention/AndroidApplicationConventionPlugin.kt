@@ -2,7 +2,6 @@ package com.ondot.build_logic.convention
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.ondot.build_logic.convention.internal.applyAppDefaults
-import com.ondot.build_logic.convention.internal.computeNamespace
 import com.ondot.build_logic.convention.internal.configureAndroid
 import com.ondot.build_logic.convention.internal.configureToolchains
 import org.gradle.api.Plugin
@@ -22,7 +21,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         configureToolchains()
 
         extensions.configure<ApplicationExtension> {
-            namespace = computeNamespace()
+            namespace = "com.dh.ondot"
             configureAndroid(this@with)
             applyAppDefaults(this@with)
 
@@ -33,6 +32,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             buildTypes.getByName("release").isMinifyEnabled = false
 
             defaultConfig {
+                applicationId = "com.dh.ondot"
+
                 versionCode = (findProperty("version.code") as String?)?.toInt() ?: 1
                 versionName = (findProperty("version.name") as String?) ?: "1.0.0"
 
