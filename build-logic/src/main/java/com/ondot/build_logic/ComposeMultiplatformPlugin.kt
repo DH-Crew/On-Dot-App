@@ -7,20 +7,21 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
+@Deprecated("ComposeMultiplatformConventionPlugin 사용")
 class ComposeMultiplatformPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        // 1) 필요한 플러그인 적용
+        // 필요한 플러그인 적용
         project.pluginManager.apply("org.jetbrains.kotlin.multiplatform")
         project.pluginManager.apply("org.jetbrains.compose")
         project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
         project.pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
-        // 2) 버전 카탈로그 읽기
+        // 버전 카탈로그 읽기
         val libs = project.extensions
             .findByType<VersionCatalogsExtension>()!!
             .named("libs")
 
-        // 3) KMP sourceSets에 의존성 추가
+        // KMP sourceSets에 의존성 추가
         project.extensions.configure<KotlinMultiplatformExtension> {
             with(sourceSets) {
                 val commonMain = maybeCreate("commonMain")
@@ -37,7 +38,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("ktor-client-content-negotiation").get())
                     implementation(libs.findLibrary("ktor-serialization").get())
                     implementation(libs.findLibrary("ktor-client-logging").get())
-                    implementation(libs.findLibrary("viewmodel").get())
+                    implementation(libs.findLibrary("lifecycleViewModelCompose").get())
                     implementation(libs.findLibrary("navigation").get())
                     implementation(libs.findLibrary("compottie").get())
                     implementation(libs.findLibrary("compottie-dot").get())
@@ -46,7 +47,7 @@ class ComposeMultiplatformPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("kotlinx-io-bytestring").get())
                     implementation(libs.findLibrary("kotlinx-datetime").get())
                     implementation(libs.findLibrary("coroutines-extensions").get())
-                    implementation("io.insert-koin:koin-core:4.0.3")
+                    implementation(libs.findLibrary("koinCore").get())
                 }
 
                 val androidMain = maybeCreate("androidMain")

@@ -1,6 +1,5 @@
 
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import java.util.Properties
 
@@ -33,9 +32,28 @@ buildkonfig {
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+
+            implementation(libs.kotlinx.coroutines.android)
+
+            implementation(libs.datastore.core)
+            implementation(libs.datastore.preferences)
+
+            implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.kakao.login)
+
+            implementation(libs.android.driver)
+
+            implementation(libs.firebase.analytics)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+
+            implementation(libs.native.driver)
         }
     }
 

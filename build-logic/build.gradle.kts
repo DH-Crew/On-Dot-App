@@ -28,7 +28,7 @@ gradlePlugin {
     plugins {
         register("android-application") {
             id = "ondot.android.application"
-            implementationClass = "com.ondot.build_logic.AndroidApplicationPlugin"
+            implementationClass = "com.ondot.build_logic.convention.AndroidApplicationConventionPlugin"
         }
         register("compose-app") {
             id = "ondot.compose.app"
@@ -40,7 +40,12 @@ gradlePlugin {
         }
         register("kotlin-multiplatform") {
             id = "ondot.kotlin.multiplatform"
-            implementationClass = "com.ondot.build_logic.KotlinMultiplatformPlugin"
+            implementationClass = "com.ondot.build_logic.convention.KotlinMultiplatformConventionPlugin"
+        }
+
+        register("compose-multiplatform-convention") {
+            id = "ondot.compose.multiplatform.convention"
+            implementationClass = "com.ondot.build_logic.convention.ComposeMultiplatformConventionPlugin"
         }
     }
 }
