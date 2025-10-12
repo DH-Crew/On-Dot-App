@@ -33,6 +33,10 @@ buildkonfig {
 
 kotlin {
     sourceSets {
+        commonMain.dependencies {
+            implementation(projects.domain)
+        }
+
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
 
