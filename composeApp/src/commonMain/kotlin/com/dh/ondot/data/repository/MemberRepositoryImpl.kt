@@ -3,7 +3,7 @@ package com.dh.ondot.data.repository
 import com.dh.ondot.core.network.BaseRepository
 import com.dh.ondot.core.network.HttpMethod
 import com.dh.ondot.core.network.NetworkClient
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 import com.dh.ondot.domain.model.enums.MapProvider
 import com.dh.ondot.domain.model.request.DeleteAccountRequest
 import com.dh.ondot.domain.model.request.MapProviderRequest
@@ -21,7 +21,7 @@ class MemberRepositoryImpl(
     networkClient: NetworkClient,
     private val mapProviderStorage: MapProviderStorage
 ) : MemberRepository, BaseRepository(networkClient) {
-    override suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<TokenModel>> = flow {
+    override suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<AuthTokens>> = flow {
         emit(fetch(HttpMethod.POST, "/members/onboarding", body = request))
     }
 

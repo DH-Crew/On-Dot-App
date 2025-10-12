@@ -1,24 +1,24 @@
 package com.dh.ondot.core.network
 
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.setValue
 
 actual class TokenProvider {
     private val userDefaults = NSUserDefaults.standardUserDefaults
 
-    actual suspend fun getToken(): TokenModel? {
+    actual suspend fun getToken(): AuthTokens? {
         val accessToken = userDefaults.stringForKey(ACCESS_TOKEN_KEY)
         val refreshToken = userDefaults.stringForKey(REFRESH_TOKEN_KEY)
 
         return if (accessToken != null && refreshToken != null) {
-            TokenModel(accessToken = accessToken, refreshToken = refreshToken)
+            AuthTokens(accessToken = accessToken, refreshToken = refreshToken)
         } else {
             null
         }
     }
 
-    actual suspend fun saveToken(newToken: TokenModel) {
+    actual suspend fun saveToken(newToken: AuthTokens) {
         userDefaults.setValue(newToken.accessToken, forKey = ACCESS_TOKEN_KEY)
         userDefaults.setValue(newToken.refreshToken, forKey = REFRESH_TOKEN_KEY)
     }

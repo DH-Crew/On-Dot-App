@@ -8,7 +8,7 @@ import com.dh.ondot.core.platform.kakaoSignIn
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.model.response.AuthResponse
 import com.dh.ondot.domain.repository.AuthRepository
@@ -33,7 +33,7 @@ class LoginViewModel(
     }
 
     private fun onSuccessKakaoLogin(result: AuthResponse) {
-        saveToken(token = TokenModel(accessToken = result.accessToken, refreshToken = result.refreshToken))
+        saveToken(token = AuthTokens(accessToken = result.accessToken, refreshToken = result.refreshToken))
 
         when(result.isNewMember) {
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
@@ -67,7 +67,7 @@ class LoginViewModel(
     }
 
     private fun onSuccessAppleLogin(result: AuthResponse) {
-        saveToken(token = TokenModel(accessToken = result.accessToken, refreshToken = result.refreshToken))
+        saveToken(token = AuthTokens(accessToken = result.accessToken, refreshToken = result.refreshToken))
 
         when(result.isNewMember) {
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
@@ -75,7 +75,7 @@ class LoginViewModel(
         }
     }
 
-    private fun saveToken(token: TokenModel) {
+    private fun saveToken(token: AuthTokens) {
         viewModelScope.launch {
             authRepository.saveToken(token)
         }

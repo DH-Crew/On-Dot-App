@@ -1,9 +1,9 @@
 package com.dh.ondot.core.network
 
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 
 expect class TokenProvider {
-    suspend fun getToken(): TokenModel?
-    suspend fun saveToken(newToken: TokenModel)
+    suspend fun getToken(): AuthTokens?
+    suspend fun saveToken(newToken: AuthTokens)
     suspend fun clearToken()
 }
