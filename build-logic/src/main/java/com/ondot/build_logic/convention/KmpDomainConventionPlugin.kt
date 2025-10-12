@@ -14,13 +14,13 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 class KmpDomainConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
+        pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
         val libs = project.extensions
             .findByType<VersionCatalogsExtension>()!!
             .named("libs")
 
         extensions.configure<KotlinMultiplatformExtension> {
-            explicitApi()
             jvm {
                 compilerOptions {
                     jvmTarget.set(JvmTarget.JVM_17)
