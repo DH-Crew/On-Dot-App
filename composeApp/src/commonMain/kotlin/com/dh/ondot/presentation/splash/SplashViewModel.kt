@@ -5,7 +5,7 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 import com.dh.ondot.domain.model.enums.ToastType
 import com.dh.ondot.domain.repository.AuthRepository
 import com.dh.ondot.core.network.TokenProvider
@@ -42,7 +42,7 @@ class SplashViewModel(
         }
     }
 
-    private fun onSuccessReissueToken(result: TokenModel) {
+    private fun onSuccessReissueToken(result: AuthTokens) {
         viewModelScope.launch {
             tokenProvider.saveToken(result)
             updateState(uiState.value.copy(skipLogin = true))

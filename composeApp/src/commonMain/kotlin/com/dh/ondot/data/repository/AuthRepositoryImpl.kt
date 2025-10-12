@@ -4,7 +4,7 @@ import com.dh.ondot.core.network.BaseRepository
 import com.dh.ondot.core.network.HttpMethod
 import com.dh.ondot.core.network.NetworkClient
 import com.dh.ondot.core.network.TokenProvider
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 import com.dh.ondot.domain.model.response.AuthResponse
 import com.dh.ondot.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
@@ -31,11 +31,11 @@ class AuthRepositoryImpl(
         emit(fetch(HttpMethod.POST, "/auth/logout"))
     }
 
-    override suspend fun saveToken(token: TokenModel) {
+    override suspend fun saveToken(token: AuthTokens) {
         tokenProvider.saveToken(token)
     }
 
-    override suspend fun reissueToken(): Flow<Result<TokenModel>> = flow {
+    override suspend fun reissueToken(): Flow<Result<AuthTokens>> = flow {
         emit(
             fetch(
                 method = HttpMethod.POST,

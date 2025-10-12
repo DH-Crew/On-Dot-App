@@ -6,7 +6,7 @@ import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.TokenModel
+import com.dh.ondot.data.model.AuthTokens
 import com.dh.ondot.domain.model.enums.AlarmMode
 import com.dh.ondot.domain.model.enums.RingTone
 import com.dh.ondot.domain.model.enums.SoundCategory
@@ -290,7 +290,7 @@ class OnboardingViewModel(
         }
     }
 
-    private fun onSuccessCompleteOnboarding(result: TokenModel) {
+    private fun onSuccessCompleteOnboarding(result: AuthTokens) {
         viewModelScope.launch { tokenProvider.saveToken(result) }
         emitEventFlow(OnboardingEvent.NavigateToMainScreen)
     }

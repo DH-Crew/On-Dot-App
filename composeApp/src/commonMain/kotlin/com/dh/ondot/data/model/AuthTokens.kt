@@ -3,7 +3,7 @@ package com.dh.ondot.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TokenModel(
+data class AuthTokens(
     val accessToken: String = "",
     val refreshToken: String = ""
 )
