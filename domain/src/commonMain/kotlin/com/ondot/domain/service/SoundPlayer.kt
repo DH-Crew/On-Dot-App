@@ -1,4 +1,4 @@
-package com.dh.ondot.domain.service
+package com.ondot.domain.service
 
 interface SoundPlayer {
     fun playSound(soundResId: String, onComplete: () -> Unit = {})

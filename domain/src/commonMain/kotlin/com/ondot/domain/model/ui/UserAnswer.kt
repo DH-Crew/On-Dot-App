@@ -1,4 +1,4 @@
-package com.dh.ondot.domain.model.ui
+package com.ondot.domain.model.ui
 
 data class UserAnswer(
     val id: Long,

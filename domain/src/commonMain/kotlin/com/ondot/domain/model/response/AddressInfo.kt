@@ -1,8 +1,5 @@
-package com.dh.ondot.domain.model.response
+package com.ondot.domain.model.response
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class AddressInfo(
     val title: String = "",
     val roadAddress: String = "",

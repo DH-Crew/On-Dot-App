@@ -1,13 +1,13 @@
-package com.dh.ondot.domain.repository
+package com.ondot.domain.repository
 
-import com.dh.ondot.domain.model.request.CreateScheduleRequest
-import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
-import com.dh.ondot.domain.model.request.ToggleAlarmRequest
-import com.dh.ondot.domain.model.response.Schedule
-import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
-import com.dh.ondot.domain.model.response.ScheduleDetail
-import com.dh.ondot.domain.model.response.ScheduleListResponse
-import com.dh.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.domain.model.request.CreateScheduleRequest
+import com.ondot.domain.model.request.ScheduleAlarmRequest
+import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.response.Schedule
+import com.ondot.domain.model.response.ScheduleAlarmResponse
+import com.ondot.domain.model.response.ScheduleDetail
+import com.ondot.domain.model.response.ScheduleListResponse
+import com.ondot.domain.model.schedule.SchedulePreparation
 import kotlinx.coroutines.flow.Flow
 
 interface ScheduleRepository {

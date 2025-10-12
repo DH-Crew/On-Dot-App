@@ -1,12 +1,12 @@
-package com.dh.ondot.domain.repository
+package com.ondot.domain.repository
 
-import com.dh.ondot.data.model.TokenModel
-import com.dh.ondot.domain.model.response.AuthResponse
+import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.model.response.AuthResponse
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
     suspend fun login(provider: String, accessToken: String): Flow<Result<AuthResponse>>
     suspend fun logout(): Flow<Result<Unit>>
-    suspend fun saveToken(token: TokenModel)
-    suspend fun reissueToken(): Flow<Result<TokenModel>>
+    suspend fun saveToken(token: AuthTokens)
+    suspend fun reissueToken(): Flow<Result<AuthTokens>>
 }

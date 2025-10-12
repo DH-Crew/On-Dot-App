@@ -1,9 +1,7 @@
-package com.dh.ondot.domain.model.request
+package com.ondot.domain.model.request
 
-import com.dh.ondot.domain.model.enums.MapProvider
-import kotlinx.serialization.Serializable
+import com.ondot.domain.model.enums.MapProvider
 
-@Serializable
 data class MapProviderRequest(
     val mapProvider: MapProvider
 )

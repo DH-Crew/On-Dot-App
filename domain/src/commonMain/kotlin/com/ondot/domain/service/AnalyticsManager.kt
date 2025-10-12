@@ -1,4 +1,4 @@
-package com.dh.ondot.domain.service
+package com.ondot.domain.service
 
 interface AnalyticsManager {
     fun logEvent(name: String, params: Map<String, Any?> = emptyMap())

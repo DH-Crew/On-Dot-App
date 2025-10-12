@@ -1,6 +1,6 @@
-package com.dh.ondot.domain.repository
+package com.ondot.domain.repository
 
-import com.dh.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.response.AddressInfo
 import kotlinx.coroutines.flow.Flow
 
 interface PlaceRepository {

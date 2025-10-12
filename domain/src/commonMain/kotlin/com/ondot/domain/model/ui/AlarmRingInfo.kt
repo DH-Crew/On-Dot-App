@@ -1,10 +1,8 @@
-package com.dh.ondot.domain.model.ui
+package com.ondot.domain.model.ui
 
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.response.AlarmDetail
-import kotlinx.serialization.Serializable
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.response.AlarmDetail
 
-@Serializable
 data class AlarmRingInfo(
     val alarmDetail: AlarmDetail = AlarmDetail(),
     val alarmType: AlarmType = AlarmType.Departure,

@@ -1,16 +1,10 @@
-package com.dh.ondot.domain.model.response
+package com.ondot.domain.model.response
 
-import com.dh.ondot.domain.model.enums.AlarmMode
-import com.dh.ondot.core.network.DefaultOnNullLongSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.ondot.domain.model.enums.AlarmMode
 
-@Serializable
 data class AlarmDetail(
-    @Serializable(with = DefaultOnNullLongSerializer::class)
     val alarmId: Long = -1,
     val alarmMode: AlarmMode = AlarmMode.SOUND,
-    @SerialName("isEnabled")
     val enabled: Boolean = false,
     val triggeredAt: String = "2025-05-10T19:00:00",
     val isSnoozeEnabled: Boolean = false,
