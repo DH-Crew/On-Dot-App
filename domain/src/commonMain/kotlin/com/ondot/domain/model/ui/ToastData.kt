@@ -1,6 +1,6 @@
-package com.dh.ondot.domain.model.ui
+package com.ondot.domain.model.ui
 
-import com.dh.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.enums.ToastType
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 

@@ -1,4 +1,4 @@
-package com.dh.ondot.domain.model.enums
+package com.ondot.domain.model.enums
 
 enum class RingTone(val id: String) {
     DANCING_IN_THE_STARDUST("dancing_in_the_stardust"),

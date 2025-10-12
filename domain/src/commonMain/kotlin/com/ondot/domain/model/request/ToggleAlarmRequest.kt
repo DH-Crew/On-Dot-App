@@ -1,8 +1,5 @@
-package com.dh.ondot.domain.model.request
+package com.ondot.domain.model.request
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class ToggleAlarmRequest(
     val isEnabled: Boolean
 )

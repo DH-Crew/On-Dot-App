@@ -1,8 +1,5 @@
-package com.dh.ondot.domain.model.response
+package com.ondot.domain.model.response
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Schedule(
     val scheduleId: Long = -1L,
     val startLongitude: Double = 0.0,
