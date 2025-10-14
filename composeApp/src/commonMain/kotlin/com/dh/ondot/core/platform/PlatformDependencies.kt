@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.data.local.db.OndotDatabase
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AlarmStorage
-import com.dh.ondot.domain.service.AnalyticsManager
-import com.dh.ondot.domain.service.MapProviderStorage
-import com.dh.ondot.domain.service.SoundPlayer
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.AlarmStorage
+import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.MapProviderStorage
+import com.ondot.domain.service.SoundPlayer
 
 expect fun provideTokenProvider(): TokenProvider
 

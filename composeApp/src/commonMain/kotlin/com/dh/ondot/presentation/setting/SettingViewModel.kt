@@ -5,17 +5,6 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.request.DeleteAccountRequest
-import com.dh.ondot.domain.model.request.MapProviderRequest
-import com.dh.ondot.domain.model.request.settings.home_address.HomeAddressRequest
-import com.dh.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
-import com.dh.ondot.domain.model.response.AddressInfo
-import com.dh.ondot.domain.model.response.HomeAddressInfo
-import com.dh.ondot.domain.repository.AuthRepository
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGOUT
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
@@ -25,6 +14,17 @@ import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_PREPARATION_TIME
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
 import com.dh.ondot.presentation.ui.theme.WITHDRAW_SUCCESS_MESSAGE
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.request.DeleteAccountRequest
+import com.ondot.domain.model.request.MapProviderRequest
+import com.ondot.domain.model.request.settings.home_address.HomeAddressRequest
+import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
+import com.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.response.HomeAddressInfo
+import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.PlaceRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -220,7 +220,10 @@ class SettingViewModel(
 
         viewModelScope.launch {
             memberRepository.withdrawUser(
-                request = DeleteAccountRequest(withdrawalReasonId = selectedReason.id, customReason = "")
+                request = DeleteAccountRequest(
+                    withdrawalReasonId = selectedReason.id,
+                    customReason = ""
+                )
             ).collect {
                 resultResponse(it, ::onSuccessWithdraw, ::onFailWithdraw)
             }

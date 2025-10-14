@@ -21,8 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.constants.AppConstants
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray100
@@ -30,6 +28,8 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
+import com.ondot.domain.model.constants.AppConstants
+import com.ondot.domain.model.enums.OnDotTextStyle
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.isoDayNumber

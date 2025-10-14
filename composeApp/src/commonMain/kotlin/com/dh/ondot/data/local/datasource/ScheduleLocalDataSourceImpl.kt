@@ -6,8 +6,8 @@ import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.dh.ondot.data.local.db.OndotDatabase
 import com.dh.ondot.data.local.db.ScheduleEntityQueries
 import com.dh.ondot.data.local.db.toDomain
-import com.dh.ondot.domain.datasource.ScheduleLocalDataSource
-import com.dh.ondot.domain.model.response.Schedule
+import com.ondot.domain.datasource.ScheduleLocalDataSource
+import com.ondot.domain.model.response.Schedule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow

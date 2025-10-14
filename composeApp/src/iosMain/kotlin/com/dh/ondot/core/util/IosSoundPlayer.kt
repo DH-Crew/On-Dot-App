@@ -1,6 +1,6 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.service.SoundPlayer
+import com.ondot.domain.service.SoundPlayer
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFAudio.AVAudioPlayer
 import platform.AVFAudio.AVAudioSession

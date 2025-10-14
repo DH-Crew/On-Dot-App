@@ -1,4 +1,4 @@
-import com.dh.ondot.domain.model.response.AlarmDetail;
+import com.ondot.domain.model.response.AlarmDetail;
 import kotlin.Boolean;
 import kotlin.Int;
 import kotlin.collections.List;

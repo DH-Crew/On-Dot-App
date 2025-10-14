@@ -4,16 +4,16 @@ import com.dh.ondot.core.network.BaseRepository
 import com.dh.ondot.core.network.HttpMethod
 import com.dh.ondot.core.network.NetworkClient
 import com.dh.ondot.data.mapper.SchedulePreparationResponseMapper
-import com.dh.ondot.domain.datasource.ScheduleLocalDataSource
-import com.dh.ondot.domain.model.request.CreateScheduleRequest
-import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
-import com.dh.ondot.domain.model.request.ToggleAlarmRequest
-import com.dh.ondot.domain.model.response.Schedule
-import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
-import com.dh.ondot.domain.model.response.ScheduleDetail
-import com.dh.ondot.domain.model.response.ScheduleListResponse
-import com.dh.ondot.domain.model.schedule.SchedulePreparation
-import com.dh.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.datasource.ScheduleLocalDataSource
+import com.ondot.domain.model.request.CreateScheduleRequest
+import com.ondot.domain.model.request.ScheduleAlarmRequest
+import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.response.Schedule
+import com.ondot.domain.model.response.ScheduleAlarmResponse
+import com.ondot.domain.model.response.ScheduleDetail
+import com.ondot.domain.model.response.ScheduleListResponse
+import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.domain.repository.ScheduleRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

@@ -17,10 +17,10 @@ import com.dh.ondot.R
 import com.dh.ondot.core.di.AndroidServiceLocator
 import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.data.OnDotDataStore
-import com.dh.ondot.domain.model.enums.AlarmMode
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.presentation.MainActivity
+import com.ondot.domain.model.enums.AlarmMode
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.service.SoundPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

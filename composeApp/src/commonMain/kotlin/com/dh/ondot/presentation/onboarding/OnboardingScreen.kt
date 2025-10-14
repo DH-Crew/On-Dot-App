@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.core.platform.BackPressHandler
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep1
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep2
@@ -30,6 +28,8 @@ import com.dh.ondot.presentation.ui.components.TopBar
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.response.AddressInfo
 
 @Composable
 fun OnboardingScreen(

@@ -4,9 +4,9 @@ import com.dh.ondot.core.network.BaseRepository
 import com.dh.ondot.core.network.HttpMethod
 import com.dh.ondot.core.network.NetworkClient
 import com.dh.ondot.core.network.TokenProvider
-import com.dh.ondot.data.model.AuthTokens
-import com.dh.ondot.domain.model.response.AuthResponse
-import com.dh.ondot.domain.repository.AuthRepository
+import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.model.response.AuthResponse
+import com.ondot.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

@@ -26,11 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.ui.ToastData
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.ui.ToastData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import ondot.composeapp.generated.resources.Res

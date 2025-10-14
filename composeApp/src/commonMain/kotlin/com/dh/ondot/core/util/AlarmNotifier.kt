@@ -1,6 +1,6 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.model.ui.AlarmEvent
+import com.ondot.domain.model.ui.AlarmEvent
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

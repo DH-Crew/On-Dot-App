@@ -1,6 +1,6 @@
 package com.dh.ondot.core.network
 
-import com.dh.ondot.data.model.AuthTokens
+import com.ondot.domain.model.auth.AuthTokens
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.setValue
 

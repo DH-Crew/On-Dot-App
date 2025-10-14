@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.domain.repository.AuthRepository
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.PlaceRepository
 import com.dh.ondot.presentation.setting.SettingViewModel
+import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.PlaceRepository
 import kotlin.reflect.KClass
 
 class SettingViewModelFactory(

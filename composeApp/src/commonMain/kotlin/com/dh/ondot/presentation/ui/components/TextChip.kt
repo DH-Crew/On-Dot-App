@@ -15,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.ChipStyle
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
@@ -24,6 +22,8 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Green1000
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
+import com.ondot.domain.model.enums.ChipStyle
+import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_check_green
 import org.jetbrains.compose.resources.painterResource

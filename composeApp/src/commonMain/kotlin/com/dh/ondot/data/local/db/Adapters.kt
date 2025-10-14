@@ -1,10 +1,9 @@
 package com.dh.ondot.data.local.db
 
 import app.cash.sqldelight.ColumnAdapter
-import com.dh.ondot.domain.model.response.AlarmDetail
+import com.ondot.domain.model.response.AlarmDetail
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 // 기본값 포함

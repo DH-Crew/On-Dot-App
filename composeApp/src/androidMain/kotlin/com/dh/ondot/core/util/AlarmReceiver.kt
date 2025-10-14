@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import co.touchlab.kermit.Logger
-import com.dh.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.AlarmType
 
 class AlarmReceiver : BroadcastReceiver() {
     private val logger = Logger.withTag("AlarmReceiver")

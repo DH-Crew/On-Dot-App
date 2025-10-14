@@ -1,7 +1,7 @@
 package com.dh.ondot.core.util
 
 import com.dh.ondot.analytics.ONDAnalytics
-import com.dh.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.AnalyticsManager
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSArray
 import platform.Foundation.NSDictionary

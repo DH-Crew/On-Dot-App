@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.core.platform.openUrl
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotDialog
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.LOGOUT_DIALOG_CONTENT
@@ -49,6 +48,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_NO
 import com.dh.ondot.presentation.ui.theme.WORD_SETTING
 import com.dh.ondot.presentation.ui.theme.WORD_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.WORD_YES
+import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_arrow_right_gray400
 import org.jetbrains.compose.resources.painterResource
