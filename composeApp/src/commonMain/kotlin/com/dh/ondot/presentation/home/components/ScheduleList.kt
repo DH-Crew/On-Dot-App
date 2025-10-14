@@ -22,10 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.response.AlarmDetail
-import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.SwipableDeleteItem
@@ -38,6 +34,10 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.WORD_DEPARTURE
 import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.response.AlarmDetail
+import com.ondot.domain.model.response.Schedule
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_banner
 import org.jetbrains.compose.resources.painterResource

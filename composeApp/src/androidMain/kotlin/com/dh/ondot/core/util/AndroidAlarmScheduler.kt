@@ -7,9 +7,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.RequiresPermission
 import co.touchlab.kermit.Logger
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.ui.AlarmRingInfo
-import com.dh.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.service.AlarmScheduler
 
 class AndroidAlarmScheduler(
     private val context: Context

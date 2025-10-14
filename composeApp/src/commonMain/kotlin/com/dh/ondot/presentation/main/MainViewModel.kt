@@ -2,7 +2,7 @@ package com.dh.ondot.presentation.main
 
 import com.dh.ondot.core.navigation.NavRoutes
 import com.dh.ondot.core.ui.base.BaseViewModel
-import com.dh.ondot.domain.model.enums.BottomNavType
+import com.ondot.domain.model.enums.BottomNavType
 
 class MainViewModel(
 

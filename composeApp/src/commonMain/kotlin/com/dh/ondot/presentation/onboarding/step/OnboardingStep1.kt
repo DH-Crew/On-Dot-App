@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.RoundedTextField
@@ -22,6 +21,7 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_HOUR
 import com.dh.ondot.presentation.ui.theme.WORD_MINUTE
+import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable
 fun OnboardingStep1(

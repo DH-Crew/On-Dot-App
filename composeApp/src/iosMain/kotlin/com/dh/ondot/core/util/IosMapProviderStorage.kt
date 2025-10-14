@@ -1,7 +1,7 @@
 package com.dh.ondot.core.util
 
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.service.MapProviderStorage
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.service.MapProviderStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import platform.Foundation.NSNotificationCenter

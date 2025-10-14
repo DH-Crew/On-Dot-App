@@ -23,11 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.response.AlarmDetail
-import com.dh.ondot.domain.model.response.Schedule
-import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.app.AppViewModel
 import com.dh.ondot.presentation.ui.components.OnDotButton
@@ -47,6 +42,11 @@ import com.dh.ondot.presentation.ui.theme.alarmRingTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.dh.ondot.presentation.ui.theme.schedulePreparation
 import com.dh.ondot.presentation.ui.theme.snoozeIntervalLabel
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.response.AlarmDetail
+import com.ondot.domain.model.response.Schedule
+import com.ondot.domain.model.schedule.SchedulePreparation
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState

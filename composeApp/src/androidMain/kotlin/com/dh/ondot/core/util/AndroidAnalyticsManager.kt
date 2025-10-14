@@ -2,8 +2,8 @@ package com.dh.ondot.core.util
 
 import android.content.Context
 import android.os.Bundle
-import com.dh.ondot.domain.service.AnalyticsManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ondot.domain.service.AnalyticsManager
 
 class AndroidAnalyticsManager(
     private val context: Context

@@ -1,6 +1,6 @@
 package com.dh.ondot.domain
 
-import com.dh.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.AlarmType
 import kotlinx.serialization.Serializable
 
 @Serializable

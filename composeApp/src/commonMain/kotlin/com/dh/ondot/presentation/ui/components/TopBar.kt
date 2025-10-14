@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
+import com.ondot.domain.model.enums.TopBarType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_back
 import ondot.composeapp.generated.resources.ic_close

@@ -27,8 +27,8 @@ import com.dh.ondot.core.navigation.splashNavGraph
 import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
 import com.dh.ondot.core.util.AlarmNotifier
-import com.dh.ondot.domain.model.enums.AlarmType
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
+import com.ondot.domain.model.enums.AlarmType
 
 @Composable
 fun App() {

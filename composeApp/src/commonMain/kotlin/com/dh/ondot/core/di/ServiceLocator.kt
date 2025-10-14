@@ -8,16 +8,16 @@ import com.dh.ondot.data.repository.AuthRepositoryImpl
 import com.dh.ondot.data.repository.MemberRepositoryImpl
 import com.dh.ondot.data.repository.PlaceRepositoryImpl
 import com.dh.ondot.data.repository.ScheduleRepositoryImpl
-import com.dh.ondot.domain.datasource.ScheduleLocalDataSource
-import com.dh.ondot.domain.repository.AuthRepository
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.PlaceRepository
-import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AlarmStorage
-import com.dh.ondot.domain.service.AnalyticsManager
-import com.dh.ondot.domain.service.MapProviderStorage
-import com.dh.ondot.domain.service.SoundPlayer
+import com.ondot.domain.datasource.ScheduleLocalDataSource
+import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.AlarmStorage
+import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.MapProviderStorage
+import com.ondot.domain.service.SoundPlayer
 
 object ServiceLocator {
     private lateinit var tokenProvider: TokenProvider

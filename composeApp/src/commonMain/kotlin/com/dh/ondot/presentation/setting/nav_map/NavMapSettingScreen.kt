@@ -27,10 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.setting.SettingEvent
 import com.dh.ondot.presentation.setting.SettingViewModel
@@ -47,6 +43,10 @@ import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP_PROVIDER_GUIDE
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP_PROVIDER_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TopBarType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_apple_map
 import ondot.composeapp.generated.resources.ic_kakao_map

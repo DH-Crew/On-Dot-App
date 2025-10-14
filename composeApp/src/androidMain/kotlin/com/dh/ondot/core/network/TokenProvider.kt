@@ -2,7 +2,7 @@ package com.dh.ondot.core.network
 
 import android.content.Context
 import com.dh.ondot.data.OnDotDataStore
-import com.dh.ondot.data.model.AuthTokens
+import com.ondot.domain.model.auth.AuthTokens
 import kotlinx.coroutines.flow.first
 
 actual class TokenProvider(private val context: Context) {

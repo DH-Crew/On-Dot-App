@@ -7,22 +7,22 @@ import com.dh.ondot.core.platform.provideAnalyticsManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.request.MapProviderRequest
-import com.dh.ondot.domain.model.request.ToggleAlarmRequest
-import com.dh.ondot.domain.model.response.Schedule
-import com.dh.ondot.domain.model.response.ScheduleListResponse
-import com.dh.ondot.domain.model.ui.AlarmRingInfo
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.request.MapProviderRequest
+import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.response.Schedule
+import com.ondot.domain.model.response.ScheduleListResponse
+import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.AnalyticsManager
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -100,7 +100,7 @@ class HomeViewModel(
 
     private fun onSuccessGetScheduleList(result: ScheduleListResponse) {
         val remainingTime = if (result.earliestAlarmAt != null) {
-            DateTimeFormatter.calculateRemainingTime(result.earliestAlarmAt)
+            DateTimeFormatter.calculateRemainingTime(result.earliestAlarmAt!!)
         } else { Triple(-1, -1, -1) }
 
         updateState(

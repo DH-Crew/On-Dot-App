@@ -3,13 +3,13 @@ package com.dh.ondot.presentation.splash
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.di.ServiceLocator
+import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.AuthTokens
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.repository.AuthRepository
-import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGIN
+import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 class SplashViewModel(

@@ -11,8 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.ui.UserAnswer
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.OnboardingAnswerList
@@ -20,6 +18,8 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING4_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING4_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING4_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.ui.UserAnswer
 
 @Composable
 fun OnboardingStep4(

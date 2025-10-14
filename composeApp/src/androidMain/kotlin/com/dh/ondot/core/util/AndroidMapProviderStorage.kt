@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.dh.ondot.data.dataStore
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.service.MapProviderStorage
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.service.MapProviderStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged

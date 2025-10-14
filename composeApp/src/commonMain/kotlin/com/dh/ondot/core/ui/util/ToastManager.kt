@@ -1,7 +1,7 @@
 package com.dh.ondot.core.ui.util
 
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.ui.ToastData
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.ui.ToastData
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 

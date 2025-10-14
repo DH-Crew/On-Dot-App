@@ -17,10 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.ChipStyle
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.TextChip
@@ -31,6 +27,10 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.PREPARATION_ALARM_LABEL
 import com.dh.ondot.presentation.ui.theme.YESTERDAY_LABEL
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.ChipStyle
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.response.AlarmDetail
 
 @Composable
 fun AlarmInfoItem(

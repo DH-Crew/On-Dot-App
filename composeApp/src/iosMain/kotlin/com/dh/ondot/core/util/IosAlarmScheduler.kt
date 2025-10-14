@@ -2,10 +2,10 @@ package com.dh.ondot.core.util
 
 import co.touchlab.kermit.Logger
 import com.dh.ondot.alarmkit.ONDAlarmKit
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.ui.AlarmRingInfo
-import com.dh.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.service.AlarmScheduler
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay

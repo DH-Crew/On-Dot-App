@@ -13,7 +13,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -31,8 +30,8 @@ import com.dh.ondot.App
 import com.dh.ondot.core.di.AndroidServiceLocator
 import com.dh.ondot.core.util.AlarmNotifier
 import com.dh.ondot.domain.RingingState
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.ui.AlarmEvent
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.ui.AlarmEvent
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -89,7 +88,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.O_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.PlaceRepository
-import com.dh.ondot.domain.repository.ScheduleRepository
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.repository.ScheduleRepository
 import kotlin.reflect.KClass
 
 class GeneralScheduleViewModelFactory(
