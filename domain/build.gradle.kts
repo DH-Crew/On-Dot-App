@@ -1,3 +1,3 @@
 plugins {
-    id("ondot.kmp.domain")
+    id("convention.domain")
 }

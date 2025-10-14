@@ -1,11 +1,4 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
-    id("ondot.kotlin.multiplatform")
-}
-
-kotlin {
-    android {
-        namespace = "com.ondot.core"
-        compileSdk = 36
-    }
+    id("convention.android.library")
+    id("convention.kmp")
 }
