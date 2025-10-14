@@ -1,5 +1,6 @@
 package com.ondot.build_logic.convention
 
+import com.ondot.build_logic.convention.internal.addComposeCommonDependencies
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -42,15 +43,13 @@ class ComposeMultiplatformConventionPlugin: Plugin<Project> {
             }
         }
 
+        addComposeCommonDependencies(libs)
+
+
+        // TODO(이후에 feature 모듈로 분리되어야 함)
         extensions.configure<KotlinMultiplatformExtension> {
             sourceSets.apply {
                 commonMain.dependencies {
-                    implementation(libs.findLibrary("compose-runtime").get())
-                    implementation(libs.findLibrary("compose-foundation").get())
-                    implementation(libs.findLibrary("compose-ui").get())
-                    implementation(libs.findLibrary("compose-material3").get())
-                    implementation(libs.findLibrary("compose-components-resources").get())
-
                     implementation(libs.findLibrary("lifecycleViewModel").get())
                     implementation(libs.findLibrary("lifecycleViewModelCompose").get())
                     implementation(libs.findLibrary("lifecycleRuntimeCompose").get())
