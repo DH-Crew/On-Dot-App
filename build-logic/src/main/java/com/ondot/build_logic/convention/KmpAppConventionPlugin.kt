@@ -2,7 +2,6 @@ package com.ondot.build_logic.convention
 
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.ondot.build_logic.convention.internal.applyAppDefaults
-import com.ondot.build_logic.convention.internal.computeNamespace
 import com.ondot.build_logic.convention.internal.configureAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,9 +18,13 @@ class KmpAppConventionPlugin: Plugin<Project> {
         val kakaoKey = properties.getProperty("KAKAO_APP_KEY") ?: error("KAKAO_APP_KEY not found in local.properties")
 
         extensions.getByType<BaseAppModuleExtension>().apply {
-            namespace = computeNamespace()
+            namespace = "com.dh.ondot"
             configureAndroid(this@with)
             applyAppDefaults(this@with)
+
+            buildFeatures {
+                buildConfig = true
+            }
 
             defaultConfig {
                 applicationId = "com.dh.ondot"
