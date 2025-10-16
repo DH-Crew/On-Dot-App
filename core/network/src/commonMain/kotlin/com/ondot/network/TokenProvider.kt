@@ -1,4 +1,4 @@
-package com.dh.ondot.core.network
+package com.ondot.network
 
 import com.ondot.domain.model.auth.AuthTokens
 
