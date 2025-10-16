@@ -14,6 +14,10 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
         extensions.getByType<LibraryExtension>().apply {
             namespace = computeNamespace()
             configureAndroid(this@with)
+
+            buildFeatures {
+                buildConfig = true
+            }
         }
     }
 }
