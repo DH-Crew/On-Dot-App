@@ -1,32 +1,38 @@
 package com.dh.ondot.core
 
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.platform.appModule
-import com.dh.ondot.core.platform.provideAlarmScheduler
-import com.dh.ondot.core.platform.provideAlarmStorage
-import com.dh.ondot.core.platform.provideAnalyticsManager
-import com.dh.ondot.core.platform.provideDatabase
-import com.dh.ondot.core.platform.provideMapProvider
-import com.dh.ondot.core.platform.provideSoundPlayer
-import com.dh.ondot.core.platform.provideTokenProvider
+import com.dh.ondot.data.di.repositoryModule
+import com.dh.ondot.presentation.app.di.ringModule
+import com.dh.ondot.presentation.edit.di.editScheduleModule
+import com.dh.ondot.presentation.general.di.generalModule
+import com.dh.ondot.presentation.home.di.homeModule
+import com.dh.ondot.presentation.login.di.loginModule
+import com.dh.ondot.presentation.main.di.mainModule
+import com.dh.ondot.presentation.onboarding.di.onboardingModule
+import com.dh.ondot.presentation.setting.di.settingModule
+import com.dh.ondot.presentation.splash.di.splashModule
+import com.ondot.network.di.networkModule
+import com.ondot.platform.di.providePlatformModules
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 
-fun initShared() {
-    ServiceLocator.init(
-        provideTokenProvider(),
-        provideAlarmStorage(),
-        provideAlarmScheduler(),
-        provideSoundPlayer(),
-        provideMapProvider(),
-        provideDatabase(),
-        provideAnalyticsManager()
-    )
-}
-
-fun initKoin() {
+fun initKoin(extraModules: List<Module> = emptyList()) {
     startKoin {
         modules(
-            appModule
+            extraModules +
+            providePlatformModules() +
+            listOf(
+                networkModule,
+                ringModule,
+                generalModule,
+                homeModule,
+                onboardingModule,
+                splashModule,
+                editScheduleModule,
+                loginModule,
+                mainModule,
+                settingModule,
+                repositoryModule,
+            )
         )
     }
 }
