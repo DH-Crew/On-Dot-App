@@ -52,11 +52,12 @@ import ondot.composeapp.generated.resources.ic_apple_map
 import ondot.composeapp.generated.resources.ic_kakao_map
 import ondot.composeapp.generated.resources.ic_naver_map
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NavMapSettingScreen(
     popScreen: () -> Unit,
-    viewModel: SettingViewModel = viewModel { SettingViewModel() }
+    viewModel: SettingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }

@@ -9,8 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.dh.ondot.core.di.viewmodel.GeneralScheduleViewModelFactory
-import com.dh.ondot.core.di.viewmodel.SettingViewModelFactory
 import com.dh.ondot.presentation.alarm.departure.DepartureAlarmRingScreen
 import com.dh.ondot.presentation.alarm.preparation.PreparationAlarmRingScreen
 import com.dh.ondot.presentation.edit.EditScheduleScreen
@@ -29,6 +27,7 @@ import com.dh.ondot.presentation.setting.home_address.HomeAddressSettingScreen
 import com.dh.ondot.presentation.setting.nav_map.NavMapSettingScreen
 import com.dh.ondot.presentation.setting.preparation_time.PreparationTimeEditScreen
 import com.dh.ondot.presentation.splash.SplashScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.alarmNavGraph(
     navController: NavHostController
@@ -216,10 +215,7 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-            val factory = remember {
-                GeneralScheduleViewModelFactory()
-            }
-            val viewModel: GeneralScheduleViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+            val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
             ScheduleRepeatSettingScreen(
                 viewModel = viewModel,
@@ -241,10 +237,7 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-            val factory = remember {
-                GeneralScheduleViewModelFactory()
-            }
-            val viewModel: GeneralScheduleViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+            val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
             PlacePickerScreen(
                 viewModel = viewModel,
@@ -274,10 +267,7 @@ fun NavGraphBuilder.generalScheduleNavGraph(navController: NavHostController) {
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-            val factory = remember {
-                GeneralScheduleViewModelFactory()
-            }
-            val viewModel: GeneralScheduleViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+            val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
             CheckScheduleScreen(
                 viewModel = viewModel,
@@ -357,10 +347,7 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-            val factory = remember {
-                SettingViewModelFactory()
-            }
-            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+            val viewModel: SettingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
             HomeAddressSettingScreen(
                 viewModel = viewModel,
@@ -377,10 +364,7 @@ fun NavGraphBuilder.homeAddressSettingGraph(navController: NavHostController) {
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(graphRoute)
             }
-            val factory = remember {
-                SettingViewModelFactory()
-            }
-            val viewModel: SettingViewModel = viewModel(viewModelStoreOwner = parentEntry, factory = factory)
+            val viewModel: SettingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
             HomeAddressEditScreen(
                 viewModel = viewModel,

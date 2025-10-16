@@ -2,9 +2,6 @@ package com.dh.ondot.presentation.login
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.platform.appleSignIn
-import com.dh.ondot.core.platform.kakaoSignIn
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.core.ui.util.ToastManager
@@ -13,15 +10,18 @@ import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.response.AuthResponse
 import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.service.KaKaoSignInProvider
+import com.ondot.platform.apple.appleSignIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authRepository: AuthRepository = ServiceLocator.authRepository
+    private val authRepository: AuthRepository,
+    private val kaKaoSignInProvider: KaKaoSignInProvider
 ): BaseViewModel<UiState.Default>(UiState.Default) {
     private val logger = Logger.withTag("LoginViewModel")
 
     fun performKakaoLogin() {
-        kakaoSignIn { token ->
+        kaKaoSignInProvider.kakaoSignIn { token ->
             if (token.isBlank()) return@kakaoSignIn
 
             viewModelScope.launch {

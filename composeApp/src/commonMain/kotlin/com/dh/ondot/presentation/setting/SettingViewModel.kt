@@ -2,7 +2,6 @@ package com.dh.ondot.presentation.setting
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
@@ -25,14 +24,16 @@ import com.ondot.domain.model.response.HomeAddressInfo
 import com.ondot.domain.repository.AuthRepository
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.service.UrlOpener
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
-    private val authRepository: AuthRepository = ServiceLocator.authRepository,
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository
+    private val authRepository: AuthRepository,
+    private val memberRepository: MemberRepository,
+    private val placeRepository: PlaceRepository,
+    private val urlOpener: UrlOpener
 ): BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
     private var searchJob: Job? = null
@@ -246,6 +247,11 @@ class SettingViewModel(
 
     fun toggleDeleteAccountDialog() {
         updateState(uiState.value.copy(showDeleteAccountDialog = !uiState.value.showDeleteAccountDialog))
+    }
+
+    /**--------------------------------------------고객센터-----------------------------------------------*/
+    fun openUrl(url: String) {
+        urlOpener.openUrl(url)
     }
 
     /**--------------------------------------------상태 처리-----------------------------------------------*/

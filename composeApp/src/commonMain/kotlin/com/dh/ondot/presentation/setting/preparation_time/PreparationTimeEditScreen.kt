@@ -33,11 +33,12 @@ import com.dh.ondot.presentation.ui.theme.WORD_SAVE
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PreparationTimeEditScreen(
     popScreen: () -> Unit,
-    viewModel: SettingViewModel = viewModel { SettingViewModel() }
+    viewModel: SettingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

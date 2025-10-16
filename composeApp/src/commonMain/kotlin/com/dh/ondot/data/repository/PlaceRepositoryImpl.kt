@@ -1,10 +1,10 @@
 package com.dh.ondot.data.repository
 
-import com.dh.ondot.core.network.BaseRepository
-import com.dh.ondot.core.network.HttpMethod
-import com.dh.ondot.core.network.NetworkClient
 import com.ondot.domain.model.response.AddressInfo
 import com.ondot.domain.repository.PlaceRepository
+import com.ondot.network.HttpMethod
+import com.ondot.network.NetworkClient
+import com.ondot.network.base.BaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

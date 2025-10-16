@@ -22,10 +22,11 @@ import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import kotlinx.coroutines.delay
 import ondot.composeapp.generated.resources.Res
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SplashScreen(
-    viewModel: SplashViewModel = viewModel { SplashViewModel() },
+    viewModel: SplashViewModel = koinViewModel(),
     navigateToLogin: () -> Unit,
     navigateToHome: () -> Unit
 ) {

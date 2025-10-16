@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.core.platform.BackPressHandler
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep1
 import com.dh.ondot.presentation.onboarding.step.OnboardingStep2
@@ -30,10 +29,12 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.response.AddressInfo
+import com.ondot.platform.util.BackPressHandler
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OnboardingScreen(
-    viewModel: OnboardingViewModel = viewModel { OnboardingViewModel() },
+    viewModel: OnboardingViewModel = koinViewModel(),
     navigateToMain: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

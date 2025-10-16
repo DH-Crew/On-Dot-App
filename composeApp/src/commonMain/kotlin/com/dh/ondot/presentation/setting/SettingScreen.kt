@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.core.platform.openUrl
 import com.dh.ondot.presentation.ui.components.OnDotDialog
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.LOGOUT_DIALOG_CONTENT
@@ -52,6 +51,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_arrow_right_gray400
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingScreen(
@@ -61,7 +61,7 @@ fun SettingScreen(
     navigateToHomeAddressSettingScreen: () -> Unit,
     navigateToNavMapSettingScreen: () -> Unit,
     navigateToPreparationTimeEditScreen: () -> Unit,
-    viewModel: SettingViewModel = viewModel { SettingViewModel() }
+    viewModel: SettingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -83,7 +83,7 @@ fun SettingScreen(
         onEditPreparationTimeClick = navigateToPreparationTimeEditScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
-        onCustomServiceClick = { openUrl("http://pf.kakao.com/_xfdLfn/chat") },
+        onCustomServiceClick = { viewModel.openUrl("http://pf.kakao.com/_xfdLfn/chat") },
         onLogout = viewModel::logout
     )
 }

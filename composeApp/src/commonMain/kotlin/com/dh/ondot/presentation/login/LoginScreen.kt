@@ -25,10 +25,11 @@ import com.ondot.domain.model.enums.ButtonType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_login
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = viewModel { LoginViewModel() },
+    viewModel: LoginViewModel = koinViewModel(),
     navigateToOnboarding: () -> Unit,
     navigateToMain: () -> Unit
 ) {

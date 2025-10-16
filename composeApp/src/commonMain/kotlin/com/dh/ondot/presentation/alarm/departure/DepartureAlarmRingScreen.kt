@@ -48,6 +48,7 @@ import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import kotlinx.coroutines.delay
 import ondot.composeapp.generated.resources.Res
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DepartureAlarmRingScreen(
@@ -55,7 +56,7 @@ fun DepartureAlarmRingScreen(
     alarmId: Long,
     navigateToSplash: () -> Unit
 ) {
-    val viewModel: AppViewModel = viewModel { AppViewModel() }
+    val viewModel: AppViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(alarmId) {

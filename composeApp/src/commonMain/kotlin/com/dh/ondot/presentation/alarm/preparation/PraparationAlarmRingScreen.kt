@@ -56,6 +56,7 @@ import kotlinx.coroutines.delay
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_circle_check_green
 import ondot.composeapp.generated.resources.ic_pill
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PreparationAlarmRingScreen(
@@ -63,7 +64,7 @@ fun PreparationAlarmRingScreen(
     alarmId: Long,
     navigateToSplash: () -> Unit
 ) {
-    val viewModel: AppViewModel = viewModel { AppViewModel() }
+    val viewModel: AppViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(alarmId) {
