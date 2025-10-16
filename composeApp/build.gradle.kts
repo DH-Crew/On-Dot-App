@@ -35,6 +35,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.domain)
+            implementation(projects.core.platform)
+            implementation(projects.core.network)
+            implementation(projects.core.util)
         }
 
         androidMain.dependencies {
