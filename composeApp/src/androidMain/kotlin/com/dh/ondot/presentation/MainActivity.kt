@@ -27,18 +27,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import co.touchlab.kermit.Logger
 import com.dh.ondot.App
-import com.dh.ondot.core.di.AndroidServiceLocator
 import com.dh.ondot.core.util.AlarmNotifier
-import com.dh.ondot.domain.RingingState
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.ui.AlarmEvent
+import com.ondot.platform.data.OnDotDataStore
+import com.ondot.platform.model.RingingState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
     private val logger = Logger.withTag("MainActivity")
-    private val dataStore by lazy { AndroidServiceLocator.provideDataStore() }
+    private val dataStore: OnDotDataStore by inject()
     private var lastNavKey: Pair<Long, Long>? = null
 
     /**
