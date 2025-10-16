@@ -2,7 +2,6 @@ package com.dh.ondot.presentation.general
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.platform.provideAnalyticsManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
@@ -45,7 +44,7 @@ class GeneralScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val placeRepository: PlaceRepository,
     private val memberRepository: MemberRepository,
-    private val analyticsManager: AnalyticsManager = provideAnalyticsManager()
+    private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()) {
     private val logger = Logger.withTag("GeneralScheduleViewModel")
     private val fullWeek = (0..6).toList()

@@ -1,12 +1,12 @@
 package com.dh.ondot.data.repository
 
-import com.dh.ondot.core.network.BaseRepository
-import com.dh.ondot.core.network.HttpMethod
-import com.dh.ondot.core.network.NetworkClient
-import com.dh.ondot.core.network.TokenProvider
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.response.AuthResponse
 import com.ondot.domain.repository.AuthRepository
+import com.ondot.network.HttpMethod
+import com.ondot.network.NetworkClient
+import com.ondot.network.base.BaseRepository
+import com.ondot.platform.network.TokenProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

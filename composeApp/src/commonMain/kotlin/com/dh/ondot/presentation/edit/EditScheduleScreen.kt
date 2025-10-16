@@ -82,11 +82,12 @@ import kotlinx.datetime.LocalTime
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_pencil_white
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EditScheduleScreen(
     scheduleId: Long,
-    viewModel: EditScheduleViewModel = viewModel { EditScheduleViewModel() },
+    viewModel: EditScheduleViewModel = koinViewModel(),
     popScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

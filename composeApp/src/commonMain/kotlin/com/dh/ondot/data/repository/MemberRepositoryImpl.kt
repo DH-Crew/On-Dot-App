@@ -1,8 +1,5 @@
 package com.dh.ondot.data.repository
 
-import com.dh.ondot.core.network.BaseRepository
-import com.dh.ondot.core.network.HttpMethod
-import com.dh.ondot.core.network.NetworkClient
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.request.DeleteAccountRequest
@@ -13,14 +10,22 @@ import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeR
 import com.ondot.domain.model.response.HomeAddressInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.service.MapProviderStorage
+import com.ondot.network.HttpMethod
+import com.ondot.network.NetworkClient
+import com.ondot.network.base.BaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
-class MemberRepositoryImpl(
-    networkClient: NetworkClient,
+class MemberRepositoryImpl : MemberRepository, BaseRepository {
     private val mapProviderStorage: MapProviderStorage
-) : MemberRepository, BaseRepository(networkClient) {
+
+    constructor(networkClient: NetworkClient, mapProviderStorage: MapProviderStorage) : super(
+        networkClient
+    ) {
+        this.mapProviderStorage = mapProviderStorage
+    }
+
     override suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<AuthTokens>> = flow {
         emit(fetch(HttpMethod.POST, "/members/onboarding", body = request))
     }

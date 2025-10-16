@@ -2,7 +2,6 @@ package com.dh.ondot.presentation.edit
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
@@ -26,8 +25,8 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 
 class EditScheduleViewModel(
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
-    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler()
+    private val scheduleRepository: ScheduleRepository,
+    private val alarmScheduler: AlarmScheduler
 ) : BaseViewModel<EditScheduleUiState>(EditScheduleUiState()) {
 
     private val logger = Logger.withTag("EditScheduleViewModel")

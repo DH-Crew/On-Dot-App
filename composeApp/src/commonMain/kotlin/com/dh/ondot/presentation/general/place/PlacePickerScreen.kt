@@ -25,7 +25,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dh.ondot.core.platform.BackPressHandler
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.general.GeneralScheduleEvent
 import com.dh.ondot.presentation.general.GeneralScheduleUiState
@@ -50,6 +49,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.domain.model.response.AddressInfo
+import com.ondot.platform.util.BackPressHandler
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

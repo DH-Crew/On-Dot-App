@@ -1,7 +1,8 @@
 package com.ondot.network
 
 import com.dh.ondot.BuildKonfig
-import com.dh.ondot.core.di.httpClient
+import com.ondot.platform.network.TokenProvider
+import com.ondot.platform.network.httpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.request

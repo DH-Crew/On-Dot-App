@@ -1,9 +1,6 @@
 package com.dh.ondot.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.network.TokenProvider
-import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.getPlatform
@@ -19,13 +16,14 @@ import com.ondot.domain.model.response.AddressInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.domain.service.SoundPlayer
+import com.ondot.platform.network.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository,
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val soundPlayer: SoundPlayer = provideSoundPlayer(),
-    private val tokenProvider: TokenProvider = ServiceLocator.provideTokenProvider()
+    private val placeRepository: PlaceRepository,
+    private val memberRepository: MemberRepository,
+    private val soundPlayer: SoundPlayer,
+    private val tokenProvider: TokenProvider
 ): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
 
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드

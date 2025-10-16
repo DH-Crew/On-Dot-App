@@ -1,8 +1,5 @@
 package com.dh.ondot.data.repository
 
-import com.dh.ondot.core.network.BaseRepository
-import com.dh.ondot.core.network.HttpMethod
-import com.dh.ondot.core.network.NetworkClient
 import com.dh.ondot.data.mapper.SchedulePreparationResponseMapper
 import com.ondot.domain.datasource.ScheduleLocalDataSource
 import com.ondot.domain.model.request.CreateScheduleRequest
@@ -14,6 +11,9 @@ import com.ondot.domain.model.response.ScheduleDetail
 import com.ondot.domain.model.response.ScheduleListResponse
 import com.ondot.domain.model.schedule.SchedulePreparation
 import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.network.HttpMethod
+import com.ondot.network.NetworkClient
+import com.ondot.network.base.BaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

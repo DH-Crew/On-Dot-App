@@ -2,8 +2,6 @@ package com.dh.ondot.presentation.home
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.platform.provideAnalyticsManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.core.util.DateTimeFormatter
@@ -26,10 +24,10 @@ import com.ondot.domain.service.AnalyticsManager
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
-    private val analyticsManager: AnalyticsManager = provideAnalyticsManager()
+    private val scheduleRepository: ScheduleRepository,
+    private val memberRepository: MemberRepository,
+    private val alarmScheduler: AlarmScheduler,
+    private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO

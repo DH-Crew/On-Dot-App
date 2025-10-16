@@ -43,10 +43,11 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_banner
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel { HomeViewModel() },
+    viewModel: HomeViewModel = koinViewModel(),
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit
 ) {

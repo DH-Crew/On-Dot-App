@@ -63,10 +63,11 @@ import com.ondot.domain.model.ui.UserAnswer
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_warning_red
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DeleteAccountScreen(
-    viewModel: SettingViewModel = viewModel { SettingViewModel() },
+    viewModel: SettingViewModel = koinViewModel(),
     popScreen: () -> Unit,
     navigateToLoginScreen: () -> Unit
 ) {
