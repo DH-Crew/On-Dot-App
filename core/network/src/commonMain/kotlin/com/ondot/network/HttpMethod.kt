@@ -1,4 +1,4 @@
-package com.dh.ondot.core.network
+package com.ondot.network
 
 enum class HttpMethod {
     GET, POST, PUT, PATCH, DELETE
