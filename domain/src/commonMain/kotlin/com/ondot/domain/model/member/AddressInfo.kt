@@ -1,5 +1,7 @@
 package com.ondot.domain.model.member
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AddressInfo(
     val title: String = "",
     val roadAddress: String = "",

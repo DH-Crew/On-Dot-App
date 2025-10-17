@@ -2,7 +2,9 @@ package com.ondot.domain.model.request
 
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.member.AddressInfo
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CreateScheduleRequest(
     val title: String,
     val isRepeat: Boolean,

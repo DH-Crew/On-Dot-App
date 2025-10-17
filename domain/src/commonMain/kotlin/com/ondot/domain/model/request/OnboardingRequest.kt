@@ -3,7 +3,9 @@ package com.ondot.domain.model.request
 import com.ondot.domain.model.enums.AlarmMode
 import com.ondot.domain.model.enums.RingTone
 import com.ondot.domain.model.enums.SoundCategory
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class OnboardingRequest(
     val preparationTime: Int,
     val roadAddress: String,
