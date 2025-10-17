@@ -8,8 +8,8 @@ import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER2
 import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER3
 import com.dh.ondot.presentation.ui.theme.DELETION_ANSWER4
 import com.ondot.domain.model.enums.MapProvider
-import com.ondot.domain.model.response.AddressInfo
-import com.ondot.domain.model.response.HomeAddressInfo
+import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.ui.UserAnswer
 
 data class SettingUiState(

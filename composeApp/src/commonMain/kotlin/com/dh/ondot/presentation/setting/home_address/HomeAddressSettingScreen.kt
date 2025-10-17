@@ -39,7 +39,7 @@ import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.WORD_HOME
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
-import com.ondot.domain.model.response.HomeAddressInfo
+import com.ondot.domain.model.member.HomeAddressInfo
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_home_circle_green
 import ondot.composeapp.generated.resources.ic_pencil_white

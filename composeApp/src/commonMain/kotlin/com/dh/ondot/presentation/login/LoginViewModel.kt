@@ -6,9 +6,9 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGIN
+import com.ondot.domain.model.auth.AuthResult
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.ToastType
-import com.ondot.domain.model.response.AuthResponse
 import com.ondot.domain.repository.AuthRepository
 import com.ondot.domain.service.KaKaoSignInProvider
 import com.ondot.platform.apple.appleSignIn
@@ -32,8 +32,8 @@ class LoginViewModel(
         }
     }
 
-    private fun onSuccessKakaoLogin(result: AuthResponse) {
-        saveToken(token = AuthTokens(accessToken = result.accessToken, refreshToken = result.refreshToken))
+    private fun onSuccessKakaoLogin(result: AuthResult) {
+        saveToken(token = AuthTokens(accessToken = result.tokens.accessToken, refreshToken = result.tokens.refreshToken))
 
         when(result.isNewMember) {
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
@@ -66,10 +66,10 @@ class LoginViewModel(
         )
     }
 
-    private fun onSuccessAppleLogin(result: AuthResponse) {
+    private fun onSuccessAppleLogin(result: AuthResult) {
         saveToken(token = AuthTokens(
-            accessToken = result.accessToken,
-            refreshToken = result.refreshToken
+            accessToken = result.tokens.accessToken,
+            refreshToken = result.tokens.refreshToken
         )
         )
 

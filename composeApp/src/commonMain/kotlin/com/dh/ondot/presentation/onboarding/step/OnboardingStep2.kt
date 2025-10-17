@@ -32,7 +32,7 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.member.AddressInfo
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_search
 import org.jetbrains.compose.resources.painterResource

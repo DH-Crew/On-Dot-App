@@ -38,7 +38,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dh.ondot.core.util.DateTimeFormatter.toIsoDateString
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.general.GeneralScheduleEvent
 import com.dh.ondot.presentation.general.GeneralScheduleUiState
@@ -70,6 +69,7 @@ import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.util.DateTimeFormatter.toIsoDateString
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_pencil_white
 import org.jetbrains.compose.resources.painterResource

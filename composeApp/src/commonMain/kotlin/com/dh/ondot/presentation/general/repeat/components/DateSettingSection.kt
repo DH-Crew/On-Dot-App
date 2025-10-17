@@ -16,8 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.core.util.DateTimeFormatter.formatAmPmTime
-import com.dh.ondot.core.util.DateTimeFormatter.formatKorean
 import com.dh.ondot.presentation.general.GeneralScheduleUiState
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.TextChip
@@ -31,6 +29,8 @@ import com.dh.ondot.presentation.ui.theme.WORD_TIME
 import com.ondot.domain.model.constants.AppConstants
 import com.ondot.domain.model.enums.ChipStyle
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.util.DateTimeFormatter.formatAmPmTime
+import com.ondot.util.DateTimeFormatter.formatKorean
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 

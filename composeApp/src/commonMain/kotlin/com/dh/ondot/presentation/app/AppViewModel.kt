@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ToastType
@@ -16,6 +15,7 @@ import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.SoundPlayer
+import com.ondot.util.DateTimeFormatter
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
@@ -182,7 +182,7 @@ class AppViewModel(
             alarmScheduler.scheduleAlarm(
                 AlarmRingInfo(
                     scheduleId = newSchedule.scheduleId,
-                    alarmDetail = currentAlarm,
+                    alarm = currentAlarm,
                     alarmType = type,
                     startLat = newSchedule.startLatitude,
                     startLng = newSchedule.startLongitude,
