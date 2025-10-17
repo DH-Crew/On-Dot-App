@@ -8,10 +8,11 @@ import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.KaKaoSignInProvider
 import com.ondot.domain.service.MapProviderStorage
 import com.ondot.domain.service.SoundPlayer
+import com.ondot.domain.service.TokenProvider
 import com.ondot.domain.service.UrlOpener
 import com.ondot.platform.data.OnDotDataStore
 import com.ondot.platform.kakao.AndroidKaKaoSignInProvider
-import com.ondot.platform.network.TokenProvider
+import com.ondot.platform.network.AndroidTokenProvider
 import com.ondot.platform.network.httpClient
 import com.ondot.platform.util.AlarmReceiver
 import com.ondot.platform.util.AlarmService
@@ -31,7 +32,7 @@ actual fun providePlatformModules(): List<Module> {
         module {
             single<HttpClient> { httpClient() }
             single<OnDotDataStore> { OnDotDataStore(get()) }
-            single<TokenProvider> { TokenProvider(get()) }
+            single<TokenProvider> { AndroidTokenProvider(get()) }
             single<AlarmReceiver> { AlarmReceiver() }
             single<AlarmService> { AlarmService(get(), get(), get()) }
             single<AlarmScheduler> { AndroidAlarmScheduler(get<Context>()) }

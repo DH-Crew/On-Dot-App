@@ -1,13 +1,14 @@
 package com.ondot.platform.network
 
 import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.service.TokenProvider
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.setValue
 
-actual class TokenProvider {
+class IosTokenProvider: TokenProvider {
     private val userDefaults = NSUserDefaults.standardUserDefaults
 
-    actual suspend fun getToken(): AuthTokens? {
+    override suspend fun getToken(): AuthTokens? {
         val accessToken = userDefaults.stringForKey(ACCESS_TOKEN_KEY)
         val refreshToken = userDefaults.stringForKey(REFRESH_TOKEN_KEY)
 
@@ -18,12 +19,12 @@ actual class TokenProvider {
         }
     }
 
-    actual suspend fun saveToken(newToken: AuthTokens) {
+    override suspend fun saveToken(newToken: AuthTokens) {
         userDefaults.setValue(newToken.accessToken, forKey = ACCESS_TOKEN_KEY)
         userDefaults.setValue(newToken.refreshToken, forKey = REFRESH_TOKEN_KEY)
     }
 
-    actual suspend fun clearToken() {
+    override suspend fun clearToken() {
         userDefaults.removeObjectForKey(ACCESS_TOKEN_KEY)
         userDefaults.removeObjectForKey(REFRESH_TOKEN_KEY)
     }
