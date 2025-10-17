@@ -10,8 +10,8 @@ object ScheduleListResponseMapper: Mapper<ScheduleListResponse, ScheduleList> {
         return response?.let {
             ScheduleList(
                 earliestAlarmAt = it.earliestAlarmAt ?: "",
-                hasNext = it.hasNext,
-                scheduleList = it.scheduleList.map { scheduleResponse ->
+                hasNext = it.hasNext ?: false,
+                scheduleList = it.scheduleList?.map { scheduleResponse ->
                     Schedule(
                         scheduleId = scheduleResponse.scheduleId,
                         startLongitude = scheduleResponse.startLongitude,
@@ -26,7 +26,7 @@ object ScheduleListResponseMapper: Mapper<ScheduleListResponse, ScheduleList> {
                         departureAlarm = AlarmResponseMapper.responseToModel(scheduleResponse.departureAlarm),
                         hasActiveAlarm = scheduleResponse.hasActiveAlarm
                     )
-                }
+                } ?: emptyList()
             )
         } ?: ScheduleList()
     }
