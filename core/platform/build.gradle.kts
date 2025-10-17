@@ -10,7 +10,6 @@ plugins {
     id("convention.compose")
     id("convention.compose.lifecycle")
     id("convention.koin")
-    alias(libs.plugins.sqldelight)
     alias(libs.plugins.buildKonfig)
 }
 
@@ -49,8 +48,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
 
-            implementation(libs.android.driver)
-
             implementation(libs.datastore.core)
             implementation(libs.datastore.preferences)
 
@@ -63,8 +60,6 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-
-            implementation(libs.native.driver)
         }
     }
 
@@ -90,20 +85,6 @@ kotlin {
                 // 헤더가 있는 경로 (iosApp의 iOS 타깃 소스 루트)
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp/AlarmKitBridge"))
             }
-        }
-    }
-
-    targets.withType<KotlinNativeTarget>().configureEach {
-        binaries.all {
-            linkerOpts("-lsqlite3")
-        }
-    }
-}
-
-sqldelight {
-    databases {
-        create("OndotDatabase") {
-            packageName.set("com.dh.ondot.data.local.db")
         }
     }
 }
