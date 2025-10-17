@@ -1,4 +1,4 @@
-import com.ondot.domain.model.response.AlarmDetail;
+import com.ondot.domain.model.alarm.Alarm;
 import kotlin.Boolean;
 import kotlin.Int;
 import kotlin.collections.List;
@@ -13,8 +13,8 @@ CREATE TABLE schedule_entity (
   isRepeat          INTEGER AS Boolean NOT NULL,
   repeatDays        TEXT    AS List<Int> NOT NULL,
   appointmentAt     TEXT    NOT NULL,
-  preparationAlarm  TEXT AS AlarmDetail NOT NULL,
-  departureAlarm    TEXT AS AlarmDetail NOT NULL,
+  preparationAlarm  TEXT AS Alarm NOT NULL,
+  departureAlarm    TEXT AS Alarm NOT NULL,
   hasActiveAlarm    INTEGER AS Boolean NOT NULL
 );
 

@@ -7,7 +7,7 @@ import com.ondot.domain.model.request.MapProviderRequest
 import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
-import com.ondot.domain.model.response.HomeAddressInfo
+import com.ondot.domain.model.member.HomeAddressInfo
 import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {

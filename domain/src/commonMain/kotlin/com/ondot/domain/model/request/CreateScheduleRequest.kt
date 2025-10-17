@@ -1,7 +1,7 @@
 package com.ondot.domain.model.request
 
-import com.ondot.domain.model.response.AddressInfo
-import com.ondot.domain.model.response.AlarmDetail
+import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.member.AddressInfo
 
 data class CreateScheduleRequest(
     val title: String,
@@ -12,6 +12,6 @@ data class CreateScheduleRequest(
     val preparationNote: String,
     val departurePlace: AddressInfo,
     val arrivalPlace: AddressInfo,
-    val preparationAlarm: AlarmDetail,
-    val departureAlarm: AlarmDetail
+    val preparationAlarm: Alarm,
+    val departureAlarm: Alarm
 )
