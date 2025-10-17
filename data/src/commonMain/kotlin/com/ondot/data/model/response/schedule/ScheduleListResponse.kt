@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ScheduleListResponse(
     val earliestAlarmAt: String?,
-    val hasNext: Boolean,
-    val scheduleList: List<ScheduleResponse>
+    val hasNext: Boolean?,
+    val scheduleList: List<ScheduleResponse>?
 )
