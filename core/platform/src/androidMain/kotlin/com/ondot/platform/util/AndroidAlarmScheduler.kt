@@ -20,7 +20,7 @@ class AndroidAlarmScheduler(
 
     @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
     override fun scheduleAlarm(info: AlarmRingInfo, mapProvider: MapProvider) {
-        val alarm = info.alarmDetail
+        val alarm = info.alarm
 
         // 사용자가 알람을 꺼두었다면 리턴
         if (!alarm.enabled) return
