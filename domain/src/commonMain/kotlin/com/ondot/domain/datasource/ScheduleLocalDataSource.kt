@@ -1,6 +1,6 @@
 package com.ondot.domain.datasource
 
-import com.ondot.domain.model.response.Schedule
+import com.ondot.domain.model.schedule.Schedule
 import kotlinx.coroutines.flow.Flow
 
 interface ScheduleLocalDataSource {

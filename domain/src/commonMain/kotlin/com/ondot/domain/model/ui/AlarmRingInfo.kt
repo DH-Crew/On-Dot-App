@@ -1,10 +1,10 @@
 package com.ondot.domain.model.ui
 
+import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.AlarmType
-import com.ondot.domain.model.response.AlarmDetail
 
 data class AlarmRingInfo(
-    val alarmDetail: AlarmDetail = AlarmDetail(),
+    val alarm: Alarm = Alarm(),
     val alarmType: AlarmType = AlarmType.Departure,
     val appointmentAt: String = "",
     val scheduleTitle: String = "",
