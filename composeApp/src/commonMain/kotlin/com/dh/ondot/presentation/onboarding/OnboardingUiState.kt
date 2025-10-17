@@ -12,7 +12,7 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER2
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER3
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER4
 import com.ondot.domain.model.enums.RingTone
-import com.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.ui.AlarmSound
 import com.ondot.domain.model.ui.UserAnswer
 

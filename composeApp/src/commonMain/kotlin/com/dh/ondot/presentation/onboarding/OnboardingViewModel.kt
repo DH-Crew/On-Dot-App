@@ -12,11 +12,11 @@ import com.ondot.domain.model.enums.SoundCategory
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.QuestionAnswer
-import com.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.domain.service.SoundPlayer
-import com.ondot.platform.network.TokenProvider
+import com.ondot.domain.service.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(

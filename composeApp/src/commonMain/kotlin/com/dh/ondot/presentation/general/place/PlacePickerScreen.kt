@@ -48,7 +48,7 @@ import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.TopBarType
-import com.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.member.AddressInfo
 import com.ondot.platform.util.BackPressHandler
 
 @OptIn(ExperimentalComposeUiApi::class)

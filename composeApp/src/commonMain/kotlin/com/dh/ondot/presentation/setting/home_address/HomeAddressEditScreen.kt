@@ -44,7 +44,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_SAVE
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
-import com.ondot.domain.model.response.AddressInfo
+import com.ondot.domain.model.member.AddressInfo
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource

@@ -3,7 +3,7 @@ package com.dh.ondot.presentation.edit
 import com.dh.ondot.core.ui.base.UiState
 import com.ondot.domain.model.enums.TimeBottomSheet
 import com.ondot.domain.model.enums.TimeType
-import com.ondot.domain.model.response.ScheduleDetail
+import com.ondot.domain.model.schedule.ScheduleDetail
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone

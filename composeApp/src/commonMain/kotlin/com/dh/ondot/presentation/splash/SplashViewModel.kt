@@ -8,7 +8,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_LOGIN
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.repository.AuthRepository
-import com.ondot.platform.network.TokenProvider
+import com.ondot.domain.service.TokenProvider
 import kotlinx.coroutines.launch
 
 class SplashViewModel(

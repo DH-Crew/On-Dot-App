@@ -18,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.core.util.DateTimeFormatter
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.alarm.preparation.ScheduleInfoSection
 import com.dh.ondot.presentation.app.AppEvent
@@ -38,9 +36,10 @@ import com.dh.ondot.presentation.ui.theme.departureSnoozedTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.domain.model.response.AlarmDetail
-import com.ondot.domain.model.response.Schedule
+import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.util.DateTimeFormatter
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -75,7 +74,7 @@ fun DepartureAlarmRingScreen(
 
     if (uiState.schedule.appointmentAt.isNotBlank()) {
         DepartureAlarmRingContent(
-            alarmDetail = uiState.currentAlarm,
+            alarm = uiState.currentAlarm,
             schedule = uiState.schedule,
             schedulePreparation = uiState.schedulePreparation,
             showDepartureSnoozeAnimation = uiState.showDepartureSnoozeAnimation,
@@ -89,7 +88,7 @@ fun DepartureAlarmRingScreen(
 
 @Composable
 fun DepartureAlarmRingContent(
-    alarmDetail: AlarmDetail,
+    alarm: Alarm,
     schedule: Schedule,
     schedulePreparation: SchedulePreparation,
     showDepartureSnoozeAnimation: Boolean,
@@ -132,7 +131,7 @@ fun DepartureAlarmRingContent(
                 )
 
                 ScheduleInfoSection(
-                    snoozeInterval = alarmDetail.snoozeInterval,
+                    snoozeInterval = alarm.snoozeInterval,
                     appointmentDate = appointmentDate,
                     appointmentTime = appointmentTime,
                     scheduleTitle = schedule.scheduleTitle,
@@ -166,7 +165,7 @@ fun DepartureAlarmRingContent(
 
                 AlarmSnoozedSection(
                     schedule = schedule,
-                    snoozeInterval = alarmDetail.snoozeInterval,
+                    snoozeInterval = alarm.snoozeInterval,
                     onShowRouteInfo = onShowRouteInfo
                 )
             }
