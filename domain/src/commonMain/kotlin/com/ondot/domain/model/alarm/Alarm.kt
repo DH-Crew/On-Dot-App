@@ -1,7 +1,9 @@
 package com.ondot.domain.model.alarm
 
 import com.ondot.domain.model.enums.AlarmMode
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Alarm(
     val alarmId: Long = -1,
     val alarmMode: AlarmMode = AlarmMode.SOUND,
