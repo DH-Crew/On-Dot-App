@@ -1,13 +1,14 @@
 package com.ondot.platform.network
 
 import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.service.TokenProvider
 import com.ondot.platform.data.OnDotDataStore
 import kotlinx.coroutines.flow.first
 
-actual class TokenProvider(
+class AndroidTokenProvider(
     private val dataStore: OnDotDataStore
-) {
-    actual suspend fun getToken(): AuthTokens? {
+) : TokenProvider {
+    override suspend fun getToken(): AuthTokens? {
         val accessToken = dataStore.accessToken.first()
         val refreshToken = dataStore.refreshToken.first()
 
@@ -18,12 +19,12 @@ actual class TokenProvider(
         }
     }
 
-    actual suspend fun saveToken(newToken: AuthTokens) {
+    override suspend fun saveToken(newToken: AuthTokens) {
         dataStore.saveAccessToken(newToken.accessToken)
         dataStore.saveRefreshToken(newToken.refreshToken)
     }
 
-    actual suspend fun clearToken() {
+    override suspend fun clearToken() {
         dataStore.clearTokens()
     }
 }
