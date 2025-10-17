@@ -25,7 +25,7 @@ class IosAlarmScheduler(): AlarmScheduler {
     private val logger = Logger.withTag("IOSAlarmScheduler")
 
     override fun scheduleAlarm(info: AlarmRingInfo, mapProvider: MapProvider) {
-        val alarm = info.alarmDetail
+        val alarm = info.alarm
 
         if (!alarm.enabled) return
 
