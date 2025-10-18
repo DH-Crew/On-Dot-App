@@ -21,11 +21,11 @@
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <receiver
-            android:name=".core.util.AlarmReceiver"
+            android:name="com.ondot.platform.util.AlarmReceiver"
             android:exported="false" />
 
         <service
-            android:name=".core.util.AlarmService"
+            android:name="com.ondot.platform.util.AlarmService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback"
             tools:ignore="ForegroundServicePermission" />
@@ -36,8 +36,7 @@
             android:name=".presentation.MainActivity"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
-            android:launchMode="singleTop"
-            tools:targetApi="27">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
