@@ -1,12 +1,14 @@
 package com.ondot.domain.model.alarm
 
 import com.ondot.domain.model.enums.AlarmMode
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Alarm(
     val alarmId: Long = -1,
     val alarmMode: AlarmMode = AlarmMode.SOUND,
+    @SerialName("isEnabled")
     val enabled: Boolean = false,
     val triggeredAt: String = "2025-05-10T19:00:00",
     val isSnoozeEnabled: Boolean = false,
