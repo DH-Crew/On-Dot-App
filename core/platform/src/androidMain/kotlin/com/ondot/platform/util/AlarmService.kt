@@ -28,12 +28,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AlarmService(
-    private val scheduleRepository: ScheduleRepository,
-    private val soundPlayer: SoundPlayer,
-    private val dataStore: OnDotDataStore
-) : Service() {
+class AlarmService : Service(), KoinComponent {
+
+    private val scheduleRepository: ScheduleRepository by inject()
+    private val soundPlayer: SoundPlayer by inject()
+    private val dataStore: OnDotDataStore by inject()
 
     companion object {
         private const val CHANNEL_ID = "channel_alarm"
