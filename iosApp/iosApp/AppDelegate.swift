@@ -7,7 +7,7 @@
 
 import UIKit
 import UserNotifications
-import ComposeApp
+import composeApp
 import FirebaseCore
 import FirebaseAnalytics
 
@@ -83,7 +83,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             if let alarmId = alarmId, let scheduleId = scheduleId {
                 NSLog("[AppDelegate] didReceive emit scheduleId=\(scheduleId) alarmId=\(alarmId) type=\(typeName)")
                 // KMP AlarmNotifier 에 이벤트 흘리기
-                ComposeApp.SharedMethodKt.notifyAlarmEvent(
+                composeApp.SharedMethodKt.notifyAlarmEvent(
                     scheduleId: scheduleId,
                     alarmId: alarmId,
                     type: typeName
@@ -126,7 +126,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             // 포그라운드면 바로 이벤트 방출 -> Compose 네비게이션 트리거
             if let alarmId = alarmId, let scheduleId = scheduleId, let typeName = typeName {
                 NSLog("[AppDelegate] willPresent emit scheduleId=\(scheduleId) alarmId=\(alarmId) type=\(typeName)")
-                ComposeApp.SharedMethodKt.notifyAlarmEvent(
+                composeApp.SharedMethodKt.notifyAlarmEvent(
                     scheduleId: scheduleId,
                     alarmId: alarmId,
                     type: typeName
