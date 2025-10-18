@@ -27,10 +27,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.TopBarType
-import com.dh.ondot.domain.model.response.AddressInfo
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.setting.SettingEvent
 import com.dh.ondot.presentation.setting.SettingViewModel
@@ -45,6 +41,10 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS_EDIT_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TopBarType
+import com.ondot.domain.model.member.AddressInfo
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource

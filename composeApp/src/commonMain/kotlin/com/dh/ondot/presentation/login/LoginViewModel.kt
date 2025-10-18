@@ -2,26 +2,26 @@ package com.dh.ondot.presentation.login
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.platform.appleSignIn
-import com.dh.ondot.core.platform.kakaoSignIn
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.base.UiState
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.TokenModel
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.response.AuthResponse
-import com.dh.ondot.domain.repository.AuthRepository
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGIN
+import com.ondot.domain.model.auth.AuthResult
+import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.service.KaKaoSignInProvider
+import com.ondot.platform.apple.appleSignIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authRepository: AuthRepository = ServiceLocator.authRepository
+    private val authRepository: AuthRepository,
+    private val kaKaoSignInProvider: KaKaoSignInProvider
 ): BaseViewModel<UiState.Default>(UiState.Default) {
     private val logger = Logger.withTag("LoginViewModel")
 
     fun performKakaoLogin() {
-        kakaoSignIn { token ->
+        kaKaoSignInProvider.kakaoSignIn { token ->
             if (token.isBlank()) return@kakaoSignIn
 
             viewModelScope.launch {
@@ -32,8 +32,8 @@ class LoginViewModel(
         }
     }
 
-    private fun onSuccessKakaoLogin(result: AuthResponse) {
-        saveToken(token = TokenModel(accessToken = result.accessToken, refreshToken = result.refreshToken))
+    private fun onSuccessKakaoLogin(result: AuthResult) {
+        saveToken(token = AuthTokens(accessToken = result.tokens.accessToken, refreshToken = result.tokens.refreshToken))
 
         when(result.isNewMember) {
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
@@ -66,8 +66,12 @@ class LoginViewModel(
         )
     }
 
-    private fun onSuccessAppleLogin(result: AuthResponse) {
-        saveToken(token = TokenModel(accessToken = result.accessToken, refreshToken = result.refreshToken))
+    private fun onSuccessAppleLogin(result: AuthResult) {
+        saveToken(token = AuthTokens(
+            accessToken = result.tokens.accessToken,
+            refreshToken = result.tokens.refreshToken
+        )
+        )
 
         when(result.isNewMember) {
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
@@ -75,7 +79,7 @@ class LoginViewModel(
         }
     }
 
-    private fun saveToken(token: TokenModel) {
+    private fun saveToken(token: AuthTokens) {
         viewModelScope.launch {
             authRepository.saveToken(token)
         }

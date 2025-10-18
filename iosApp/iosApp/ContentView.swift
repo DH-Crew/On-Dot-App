@@ -1,6 +1,6 @@
 import UIKit
 import SwiftUI
-import ComposeApp
+import composeApp
 import KakaoSDKAuth
 
 struct ComposeView: UIViewControllerRepresentable {

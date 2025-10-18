@@ -21,11 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.response.AlarmDetail
-import com.dh.ondot.domain.model.response.Schedule
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.SwipableDeleteItem
@@ -38,6 +33,11 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.WORD_DEPARTURE
 import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.schedule.Schedule
+import com.ondot.util.DateTimeFormatter
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_banner
 import org.jetbrains.compose.resources.painterResource
@@ -189,8 +189,8 @@ private fun ScheduleInfoToggleSection(
 
 @Composable
 private fun AlarmInfoSection(
-    preparationAlarm: AlarmDetail,
-    departureAlarm: AlarmDetail
+    preparationAlarm: Alarm,
+    departureAlarm: Alarm
 ) {
     Row(
         modifier = Modifier
@@ -205,7 +205,7 @@ private fun AlarmInfoSection(
 @Composable
 private fun AlarmItem(
     type: AlarmType,
-    alarm: AlarmDetail
+    alarm: Alarm
 ) {
     Row(
         verticalAlignment = Alignment.Bottom
@@ -283,11 +283,11 @@ private fun ScheduleTitleDateRow(
 
 @Composable
 private fun DepartureAlarmInfoRow(
-    alarmDetail: AlarmDetail,
+    alarm: Alarm,
     isEnabled: Boolean,
     onClickSwitch: (Boolean) -> Unit
 ) {
-    val (period, time) = DateTimeFormatter.formatAmPmTimePair(alarmDetail.triggeredAt)
+    val (period, time) = DateTimeFormatter.formatAmPmTimePair(alarm.triggeredAt)
 
     Row(
         modifier = Modifier
@@ -321,11 +321,11 @@ private fun DepartureAlarmInfoRow(
 
 @Composable
 private fun PreparationAlarmText(
-    alarmDetail: AlarmDetail
+    alarm: Alarm
 ) {
-    if (alarmDetail.enabled == true) {
+    if (alarm.enabled == true) {
         OnDotText(
-            text = "준비시작 ${DateTimeFormatter.formatAmPmTime(alarmDetail.triggeredAt)}",
+            text = "준비시작 ${DateTimeFormatter.formatAmPmTime(alarm.triggeredAt)}",
             style = OnDotTextStyle.BodyLargeR2,
             color = Gray200
         )

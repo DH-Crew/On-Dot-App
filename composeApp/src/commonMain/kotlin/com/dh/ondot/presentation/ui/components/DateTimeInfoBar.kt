@@ -14,14 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.core.util.DateTimeFormatter.formatAmPmTime
-import com.dh.ondot.core.util.DateTimeFormatter.formatKorean
-import com.dh.ondot.domain.model.constants.AppConstants
-import com.dh.ondot.domain.model.enums.ChipStyle
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
+import com.ondot.domain.model.constants.AppConstants
+import com.ondot.domain.model.enums.ChipStyle
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.util.DateTimeFormatter.formatAmPmTime
+import com.ondot.util.DateTimeFormatter.formatKorean
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 

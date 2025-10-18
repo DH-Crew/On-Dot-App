@@ -28,10 +28,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.TopBarType
-import com.dh.ondot.domain.model.ui.UserAnswer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.setting.SettingEvent
 import com.dh.ondot.presentation.setting.SettingUiState
@@ -60,13 +56,18 @@ import com.dh.ondot.presentation.ui.theme.WORD_CANCEL
 import com.dh.ondot.presentation.ui.theme.WORD_CONFIRM
 import com.dh.ondot.presentation.ui.theme.WORD_DELETE_ACCOUNT_ACTION
 import com.dh.ondot.presentation.ui.theme.WORD_WITHDRAW
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TopBarType
+import com.ondot.domain.model.ui.UserAnswer
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_warning_red
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DeleteAccountScreen(
-    viewModel: SettingViewModel = viewModel { SettingViewModel() },
+    viewModel: SettingViewModel = koinViewModel(),
     popScreen: () -> Unit,
     navigateToLoginScreen: () -> Unit
 ) {

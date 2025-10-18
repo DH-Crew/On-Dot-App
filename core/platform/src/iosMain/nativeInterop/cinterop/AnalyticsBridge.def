@@ -1,0 +1,3 @@
+language = Objective-C
+headers = AnalyticsBridge.h
+package = com.dh.ondot.analytics

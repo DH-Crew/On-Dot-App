@@ -26,26 +26,56 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("android-application") {
-            id = "ondot.android.application"
-            implementationClass = "com.ondot.build_logic.convention.AndroidApplicationConventionPlugin"
+        register("kmpAppConvention") {
+            id = "convention.kmp.app"
+            implementationClass = "com.ondot.build_logic.convention.KmpAppConventionPlugin"
         }
+
+        register("composeMultiplatformConvention") {
+            id = "convention.compose"
+            implementationClass = "com.ondot.build_logic.convention.ComposeMultiplatformConventionPlugin"
+        }
+
+        register("kmpDomainConvention") {
+            id = "convention.domain"
+            implementationClass = "com.ondot.build_logic.convention.KmpDomainConventionPlugin"
+        }
+
+        register("composeLifecycleConvention") {
+            id = "convention.compose.lifecycle"
+            implementationClass = "com.ondot.build_logic.convention.ComposeLifecycleConventionPlugin"
+        }
+
+        register("composeKoinConvention") {
+            id = "convention.koin"
+            implementationClass = "com.ondot.build_logic.convention.ComposeKoinConventionPlugin"
+        }
+
+        register("androidLibraryConvention") {
+            id = "convention.android.library"
+            implementationClass = "com.ondot.build_logic.convention.AndroidLibraryConventionPlugin"
+        }
+
+        register("featureComposeConvention") {
+            id = "convention.feature"
+            implementationClass = "com.ondot.build_logic.convention.feature.FeatureComposeConventionPlugin"
+        }
+
+        register("kotlinMultiplatformConvention") {
+            id = "convention.kmp"
+            implementationClass = "com.ondot.build_logic.convention.KotlinMultiplatformConventionPlugin"
+        }
+
         register("compose-app") {
             id = "ondot.compose.app"
             implementationClass = "com.ondot.build_logic.ComposeAppPlugin"
         }
+
+        /**----------------------------Legacy----------------------------*/
+
         register("compose-multiplatform") {
             id = "ondot.compose.multiplatform"
             implementationClass = "com.ondot.build_logic.ComposeMultiplatformPlugin"
-        }
-        register("kotlin-multiplatform") {
-            id = "ondot.kotlin.multiplatform"
-            implementationClass = "com.ondot.build_logic.convention.KotlinMultiplatformConventionPlugin"
-        }
-
-        register("compose-multiplatform-convention") {
-            id = "ondot.compose.multiplatform.convention"
-            implementationClass = "com.ondot.build_logic.convention.ComposeMultiplatformConventionPlugin"
         }
     }
 }

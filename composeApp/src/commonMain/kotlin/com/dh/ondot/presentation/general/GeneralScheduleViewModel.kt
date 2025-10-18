@@ -2,25 +2,24 @@ package com.dh.ondot.presentation.general
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.platform.provideAnalyticsManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.RouterType
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.request.CreateScheduleRequest
-import com.dh.ondot.domain.model.request.ScheduleAlarmRequest
-import com.dh.ondot.domain.model.response.AddressInfo
-import com.dh.ondot.domain.model.response.HomeAddressInfo
-import com.dh.ondot.domain.model.response.ScheduleAlarmResponse
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.PlaceRepository
-import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.presentation.ui.theme.ERROR_CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
+import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.request.CreateScheduleRequest
+import com.ondot.domain.model.request.ScheduleAlarmRequest
+import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.member.HomeAddressInfo
+import com.ondot.domain.model.schedule.ScheduleAlarm
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AnalyticsManager
+import com.ondot.util.DateTimeFormatter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +44,7 @@ class GeneralScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val placeRepository: PlaceRepository,
     private val memberRepository: MemberRepository,
-    private val analyticsManager: AnalyticsManager = provideAnalyticsManager()
+    private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()) {
     private val logger = Logger.withTag("GeneralScheduleViewModel")
     private val fullWeek = (0..6).toList()
@@ -307,7 +306,7 @@ class GeneralScheduleViewModel(
         }
     }
 
-    private fun onSuccessGetScheduleAlarms(result: ScheduleAlarmResponse) {
+    private fun onSuccessGetScheduleAlarms(result: ScheduleAlarm) {
         updateState(uiState.value.copy(preparationAlarm = result.preparationAlarm, departureAlarm = result.departureAlarm))
     }
 

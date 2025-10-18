@@ -2,24 +2,20 @@ package com.dh.ondot.presentation.app
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.platform.openDirections
-import com.dh.ondot.core.platform.stopService
+import com.dh.ondot.core.DirectionsFacade
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.schedule.SchedulePreparation
-import com.dh.ondot.domain.model.ui.AlarmRingInfo
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AnalyticsManager
-import com.dh.ondot.domain.service.SoundPlayer
-import com.dh.ondot.getPlatform
-import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.SoundPlayer
+import com.ondot.util.DateTimeFormatter
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
@@ -28,11 +24,11 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 
 class AppViewModel(
-    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
-    private val soundPlayer: SoundPlayer = ServiceLocator.provideSoundPlayer(),
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
-    private val analyticsManager: AnalyticsManager = ServiceLocator.provideAnalyticsManager()
+    private val alarmScheduler: AlarmScheduler,
+    private val soundPlayer: SoundPlayer,
+    private val memberRepository: MemberRepository,
+    private val scheduleRepository: ScheduleRepository,
+    private val analyticsManager: AnalyticsManager
 ): BaseViewModel<AppUiState>(AppUiState()) {
     private val logger = Logger.withTag("AppViewModel")
 
@@ -119,8 +115,6 @@ class AppViewModel(
     fun startDeparture() {
         soundPlayer.stopSound()
 
-        if (getPlatform().name == ANDROID) stopService(uiState.value.currentAlarm.alarmId)
-
         val info = uiState.value.schedule
         val invalidCoords = listOf(info.startLatitude, info.startLongitude, info.endLatitude, info.endLongitude).any { it.isNaN() }
                 || ((info.startLatitude == 0.0 && info.startLongitude == 0.0) || (info.endLatitude == 0.0 && info.endLongitude == 0.0))
@@ -136,7 +130,7 @@ class AppViewModel(
         )
 
         emitEventFlow(AppEvent.NavigateToSplash)
-        openDirections(
+        DirectionsFacade.openDirections(
             startLat = info.startLatitude,
             startLng = info.startLongitude,
             endLat = info.endLatitude,
@@ -187,7 +181,7 @@ class AppViewModel(
             alarmScheduler.scheduleAlarm(
                 AlarmRingInfo(
                     scheduleId = newSchedule.scheduleId,
-                    alarmDetail = currentAlarm,
+                    alarm = currentAlarm,
                     alarmType = type,
                     startLat = newSchedule.startLatitude,
                     startLng = newSchedule.startLongitude,

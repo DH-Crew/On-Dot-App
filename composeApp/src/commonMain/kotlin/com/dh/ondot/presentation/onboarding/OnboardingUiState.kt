@@ -1,10 +1,6 @@
 package com.dh.ondot.presentation.onboarding
 
 import com.dh.ondot.core.ui.base.UiState
-import com.dh.ondot.domain.model.enums.RingTone
-import com.dh.ondot.domain.model.response.AddressInfo
-import com.dh.ondot.domain.model.ui.AlarmSound
-import com.dh.ondot.domain.model.ui.UserAnswer
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
 import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER1
@@ -15,6 +11,10 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER1
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER2
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER3
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER4
+import com.ondot.domain.model.enums.RingTone
+import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.ui.AlarmSound
+import com.ondot.domain.model.ui.UserAnswer
 
 data class OnboardingUiState(
     val currentStep: Int = 0,
@@ -68,4 +68,4 @@ data class OnboardingUiState(
     ),
     val selectedAnswer2Index: Int = 0,
 
-): UiState
+    ): UiState

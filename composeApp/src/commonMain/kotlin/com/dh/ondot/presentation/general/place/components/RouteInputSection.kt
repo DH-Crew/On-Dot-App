@@ -26,8 +26,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.RouterType
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.ARRIVAL_INPUT_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.DEPARTURE_INPUT_PLACEHOLDER
@@ -41,6 +39,8 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.RouterType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource

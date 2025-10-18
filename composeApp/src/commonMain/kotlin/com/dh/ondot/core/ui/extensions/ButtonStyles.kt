@@ -2,8 +2,8 @@ package com.dh.ondot.core.ui.extensions
 
 import androidx.compose.runtime.Composable
 import com.dh.ondot.core.ui.model.ButtonStyle
-import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.ondot.domain.model.enums.ButtonType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_apple
 import ondot.composeapp.generated.resources.ic_kakao

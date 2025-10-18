@@ -1,6 +1,6 @@
 import SwiftUI
 import KakaoSDKCommon
-import ComposeApp
+import composeApp
 import AlarmKit
 
 @main
@@ -11,8 +11,7 @@ struct iOSApp: App {
     init() {
         KakaoSDK.initSDK(appKey: KAKAO_APP_KEY)
         
-        ComposeApp.SharedInitKt.doInitShared()
-        ComposeApp.SharedInitKt.doInitKoin()
+        composeApp.SharedInitKt.doInitKoin(extraModules: [])
     }
     
     var body: some Scene {
@@ -46,7 +45,7 @@ private func consumePendingDirectionsAndOpen() {
       let eLat = elat, let eLng = elng
     else { return }
 
-    let provider: ComposeApp.MapProvider = {
+    let provider: composeApp.DomainMapProvider = {
         switch providerStr {
         case "naver": return .naver
         case "apple": return .apple
@@ -54,7 +53,7 @@ private func consumePendingDirectionsAndOpen() {
         }
     }()
     
-    ComposeApp.PlatformDependencies_iosKt.openDirections(
+    composeApp.DirectionsFacade().openDirections(
         startLat: sLat, startLng: sLng,
         endLat:   eLat, endLng:   eLng,
         provider: provider,

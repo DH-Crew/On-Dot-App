@@ -23,8 +23,6 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.ui.AlarmSound
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
 import com.dh.ondot.presentation.ui.components.OnDotRadioButton
 import com.dh.ondot.presentation.ui.components.OnDotSlider
@@ -36,6 +34,8 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING3_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.WORD_MUTE
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.ui.AlarmSound
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_sound
 import org.jetbrains.compose.resources.painterResource

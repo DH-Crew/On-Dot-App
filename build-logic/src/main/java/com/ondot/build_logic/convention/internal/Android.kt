@@ -22,7 +22,7 @@ fun <T: CommonExtension<*, *, *, *, *, *>> T.configureAndroid(project: Project) 
     compileSdk = project.intProp("compile.sdk", 36).get()
 
     defaultConfig {
-        minSdk = project.intProp("min.sdk", 26).get()
+        minSdk = project.intProp("min.sdk", 29).get()
         vectorDrawables { useSupportLibrary = true }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

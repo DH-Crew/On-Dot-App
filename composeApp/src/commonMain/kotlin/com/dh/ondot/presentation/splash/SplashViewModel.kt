@@ -2,19 +2,18 @@ package com.dh.ondot.presentation.splash
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.TokenModel
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.repository.AuthRepository
-import com.dh.ondot.core.network.TokenProvider
 import com.dh.ondot.presentation.ui.theme.ERROR_LOGIN
+import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.service.TokenProvider
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val tokenProvider: TokenProvider = ServiceLocator.provideTokenProvider(),
-    private val authRepository: AuthRepository = ServiceLocator.authRepository
+    private val tokenProvider: TokenProvider,
+    private val authRepository: AuthRepository
 ): BaseViewModel<SplashUiState>(SplashUiState()) {
     private val logger = Logger.withTag("SplashViewModel")
 
@@ -42,7 +41,7 @@ class SplashViewModel(
         }
     }
 
-    private fun onSuccessReissueToken(result: TokenModel) {
+    private fun onSuccessReissueToken(result: AuthTokens) {
         viewModelScope.launch {
             tokenProvider.saveToken(result)
             updateState(uiState.value.copy(skipLogin = true))

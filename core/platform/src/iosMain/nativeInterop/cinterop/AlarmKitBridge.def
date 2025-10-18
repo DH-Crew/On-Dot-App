@@ -1,0 +1,3 @@
+language = Objective-C
+headers = ONDAlarmKit.h
+package = com.dh.ondot.alarmkit

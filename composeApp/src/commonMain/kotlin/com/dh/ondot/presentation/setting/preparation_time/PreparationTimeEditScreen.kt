@@ -16,9 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.onboarding.step.HourMinuteTextField
 import com.dh.ondot.presentation.setting.SettingViewModel
@@ -33,11 +30,15 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green300
 import com.dh.ondot.presentation.ui.theme.SETTING_PREPARE_TIME
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TopBarType
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PreparationTimeEditScreen(
     popScreen: () -> Unit,
-    viewModel: SettingViewModel = viewModel { SettingViewModel() }
+    viewModel: SettingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

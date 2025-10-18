@@ -17,11 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_apple_map
 import ondot.composeapp.generated.resources.ic_kakao_map
