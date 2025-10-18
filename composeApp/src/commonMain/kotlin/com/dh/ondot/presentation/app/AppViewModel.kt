@@ -2,6 +2,7 @@ package com.dh.ondot.presentation.app
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.dh.ondot.core.DirectionsFacade
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
@@ -13,7 +14,6 @@ import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
-import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.SoundPlayer
 import com.ondot.util.DateTimeFormatter
 import kotlinx.coroutines.launch
@@ -28,8 +28,7 @@ class AppViewModel(
     private val soundPlayer: SoundPlayer,
     private val memberRepository: MemberRepository,
     private val scheduleRepository: ScheduleRepository,
-    private val analyticsManager: AnalyticsManager,
-    private val directionsOpener: DirectionsOpener
+    private val analyticsManager: AnalyticsManager
 ): BaseViewModel<AppUiState>(AppUiState()) {
     private val logger = Logger.withTag("AppViewModel")
 
@@ -131,7 +130,7 @@ class AppViewModel(
         )
 
         emitEventFlow(AppEvent.NavigateToSplash)
-        directionsOpener.openDirections(
+        DirectionsFacade.openDirections(
             startLat = info.startLatitude,
             startLng = info.startLongitude,
             endLat = info.endLatitude,
