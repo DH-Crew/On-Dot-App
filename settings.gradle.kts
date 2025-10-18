@@ -46,3 +46,9 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":domain")
+include(":core")
+include(":data")
+include(":core:network")
+include(":core:platform")
+include(":core:util")

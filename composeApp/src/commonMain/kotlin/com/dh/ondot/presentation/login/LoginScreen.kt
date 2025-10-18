@@ -15,20 +15,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.domain.model.enums.ButtonType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.theme.APPLE_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.IOS
 import com.dh.ondot.presentation.ui.theme.KAKAO_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.ondot.domain.model.enums.ButtonType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_login
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = viewModel { LoginViewModel() },
+    viewModel: LoginViewModel = koinViewModel(),
     navigateToOnboarding: () -> Unit,
     navigateToMain: () -> Unit
 ) {

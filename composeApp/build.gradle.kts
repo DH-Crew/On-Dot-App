@@ -1,38 +1,22 @@
 
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import java.util.Properties
 
 plugins {
     id("ondot.compose.app")
     alias(libs.plugins.composeHotReload)
-    alias(libs.plugins.sqldelight)
-    alias(libs.plugins.buildKonfig)
     alias(libs.plugins.google.services)
-}
-
-buildkonfig {
-    packageName = "com.dh.ondot"
-
-    exposeObjectWithName = "BuildKonfig"
-
-    val props = Properties().apply {
-        val file = rootProject.file("local.properties")
-        if (file.exists()) file.inputStream().use { load(it) }
-    }
-    val baseUrl = props.getProperty("BASE_URL")
-
-    defaultConfigs {
-        buildConfigField(
-            Type.STRING,
-            "BASE_URL",
-            baseUrl
-        )
-    }
 }
 
 kotlin {
     sourceSets {
+        commonMain.dependencies {
+            implementation(projects.domain)
+            implementation(projects.data)
+            implementation(projects.core.platform)
+            implementation(projects.core.network)
+            implementation(projects.core.util)
+        }
+
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
 
@@ -45,15 +29,11 @@ kotlin {
 
             implementation(libs.kakao.login)
 
-            implementation(libs.android.driver)
-
             implementation(libs.firebase.analytics)
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-
-            implementation(libs.native.driver)
         }
     }
 
@@ -79,20 +59,6 @@ kotlin {
                 // 헤더가 있는 경로 (iosApp의 iOS 타깃 소스 루트)
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp/AlarmKitBridge"))
             }
-        }
-    }
-
-    targets.withType<KotlinNativeTarget>().configureEach {
-        binaries.all {
-            linkerOpts("-lsqlite3")
-        }
-    }
-}
-
-sqldelight {
-    databases {
-        create("OndotDatabase") {
-            packageName.set("com.dh.ondot.data.local.db")
         }
     }
 }

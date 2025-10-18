@@ -25,8 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.home.components.AddScheduleButton
 import com.dh.ondot.presentation.home.components.EmptyScheduleContent
 import com.dh.ondot.presentation.home.components.RemainingTimeText
@@ -40,13 +38,16 @@ import com.dh.ondot.presentation.ui.theme.MAP_PROVIDER_TITLE
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_banner
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel { HomeViewModel() },
+    viewModel: HomeViewModel = koinViewModel(),
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit
 ) {

@@ -27,15 +27,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.ScheduleMenuType
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.ADD_SCHEDULE
+import com.dh.ondot.presentation.ui.theme.GENERAL_ADD
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
+import com.dh.ondot.presentation.ui.theme.QUICK_ADD
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.ScheduleMenuType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_clock_white
 import ondot.composeapp.generated.resources.ic_plus
@@ -143,7 +145,10 @@ private fun AddScheduleMenuItem(
         Spacer(modifier = Modifier.width(4.dp))
 
         OnDotText(
-            text = type.text,
+            text = when(type) {
+                ScheduleMenuType.Quick -> QUICK_ADD
+                ScheduleMenuType.General -> GENERAL_ADD
+            },
             style = OnDotTextStyle.BodyLargeR1,
             color = Gray0
         )

@@ -13,7 +13,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -28,18 +27,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import co.touchlab.kermit.Logger
 import com.dh.ondot.App
-import com.dh.ondot.core.di.AndroidServiceLocator
-import com.dh.ondot.core.util.AlarmNotifier
-import com.dh.ondot.domain.RingingState
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.ui.AlarmEvent
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.ui.AlarmEvent
+import com.ondot.platform.data.OnDotDataStore
+import com.ondot.platform.model.RingingState
+import com.ondot.util.AlarmNotifier
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
     private val logger = Logger.withTag("MainActivity")
-    private val dataStore by lazy { AndroidServiceLocator.provideDataStore() }
+    private val dataStore: OnDotDataStore by inject()
     private var lastNavKey: Pair<Long, Long>? = null
 
     /**
@@ -89,7 +89,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.O_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

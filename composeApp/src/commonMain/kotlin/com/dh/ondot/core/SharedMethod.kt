@@ -1,9 +1,9 @@
 package com.dh.ondot.core
 
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.util.AlarmNotifier
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.ui.AlarmEvent
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.ui.AlarmEvent
+import com.ondot.util.AlarmNotifier
 
 fun notifyAlarmEvent(scheduleId: Long, alarmId: Long, type: String) {
     val logger = Logger.withTag("notifyAlarmEvent")

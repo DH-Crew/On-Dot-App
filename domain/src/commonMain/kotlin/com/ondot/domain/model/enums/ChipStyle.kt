@@ -1,0 +1,5 @@
+package com.ondot.domain.model.enums
+
+enum class ChipStyle {
+    Active, Normal, Inactive, Info, Yesterday
+}

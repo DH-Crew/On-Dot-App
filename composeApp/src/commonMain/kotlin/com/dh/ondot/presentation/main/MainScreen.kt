@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.core.navigation.NavRoutes
-import com.dh.ondot.domain.model.enums.BottomNavType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.home.HomeScreen
 import com.dh.ondot.presentation.setting.SettingScreen
@@ -34,6 +33,7 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
+import com.ondot.domain.model.enums.BottomNavType
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_home_selected
 import ondot.composeapp.generated.resources.ic_home_unselected

@@ -1,10 +1,10 @@
 package com.dh.ondot.presentation.home.components
 
 import androidx.compose.runtime.Composable
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.ALARM_IMMINENT
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
+import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable
 fun RemainingTimeText(

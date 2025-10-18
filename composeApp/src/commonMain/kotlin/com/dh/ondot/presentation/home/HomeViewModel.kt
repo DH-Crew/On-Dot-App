@@ -2,34 +2,32 @@ package com.dh.ondot.presentation.home
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.platform.provideAnalyticsManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.AlarmType
-import com.dh.ondot.domain.model.enums.MapProvider
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.request.MapProviderRequest
-import com.dh.ondot.domain.model.request.ToggleAlarmRequest
-import com.dh.ondot.domain.model.response.Schedule
-import com.dh.ondot.domain.model.response.ScheduleListResponse
-import com.dh.ondot.domain.model.ui.AlarmRingInfo
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.domain.service.AlarmScheduler
-import com.dh.ondot.domain.service.AnalyticsManager
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
+import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.request.MapProviderRequest
+import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.schedule.Schedule
+import com.ondot.domain.model.schedule.ScheduleList
+import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.AnalyticsManager
+import com.ondot.util.DateTimeFormatter
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler(),
-    private val analyticsManager: AnalyticsManager = provideAnalyticsManager()
+    private val scheduleRepository: ScheduleRepository,
+    private val memberRepository: MemberRepository,
+    private val alarmScheduler: AlarmScheduler,
+    private val analyticsManager: AnalyticsManager
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
@@ -98,8 +96,8 @@ class HomeViewModel(
         }
     }
 
-    private fun onSuccessGetScheduleList(result: ScheduleListResponse) {
-        val remainingTime = if (result.earliestAlarmAt != null) {
+    private fun onSuccessGetScheduleList(result: ScheduleList) {
+        val remainingTime = if (result.earliestAlarmAt.isNotBlank()) {
             DateTimeFormatter.calculateRemainingTime(result.earliestAlarmAt)
         } else { Triple(-1, -1, -1) }
 
@@ -121,7 +119,7 @@ class HomeViewModel(
                     if (schedule.preparationAlarm.enabled) {
                         add(
                             AlarmRingInfo(
-                                alarmDetail = schedule.preparationAlarm,
+                                alarm = schedule.preparationAlarm,
                                 alarmType = AlarmType.Preparation,
                                 appointmentAt = schedule.appointmentAt,
                                 scheduleTitle = schedule.scheduleTitle,
@@ -135,7 +133,7 @@ class HomeViewModel(
                     }
                     add(
                         AlarmRingInfo(
-                            alarmDetail = schedule.departureAlarm,
+                            alarm = schedule.departureAlarm,
                             alarmType = AlarmType.Departure,
                             appointmentAt = schedule.appointmentAt,
                             scheduleTitle = schedule.scheduleTitle,

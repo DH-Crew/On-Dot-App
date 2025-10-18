@@ -21,13 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.response.AlarmDetail
-import com.dh.ondot.domain.model.response.Schedule
-import com.dh.ondot.domain.model.schedule.SchedulePreparation
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.app.AppViewModel
 import com.dh.ondot.presentation.ui.components.OnDotButton
@@ -47,6 +40,12 @@ import com.dh.ondot.presentation.ui.theme.alarmRingTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.dh.ondot.presentation.ui.theme.schedulePreparation
 import com.dh.ondot.presentation.ui.theme.snoozeIntervalLabel
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.schedule.Schedule
+import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.util.DateTimeFormatter
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -56,6 +55,7 @@ import kotlinx.coroutines.delay
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_circle_check_green
 import ondot.composeapp.generated.resources.ic_pill
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PreparationAlarmRingScreen(
@@ -63,7 +63,7 @@ fun PreparationAlarmRingScreen(
     alarmId: Long,
     navigateToSplash: () -> Unit
 ) {
-    val viewModel: AppViewModel = viewModel { AppViewModel() }
+    val viewModel: AppViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(alarmId) {
@@ -87,7 +87,7 @@ fun PreparationAlarmRingScreen(
 
     if (uiState.schedule.appointmentAt.isNotBlank()) {
         PreparationAlarmRingContent(
-            alarmDetail = uiState.currentAlarm,
+            alarm = uiState.currentAlarm,
             schedule = uiState.schedule,
             showPreparationStartAnimation = uiState.showPreparationStartAnimation,
             showPreparationSnoozeAnimation = uiState.showPreparationSnoozeAnimation,
@@ -101,7 +101,7 @@ fun PreparationAlarmRingScreen(
 
 @Composable
 fun PreparationAlarmRingContent(
-    alarmDetail: AlarmDetail,
+    alarm: Alarm,
     schedule: Schedule,
     showPreparationStartAnimation: Boolean,
     showPreparationSnoozeAnimation: Boolean,
@@ -149,7 +149,7 @@ fun PreparationAlarmRingContent(
                 AlarmRingTitle(alarmRingTitle, formattedTime)
 
                 ScheduleInfoSection(
-                    snoozeInterval = alarmDetail.snoozeInterval,
+                    snoozeInterval = alarm.snoozeInterval,
                     appointmentDate = appointmentDate,
                     appointmentTime = appointmentTime,
                     scheduleTitle = schedule.scheduleTitle,
@@ -199,7 +199,7 @@ fun PreparationAlarmRingContent(
                 AlarmSnoozedSection(
                     alarmRingTitle = alarmRingTitle,
                     formattedText = formattedTime,
-                    snoozeInterval = alarmDetail.snoozeInterval,
+                    snoozeInterval = alarm.snoozeInterval,
                     onStartPreparation = onClickPreparationStartButton
                 )
             }

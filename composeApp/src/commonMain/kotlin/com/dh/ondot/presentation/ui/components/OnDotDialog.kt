@@ -19,14 +19,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.ButtonType
-import com.dh.ondot.domain.model.enums.DialogType
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.WORD_CANCEL
 import com.dh.ondot.presentation.ui.theme.WORD_CONFIRM
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.DialogType
+import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable
 fun OnDotDialog(

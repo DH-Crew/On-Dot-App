@@ -1,31 +1,29 @@
 package com.dh.ondot.presentation.onboarding
 
 import androidx.lifecycle.viewModelScope
-import com.dh.ondot.core.di.ServiceLocator
-import com.dh.ondot.core.network.TokenProvider
-import com.dh.ondot.core.platform.provideSoundPlayer
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.data.model.TokenModel
-import com.dh.ondot.domain.model.enums.AlarmMode
-import com.dh.ondot.domain.model.enums.RingTone
-import com.dh.ondot.domain.model.enums.SoundCategory
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.request.OnboardingRequest
-import com.dh.ondot.domain.model.request.QuestionAnswer
-import com.dh.ondot.domain.model.response.AddressInfo
-import com.dh.ondot.domain.repository.MemberRepository
-import com.dh.ondot.domain.repository.PlaceRepository
-import com.dh.ondot.domain.service.SoundPlayer
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.ondot.domain.model.auth.AuthTokens
+import com.ondot.domain.model.enums.AlarmMode
+import com.ondot.domain.model.enums.RingTone
+import com.ondot.domain.model.enums.SoundCategory
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.request.OnboardingRequest
+import com.ondot.domain.model.request.QuestionAnswer
+import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.repository.MemberRepository
+import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.service.SoundPlayer
+import com.ondot.domain.service.TokenProvider
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val placeRepository: PlaceRepository = ServiceLocator.placeRepository,
-    private val memberRepository: MemberRepository = ServiceLocator.memberRepository,
-    private val soundPlayer: SoundPlayer = provideSoundPlayer(),
-    private val tokenProvider: TokenProvider = ServiceLocator.provideTokenProvider()
+    private val placeRepository: PlaceRepository,
+    private val memberRepository: MemberRepository,
+    private val soundPlayer: SoundPlayer,
+    private val tokenProvider: TokenProvider
 ): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
 
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
@@ -290,7 +288,7 @@ class OnboardingViewModel(
         }
     }
 
-    private fun onSuccessCompleteOnboarding(result: TokenModel) {
+    private fun onSuccessCompleteOnboarding(result: AuthTokens) {
         viewModelScope.launch { tokenProvider.saveToken(result) }
         emitEventFlow(OnboardingEvent.NavigateToMainScreen)
     }

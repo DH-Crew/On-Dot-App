@@ -2,22 +2,21 @@ package com.dh.ondot.presentation.edit
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.dh.ondot.core.di.ServiceLocator
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
-import com.dh.ondot.core.util.DateTimeFormatter
-import com.dh.ondot.core.util.DateTimeFormatter.toIsoTimeString
-import com.dh.ondot.core.util.DateTimeFormatter.toLocalDateFromIso
-import com.dh.ondot.core.util.DateTimeFormatter.toLocalTimeFromIso
-import com.dh.ondot.domain.model.enums.TimeBottomSheet
-import com.dh.ondot.domain.model.enums.TimeType
-import com.dh.ondot.domain.model.enums.ToastType
-import com.dh.ondot.domain.model.response.ScheduleDetail
-import com.dh.ondot.domain.repository.ScheduleRepository
-import com.dh.ondot.domain.service.AlarmScheduler
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_EDIT_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
+import com.ondot.domain.model.enums.TimeBottomSheet
+import com.ondot.domain.model.enums.TimeType
+import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.schedule.ScheduleDetail
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AlarmScheduler
+import com.ondot.util.DateTimeFormatter
+import com.ondot.util.DateTimeFormatter.toIsoTimeString
+import com.ondot.util.DateTimeFormatter.toLocalDateFromIso
+import com.ondot.util.DateTimeFormatter.toLocalTimeFromIso
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -26,8 +25,8 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 
 class EditScheduleViewModel(
-    private val scheduleRepository: ScheduleRepository = ServiceLocator.scheduleRepository,
-    private val alarmScheduler: AlarmScheduler = ServiceLocator.provideAlarmScheduler()
+    private val scheduleRepository: ScheduleRepository,
+    private val alarmScheduler: AlarmScheduler
 ) : BaseViewModel<EditScheduleUiState>(EditScheduleUiState()) {
 
     private val logger = Logger.withTag("EditScheduleViewModel")

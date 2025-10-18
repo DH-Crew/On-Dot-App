@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.EMPTY_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
+import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_no_clock
 import org.jetbrains.compose.resources.painterResource

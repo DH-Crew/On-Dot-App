@@ -10,9 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.core.platform.WebView
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.TopBarType
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.TopBar
@@ -20,6 +17,9 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SERVICE_TERMS_TITLE
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TopBarType
+import com.ondot.platform.webview.WebView
 
 @Composable
 fun ServiceTermsScreen(

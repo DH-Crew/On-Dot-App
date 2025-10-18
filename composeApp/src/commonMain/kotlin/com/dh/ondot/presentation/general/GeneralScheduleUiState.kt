@@ -1,10 +1,10 @@
 package com.dh.ondot.presentation.general
 
 import com.dh.ondot.core.ui.base.UiState
-import com.dh.ondot.domain.model.enums.RouterType
-import com.dh.ondot.domain.model.response.AddressInfo
-import com.dh.ondot.domain.model.response.AlarmDetail
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
+import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.alarm.Alarm
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -46,11 +46,11 @@ data class GeneralScheduleUiState @OptIn(ExperimentalTime::class) constructor(
     val isHomeAddressInitialized: Boolean = false,
 
     // RouteLoading
-    val preparationAlarm: AlarmDetail = AlarmDetail(),
-    val departureAlarm: AlarmDetail = AlarmDetail(),
+    val preparationAlarm: Alarm = Alarm(),
+    val departureAlarm: Alarm = Alarm(),
 
     // CheckSchedule
     val scheduleTitle: String = NEW_SCHEDULE_LABEL,
     val showBottomSheet: Boolean = false,
 
-): UiState
+    ): UiState

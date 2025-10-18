@@ -15,10 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.domain.model.constants.AppConstants
-import com.dh.ondot.domain.model.enums.ChipStyle
-import com.dh.ondot.domain.model.enums.OnDotTextStyle
-import com.dh.ondot.domain.model.enums.RepeatType
 import com.dh.ondot.presentation.ui.components.CheckTextChip
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
@@ -26,7 +22,14 @@ import com.dh.ondot.presentation.ui.components.TextChip
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
+import com.dh.ondot.presentation.ui.theme.WORD_EVERYDAY
 import com.dh.ondot.presentation.ui.theme.WORD_REPEAT
+import com.dh.ondot.presentation.ui.theme.WORD_WEEKDAY
+import com.dh.ondot.presentation.ui.theme.WORD_WEEKEND
+import com.ondot.domain.model.constants.AppConstants
+import com.ondot.domain.model.enums.ChipStyle
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.RepeatType
 
 @Composable
 fun RepeatSettingSection(
@@ -104,7 +107,11 @@ fun RepeatTypeChips(
     ChipsRow {
         RepeatType.entries.forEach { type ->
             CheckTextChip(
-                text = type.title,
+                text = when(type) {
+                    RepeatType.EVERYDAY -> WORD_EVERYDAY
+                    RepeatType.WEEKDAY -> WORD_WEEKDAY
+                    RepeatType.WEEKEND -> WORD_WEEKEND
+                },
                 chipStyle = if (activeCheckChip == null && activeWeekDays.isEmpty()) ChipStyle.Normal
                 else {
                     if (activeCheckChip == type.index) ChipStyle.Active
