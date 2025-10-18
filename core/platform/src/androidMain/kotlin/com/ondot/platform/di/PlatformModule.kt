@@ -34,7 +34,7 @@ actual fun providePlatformModules(): List<Module> {
             single<OnDotDataStore> { OnDotDataStore(get()) }
             single<TokenProvider> { AndroidTokenProvider(get()) }
             single<AlarmReceiver> { AlarmReceiver() }
-            single<AlarmService> { AlarmService(get(), get(), get()) }
+            single<AlarmService> { AlarmService() }
             single<AlarmScheduler> { AndroidAlarmScheduler(get<Context>()) }
             single<AlarmStorage> { AndroidAlarmStorage(get<Context>()) }
             single<AnalyticsManager> { AndroidAnalyticsManager(get<Context>()) }
