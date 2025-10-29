@@ -41,6 +41,7 @@ class HomeViewModel(
         logGA("home_open")
 
         needsChooseProvider()
+        observeMapProvider()
     }
 
     private fun needsChooseProvider() {
@@ -49,9 +50,13 @@ class HomeViewModel(
                 logger.e { "needsChooseProvider: $it" }
                 updateState(uiState.value.copy(needsChooseProvider = it))
             }
-            memberRepository.getLocalMapProvider().collect {
-                mapProvider = it
-            }
+        }
+    }
+
+    private fun observeMapProvider() = viewModelScope.launch {
+        memberRepository.getLocalMapProvider().collect {
+            logger.e { "mapProvider: $it" }
+            mapProvider = it
         }
     }
 
