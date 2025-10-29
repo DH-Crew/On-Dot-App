@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DD5BB6812EB23E4C00298199 /* ComposeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB67F2EB23D7C00298199 /* ComposeApp.xcframework */; };
-		DD5BB6822EB23E4C00298199 /* ComposeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB67F2EB23D7C00298199 /* ComposeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD5BB6852EB2402700298199 /* ComposeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB6832EB2402300298199 /* ComposeApp.xcframework */; };
+		DD5BB6862EB2402700298199 /* ComposeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB6832EB2402300298199 /* ComposeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */; };
 		E23379422E87D74C004F2E5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */; };
 		E23379432E87D74C004F2E5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */; };
@@ -50,7 +50,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DD5BB6822EB23E4C00298199 /* ComposeApp.xcframework in Embed Frameworks */,
+				DD5BB6862EB2402700298199 /* ComposeApp.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,7 +59,7 @@
 
 /* Begin PBXFileReference section */
 		B9DA97B12DC1472C00A4DA20 /* OnDot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnDot.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD5BB67F2EB23D7C00298199 /* ComposeApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ComposeApp.xcframework; sourceTree = "<group>"; };
+		DD5BB6832EB2402300298199 /* ComposeApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ComposeApp.xcframework; sourceTree = "<group>"; };
 		E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OnDotAlarmWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2962B612E76A53D00FC30F4 /* heating_sun.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = heating_sun.caf; path = ../../heating_sun.caf; sourceTree = "<group>"; };
@@ -141,7 +141,7 @@
 				E234126D2E8EFD8100098BCC /* OnDotAlarmKitBridge in Frameworks */,
 				E23412752E8EFE4B00098BCC /* Alamofire in Frameworks */,
 				E23412772E8EFE5700098BCC /* FirebaseAnalytics in Frameworks */,
-				DD5BB6812EB23E4C00298199 /* ComposeApp.xcframework in Frameworks */,
+				DD5BB6852EB2402700298199 /* ComposeApp.xcframework in Frameworks */,
 				E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */,
 				E23412792E8EFE5700098BCC /* FirebaseCore in Frameworks */,
 				E23412972E8F025100098BCC /* KakaoSDKUser in Frameworks */,
@@ -190,7 +190,7 @@
 				E23379442E87D74C004F2E5A /* OnDotAlarmWidget */,
 				B9DA97B22DC1472C00A4DA20 /* Products */,
 				3258F94D5AE37B4F2304E3BB /* Frameworks */,
-				DD5BB67F2EB23D7C00298199 /* ComposeApp.xcframework */,
+				DD5BB6832EB2402300298199 /* ComposeApp.xcframework */,
 			);
 			sourceTree = "<group>";
 		};
