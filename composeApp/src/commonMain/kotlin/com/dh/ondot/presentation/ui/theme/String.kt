@@ -65,6 +65,7 @@ const val ERROR_SET_MAP_PROVIDER = "지도 공급자 저장에 실패했습니�
 const val ERROR_UPDATE_HOME_ADDRESS = "집 주소 변경에 실패했습니다."
 const val ERROR_UPDATE_PREPARATION_TIME = "준비 시간 변경에 실패했습니다."
 const val ERROR_GET_SCHEDULE_PREPARATION = "준비 정보 조회에 실패했습니다."
+const val ERROR_INVALID_MINUTE_INPUT = "분은 59이하의 숫자로 입력해주세요."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
