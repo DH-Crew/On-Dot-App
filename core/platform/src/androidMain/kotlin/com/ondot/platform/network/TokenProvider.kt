@@ -16,8 +16,6 @@ class AndroidTokenProvider(
         val accessToken = dataStore.accessToken.first()
         val refreshToken = dataStore.refreshToken.first()
 
-        if (BuildConfig.DEBUG) { logger.d { "Access Token: $accessToken, Refresh Token: $refreshToken" } }
-
         return if (accessToken != null && refreshToken != null && accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
             AuthTokens(accessToken, refreshToken)
         } else {
