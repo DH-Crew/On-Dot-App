@@ -65,6 +65,7 @@ const val ERROR_SET_MAP_PROVIDER = "지도 공급자 저장에 실패했습니�
 const val ERROR_UPDATE_HOME_ADDRESS = "집 주소 변경에 실패했습니다."
 const val ERROR_UPDATE_PREPARATION_TIME = "준비 시간 변경에 실패했습니다."
 const val ERROR_GET_SCHEDULE_PREPARATION = "준비 정보 조회에 실패했습니다."
+const val ERROR_INVALID_MINUTE_INPUT = "분은 59이하의 숫자로 입력해주세요."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
@@ -73,7 +74,8 @@ const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
 const val ONBOARDING1_TITLE_HIGHLIGHT = "외출 준비"
 const val ONBOARDING1_SUB_TITLE = "30분, 1시간 20분 등 자유롭게 적어주세요!"
-const val ONBOARDING1_PLACEHOLDER = "5자 이내의 숫자"
+const val ONBOARDING1_HOUR_PLACEHOLDER = "1자 이내의 숫자"
+const val ONBOARDING1_MINUTE_PLACEHOLDER = "2자 이내의 숫자"
 
 const val ONBOARDING2_TITLE = "주소를 입력해 주세요."
 const val ONBOARDING2_TITLE_HIGHLIGHT = "주소"

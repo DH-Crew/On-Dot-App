@@ -11,6 +11,7 @@ import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeR
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.service.MapProviderStorage
+import com.ondot.domain.service.TokenProvider
 import com.ondot.network.HttpMethod
 import com.ondot.network.NetworkClient
 import com.ondot.network.base.BaseRepository
@@ -18,14 +19,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
-class MemberRepositoryImpl : MemberRepository, BaseRepository {
-    private val mapProviderStorage: MapProviderStorage
-
-    constructor(networkClient: NetworkClient, mapProviderStorage: MapProviderStorage) : super(
-        networkClient
-    ) {
-        this.mapProviderStorage = mapProviderStorage
-    }
+class MemberRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val mapProviderStorage: MapProviderStorage,
+    private val tokenProvider: TokenProvider
+): MemberRepository, BaseRepository(networkClient) {
 
     override suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<AuthTokens>> = flow {
         emit(fetch(HttpMethod.POST, "/members/onboarding", body = request))
@@ -40,7 +38,10 @@ class MemberRepositoryImpl : MemberRepository, BaseRepository {
         emit(result)
 
         // 성공했을 때만 local storage clear
-        result.onSuccess { mapProviderStorage.clear() }
+        if (result.isSuccess) {
+            tokenProvider.clearToken()
+            mapProviderStorage.clear()
+        }
     }
 
     override suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>> = flow {

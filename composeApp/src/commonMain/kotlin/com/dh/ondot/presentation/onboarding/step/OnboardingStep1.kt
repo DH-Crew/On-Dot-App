@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -14,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.RoundedTextField
-import com.dh.ondot.presentation.ui.theme.ONBOARDING1_PLACEHOLDER
+import com.dh.ondot.presentation.ui.theme.ERROR_INVALID_MINUTE_INPUT
+import com.dh.ondot.presentation.ui.theme.ONBOARDING1_HOUR_PLACEHOLDER
+import com.dh.ondot.presentation.ui.theme.ONBOARDING1_MINUTE_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE_HIGHLIGHT
@@ -30,6 +35,13 @@ fun OnboardingStep1(
     onHourInputChanged: (String) -> Unit,
     onMinuteInputChanged: (String) -> Unit,
 ) {
+    val showError by remember(minuteInput) {
+        derivedStateOf {
+            val m = minuteInput.toIntOrNull()
+            m != null && m > 59
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,6 +71,16 @@ fun OnboardingStep1(
             onHourInputChanged = onHourInputChanged,
             onMinuteInputChanged = onMinuteInputChanged
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (showError) {
+            OnDotText(
+                text = ERROR_INVALID_MINUTE_INPUT,
+                style = OnDotTextStyle.BodySmallR1,
+                color = OnDotColor.Red
+            )
+        }
     }
 }
 
@@ -77,7 +99,8 @@ fun HourMinuteTextField(
         RoundedTextField(
             value = hourInput,
             onValueChange = onHourInputChanged,
-            placeholder = ONBOARDING1_PLACEHOLDER,
+            placeholder = ONBOARDING1_HOUR_PLACEHOLDER,
+            maxLength = 1,
             modifier = Modifier.weight(1f).padding(end = 8.dp)
         )
 
@@ -90,7 +113,8 @@ fun HourMinuteTextField(
         RoundedTextField(
             value = minuteInput,
             onValueChange = onMinuteInputChanged,
-            placeholder = ONBOARDING1_PLACEHOLDER,
+            placeholder = ONBOARDING1_MINUTE_PLACEHOLDER,
+            maxLength = 2,
             modifier = Modifier.weight(1f).padding(start = 11.dp, end = 8.dp)
         )
 

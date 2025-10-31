@@ -74,6 +74,7 @@ fun DateSettingSection(
             Calendar(
                 month = uiState.calendarMonth,
                 selectedDate = uiState.selectedDate,
+                today = uiState.today,
                 isRepeat = uiState.isRepeat,
                 activeWeekDays = uiState.activeWeekDays,
                 onPrevMonth = onPrevMonth,
