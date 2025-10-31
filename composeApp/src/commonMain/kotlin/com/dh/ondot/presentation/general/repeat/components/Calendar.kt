@@ -2,6 +2,7 @@ package com.dh.ondot.presentation.general.repeat.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 fun Calendar(
     month: LocalDate,
     selectedDate: LocalDate?,
+    today: LocalDate? = null,
     isRepeat: Boolean,
 
     // 알람 시간 수정
@@ -72,6 +74,7 @@ fun Calendar(
         CalendarContent(
             month = month,
             selectedDate = selectedDate,
+            today = today,
             isRepeat = isRepeat,
             isAlarm = isAlarm,
             scheduleDate = scheduleDate,
@@ -148,6 +151,7 @@ fun CalendarHeader() {
 fun CalendarContent(
     month: LocalDate,
     selectedDate: LocalDate?,
+    today: LocalDate?,
     isRepeat: Boolean,
 
     // 알람 시간 수정
@@ -184,10 +188,12 @@ fun CalendarContent(
                         else -> date == selectedDate
                     }
                     val isPossible = date == possibleDate || date == scheduleDate
+                    val isToday = (date == today) && today != null
 
                     DayCell(
                         date = date,
                         isSelected = isSelected,
+                        isToday = isToday,
                         isPossible = if (isAlarm) isPossible else true,
                         onClick = { if (!isRepeat && date != null) onDateSelected(date) }
                     )
@@ -201,6 +207,7 @@ fun CalendarContent(
 fun DayCell(
     date: LocalDate?,
     isSelected: Boolean,
+    isToday: Boolean,
     isPossible: Boolean,
     onClick: () -> Unit
 ) {
@@ -211,6 +218,10 @@ fun DayCell(
             .background(
                 if (isSelected) Green900
                 else Color.Transparent
+            )
+            .then(
+                if (isToday) Modifier.border(1.5.dp, Green900, CircleShape)
+                else Modifier
             )
             .clickable(enabled = date != null && isPossible) { onClick() },
         contentAlignment = Alignment.Center

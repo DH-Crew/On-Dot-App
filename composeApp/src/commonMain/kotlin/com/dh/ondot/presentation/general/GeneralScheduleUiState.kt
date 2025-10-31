@@ -8,7 +8,9 @@ import com.ondot.domain.model.alarm.Alarm
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 data class GeneralScheduleUiState @OptIn(ExperimentalTime::class) constructor(
@@ -23,15 +25,22 @@ data class GeneralScheduleUiState @OptIn(ExperimentalTime::class) constructor(
     // ScheduleDate
     val isActiveCalendar: Boolean = true,
     val isActiveDial: Boolean = false,
-    val calendarMonth: LocalDate = kotlin.time.Clock.System
+    val calendarMonth: LocalDate = Clock.System
         .now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .let { today ->
-            LocalDate(today.year, today.monthNumber, 1)
+            LocalDate(today.year, today.month, 1)
         },
     val selectedDate: LocalDate? = null,
     val selectedTime: LocalTime? = null,
+    val today: LocalDate = Clock.System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
+        .let { today ->
+            LocalDate(today.year, today.month, today.day)
+        },
 
     // PlacePicker
     val isInitialPlacePicker: Boolean = true,
