@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.components.OnDotHighlightText
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.RoundedTextField
-import com.dh.ondot.presentation.ui.theme.ONBOARDING1_PLACEHOLDER
+import com.dh.ondot.presentation.ui.theme.ONBOARDING1_HOUR_PLACEHOLDER
+import com.dh.ondot.presentation.ui.theme.ONBOARDING1_MINUTE_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE_HIGHLIGHT
@@ -77,7 +78,8 @@ fun HourMinuteTextField(
         RoundedTextField(
             value = hourInput,
             onValueChange = onHourInputChanged,
-            placeholder = ONBOARDING1_PLACEHOLDER,
+            placeholder = ONBOARDING1_HOUR_PLACEHOLDER,
+            maxLength = 1,
             modifier = Modifier.weight(1f).padding(end = 8.dp)
         )
 
@@ -90,7 +92,8 @@ fun HourMinuteTextField(
         RoundedTextField(
             value = minuteInput,
             onValueChange = onMinuteInputChanged,
-            placeholder = ONBOARDING1_PLACEHOLDER,
+            placeholder = ONBOARDING1_MINUTE_PLACEHOLDER,
+            maxLength = 2,
             modifier = Modifier.weight(1f).padding(start = 11.dp, end = 8.dp)
         )
 
