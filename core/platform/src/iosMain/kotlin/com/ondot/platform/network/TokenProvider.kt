@@ -12,7 +12,7 @@ class IosTokenProvider: TokenProvider {
         val accessToken = userDefaults.stringForKey(ACCESS_TOKEN_KEY)
         val refreshToken = userDefaults.stringForKey(REFRESH_TOKEN_KEY)
 
-        return if (accessToken != null && refreshToken != null) {
+        return if (accessToken != null && refreshToken != null && accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
             AuthTokens(accessToken = accessToken, refreshToken = refreshToken)
         } else {
             null

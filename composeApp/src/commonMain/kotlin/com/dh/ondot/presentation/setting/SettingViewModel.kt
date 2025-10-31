@@ -159,7 +159,7 @@ class SettingViewModel(
         viewModelScope.launch { ToastManager.show(ERROR_SET_MAP_PROVIDER, ToastType.ERROR) }
     }
 
-    /**--------------------------------------------길 안내 지도 설정-----------------------------------------------*/
+    /**--------------------------------------------준비 시간 설정-----------------------------------------------*/
 
     fun onHourInputChanged(newHourInput: String) {
         updateState(uiState.value.copy(hourInput = newHourInput))
@@ -232,7 +232,9 @@ class SettingViewModel(
     }
 
     private fun onSuccessWithdraw(result: Unit) {
-        viewModelScope.launch { ToastManager.show(WITHDRAW_SUCCESS_MESSAGE, ToastType.INFO) }
+        viewModelScope.launch {
+            ToastManager.show(WITHDRAW_SUCCESS_MESSAGE, ToastType.INFO)
+        }
         emitEventFlow(SettingEvent.NavigateToLoginScreen)
     }
 
