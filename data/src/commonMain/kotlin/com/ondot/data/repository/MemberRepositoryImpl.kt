@@ -38,7 +38,7 @@ class MemberRepositoryImpl(
         emit(result)
 
         // 성공했을 때만 local storage clear
-        result.onSuccess {
+        if (result.isSuccess) {
             tokenProvider.clearToken()
             mapProviderStorage.clear()
         }

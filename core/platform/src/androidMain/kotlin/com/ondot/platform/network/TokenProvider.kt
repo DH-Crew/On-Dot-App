@@ -1,7 +1,6 @@
 package com.ondot.platform.network
 
 import co.touchlab.kermit.Logger
-import com.dh.core.platform.BuildConfig
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.service.TokenProvider
 import com.ondot.platform.data.OnDotDataStore
@@ -15,8 +14,6 @@ class AndroidTokenProvider(
     override suspend fun getToken(): AuthTokens? {
         val accessToken = dataStore.accessToken.first()
         val refreshToken = dataStore.refreshToken.first()
-
-        if (BuildConfig.DEBUG) { logger.d { "Access Token: $accessToken, Refresh Token: $refreshToken" } }
 
         return if (accessToken != null && refreshToken != null) {
             AuthTokens(accessToken, refreshToken)
