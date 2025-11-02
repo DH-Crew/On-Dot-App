@@ -18,7 +18,7 @@ class AndroidTokenProvider(
 
         if (BuildConfig.DEBUG) { logger.d { "Access Token: $accessToken, Refresh Token: $refreshToken" } }
 
-        return if (accessToken != null && refreshToken != null && accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
+        return if (accessToken != null && refreshToken != null) {
             AuthTokens(accessToken, refreshToken)
         } else {
             null
