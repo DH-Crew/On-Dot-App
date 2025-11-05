@@ -27,6 +27,8 @@ class SplashViewModel(
 
             if (tokenModel == null) {
                 updateState(uiState.value.copy(skipLogin = false))
+            } else if (tokenModel.refreshToken.isBlank()) {
+                updateState(uiState.value.copy(skipLogin = false))
             } else {
                 refreshToken()
             }

@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.onboarding.step
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,6 +57,7 @@ fun OnboardingStep3(
     onVolumeChange: (Float) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -78,52 +82,56 @@ fun OnboardingStep3(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        MuteSection(isMuted, onToggleMute)
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        CategorySection(
-            categories = categories,
-            selectedIndex = selectedCategoryIndex,
-            onCategorySelected = onCategorySelected,
-            interactionSource = interactionSource
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
+        Column(
+            modifier = Modifier.verticalScroll(scrollState)
         ) {
-            Column {
-                SoundListSection(
-                    sounds = filteredSounds,
-                    selectedSoundId = selectedSoundId,
-                    onSelectSound = onSelectSound,
-                    interactionSource = interactionSource
-                )
+            MuteSection(isMuted, onToggleMute)
 
-                Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-                VolumeSection(
-                    volume = volume,
-                    onVolumeChange = onVolumeChange
-                )
-            }
+            CategorySection(
+                categories = categories,
+                selectedIndex = selectedCategoryIndex,
+                onCategorySelected = onCategorySelected,
+                interactionSource = interactionSource
+            )
 
-            if (isMuted) {
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(OnDotColor.Gray900.copy(alpha = 0.7f))
-                        .pointerInput(Unit) {
-                            awaitPointerEventScope {
-                                while (true) {
-                                    awaitPointerEvent(PointerEventPass.Initial)
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Column {
+                    SoundListSection(
+                        sounds = filteredSounds,
+                        selectedSoundId = selectedSoundId,
+                        onSelectSound = onSelectSound,
+                        interactionSource = interactionSource
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    VolumeSection(
+                        volume = volume,
+                        onVolumeChange = onVolumeChange
+                    )
+                }
+
+                if (isMuted) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background(OnDotColor.Gray900.copy(alpha = 0.7f))
+                            .pointerInput(Unit) {
+                                awaitPointerEventScope {
+                                    while (true) {
+                                        awaitPointerEvent(PointerEventPass.Initial)
+                                    }
                                 }
                             }
-                        }
-                )
+                    )
+                }
             }
         }
     }
