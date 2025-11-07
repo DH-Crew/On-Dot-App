@@ -9,6 +9,7 @@ object AuthResponseMapper: Mapper<AuthResponse, AuthResult> {
     override fun responseToModel(response: AuthResponse?): AuthResult {
         return response?.let {
             AuthResult(
+                memberId = it.memberId,
                 tokens = AuthTokens(it.accessToken, it.refreshToken),
                 isNewMember = it.isNewMember
             )
