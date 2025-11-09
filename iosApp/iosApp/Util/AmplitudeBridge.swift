@@ -7,6 +7,7 @@
 
 import Foundation
 import AmplitudeSwift
+import AmplitudeSwiftSessionReplayPlugin
 
 @objc(AmplitudeBridge)
 public final class AmplitudeBridge: NSObject {
@@ -19,6 +20,7 @@ public final class AmplitudeBridge: NSObject {
         let config = Configuration(apiKey: apiKey)
         config.optOut = optOut
         amplitude = Amplitude(configuration: config)
+        amplitude?.add(plugin: AmplitudeSwiftSessionReplayPlugin(sampleRate: 0.5))
     }
 
     @objc public func track(_ name: String, properties: [String: Any]? = nil) {

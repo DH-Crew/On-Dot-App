@@ -19,7 +19,7 @@ fun androidModule(app: Application) = module {
                 autocapture = AutocaptureOption.ALL
             )
         ).apply {
-            add(SessionReplayPlugin())
+            add(SessionReplayPlugin(sampleRate = 0.5))
         }
     }
 }
