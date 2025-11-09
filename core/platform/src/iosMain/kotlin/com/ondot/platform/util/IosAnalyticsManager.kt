@@ -1,5 +1,6 @@
 package com.ondot.platform.util
 
+import com.dh.ondot.amplitude.ONDAmplitude
 import com.dh.ondot.analytics.ONDAnalytics
 import com.ondot.domain.service.AnalyticsManager
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -29,10 +30,12 @@ class IosAnalyticsManager(): AnalyticsManager {
             }
         }
         ONDAnalytics.logEvent(name, parameters = boxed)
+        ONDAmplitude.logEvent(name, parameters = boxed)
     }
     @OptIn(ExperimentalForeignApi::class)
     override fun setUserId(id: String?) {
         ONDAnalytics.setUserID(id)
+        ONDAmplitude.setUserID(id)
     }
     @OptIn(ExperimentalForeignApi::class)
     override fun setUserProperty(name: String, value: String) {
