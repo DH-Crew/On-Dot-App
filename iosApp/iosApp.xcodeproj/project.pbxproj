@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DD5BB7622EB2591B00298199 /* ComposeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB7602EB2591700298199 /* ComposeApp.xcframework */; };
 		DD5BB7632EB2591B00298199 /* ComposeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB7602EB2591700298199 /* ComposeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDDE046A2EC07AFC00BFF934 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04692EC07AFC00BFF934 /* AmplitudeSwift */; };
 		E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */; };
 		E23379422E87D74C004F2E5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */; };
 		E23379432E87D74C004F2E5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */; };
@@ -134,6 +135,7 @@
 				DD5BB7622EB2591B00298199 /* ComposeApp.xcframework in Frameworks */,
 				E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */,
 				E23412792E8EFE5700098BCC /* FirebaseCore in Frameworks */,
+				DDDE046A2EC07AFC00BFF934 /* AmplitudeSwift in Frameworks */,
 				E23412972E8F025100098BCC /* KakaoSDKUser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,6 +267,7 @@
 				E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				E234126B2E8EFD6F00098BCC /* XCLocalSwiftPackageReference "../OnDotAlarmKitBridge" */,
 				E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				DDDE04682EC07AFC00BFF934 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9DA97B22DC1472C00A4DA20 /* Products */;
@@ -660,6 +663,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DDDE04682EC07AFC00BFF934 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -687,6 +698,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DDDE04692EC07AFC00BFF934 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DDDE04682EC07AFC00BFF934 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
+		};
 		E234126C2E8EFD8100098BCC /* OnDotAlarmKitBridge */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E234126B2E8EFD6F00098BCC /* XCLocalSwiftPackageReference "../OnDotAlarmKitBridge" */;
