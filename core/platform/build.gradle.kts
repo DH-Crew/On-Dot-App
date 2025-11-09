@@ -14,7 +14,7 @@ plugins {
 }
 
 buildkonfig {
-    packageName = "com.dh.ondot"
+    packageName = "com.dh.ondot.core.platform"
 
     exposeObjectWithName = "BuildKonfig"
 
@@ -56,6 +56,9 @@ kotlin {
             implementation(libs.firebase.analytics)
 
             implementation(libs.kakao.login)
+
+            implementation(libs.amplitude.analytics)
+            implementation(libs.amplitude.session.replay)
         }
 
         iosMain.dependencies {

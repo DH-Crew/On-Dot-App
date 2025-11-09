@@ -90,6 +90,10 @@ google-services = "4.4.3"
 # Koin
 koin = "4.1.1"
 
+# Amplitude
+amplitude = "1.+"
+amplitudeSessionReplay = "0.20.14"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -197,23 +201,26 @@ compottie-network              = { module = "io.github.alexzhirkevich:compottie-
 kakao-login                    = { module = "com.kakao.sdk:v2-user", version.ref = "kakao-login" }
 
 # kotlinx-io
-kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
-kotlinx-io-bytestring = { module = "org.jetbrains.kotlinx:kotlinx-io-bytestring", version.ref = "kotlinx-io" }
+kotlinx-io-core                 = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
+kotlinx-io-bytestring           = { module = "org.jetbrains.kotlinx:kotlinx-io-bytestring", version.ref = "kotlinx-io" }
 
 # Coroutine Extensions
-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+coroutines-extensions           = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 
 # AndroidDriver
-android-driver                         = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+android-driver                  = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 
 # NativeDriver
-native-driver                          = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+native-driver                   = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 
 # Firebase
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
+firebase-bom                    = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-analytics              = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
 
 # Koin
 koinCore                          = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koinCompose                       = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koinComposeViewModel              = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+
+amplitude-analytics             = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
+amplitude-session-replay        = { module = "com.amplitude:plugin-session-replay-android", version.ref = "amplitudeSessionReplay" }
