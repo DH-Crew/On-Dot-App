@@ -10,6 +10,8 @@
 		DD5BB7622EB2591B00298199 /* ComposeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB7602EB2591700298199 /* ComposeApp.xcframework */; };
 		DD5BB7632EB2591B00298199 /* ComposeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB7602EB2591700298199 /* ComposeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDDE046A2EC07AFC00BFF934 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04692EC07AFC00BFF934 /* AmplitudeSwift */; };
+		DDDE04732EC0CB9900BFF934 /* AmplitudeSessionReplay in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04722EC0CB9900BFF934 /* AmplitudeSessionReplay */; };
+		DDDE04752EC0CB9900BFF934 /* AmplitudeSwiftSessionReplayPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04742EC0CB9900BFF934 /* AmplitudeSwiftSessionReplayPlugin */; };
 		E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */; };
 		E23379422E87D74C004F2E5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */; };
 		E23379432E87D74C004F2E5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */; };
@@ -128,10 +130,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E23412952E8F025100098BCC /* KakaoSDKCommon in Frameworks */,
+				DDDE04752EC0CB9900BFF934 /* AmplitudeSwiftSessionReplayPlugin in Frameworks */,
 				E23412932E8F025100098BCC /* KakaoSDKAuth in Frameworks */,
 				E234126D2E8EFD8100098BCC /* OnDotAlarmKitBridge in Frameworks */,
 				E23412752E8EFE4B00098BCC /* Alamofire in Frameworks */,
 				E23412772E8EFE5700098BCC /* FirebaseAnalytics in Frameworks */,
+				DDDE04732EC0CB9900BFF934 /* AmplitudeSessionReplay in Frameworks */,
 				DD5BB7622EB2591B00298199 /* ComposeApp.xcframework in Frameworks */,
 				E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */,
 				E23412792E8EFE5700098BCC /* FirebaseCore in Frameworks */,
@@ -268,6 +272,7 @@
 				E234126B2E8EFD6F00098BCC /* XCLocalSwiftPackageReference "../OnDotAlarmKitBridge" */,
 				E23412912E8F025100098BCC /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				DDDE04682EC07AFC00BFF934 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
+				DDDE04712EC0CB9900BFF934 /* XCRemoteSwiftPackageReference "AmplitudeSessionReplay-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9DA97B22DC1472C00A4DA20 /* Products */;
@@ -475,7 +480,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -498,7 +503,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dh.ondot.iosApp;
 				PRODUCT_NAME = OnDot;
@@ -523,7 +528,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -546,7 +551,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dh.ondot.iosApp;
 				PRODUCT_NAME = OnDot;
@@ -671,6 +676,14 @@
 				kind = branch;
 			};
 		};
+		DDDE04712EC0CB9900BFF934 /* XCRemoteSwiftPackageReference "AmplitudeSessionReplay-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/AmplitudeSessionReplay-iOS";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		E234125E2E8EF93B00098BCC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -702,6 +715,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DDDE04682EC07AFC00BFF934 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
 			productName = AmplitudeSwift;
+		};
+		DDDE04722EC0CB9900BFF934 /* AmplitudeSessionReplay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DDDE04712EC0CB9900BFF934 /* XCRemoteSwiftPackageReference "AmplitudeSessionReplay-iOS" */;
+			productName = AmplitudeSessionReplay;
+		};
+		DDDE04742EC0CB9900BFF934 /* AmplitudeSwiftSessionReplayPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DDDE04712EC0CB9900BFF934 /* XCRemoteSwiftPackageReference "AmplitudeSessionReplay-iOS" */;
+			productName = AmplitudeSwiftSessionReplayPlugin;
 		};
 		E234126C2E8EFD8100098BCC /* OnDotAlarmKitBridge */ = {
 			isa = XCSwiftPackageProductDependency;
