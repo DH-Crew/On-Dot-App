@@ -83,6 +83,12 @@ kotlin {
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp/AnalyticsBridge"))
             }
 
+            create("AmplitudeBridge") {
+                definitionFile = project.file("src/iosMain/nativeInterop/cinterop/AmplitudeBridge.def")
+                // 헤더가 있는 경로 (iosApp의 iOS 타깃 소스 루트)
+                includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp/AmplitudeBridge"))
+            }
+
             create("AlarmKitBridge") {
                 definitionFile = project.file("src/iosMain/nativeInterop/cinterop/AlarmKitBridge.def")
                 // 헤더가 있는 경로 (iosApp의 iOS 타깃 소스 루트)
