@@ -14,7 +14,7 @@ plugins {
 }
 
 buildkonfig {
-    packageName = "com.dh.ondot"
+    packageName = "com.dh.ondot.core.platform"
 
     exposeObjectWithName = "BuildKonfig"
 
@@ -56,6 +56,9 @@ kotlin {
             implementation(libs.firebase.analytics)
 
             implementation(libs.kakao.login)
+
+            implementation(libs.amplitude.analytics)
+            implementation(libs.amplitude.session.replay)
         }
 
         iosMain.dependencies {
@@ -78,6 +81,12 @@ kotlin {
                 definitionFile = project.file("src/iosMain/nativeInterop/cinterop/AnalyticsBridge.def")
                 // 헤더가 있는 경로 (iosApp의 iOS 타깃 소스 루트)
                 includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp/AnalyticsBridge"))
+            }
+
+            create("AmplitudeBridge") {
+                definitionFile = project.file("src/iosMain/nativeInterop/cinterop/AmplitudeBridge.def")
+                // 헤더가 있는 경로 (iosApp의 iOS 타깃 소스 루트)
+                includeDirs.allHeaders(project.rootDir.resolve("iosApp/iosApp/AmplitudeBridge"))
             }
 
             create("AlarmKitBridge") {

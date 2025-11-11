@@ -1,0 +1,3 @@
+language = Objective-C
+headers = AmplitudeBridge.h
+package = com.dh.ondot.amplitude

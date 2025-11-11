@@ -10,13 +10,15 @@ import com.ondot.domain.model.auth.AuthResult
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.service.AnalyticsManager
 import com.ondot.domain.service.KaKaoSignInProvider
 import com.ondot.platform.apple.appleSignIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val kaKaoSignInProvider: KaKaoSignInProvider
+    private val kaKaoSignInProvider: KaKaoSignInProvider,
+    private val analyticsManager: AnalyticsManager
 ): BaseViewModel<UiState.Default>(UiState.Default) {
     private val logger = Logger.withTag("LoginViewModel")
 
@@ -39,6 +41,8 @@ class LoginViewModel(
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
             false -> emitEventFlow(LoginEvent.NavigateToMain)
         }
+
+        if (result.memberId > 0) setUserId(result.memberId)
     }
 
     private fun onFailedKakaoLogin(e: Throwable) {
@@ -67,21 +71,23 @@ class LoginViewModel(
     }
 
     private fun onSuccessAppleLogin(result: AuthResult) {
-        saveToken(token = AuthTokens(
-            accessToken = result.tokens.accessToken,
-            refreshToken = result.tokens.refreshToken
-        )
-        )
+        saveToken(token = AuthTokens(accessToken = result.tokens.accessToken, refreshToken = result.tokens.refreshToken))
 
         when(result.isNewMember) {
             true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
             false -> emitEventFlow(LoginEvent.NavigateToMain)
         }
+
+        if (result.memberId > 0) setUserId(result.memberId)
     }
 
     private fun saveToken(token: AuthTokens) {
         viewModelScope.launch {
             authRepository.saveToken(token)
         }
+    }
+
+    private fun setUserId(id: Long) {
+        analyticsManager.setUserId(id.toString())
     }
 }

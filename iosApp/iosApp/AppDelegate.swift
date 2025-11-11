@@ -24,6 +24,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
+        
+        let apiKey = Bundle.main.object(forInfoDictionaryKey: "AMPLITUDE_API_KEY") as? String ?? ""
+        AmplitudeBridge.shared.configure(apiKey: apiKey, optOut: false)
       
         // 알림 센터 델리게이트 지정
         // 앱이 실행 중일 때(포그라운드/백그라운드) 전달되는 알림도 이 클래스에서 처리하도록 지정

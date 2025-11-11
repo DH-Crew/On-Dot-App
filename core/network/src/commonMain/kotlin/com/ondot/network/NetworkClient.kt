@@ -1,6 +1,6 @@
 package com.ondot.network
 
-import com.dh.ondot.BuildKonfig
+import com.dh.ondot.core.platform.BuildKonfig
 import com.ondot.domain.service.TokenProvider
 import com.ondot.platform.network.httpClient
 import io.ktor.client.call.body

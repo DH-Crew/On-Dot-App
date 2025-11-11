@@ -21,6 +21,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class AppViewModel(
@@ -112,6 +113,7 @@ class AppViewModel(
         )
     }
 
+    @OptIn(ExperimentalTime::class)
     fun startDeparture() {
         soundPlayer.stopSound()
 
@@ -122,6 +124,18 @@ class AppViewModel(
             logger.e { "Invalid coords: $invalidCoords" }
             return
         }
+
+        val now = Clock.System.now()
+        val koreaZone = TimeZone.of("Asia/Seoul")
+        val localDateTime = now.toLocalDateTime(koreaZone)
+        val isoDate = localDateTime.toString()
+        val epochMs = now.toEpochMilliseconds()
+
+        logGA(
+            "departure_alarm_off",
+            "occurred_at_iso" to isoDate,
+            "occurred_at_ms" to epochMs
+        )
 
         logGA(
             "directions_open",

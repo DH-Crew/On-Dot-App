@@ -37,7 +37,7 @@ actual fun providePlatformModules(): List<Module> {
             single<AlarmService> { AlarmService() }
             single<AlarmScheduler> { AndroidAlarmScheduler(get<Context>()) }
             single<AlarmStorage> { AndroidAlarmStorage(get<Context>()) }
-            single<AnalyticsManager> { AndroidAnalyticsManager(get<Context>()) }
+            single<AnalyticsManager> { AndroidAnalyticsManager(get<Context>(), get()) }
             single<MapProviderStorage> { AndroidMapProviderStorage(get<Context>()) }
             single<SoundPlayer> { AndroidSoundPlayer(get<Context>()) }
             single<DirectionsOpener> { AndroidDirectionsOpener(get<Context>()) }
