@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>AMPLITUDE_API_KEY</key>
-	<string>84edf459c786b6cbd4525f90ef5fb439</string>
+	<string>$(AMPLITUDE_API_KEY)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
