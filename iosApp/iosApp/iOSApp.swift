@@ -2,6 +2,7 @@ import SwiftUI
 import KakaoSDKCommon
 import composeApp
 import AlarmKit
+import FirebaseAnalytics;
 
 @main
 struct iOSApp: App {
@@ -30,6 +31,21 @@ private func consumePendingDirectionsAndOpen() {
     guard let ud = UserDefaults(suiteName: "group.com.dh.ondot.shared"),
           let payload = ud.dictionary(forKey: "pendingOpenDirections") else { return }
     ud.removeObject(forKey: "pendingOpenDirections")
+    
+    let now = Date()
+    let dateFormatter = ISO8601DateFormatter()
+    dateFormatter.timeZone = .current
+    let isoDate = dateFormatter.string(from: now)
+    let epochMs = Int64(now.timeIntervalSince1970 * 1000)
+
+    Analytics.logEvent("departure_alarm_off", parameters: [
+        "occurred_at_iso": isoDate,
+        "occurred_at_ms": NSNumber(value: epochMs)
+    ])
+    AmplitudeBridge.shared.track("departure_alarm_off", properties: [
+        "occurred_at_iso": isoDate,
+        "occurred_at_ms": epochMs
+    ])
 
     // 파싱
     let slat = payload["slat"] as? Double
