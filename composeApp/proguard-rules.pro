@@ -1,8 +1,11 @@
 ##############################################################
 # Kakao SDK 관련 리플렉션 보호
 ##############################################################
--keep class com.kakao.sdk.** { *; }
+-keep class com.kakao.sdk.**.model.* { <fields>; }
 -dontwarn com.kakao.sdk.**
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.*
+-dontwarn org.openjsse.**
 
 ##############################################################
 # Jetpack Compose, KMP, Coroutine 관련 기본 설정
@@ -21,3 +24,7 @@
 -dontwarn io.ktor.**
 -keep class okhttp3.** { *; }
 -dontwarn okhttp3.**
+
+-keep class com.google.android.gms.ads.** { *; }
+-keep class com.google.android.gms.common.** { *; }
+-dontwarn okio.**
