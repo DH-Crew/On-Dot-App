@@ -42,7 +42,7 @@ class LoginViewModel(
             false -> emitEventFlow(LoginEvent.NavigateToMain)
         }
 
-        setUserId(result.memberId)
+        if (result.memberId > 0) setUserId(result.memberId)
     }
 
     private fun onFailedKakaoLogin(e: Throwable) {
@@ -78,7 +78,7 @@ class LoginViewModel(
             false -> emitEventFlow(LoginEvent.NavigateToMain)
         }
 
-        setUserId(result.memberId)
+        if (result.memberId > 0) setUserId(result.memberId)
     }
 
     private fun saveToken(token: AuthTokens) {
