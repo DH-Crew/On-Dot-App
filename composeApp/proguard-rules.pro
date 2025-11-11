@@ -15,7 +15,7 @@
 -dontwarn kotlinx.serialization.**
 
 ##############################################################
-# Ktor / Retrofit / OkHttp 관련 (KMP 프로젝트에서 자주 필요)
+# Ktor / Retrofit / OkHttp 관련
 ##############################################################
 -keep class io.ktor.** { *; }
 -dontwarn io.ktor.**
