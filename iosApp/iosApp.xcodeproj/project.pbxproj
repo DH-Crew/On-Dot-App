@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DD5BB7622EB2591B00298199 /* ComposeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB7602EB2591700298199 /* ComposeApp.xcframework */; };
-		DD5BB7632EB2591B00298199 /* ComposeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5BB7602EB2591700298199 /* ComposeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD7B203C2EC4F945001A8D47 /* composeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B203A2EC4F934001A8D47 /* composeApp.framework */; };
+		DD7B203D2EC4F945001A8D47 /* composeApp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B203A2EC4F934001A8D47 /* composeApp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDDE046A2EC07AFC00BFF934 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04692EC07AFC00BFF934 /* AmplitudeSwift */; };
 		DDDE04732EC0CB9900BFF934 /* AmplitudeSessionReplay in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04722EC0CB9900BFF934 /* AmplitudeSessionReplay */; };
 		DDDE04752EC0CB9900BFF934 /* AmplitudeSwiftSessionReplayPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = DDDE04742EC0CB9900BFF934 /* AmplitudeSwiftSessionReplayPlugin */; };
@@ -53,7 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DD5BB7632EB2591B00298199 /* ComposeApp.xcframework in Embed Frameworks */,
+				DD7B203D2EC4F945001A8D47 /* composeApp.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -62,7 +62,7 @@
 
 /* Begin PBXFileReference section */
 		B9DA97B12DC1472C00A4DA20 /* OnDot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnDot.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD5BB7602EB2591700298199 /* ComposeApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ComposeApp.xcframework; sourceTree = "<group>"; };
+		DD7B203A2EC4F934001A8D47 /* composeApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = composeApp.framework; path = "../composeApp/build/xcode-frameworks/Debug/iphoneos26.0/composeApp.framework"; sourceTree = SOURCE_ROOT; };
 		E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OnDotAlarmWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2BE6DAF2E8D849C005916BD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 				E23412752E8EFE4B00098BCC /* Alamofire in Frameworks */,
 				E23412772E8EFE5700098BCC /* FirebaseAnalytics in Frameworks */,
 				DDDE04732EC0CB9900BFF934 /* AmplitudeSessionReplay in Frameworks */,
-				DD5BB7622EB2591B00298199 /* ComposeApp.xcframework in Frameworks */,
+				DD7B203C2EC4F945001A8D47 /* composeApp.framework in Frameworks */,
 				E2329ECE2E6D768B000E9479 /* libsqlite3.tbd in Frameworks */,
 				E23412792E8EFE5700098BCC /* FirebaseCore in Frameworks */,
 				DDDE046A2EC07AFC00BFF934 /* AmplitudeSwift in Frameworks */,
@@ -176,7 +176,7 @@
 				E23379442E87D74C004F2E5A /* OnDotAlarmWidget */,
 				B9DA97B22DC1472C00A4DA20 /* Products */,
 				3258F94D5AE37B4F2304E3BB /* Frameworks */,
-				DD5BB7602EB2591700298199 /* ComposeApp.xcframework */,
+				DD7B203A2EC4F934001A8D47 /* composeApp.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -482,7 +482,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -505,7 +505,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.6;
+				MARKETING_VERSION = 1.0.9;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dh.ondot.iosApp;
@@ -533,7 +533,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -556,7 +556,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.6;
+				MARKETING_VERSION = 1.0.9;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dh.ondot.iosApp;
