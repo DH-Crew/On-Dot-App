@@ -227,6 +227,7 @@ class OnboardingViewModel(
 
     fun onSelectSound(newSoundId: String) {
         updateState(uiState.value.copy(selectedSound = newSoundId))
+        soundPlayer.stopSound()
         soundPlayer.playSound(newSoundId)
     }
 
