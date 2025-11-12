@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
     private val logger = Logger.withTag("MainActivity")
     private val dataStore: OnDotDataStore by inject()
-    private var lastNavKey: Pair<Long, Long>? = null
+    private var lastNavKey: Triple<Long, Long, Long>? = null
 
     /**
      * LOG: 인텐트 요약 출력
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
      * Log: RingingState 출력
      * */
     private fun logRingingState(source: String, state: RingingState?) {
-        logger.i { "[SoT][$source] state=$state (isRinging=${state?.isRinging}, scheduleId=${state?.scheduleId}, alarmId=${state?.alarmId}, type=${state?.type})" }
+        logger.i { "[SoT][$source] state=$state (isRinging=${state?.isRinging}, scheduleId=${state?.scheduleId}, alarmId=${state?.alarmId}, type=${state?.type}, instanceId=${state?.instanceId})" }
     }
 
     private val requestNotificationPermission =
@@ -125,18 +125,16 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 dataStore.flow()
-                    .distinctUntilChanged { old, new ->
-                        old.isRinging == new.isRinging &&
-                                old.scheduleId == new.scheduleId &&
-                                old.alarmId == new.alarmId
-                    }
                     .collect { state ->
                         if (state.isRinging) {
-                            val key = state.scheduleId to state.alarmId
+                            logRingingState("onCreate", state)
+                            val key = Triple(state.scheduleId, state.alarmId, state.instanceId)
                             if (lastNavKey != key) {
                                 lastNavKey = key
                                 navigateToAlarm(state)
                             }
+                        } else {
+                            lastNavKey = null
                         }
                     }
             }
@@ -184,7 +182,7 @@ class MainActivity : ComponentActivity() {
         if (sid > 0 && aid > 0) {
             val t = AlarmType.valueOf(type)
             logger.i { "[NAV] navigateToAlarm via intent (sid=$sid, aid=$aid, type=$type)" }
-            navigateToAlarm(RingingState(true, sid, aid, t))
+            navigateToAlarm(RingingState(true, sid, aid, t, -1L))
         }
     }
 
