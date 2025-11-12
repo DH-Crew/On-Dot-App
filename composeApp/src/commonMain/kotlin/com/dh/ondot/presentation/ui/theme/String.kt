@@ -69,6 +69,7 @@ const val ERROR_INVALID_MINUTE_INPUT = "분은 59이하의 숫자로 입력해�
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
+const val SUCCESS_EDIT_PREPARATION_TIME = "준비 시간이 수정되었어요."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
