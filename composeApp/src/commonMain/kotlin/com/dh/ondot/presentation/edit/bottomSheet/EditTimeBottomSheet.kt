@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.general.repeat.components.Calendar
 import com.dh.ondot.presentation.general.repeat.components.DateSectionHeader
 import com.dh.ondot.presentation.general.repeat.components.TimePicker
@@ -28,7 +29,12 @@ import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
 import com.ondot.domain.model.enums.ButtonType
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun EditTimeBottomSheet(
     currentTime: LocalTime,
@@ -124,18 +130,22 @@ fun EditTimeBottomSheet(
                         buttonText = WORD_COMPETE,
                         buttonType = ButtonType.Green500,
                         onClick = {
+                            Logger.e { "currentTime: ${uiState.currentTime}" }
                             uiState.currentTime?.let { time ->
                                 if (isAlarm) {
                                     uiState.currentDate?.let { date ->
                                         onTimeSelected(date, time)
                                     }
                                 } else {
-                                    val date = uiState.currentDate ?: scheduleDate ?: return@OnDotButton
+                                    val date = uiState.currentDate ?: scheduleDate ?: Clock.System.now().toLocalDateTime(
+                                        TimeZone.currentSystemDefault()).date
                                     onTimeSelected(date, time)
                                 }
                             }
                         }
                     )
+
+                    Spacer(Modifier.height(12.dp))
                 }
             }
         )
