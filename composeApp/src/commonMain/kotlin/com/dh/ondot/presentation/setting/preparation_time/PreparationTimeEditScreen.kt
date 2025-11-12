@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.onboarding.step.HourMinuteTextField
+import com.dh.ondot.presentation.setting.SettingEvent
 import com.dh.ondot.presentation.setting.SettingViewModel
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.components.OnDotText
@@ -51,6 +53,18 @@ fun PreparationTimeEditScreen(
         onSaveClick = viewModel::updatePreparationTime,
         popScreen = popScreen
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.getPreparationTime()
+    }
+
+    LaunchedEffect(viewModel.eventFlow) {
+        viewModel.eventFlow.collect {
+            when (it) {
+                is SettingEvent.PopScreen -> popScreen()
+            }
+        }
+    }
 }
 
 @Composable
