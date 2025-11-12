@@ -12,6 +12,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_PREPARATION_TIME
 import com.dh.ondot.presentation.ui.theme.ERROR_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.LOGOUT_SUCCESS_MESSAGE
+import com.dh.ondot.presentation.ui.theme.SUCCESS_EDIT_PREPARATION_TIME
 import com.dh.ondot.presentation.ui.theme.WITHDRAW_SUCCESS_MESSAGE
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
@@ -21,6 +22,7 @@ import com.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
+import com.ondot.domain.model.member.PreparationTime
 import com.ondot.domain.repository.AuthRepository
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
@@ -161,6 +163,26 @@ class SettingViewModel(
 
     /**--------------------------------------------준비 시간 설정-----------------------------------------------*/
 
+    fun getPreparationTime() {
+        viewModelScope.launch {
+            memberRepository.getPreparationTime().collect {
+                resultResponse(it, ::onSuccessGetPreparationTime)
+            }
+        }
+    }
+
+    private fun onSuccessGetPreparationTime(result: PreparationTime) {
+        val hour = result.preparationTime / 60
+        val minute = result.preparationTime % 60
+
+        updateState(
+            uiState.value.copy(
+                hourInput = if (hour == 0) "" else hour.toString(),
+                minuteInput = if (minute == 0) "" else minute.toString()
+            )
+        )
+    }
+
     fun onHourInputChanged(newHourInput: String) {
         updateState(uiState.value.copy(hourInput = newHourInput))
     }
@@ -182,6 +204,7 @@ class SettingViewModel(
     }
 
     private fun onSuccessUpdatePreparationTime(result: Unit) {
+        viewModelScope.launch { ToastManager.show(SUCCESS_EDIT_PREPARATION_TIME, ToastType.INFO) }
         emitEventFlow(SettingEvent.PopScreen)
     }
 

@@ -1,6 +1,7 @@
 package com.ondot.data.repository
 
 import com.ondot.data.mapper.HomeAddressResponseMapper
+import com.ondot.data.mapper.PreparationTimeResponseMapper
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.request.DeleteAccountRequest
@@ -9,6 +10,7 @@ import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
 import com.ondot.domain.model.member.HomeAddressInfo
+import com.ondot.domain.model.member.PreparationTime
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.service.MapProviderStorage
 import com.ondot.domain.service.TokenProvider
@@ -31,6 +33,10 @@ class MemberRepositoryImpl(
 
     override suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>> = flow {
         emit(fetchMapped(HttpMethod.GET, "/members/home-address", mapper = HomeAddressResponseMapper))
+    }
+
+    override suspend fun getPreparationTime(): Flow<Result<PreparationTime>> = flow {
+        emit(fetchMapped(HttpMethod.GET, "/members/preparation-time", mapper = PreparationTimeResponseMapper))
     }
 
     override suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>> = flow {

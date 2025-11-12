@@ -8,11 +8,13 @@ import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.settings.home_address.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
 import com.ondot.domain.model.member.HomeAddressInfo
+import com.ondot.domain.model.member.PreparationTime
 import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {
     suspend fun completeOnboarding(request: OnboardingRequest): Flow<Result<AuthTokens>>
     suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>>
+    suspend fun getPreparationTime(): Flow<Result<PreparationTime>>
     suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>>
     suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>>
     suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>>
