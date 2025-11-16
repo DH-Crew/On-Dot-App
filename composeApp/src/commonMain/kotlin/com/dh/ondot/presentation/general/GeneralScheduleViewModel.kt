@@ -6,6 +6,7 @@ import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.presentation.ui.theme.ERROR_CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
+import com.dh.ondot.presentation.ui.theme.ERROR_GET_PLACE_HISTORY
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.ondot.domain.model.enums.RouterType
@@ -14,6 +15,8 @@ import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
+import com.ondot.domain.model.member.PlaceHistory
+import com.ondot.domain.model.request.DeletePlaceHistoryRequest
 import com.ondot.domain.model.schedule.ScheduleAlarm
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
@@ -232,6 +235,8 @@ class GeneralScheduleViewModel(
     }
 
     fun onPlaceSelected(place: AddressInfo) {
+        savePlaceHistory(place)
+
         when (uiState.value.lastFocusedTextField) {
             RouterType.Departure -> {
                 updateState(
@@ -253,6 +258,8 @@ class GeneralScheduleViewModel(
                 )
             )
         }
+
+        logGA("place_selected")
     }
 
     fun onClickCheckBox() {
@@ -275,6 +282,58 @@ class GeneralScheduleViewModel(
 
     fun updateInitialPlacePicker(value: Boolean) {
         updateState(uiState.value.copy(isInitialPlacePicker = value))
+    }
+
+    fun getPlaceHistory() {
+        viewModelScope.launch {
+            placeRepository.getPlaceHistory().collect {
+                resultResponse(it, ::onSuccessGetPlaceHistory, ::onFailedGetPlaceHistory)
+            }
+        }
+    }
+
+    private fun onSuccessGetPlaceHistory(result: List<PlaceHistory>) {
+        updateState(uiState.value.copy(placeHistory = result))
+    }
+
+    private fun onFailedGetPlaceHistory(e: Throwable) {
+        logger.e { "On Failed Get Place History: ${e.message}" }
+        viewModelScope.launch { ToastManager.show(ERROR_GET_PLACE_HISTORY, ToastType.ERROR) }
+    }
+
+    private fun savePlaceHistory(place: AddressInfo) {
+        viewModelScope.launch {
+            placeRepository.savePlaceHistory(place).collect {
+                resultResponse(it, ::onSuccessSavePlaceHistory)
+            }
+        }
+    }
+
+    private fun onSuccessSavePlaceHistory(result: Unit) {
+        getPlaceHistory()
+    }
+
+    fun onHistoryPlaceSelected(place: PlaceHistory) {
+        val address = AddressInfo(
+            title = place.title,
+            roadAddress = place.roadAddress,
+            latitude = place.latitude,
+            longitude = place.longitude
+        )
+
+        onPlaceSelected(address)
+    }
+
+    fun deletePlaceHistory(place: PlaceHistory) {
+        viewModelScope.launch {
+            placeRepository.deletePlaceHistory(request = DeletePlaceHistoryRequest(place.searchedAt)).collect {
+                resultResponse(it, ::onSuccessDeletePlaceHistory)
+            }
+        }
+    }
+
+    private fun onSuccessDeletePlaceHistory(result: Unit) {
+        getPlaceHistory()
     }
 
     /**--------------------------------------------RouteLoading-----------------------------------------------*/

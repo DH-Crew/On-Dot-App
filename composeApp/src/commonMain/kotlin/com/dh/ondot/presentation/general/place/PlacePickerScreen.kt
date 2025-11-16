@@ -29,6 +29,7 @@ import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.general.GeneralScheduleEvent
 import com.dh.ondot.presentation.general.GeneralScheduleUiState
 import com.dh.ondot.presentation.general.GeneralScheduleViewModel
+import com.dh.ondot.presentation.general.place.components.PlaceHistoryItem
 import com.dh.ondot.presentation.general.place.components.RouteInputSection
 import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.components.OnDotCheckBox
@@ -49,6 +50,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.platform.util.BackPressHandler
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -92,6 +94,10 @@ fun PlacePickerScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getPlaceHistory()
+    }
+
     PlacePickerContent(
         uiState = uiState,
         buttonEnabled = viewModel.isButtonEnabled(),
@@ -103,6 +109,11 @@ fun PlacePickerScreen(
             viewModel.onPlaceSelected(it)
             focusManager.clearFocus()
         },
+        onHistoryPlaceSelected = {
+            viewModel.onHistoryPlaceSelected(it)
+            focusManager.clearFocus()
+        },
+        onHistoryClose = viewModel::deletePlaceHistory,
         onClickCheckBox = viewModel::onClickCheckBox,
         onClickButton = viewModel::onClickNextButton,
         popScreen = {
@@ -121,6 +132,8 @@ fun PlacePickerContent(
     onRouteInputChanged: (String) -> Unit,
     onRouteInputFocused: (RouterType) -> Unit,
     onPlaceSelected: (AddressInfo) -> Unit,
+    onHistoryPlaceSelected: (PlaceHistory) -> Unit,
+    onHistoryClose: (PlaceHistory) -> Unit,
     onClickCheckBox: () -> Unit,
     onClickButton: () -> Unit,
     popScreen: () -> Unit
@@ -175,11 +188,14 @@ fun PlacePickerContent(
         Box(modifier = Modifier.weight(1f)) {
             PlaceList(
                 list = uiState.placeList,
+                historyList = uiState.placeHistory,
                 addressInput = when (uiState.lastFocusedTextField) {
                     RouterType.Departure -> uiState.departurePlaceInput
                     RouterType.Arrival -> uiState.arrivalPlaceInput
                 },
-                onPlaceSelected = onPlaceSelected
+                onPlaceSelected = onPlaceSelected,
+                onHistoryClose = { onHistoryClose(uiState.placeHistory[it]) },
+                onHistoryPlaceSelected = onHistoryPlaceSelected
             )
         }
 
@@ -217,22 +233,38 @@ fun HomeDepartureOption(
 @Composable
 fun PlaceList(
     list: List<AddressInfo>,
+    historyList: List<PlaceHistory>,
     addressInput: String,
-    onPlaceSelected: (AddressInfo) -> Unit
+    onPlaceSelected: (AddressInfo) -> Unit,
+    onHistoryPlaceSelected: (PlaceHistory) -> Unit,
+    onHistoryClose: (Int) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 22.dp)
     ) {
-        itemsIndexed(list, key = { _, item -> "${item.latitude}_${item.longitude}_${item.title}" }) { index, item ->
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onPlaceSelected(item) }
-            ) {
-                PlaceSearchResultItem(addressInput = addressInput, item = item)
-                HorizontalDivider(thickness = (0.5).dp, color = Gray800)
+        if (addressInput.isBlank()) {
+            itemsIndexed(historyList, key = { _, item -> "${item.title}_${item.searchedAt}" }) { index, item ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onHistoryPlaceSelected(item) }
+                ) {
+                    PlaceHistoryItem(item = item, onClick = { onHistoryClose(index) })
+                    HorizontalDivider(thickness = (0.5).dp, color = Gray800)
+                }
+            }
+        } else {
+            itemsIndexed(list, key = { _, item -> "${item.latitude}_${item.longitude}_${item.title}" }) { index, item ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onPlaceSelected(item) }
+                ) {
+                    PlaceSearchResultItem(addressInput = addressInput, item = item)
+                    HorizontalDivider(thickness = (0.5).dp, color = Gray800)
+                }
             }
         }
     }

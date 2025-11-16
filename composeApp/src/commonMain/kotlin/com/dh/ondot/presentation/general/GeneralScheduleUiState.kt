@@ -5,9 +5,12 @@ import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.member.PlaceHistory
+import com.ondot.util.DateTimeFormatter
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
@@ -53,6 +56,7 @@ data class GeneralScheduleUiState @OptIn(ExperimentalTime::class) constructor(
     val selectedArrivalPlace: AddressInfo? = null,
     val homeAddress: AddressInfo = AddressInfo(),
     val isHomeAddressInitialized: Boolean = false,
+    val placeHistory: List<PlaceHistory> =emptyList(),
 
     // RouteLoading
     val preparationAlarm: Alarm = Alarm(),
@@ -62,4 +66,8 @@ data class GeneralScheduleUiState @OptIn(ExperimentalTime::class) constructor(
     val scheduleTitle: String = NEW_SCHEDULE_LABEL,
     val showBottomSheet: Boolean = false,
 
-    ): UiState
+    ): UiState {
+        companion object {
+            fun formattedDate(date: String) = DateTimeFormatter.formatKoreanDateMonthDay(date)
+        }
+    }
