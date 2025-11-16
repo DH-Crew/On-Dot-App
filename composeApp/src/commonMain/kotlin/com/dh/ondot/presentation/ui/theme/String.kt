@@ -52,6 +52,7 @@ const val SHOW_ROUTE_INFORMATION_BUTTON_TEXT = "경로안내 보기"
 // ERROR
 const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
 const val ERROR_SEARCH_PLACE = "장소 검색에 실패했습니다."
+const val ERROR_GET_PLACE_HISTORY = "검색 기록 조회에 실패했습니다."
 const val ERROR_GET_HOME_ADDRESS = "집 주소 조회에 실패했습니다."
 const val ERROR_GET_SCHEDULE_ALARMS = "알람 정보 계산에 실패했습니다."
 const val ERROR_CREATE_SCHEDULE = "일정 생성에 실패했습니다."
