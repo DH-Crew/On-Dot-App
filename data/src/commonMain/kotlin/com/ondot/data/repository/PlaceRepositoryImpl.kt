@@ -1,7 +1,9 @@
 package com.ondot.data.repository
 
 import com.ondot.data.mapper.AddressListResponseMapper
+import com.ondot.data.mapper.PlaceHistoryResponseMapper
 import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.network.HttpMethod
 import com.ondot.network.NetworkClient
@@ -21,5 +23,9 @@ class PlaceRepositoryImpl(
                 mapper = AddressListResponseMapper
             )
         )
+    }
+
+    override suspend fun getPlaceHistory(): Flow<Result<List<PlaceHistory>>> = flow {
+        emit(fetchMapped(HttpMethod.GET, "/places/history", mapper = PlaceHistoryResponseMapper))
     }
 }
