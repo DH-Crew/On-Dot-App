@@ -10,6 +10,7 @@ object PlaceHistoryResponseMapper: Mapper<List<PlaceHistoryResponse>, List<Place
             list.map {
                 PlaceHistory(
                     title = it.title,
+                    roadAddress = it.roadAddress,
                     latitude = it.latitude,
                     longitude = it.longitude,
                     searchedAt = it.searchedAt
