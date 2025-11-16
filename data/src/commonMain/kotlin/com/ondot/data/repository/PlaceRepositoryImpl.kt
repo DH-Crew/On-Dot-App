@@ -4,6 +4,7 @@ import com.ondot.data.mapper.AddressListResponseMapper
 import com.ondot.data.mapper.PlaceHistoryResponseMapper
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
+import com.ondot.domain.model.request.DeletePlaceHistoryRequest
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.network.HttpMethod
 import com.ondot.network.NetworkClient
@@ -31,5 +32,9 @@ class PlaceRepositoryImpl(
 
     override suspend fun savePlaceHistory(place: AddressInfo): Flow<Result<Unit>> = flow {
         emit(fetch(HttpMethod.POST, "/places/history", body = place))
+    }
+
+    override suspend fun deletePlaceHistory(request: DeletePlaceHistoryRequest): Flow<Result<Unit>> = flow {
+        emit(fetch(HttpMethod.DELETE, "/places/history", body = request))
     }
 }
