@@ -58,5 +58,9 @@ actual fun httpClient(): HttpClient = HttpClient(OkHttp) {
         }
     }
 
-    defaultRequest { header("Content-Type", "application/json") }
+    defaultRequest {
+        header("Content-Type", "application/json")
+        header("X-Mobile-Type", "ANDROID")
+        header("X-Api-Version", "V1")
+    }
 }
