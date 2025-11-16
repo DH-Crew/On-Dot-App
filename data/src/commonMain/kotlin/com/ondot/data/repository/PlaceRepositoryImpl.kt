@@ -28,4 +28,8 @@ class PlaceRepositoryImpl(
     override suspend fun getPlaceHistory(): Flow<Result<List<PlaceHistory>>> = flow {
         emit(fetchMapped(HttpMethod.GET, "/places/history", mapper = PlaceHistoryResponseMapper))
     }
+
+    override suspend fun savePlaceHistory(place: AddressInfo): Flow<Result<Unit>> = flow {
+        emit(fetch(HttpMethod.POST, "/places/history", body = place))
+    }
 }

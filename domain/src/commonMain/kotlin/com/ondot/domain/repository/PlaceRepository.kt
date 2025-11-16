@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface PlaceRepository {
     suspend fun searchPlace(query: String): Flow<Result<List<AddressInfo>>>
     suspend fun getPlaceHistory(): Flow<Result<List<PlaceHistory>>>
+    suspend fun savePlaceHistory(place: AddressInfo): Flow<Result<Unit>>
 }
