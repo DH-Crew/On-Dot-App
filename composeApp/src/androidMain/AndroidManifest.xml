@@ -24,6 +24,10 @@
             android:name="com.ondot.platform.util.AlarmReceiver"
             android:exported="false" />
 
+        <receiver
+            android:name="com.ondot.platform.util.NotificationReceiver"
+            android:exported="false" />
+
         <service
             android:name="com.ondot.platform.util.AlarmService"
             android:exported="false"
