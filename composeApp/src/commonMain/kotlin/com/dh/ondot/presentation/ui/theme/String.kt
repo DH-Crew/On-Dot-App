@@ -183,3 +183,6 @@ const val DELETE_ACCOUNT_DIALOG_CONTENT = "그동안 온닷을 이용해주셔�
 
 // ServiceTerms
 const val SERVICE_TERMS_TITLE = "서비스 정책"
+
+// LocalNotification
+const val NOTIFICATION_TITLE = "준비물을 잊지 말고 챙기세요!"
