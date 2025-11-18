@@ -7,12 +7,14 @@ import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
+import com.dh.ondot.presentation.ui.theme.NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.request.MapProviderRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.request.local_notification.LocalNotificationRequest
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.model.ui.AlarmRingInfo
@@ -20,14 +22,17 @@ import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.util.DateTimeFormatter
+import com.ondot.util.DateTimeFormatter.iso8601ToEpochMillis
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val memberRepository: MemberRepository,
     private val alarmScheduler: AlarmScheduler,
-    private val analyticsManager: AnalyticsManager
+    private val analyticsManager: AnalyticsManager,
+    private val notificationScheduler: LocalNotificationScheduler
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
@@ -91,6 +96,8 @@ class HomeViewModel(
         }
     }
 
+    /**----------------------------------------------스케줄 조회---------------------------------------------*/
+
     fun getScheduleList() {
         logGA("schedule_list_request")
 
@@ -114,6 +121,7 @@ class HomeViewModel(
         )
 
         processAlarms(result.scheduleList)
+        scheduleNotification(result.scheduleList)
     }
 
     private fun processAlarms(schedules: List<Schedule>) {
@@ -159,6 +167,19 @@ class HomeViewModel(
         }
     }
 
+    private fun scheduleNotification(schedules: List<Schedule>) {
+        schedules.forEach { schedule ->
+            notificationScheduler.schedule(
+                request = LocalNotificationRequest(
+                    id = schedule.scheduleId.toString(),
+                    title = NOTIFICATION_TITLE,
+                    body = schedule.preparationNote,
+                    triggerAtMillis = schedule.departureAlarm.triggeredAt.iso8601ToEpochMillis()
+                )
+            )
+        }
+    }
+
     private fun onFailureGetScheduleList(throwable: Throwable) {
         logger.e { throwable.message.toString() }
 
@@ -188,6 +209,7 @@ class HomeViewModel(
         logGA("schedule_delete_request", "schedule_id" to scheduleId)
 
         cancelAlarms(scheduleId)
+        notificationScheduler.cancel(scheduleId.toString())
 
         viewModelScope.launch {
             scheduleRepository.deleteSchedule(scheduleId).collect {
