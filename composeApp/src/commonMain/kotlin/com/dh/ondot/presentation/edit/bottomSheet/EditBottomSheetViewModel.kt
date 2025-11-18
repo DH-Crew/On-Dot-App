@@ -1,5 +1,6 @@
 package com.dh.ondot.presentation.edit.bottomSheet
 
+import co.touchlab.kermit.Logger
 import com.dh.ondot.core.ui.base.BaseViewModel
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -7,9 +8,8 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
-class EditBottomSheetViewModel(
-
-) : BaseViewModel<EditBottomSheetUiState>(EditBottomSheetUiState()) {
+class EditBottomSheetViewModel() : BaseViewModel<EditBottomSheetUiState>(EditBottomSheetUiState()) {
+    private val logger = Logger.withTag("EditBottomSheetViewModel")
     private val fullWeek = (0..6).toList()
     private val weekDays = (1..5).toList()
     private val weekend = listOf(0, 6)
@@ -17,6 +17,7 @@ class EditBottomSheetViewModel(
     /**---------------------------------------------Date-----------------------------------------------*/
 
     fun initDate(isRepeat: Boolean, repeatDays: Set<Int>, currentDate: LocalDate) {
+        logger.i { "initDate: isRepeat = $isRepeat, repeatDays = $repeatDays, currentDate = $currentDate"  }
         updateState(
             uiState.value.copy(isRepeat = isRepeat, repeatDays = repeatDays, currentDate = currentDate)
         )

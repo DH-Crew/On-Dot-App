@@ -31,5 +31,9 @@ actual fun httpClient(): HttpClient = HttpClient(Darwin) {
         level = if (Platform.isDebugBinary) LogLevel.ALL else LogLevel.NONE
     }
 
-    defaultRequest { header("Content-Type", "application/json") }
+    defaultRequest {
+        header("Content-Type", "application/json")
+        header("X-Mobile-Type", "IOS")
+        header("X-Api-Version", "V1")
+    }
 }

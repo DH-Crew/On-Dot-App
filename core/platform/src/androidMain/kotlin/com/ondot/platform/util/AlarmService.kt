@@ -57,8 +57,9 @@ class AlarmService : Service(), KoinComponent {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun markRinging(scheduleId: Long, alarmId: Long, type: AlarmType) {
+        val instanceId = System.currentTimeMillis()
         serviceScope.launch {
-            dataStore.setRinging(scheduleId, alarmId, type)
+            dataStore.setRinging(scheduleId, alarmId, type, instanceId)
         }
     }
 

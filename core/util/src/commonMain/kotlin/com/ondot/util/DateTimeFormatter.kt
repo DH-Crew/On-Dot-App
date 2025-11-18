@@ -44,6 +44,12 @@ object DateTimeFormatter {
 
             return "${month.pad2()}월 ${day.pad2()}일 $dayOfWeekKorean"
         }
+
+        /** 06월 13일 형태로 포맷 */
+        fun formatKoreanDateMonthDay(): String {
+            val date = LocalDate(year, month, day)
+            return "${month.pad2()}월 ${day.pad2()}일"
+        }
     }
 
     private fun parseYMD(iso: String): YMD {
@@ -67,6 +73,9 @@ object DateTimeFormatter {
 
     /** 06월 13일 화요일 형태로 포맷 */
     fun formatKoreanDate(iso: String): String = parseYMD(iso).formatKoreanDate()
+
+    /** 06월 13일 형태로 포맷 */
+    fun formatKoreanDateMonthDay(iso: String): String = parseYMD(iso).formatKoreanDateMonthDay()
 
     /** 주어진 연,월의 1일부터 마지막 일까지 리스트로 생성 */
     fun monthDays(year: Int, month: Int): List<LocalDate> {

@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
+import com.dh.ondot.presentation.ui.theme.WORD_RESTORE_ACTION
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.ui.ToastData
@@ -111,7 +113,18 @@ private fun ToastItem(
 
             Spacer(Modifier.width(8.dp))
 
-            OnDotText(data.message, color = textColor, style = OnDotTextStyle.BodyLargeSB)
+            OnDotText(
+                text = data.message,
+                color = textColor,
+                style = OnDotTextStyle.BodyLargeSB,
+                modifier = Modifier.weight(1f)
+            )
+
+//            OnDotText(
+//                text = WORD_RESTORE_ACTION,
+//                style = OnDotTextStyle.BodyMediumR,
+//                color = Gray200
+//            )
         }
     }
 }

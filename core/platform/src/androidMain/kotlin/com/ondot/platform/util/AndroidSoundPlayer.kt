@@ -22,7 +22,7 @@ class AndroidSoundPlayer(
     @SuppressLint("DiscouragedApi")
     override fun playSound(soundResId: String, onComplete: () -> Unit) {
         // 이전 재생 정리
-        stopSound()
+//        stopSound()
 
         _onComplete = onComplete
 

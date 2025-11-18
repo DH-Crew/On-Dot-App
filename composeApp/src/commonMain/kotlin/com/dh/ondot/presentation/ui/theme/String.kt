@@ -35,6 +35,7 @@ const val WORD_NO = "아니요"
 const val WORD_PREPARATION = "준비"
 const val WORD_DEPARTURE = "출발"
 const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
+const val WORD_RESTORE_ACTION = "되돌리기"
 const val WORD_HOME = "집"
 
 // 알람 카테고리
@@ -52,6 +53,7 @@ const val SHOW_ROUTE_INFORMATION_BUTTON_TEXT = "경로안내 보기"
 // ERROR
 const val ERROR_GET_SCHEDULE_LIST = "일정 조회에 실패했습니다."
 const val ERROR_SEARCH_PLACE = "장소 검색에 실패했습니다."
+const val ERROR_GET_PLACE_HISTORY = "검색 기록 조회에 실패했습니다."
 const val ERROR_GET_HOME_ADDRESS = "집 주소 조회에 실패했습니다."
 const val ERROR_GET_SCHEDULE_ALARMS = "알람 정보 계산에 실패했습니다."
 const val ERROR_CREATE_SCHEDULE = "일정 생성에 실패했습니다."
@@ -69,6 +71,7 @@ const val ERROR_INVALID_MINUTE_INPUT = "분은 59이하의 숫자로 입력해�
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
+const val SUCCESS_EDIT_PREPARATION_TIME = "준비 시간이 수정되었어요."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"

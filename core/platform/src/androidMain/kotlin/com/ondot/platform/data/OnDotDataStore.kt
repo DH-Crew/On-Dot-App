@@ -48,12 +48,13 @@ class OnDotDataStore(context: Context) {
 
     /**--------------------------------------------RingingState-----------------------------------------------*/
 
-    suspend fun setRinging(scheduleId: Long, alarmId: Long, type: AlarmType) {
+    suspend fun setRinging(scheduleId: Long, alarmId: Long, type: AlarmType, instanceId: Long) {
         dataStore.edit {
             it[KEY_IS_RINGING]  = true
             it[KEY_SCHEDULE_ID] = scheduleId
             it[KEY_ALARM_ID]    = alarmId
             it[KEY_TYPE]        = type.name
+            it[KEY_INSTANCE_ID] = instanceId
         }
     }
 
@@ -63,6 +64,7 @@ class OnDotDataStore(context: Context) {
             it.remove(KEY_SCHEDULE_ID)
             it.remove(KEY_ALARM_ID)
             it.remove(KEY_TYPE)
+            it.remove(KEY_INSTANCE_ID)
         }
     }
 
@@ -71,7 +73,8 @@ class OnDotDataStore(context: Context) {
         val sid = p[KEY_SCHEDULE_ID] ?: -1L
         val aid = p[KEY_ALARM_ID] ?: -1L
         val t = runCatching { AlarmType.valueOf(p[KEY_TYPE].orEmpty()) }.getOrDefault(AlarmType.Departure)
-        RingingState(on, sid, aid, t)
+        val instanceId = p[KEY_INSTANCE_ID] ?: -1L
+        RingingState(on, sid, aid, t, instanceId)
     }
 
     suspend fun currentRinging(): RingingState = flow().first()
@@ -85,5 +88,6 @@ class OnDotDataStore(context: Context) {
         val KEY_SCHEDULE_ID  = longPreferencesKey("schedule_id")
         val KEY_ALARM_ID     = longPreferencesKey("alarm_id")
         val KEY_TYPE         = stringPreferencesKey("type")
+        val KEY_INSTANCE_ID  = longPreferencesKey("instance_id")
     }
 }
