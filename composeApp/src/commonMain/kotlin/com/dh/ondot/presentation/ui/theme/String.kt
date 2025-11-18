@@ -35,6 +35,7 @@ const val WORD_NO = "아니요"
 const val WORD_PREPARATION = "준비"
 const val WORD_DEPARTURE = "출발"
 const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
+const val WORD_RESTORE_ACTION = "되돌리기"
 const val WORD_HOME = "집"
 
 // 알람 카테고리
