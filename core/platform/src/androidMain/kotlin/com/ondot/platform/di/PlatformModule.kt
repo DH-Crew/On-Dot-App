@@ -6,6 +6,7 @@ import com.ondot.domain.service.AlarmStorage
 import com.ondot.domain.service.AnalyticsManager
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.KaKaoSignInProvider
+import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.domain.service.MapProviderStorage
 import com.ondot.domain.service.SoundPlayer
 import com.ondot.domain.service.TokenProvider
@@ -20,6 +21,7 @@ import com.ondot.platform.util.AndroidAlarmScheduler
 import com.ondot.platform.util.AndroidAlarmStorage
 import com.ondot.platform.util.AndroidAnalyticsManager
 import com.ondot.platform.util.AndroidDirectionsOpener
+import com.ondot.platform.util.AndroidLocalNotificationScheduler
 import com.ondot.platform.util.AndroidMapProviderStorage
 import com.ondot.platform.util.AndroidSoundPlayer
 import com.ondot.platform.util.AndroidUrlOpener
@@ -43,6 +45,7 @@ actual fun providePlatformModules(): List<Module> {
             single<DirectionsOpener> { AndroidDirectionsOpener(get<Context>()) }
             single<UrlOpener> { AndroidUrlOpener(get<Context>()) }
             single<KaKaoSignInProvider> { AndroidKaKaoSignInProvider(get<Context>()) }
+            single<LocalNotificationScheduler> { AndroidLocalNotificationScheduler(get<Context>()) }
         }
     )
 }

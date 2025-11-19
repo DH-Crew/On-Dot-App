@@ -130,7 +130,7 @@ class AlarmService : Service(), KoinComponent {
                 )
 
                 val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.ic_app)
                     .setContentTitle("알람 재생 중")
                     .setContentText("잠시만 기다려주세요")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
