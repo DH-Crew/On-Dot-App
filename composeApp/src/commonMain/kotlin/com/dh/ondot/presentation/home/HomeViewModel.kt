@@ -24,7 +24,6 @@ import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.util.DateTimeFormatter
-import com.ondot.util.DateTimeFormatter.iso8601ToEpochMillis
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -174,7 +173,7 @@ class HomeViewModel(
                     id = schedule.scheduleId.toString(),
                     title = NOTIFICATION_TITLE,
                     body = schedule.preparationNote,
-                    triggerAtMillis = schedule.departureAlarm.triggeredAt.iso8601ToEpochMillis()
+                    triggerAtMillis = DateTimeFormatter.isoStringToEpochMillis(schedule.departureAlarm.triggeredAt)
                 )
             )
         }

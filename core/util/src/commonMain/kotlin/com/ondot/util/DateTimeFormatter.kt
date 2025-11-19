@@ -272,18 +272,6 @@ object DateTimeFormatter {
         return LocalTime(newHour, newMinute, newSecond)
     }
 
-    /** Iso8601 -> epochMillis로 변환 */
-    @OptIn(ExperimentalTime::class)
-    fun String.iso8601ToEpochMillis(): Long {
-        return try {
-            val dt = LocalDateTime.parse(this)
-            val instant = dt.toInstant(TimeZone.of("Asia/Seoul"))
-            instant.toEpochMilliseconds()
-        } catch (e: Exception) {
-            throw IllegalArgumentException("Invalid ISO8601 datetime: $this", e)
-        }
-    }
-
     /**----------------------------------------------기타---------------------------------------------*/
 
     /** 두개의 ISO8601 날짜가 하루 차이인지 판단하는 메서드 */
