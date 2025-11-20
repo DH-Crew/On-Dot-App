@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -33,6 +34,7 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.member.AddressInfo
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_search
 import org.jetbrains.compose.resources.painterResource
@@ -46,6 +48,10 @@ fun OnboardingStep2(
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_onboarding_step_2")
+    }
 
     Column(
         modifier = Modifier

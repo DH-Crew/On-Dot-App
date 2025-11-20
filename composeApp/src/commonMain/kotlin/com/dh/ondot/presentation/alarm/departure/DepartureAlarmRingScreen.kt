@@ -39,6 +39,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
@@ -57,6 +58,10 @@ fun DepartureAlarmRingScreen(
 ) {
     val viewModel: AppViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_departure_alarm_ring")
+    }
 
     LaunchedEffect(alarmId) {
         if (alarmId != -1L) {

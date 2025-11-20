@@ -27,6 +27,7 @@ import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
 import com.ondot.domain.model.enums.ButtonType
+import com.ondot.util.AnalyticsLogger
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -51,6 +52,10 @@ fun EditTimeBottomSheet(
     val periodState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
     val hourState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.hour.coerceIn(0, 23))
     val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.minute.coerceIn(0, 59))
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("bottom_sheet_view_edit_time")
+    }
 
     LaunchedEffect(Unit) {
         viewModel.initTime(currentTime)

@@ -47,6 +47,7 @@ import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_apple_map
 import ondot.composeapp.generated.resources.ic_kakao_map
@@ -61,6 +62,10 @@ fun NavMapSettingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_nav_map_setting")
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getUserMapProvider()

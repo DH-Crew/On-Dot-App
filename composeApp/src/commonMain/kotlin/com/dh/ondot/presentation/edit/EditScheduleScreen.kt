@@ -73,6 +73,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TimeBottomSheet
 import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter.toLocalDateFromIso
 import com.ondot.util.DateTimeFormatter.toLocalTimeFromIso
 import kotlinx.coroutines.delay
@@ -92,6 +93,10 @@ fun EditScheduleScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_edit_schedule")
+    }
 
     LaunchedEffect(Unit) {
         delay(200)

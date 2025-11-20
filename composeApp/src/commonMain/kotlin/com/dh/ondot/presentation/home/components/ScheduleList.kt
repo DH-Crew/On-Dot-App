@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
@@ -151,6 +152,7 @@ private fun ScheduleInfoToggleSection(
         verticalAlignment = Alignment.Top
     ) {
         Column(
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
             if (isRepeat) {
@@ -175,10 +177,14 @@ private fun ScheduleInfoToggleSection(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            OnDotText(text = title, style = OnDotTextStyle.BodyLargeR1, color = Gray200)
+            OnDotText(
+                text = title,
+                style = OnDotTextStyle.BodyLargeR1,
+                color = Gray200,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
 
         OnDotSwitch(
             checked = isEnabled,

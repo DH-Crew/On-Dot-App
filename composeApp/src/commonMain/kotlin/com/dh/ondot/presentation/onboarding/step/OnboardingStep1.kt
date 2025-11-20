@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_HOUR
 import com.dh.ondot.presentation.ui.theme.WORD_MINUTE
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.util.AnalyticsLogger
 
 @Composable
 fun OnboardingStep1(
@@ -40,6 +42,10 @@ fun OnboardingStep1(
             val m = minuteInput.toIntOrNull()
             m != null && m > 59
         }
+    }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_onboarding_step_1")
     }
 
     Column(
