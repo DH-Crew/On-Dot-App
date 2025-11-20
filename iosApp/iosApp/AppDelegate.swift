@@ -27,6 +27,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         let apiKey = Bundle.main.object(forInfoDictionaryKey: "AMPLITUDE_API_KEY") as? String ?? ""
         AmplitudeBridge.shared.configure(apiKey: apiKey, optOut: false)
+        
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            Analytics.logEvent("app_background", parameters: nil)
+        }
       
         // 알림 센터 델리게이트 지정
         // 앱이 실행 중일 때(포그라운드/백그라운드) 전달되는 알림도 이 클래스에서 처리하도록 지정
