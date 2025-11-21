@@ -54,7 +54,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun DepartureAlarmRingScreen(
     scheduleId: Long,
     alarmId: Long,
-    navigateToSplash: () -> Unit
+    navigateToHome: () -> Unit
 ) {
     val viewModel: AppViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -72,7 +72,7 @@ fun DepartureAlarmRingScreen(
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {
             when(it) {
-                is AppEvent.NavigateToSplash -> navigateToSplash()
+                is AppEvent.NavigateToHome -> navigateToHome()
             }
         }
     }

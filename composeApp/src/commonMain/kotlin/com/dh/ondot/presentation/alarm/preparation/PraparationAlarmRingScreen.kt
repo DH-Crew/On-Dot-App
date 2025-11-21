@@ -14,7 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,7 +65,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun PreparationAlarmRingScreen(
     scheduleId: Long,
     alarmId: Long,
-    navigateToSplash: () -> Unit
+    navigateToHome: () -> Unit
 ) {
     val viewModel: AppViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -74,13 +77,6 @@ fun PreparationAlarmRingScreen(
     LaunchedEffect(alarmId) {
         if (alarmId != -1L) {
             viewModel.getAlarmInfo(scheduleId, alarmId)
-        }
-    }
-
-    LaunchedEffect(uiState.showPreparationStartAnimation) {
-        if (uiState.showPreparationStartAnimation) {
-            delay(2000L)
-            navigateToSplash()
         }
     }
 
@@ -97,7 +93,8 @@ fun PreparationAlarmRingScreen(
             showPreparationStartAnimation = uiState.showPreparationStartAnimation,
             showPreparationSnoozeAnimation = uiState.showPreparationSnoozeAnimation,
             onClickPreparationStartButton = { viewModel.startPreparation() },
-            onSnoozePreparationAlarm = viewModel::snoozePreparationAlarm
+            onSnoozePreparationAlarm = viewModel::snoozePreparationAlarm,
+            onPreparationStartAnimationFinished = { navigateToHome() }
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -111,7 +108,8 @@ fun PreparationAlarmRingContent(
     showPreparationStartAnimation: Boolean,
     showPreparationSnoozeAnimation: Boolean,
     onClickPreparationStartButton: () -> Unit,
-    onSnoozePreparationAlarm: () -> Unit
+    onSnoozePreparationAlarm: () -> Unit,
+    onPreparationStartAnimationFinished: () -> Unit
 ) {
     val remainingTime = DateTimeFormatter.diffBetweenIsoTimes(schedule.preparationAlarm.triggeredAt, schedule.departureAlarm.triggeredAt)
     val formattedTime = "${remainingTime.second.toString().padStart(2, '0')}:${remainingTime.third.toString().padStart(2, '0')}"
@@ -122,8 +120,9 @@ fun PreparationAlarmRingContent(
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_start.json").decodeToString())
     }
     val startProgress by animateLottieCompositionAsState(
-        startComposition,
-        iterations = Compottie.IterateForever
+        composition = startComposition,
+        iterations = 1,
+        isPlaying = showPreparationStartAnimation
     )
     val snoozedComposition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_alarm_snoozed.json").decodeToString())
@@ -132,6 +131,10 @@ fun PreparationAlarmRingContent(
         snoozedComposition,
         iterations = Compottie.IterateForever
     )
+
+    LaunchedEffect(showPreparationStartAnimation, startProgress) {
+        if (startProgress >= 1f) onPreparationStartAnimationFinished()
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()

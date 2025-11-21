@@ -1,7 +1,6 @@
 package com.dh.ondot.core.navigation
 
 import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -50,8 +49,8 @@ fun NavGraphBuilder.alarmNavGraph(
             PreparationAlarmRingScreen(
                 scheduleId = scheduleId,
                 alarmId = alarmId,
-                navigateToSplash = {
-                    navController.navigate(NavRoutes.Splash.route) {
+                navigateToHome = {
+                    navController.navigate(NavRoutes.MainGraph.route) {
                         popUpTo(NavRoutes.AlarmGraph.route) { inclusive = true }
                         launchSingleTop = true
                     }
@@ -73,8 +72,8 @@ fun NavGraphBuilder.alarmNavGraph(
             DepartureAlarmRingScreen(
                 scheduleId = scheduleId,
                 alarmId = alarmId,
-                navigateToSplash = {
-                    navController.navigate(NavRoutes.Splash.route) {
+                navigateToHome = {
+                    navController.navigate(NavRoutes.MainGraph.route) {
                         popUpTo(NavRoutes.AlarmGraph.route) { inclusive = true }
                         launchSingleTop = true
                     }

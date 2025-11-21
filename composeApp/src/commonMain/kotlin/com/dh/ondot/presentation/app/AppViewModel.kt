@@ -143,7 +143,7 @@ class AppViewModel(
             "provider" to uiState.value.mapProvider.toString().lowercase()
         )
 
-        emitEventFlow(AppEvent.NavigateToSplash)
+        emitEventFlow(AppEvent.NavigateToHome)
         DirectionsFacade.openDirections(
             startLat = info.startLatitude,
             startLng = info.startLongitude,
