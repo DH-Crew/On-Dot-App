@@ -167,6 +167,8 @@ class HomeViewModel(
     }
 
     private fun scheduleNotification(schedules: List<Schedule>) {
+        val twoMinutesMillis = 2 * 60 * 1000L
+
         schedules.forEach { schedule ->
             if (schedule.preparationNote.isNotBlank()) {
                 notificationScheduler.schedule(
@@ -174,7 +176,7 @@ class HomeViewModel(
                         id = schedule.scheduleId.toString(),
                         title = NOTIFICATION_TITLE,
                         body = schedule.preparationNote,
-                        triggerAtMillis = DateTimeFormatter.isoStringToEpochMillis(schedule.departureAlarm.triggeredAt)
+                        triggerAtMillis = DateTimeFormatter.isoStringToEpochMillis(schedule.departureAlarm.triggeredAt) - twoMinutesMillis
                     )
                 )
             }

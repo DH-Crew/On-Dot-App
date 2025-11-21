@@ -118,7 +118,7 @@ class AndroidLocalNotificationScheduler(
         const val CHANNEL_ID = "local_notifications"
 
         const val ACTION_SHOW_LOCAL_NOTIFICATION =
-            "com.yourapp.SHOW_LOCAL_NOTIFICATION"
+            "com.ondot.SHOW_LOCAL_NOTIFICATION"
 
         const val EXTRA_ID = "extra_notification_id"
         const val EXTRA_TITLE = "extra_notification_title"
