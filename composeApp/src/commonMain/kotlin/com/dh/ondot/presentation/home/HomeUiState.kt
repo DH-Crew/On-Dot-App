@@ -5,6 +5,7 @@ import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.schedule.Schedule
+import com.ondot.util.DateTimeFormatter
 
 data class HomeUiState(
     val remainingTime: Triple<Int, Int, Int> = Triple(-1, -1, -1),
@@ -21,4 +22,9 @@ data class HomeUiState(
             MapProvider.NAVER,
             MapProvider.APPLE
         )
-): UiState
+): UiState {
+    companion object {
+        fun appointmentAtTime(date: String) =
+            DateTimeFormatter.formatHourMinute(date)
+    }
+}
