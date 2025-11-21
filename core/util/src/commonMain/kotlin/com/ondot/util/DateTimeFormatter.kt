@@ -7,6 +7,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -39,7 +40,6 @@ object DateTimeFormatter {
                 DayOfWeek.FRIDAY    -> "금요일"
                 DayOfWeek.SATURDAY  -> "토요일"
                 DayOfWeek.SUNDAY    -> "일요일"
-                else -> ""
             }
 
             return "${month.pad2()}월 ${day.pad2()}일 $dayOfWeekKorean"
@@ -47,7 +47,6 @@ object DateTimeFormatter {
 
         /** 06월 13일 형태로 포맷 */
         fun formatKoreanDateMonthDay(): String {
-            val date = LocalDate(year, month, day)
             return "${month.pad2()}월 ${day.pad2()}일"
         }
     }
@@ -81,13 +80,44 @@ object DateTimeFormatter {
     fun monthDays(year: Int, month: Int): List<LocalDate> {
         val first = LocalDate(year, month, 1)
         val last = first.plus(DatePeriod(months = 1)).minus(DatePeriod(days = 1))
-        return (1..last.dayOfMonth).map { day -> LocalDate(year, month, day) }
+        return (1..last.day).map { day -> LocalDate(year, month, day) }
     }
 
     fun LocalDate.formatKorean(): String {
-        val mm = this.monthNumber.toString().padStart(2, '0')
-        val dd = this.dayOfMonth.toString().padStart(2, '0')
+        val mm = month.number.toString().padStart(2, '0')
+        val dd = day.toString().padStart(2, '0')
         return "${this.year}년 ${mm}월 ${dd}일"
+    }
+
+    /** iso의 요일 정보만 추출 */
+    fun extractDayOfWeek(iso: String): Int {
+        val ymd = parseYMD(iso)
+        val date = LocalDate(ymd.year, ymd.month, ymd.day)
+        val dayOfWeek = when (date.dayOfWeek) {
+            DayOfWeek.MONDAY    -> 2
+            DayOfWeek.TUESDAY   -> 3
+            DayOfWeek.WEDNESDAY -> 4
+            DayOfWeek.THURSDAY  -> 5
+            DayOfWeek.FRIDAY    -> 6
+            DayOfWeek.SATURDAY  -> 7
+            DayOfWeek.SUNDAY    -> 1
+        }
+
+        return dayOfWeek
+    }
+
+    /** iso 문자열을 days 만큼 뒤로 미룸 */
+    fun plusDays(iso: String, days: Int): String {
+        require(iso.isNotBlank()) { "ISO 문자열은 공백이 아니어야 함" }
+        if (days == 0) return iso
+
+        val timePart = iso.substringAfter('T', missingDelimiterValue = "00:00:00")
+
+        val ymd = parseYMD(iso)
+        val date = LocalDate(ymd.year, ymd.month, ymd.day)
+        val nextDate = date.plus(DatePeriod(days = days))
+
+        return "${nextDate}T$timePart"
     }
 
     /**----------------------------------------------시간---------------------------------------------*/
@@ -229,7 +259,7 @@ object DateTimeFormatter {
     private fun Int.pad2() = this.toString().padStart(2, '0')
 
     fun LocalDate.toIsoDateString(): String =
-        "${year.toString().padStart(4, '0')}-" + "${monthNumber.pad2()}-" + dayOfMonth.pad2()
+        "${year.toString().padStart(4, '0')}-" + "${month.number.pad2()}-" + day.pad2()
 
     fun LocalTime.toIsoTimeString(): String =
         "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
@@ -266,9 +296,9 @@ object DateTimeFormatter {
         // 하루(86400초)로 모듈로 연산해서 wrap-around 처리
         val modSeconds = ((addedSeconds % 86400) + 86400) % 86400
         // 초를 시, 분, 초로 분해
-        val newHour = (modSeconds / 3600).toInt()
-        val newMinute = ((modSeconds % 3600) / 60).toInt()
-        val newSecond = (modSeconds % 60).toInt()
+        val newHour = modSeconds / 3600
+        val newMinute = (modSeconds % 3600) / 60
+        val newSecond = modSeconds % 60
         return LocalTime(newHour, newMinute, newSecond)
     }
 
