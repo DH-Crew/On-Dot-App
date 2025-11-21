@@ -120,11 +120,14 @@ private fun ToastItem(
                 modifier = Modifier.weight(1f)
             )
 
-//            OnDotText(
-//                text = WORD_RESTORE_ACTION,
-//                style = OnDotTextStyle.BodyMediumR,
-//                color = Gray200
-//            )
+            if (data.type == ToastType.DELETE) {
+                OnDotText(
+                    text = WORD_RESTORE_ACTION,
+                    style = OnDotTextStyle.BodyMediumR,
+                    color = Gray200,
+                    modifier = Modifier.clickable { data.callback(); onDismiss() }
+                )
+            }
         }
     }
 }

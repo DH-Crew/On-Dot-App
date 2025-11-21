@@ -8,5 +8,6 @@ data class ToastData @OptIn(ExperimentalTime::class) constructor(
     val id: Long = Clock.System.now().toEpochMilliseconds(),
     val message: String,
     val type: ToastType,
-    val duration: Long = 2000L
+    val duration: Long = 2000L,
+    val callback: () -> Unit = {}
 )

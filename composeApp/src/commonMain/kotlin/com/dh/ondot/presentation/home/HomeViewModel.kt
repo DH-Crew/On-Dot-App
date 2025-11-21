@@ -24,6 +24,7 @@ import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.util.DateTimeFormatter
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -208,23 +209,39 @@ class HomeViewModel(
         }
     }
 
+    /**----------------------------------------------일정 삭제---------------------------------------------*/
+
     fun deleteSchedule(scheduleId: Long) {
-        logGA("schedule_delete_request", "schedule_id" to scheduleId)
-
-        cancelAlarms(scheduleId)
-        notificationScheduler.cancel(scheduleId.toString())
-
-        viewModelScope.launch {
+        val curList = uiState.value.scheduleList
+        val newList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }
+        val job = viewModelScope.launch {
+            delay(2000)
             scheduleRepository.deleteSchedule(scheduleId).collect {
                 resultResponse(it, { onSuccessDeleteSchedule(scheduleId) }, ::onFailDeleteSchedule)
             }
         }
+
+        updateState(uiState.value.copy(scheduleList = newList))
+
+        viewModelScope.launch {
+            ToastManager.show(
+                message = SUCCESS_DELETE_SCHEDULE,
+                type = ToastType.DELETE,
+                callback = {
+                    job.cancel()
+                    updateState(uiState.value.copy(scheduleList = curList))
+                }
+            )
+        }
+
+        logGA("schedule_delete_request", "schedule_id" to scheduleId)
     }
 
     private fun onSuccessDeleteSchedule(scheduleId: Long) {
+        cancelAlarms(scheduleId)
+        notificationScheduler.cancel(scheduleId.toString())
         updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }))
         getScheduleList()
-        viewModelScope.launch { ToastManager.show(SUCCESS_DELETE_SCHEDULE, ToastType.DELETE) }
     }
 
     private fun onFailDeleteSchedule(e: Throwable) {
