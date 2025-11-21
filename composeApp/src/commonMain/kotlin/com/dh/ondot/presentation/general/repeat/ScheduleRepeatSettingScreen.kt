@@ -36,6 +36,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.util.AnalyticsLogger
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -48,6 +49,10 @@ fun ScheduleRepeatSettingScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_schedule_date_time")
+    }
 
     LaunchedEffect(uiState.totalStep) {
         if (uiState.totalStep == 0) {

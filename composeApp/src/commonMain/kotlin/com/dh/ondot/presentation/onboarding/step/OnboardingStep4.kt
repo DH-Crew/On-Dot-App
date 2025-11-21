@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +21,7 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING4_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.ui.UserAnswer
+import com.ondot.util.AnalyticsLogger
 
 @Composable
 fun OnboardingStep4(
@@ -28,6 +30,10 @@ fun OnboardingStep4(
     interactionSource: MutableInteractionSource,
     onClickAnswer: (Int) -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_onboarding_step_4")
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()

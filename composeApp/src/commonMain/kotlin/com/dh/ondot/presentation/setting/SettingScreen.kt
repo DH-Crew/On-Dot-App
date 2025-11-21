@@ -48,6 +48,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_SETTING
 import com.dh.ondot.presentation.ui.theme.WORD_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.WORD_YES
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_arrow_right_gray400
 import org.jetbrains.compose.resources.painterResource
@@ -65,6 +66,10 @@ fun SettingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_setting")
+    }
 
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {

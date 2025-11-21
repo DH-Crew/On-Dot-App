@@ -168,14 +168,16 @@ class HomeViewModel(
 
     private fun scheduleNotification(schedules: List<Schedule>) {
         schedules.forEach { schedule ->
-            notificationScheduler.schedule(
-                request = LocalNotificationRequest(
-                    id = schedule.scheduleId.toString(),
-                    title = NOTIFICATION_TITLE,
-                    body = schedule.preparationNote,
-                    triggerAtMillis = DateTimeFormatter.isoStringToEpochMillis(schedule.departureAlarm.triggeredAt)
+            if (schedule.preparationNote.isNotBlank()) {
+                notificationScheduler.schedule(
+                    request = LocalNotificationRequest(
+                        id = schedule.scheduleId.toString(),
+                        title = NOTIFICATION_TITLE,
+                        body = schedule.preparationNote,
+                        triggerAtMillis = DateTimeFormatter.isoStringToEpochMillis(schedule.departureAlarm.triggeredAt)
+                    )
                 )
-            )
+            }
         }
     }
 

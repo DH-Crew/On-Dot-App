@@ -40,6 +40,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_HOME
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.domain.model.member.HomeAddressInfo
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_home_circle_green
 import ondot.composeapp.generated.resources.ic_pencil_white
@@ -53,6 +54,10 @@ fun HomeAddressSettingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_home_address_setting")
+    }
 
     LaunchedEffect(Unit) {
         if (uiState.homeAddress.roadAddress.isEmpty()) viewModel.getHomeAddress()

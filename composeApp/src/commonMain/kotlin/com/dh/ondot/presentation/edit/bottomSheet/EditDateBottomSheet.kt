@@ -23,6 +23,7 @@ import com.dh.ondot.presentation.ui.components.OnDotButton
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
 import com.ondot.domain.model.enums.ButtonType
+import com.ondot.util.AnalyticsLogger
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -36,6 +37,10 @@ fun EditDateBottomSheet(
     val viewModel: EditBottomSheetViewModel = viewModel { EditBottomSheetViewModel() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("bottom_sheet_view_edit_date")
+    }
 
     LaunchedEffect(Unit) {
         viewModel.initDate(isRepeat, repeatDays, currentDate)
