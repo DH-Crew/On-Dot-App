@@ -212,7 +212,14 @@ public final class AlarmKitBridge: NSObject {
                 let config = AlarmManager.AlarmConfiguration.alarm(
                     schedule: schedule,
                     attributes: attrs,
-                    stopIntent: nil,
+                    stopIntent: OpenMapsIntent(
+                        startLat: startLat?.doubleValue,
+                        startLng: startLng?.doubleValue,
+                        endLat: endLat?.doubleValue,
+                        endLng: endLng?.doubleValue,
+                        name: title,
+                        mapProvider: mapProvider
+                    ),
                     secondaryIntent: secondaryIntent,
                     sound: .default
                 )
