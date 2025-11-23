@@ -55,6 +55,7 @@ class IosAlarmScheduler(): AlarmScheduler {
             ONDAlarmKit.scheduleCalendarWithId(
                 alarmUUID = alarm.alarmId.toString(),
                 dateComponents = comps,
+                repeatDays = info.repeatDays,
                 title = title,
                 scheduleId = info.scheduleId,
                 alarmId = alarm.alarmId,

@@ -45,6 +45,7 @@ public final class AlarmKitBridgeShim: NSObject {
     @objc public static func scheduleCalendar(
         id: String?,
         dateComponents: NSDateComponents,
+        repeatDays: [Int],
         title: String,
         scheduleId: Int64,
         alarmId: Int64,
@@ -56,12 +57,11 @@ public final class AlarmKitBridgeShim: NSObject {
         mapProvider: String,
         completion: @escaping (String?, String?) -> Void
     ) {
-        print("AlarmKitBridgeShim startLat: \(startLat), startLng: \(startLng)")
-        
         Task { @MainActor in
             AlarmKitBridge.shared.scheduleCalendar(
                 id: id,
                 dateComponents: dateComponents as DateComponents,
+                repeatDays: repeatDays,
                 title: title,
                 scheduleId: scheduleId,
                 alarmId: alarmId,
