@@ -43,8 +43,6 @@ class HomeViewModel(
     }
 
     init {
-        logGA("home_open")
-
         needsChooseProvider()
         observeMapProvider()
     }
@@ -140,7 +138,8 @@ class HomeViewModel(
                                 startLat = schedule.startLatitude,
                                 startLng = schedule.startLongitude,
                                 endLat = schedule.endLatitude,
-                                endLng = schedule.endLongitude
+                                endLng = schedule.endLongitude,
+                                repeatDays = schedule.repeatDays
                             )
                         )
                     }
@@ -154,7 +153,8 @@ class HomeViewModel(
                             startLat = schedule.startLatitude,
                             startLng = schedule.startLongitude,
                             endLat = schedule.endLatitude,
-                            endLng = schedule.endLongitude
+                            endLng = schedule.endLongitude,
+                            repeatDays = schedule.repeatDays
                         )
                     )
                 }
