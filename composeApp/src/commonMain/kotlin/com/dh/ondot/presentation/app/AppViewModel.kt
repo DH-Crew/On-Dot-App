@@ -5,6 +5,8 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.core.DirectionsFacade
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ToastType
@@ -144,7 +146,7 @@ class AppViewModel(
             "provider" to uiState.value.mapProvider.toString().lowercase()
         )
 
-        if (schedule.isRepeat) scheduleNextAlarm(schedule)
+        if (schedule.isRepeat && getPlatform().name == ANDROID) scheduleNextAlarm(schedule)
 
         emitEventFlow(AppEvent.NavigateToHome)
         DirectionsFacade.openDirections(
