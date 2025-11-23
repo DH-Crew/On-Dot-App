@@ -1,9 +1,11 @@
 package com.ondot.data.di
 
+import com.ondot.data.repository.AlarmRepositoryImpl
 import com.ondot.data.repository.AuthRepositoryImpl
 import com.ondot.data.repository.MemberRepositoryImpl
 import com.ondot.data.repository.PlaceRepositoryImpl
 import com.ondot.data.repository.ScheduleRepositoryImpl
+import com.ondot.domain.repository.AlarmRepository
 import com.ondot.domain.repository.AuthRepository
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
@@ -15,4 +17,5 @@ val repositoryModule = module {
     single<PlaceRepository> { PlaceRepositoryImpl(get()) }
     single<MemberRepository> { MemberRepositoryImpl(get(), get(), get()) }
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
+    single<AlarmRepository> { AlarmRepositoryImpl(get()) }
 }
