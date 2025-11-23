@@ -167,6 +167,8 @@ public final class AlarmKitBridge: NSObject {
                         systemImageName: "arrow.triangle.turn.up.right.circle.fill"
                     )
                     secondaryIntent = OpenMapsIntent(
+                        scheduleId: Int(scheduleId),
+                        alarmId: Int(alarmId),
                         startLat: startLat?.doubleValue,
                         startLng: startLng?.doubleValue,
                         endLat: endLat?.doubleValue,
@@ -231,6 +233,8 @@ public final class AlarmKitBridge: NSObject {
                     schedule: schedule,
                     attributes: attrs,
                     stopIntent: alarmType == "departure" ? OpenMapsIntent(
+                        scheduleId: Int(scheduleId),
+                        alarmId: Int(alarmId),
                         startLat: startLat?.doubleValue,
                         startLng: startLng?.doubleValue,
                         endLat: endLat?.doubleValue,
@@ -285,6 +289,8 @@ struct OpenMapsIntent: LiveActivityIntent {
     static var title: LocalizedStringResource { "Open Maps" }
     static var openAppWhenRun: Bool { true }
 
+    @Parameter(title: "Schedule Id") var scheduleId: Int
+    @Parameter(title: "Alarm Id") var alarmId: Int
     @Parameter(title: "Start Latitude") var startLat: Double?
     @Parameter(title: "Start Longitude") var startLng: Double?
     @Parameter(title: "End Latitude")   var endLat: Double?
@@ -295,6 +301,8 @@ struct OpenMapsIntent: LiveActivityIntent {
     init() {}
 
     init(
+        scheduleId: Int,
+        alarmId: Int,
         startLat: Double?,
         startLng: Double?,
         endLat: Double?,
@@ -302,6 +310,8 @@ struct OpenMapsIntent: LiveActivityIntent {
         name: String?,
         mapProvider: String?
     ) {
+        self.scheduleId = scheduleId
+        self.alarmId = alarmId
         self.startLat = startLat
         self.startLng = startLng
         self.endLat   = endLat
@@ -320,6 +330,8 @@ struct OpenMapsIntent: LiveActivityIntent {
         if let ud = UserDefaults(suiteName: "group.com.dh.ondot.shared") {
             ud.set(
                 [
+                    "scheduleId": scheduleId,
+                    "alarmId": alarmId,
                     "slat": sLat,
                     "slng": sLng,
                     "elat": eLat,

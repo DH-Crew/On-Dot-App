@@ -48,6 +48,8 @@ private func consumePendingDirectionsAndOpen() {
     ])
 
     // 파싱
+    let scheduleId = payload["scheduleId"] as? Int ?? -1
+    let alarmId = payload["alarmId"] as? Int ?? -1
     let slat = payload["slat"] as? Double
     let slng = payload["slng"] as? Double
     let elat = payload["elat"] as? Double
@@ -68,6 +70,12 @@ private func consumePendingDirectionsAndOpen() {
         default:      return .kakao
         }
     }()
+    
+    composeApp.TriggeredAlarmManager().recordTriggeredAlarm(
+        scheduleId: Int64(scheduleId),
+        alarmId: Int64(alarmId),
+        action: DomainAlarmAction.viewRoute
+    )
     
     composeApp.DirectionsFacade().openDirections(
         startLat: sLat, startLng: sLng,
