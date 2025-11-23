@@ -3,11 +3,13 @@ package com.dh.ondot.presentation.app
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.DirectionsFacade
+import com.dh.ondot.core.TriggeredAlarmManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
 import com.dh.ondot.getPlatform
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
+import com.ondot.domain.model.enums.AlarmAction
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.schedule.Schedule
@@ -92,6 +94,12 @@ class AppViewModel(
         updateState(uiState.value.copy(showPreparationStartAnimation = true))
 
         logGA("preparation_start")
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.START_PREPARE
+        )
     }
 
     fun snoozePreparationAlarm() {
@@ -103,6 +111,12 @@ class AppViewModel(
             "alarm_snooze_click",
             "alarm_type" to "preparation",
         )
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.SNOOZE
+        )
     }
 
     fun snoozeDepartureAlarm() {
@@ -113,6 +127,12 @@ class AppViewModel(
         logGA(
             "alarm_snooze_click",
             "alarm_type" to "departure",
+        )
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.SNOOZE
         )
     }
 
@@ -144,6 +164,12 @@ class AppViewModel(
             "directions_open",
             "schedule_id" to schedule.scheduleId,
             "provider" to uiState.value.mapProvider.toString().lowercase()
+        )
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.VIEW_ROUTE
         )
 
         if (schedule.isRepeat && getPlatform().name == ANDROID) scheduleNextAlarm(schedule)
