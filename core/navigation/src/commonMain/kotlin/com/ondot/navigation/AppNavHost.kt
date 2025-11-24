@@ -25,6 +25,7 @@ fun AppNavHost(
     }
     val start = contributors
         .firstOrNull { it.graphRoute == NavRoutes.SplashGraph }
+        ?.graphRoute
         ?: error("해당 Graph를 찾을 수 없습니다.")
 
     Box(
@@ -32,7 +33,7 @@ fun AppNavHost(
     ) {
         NavHost(
             navController = navController,
-            startDestination = start,
+            startDestination = start.route,
             enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { fullWidth -> fullWidth },
