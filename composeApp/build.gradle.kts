@@ -45,6 +45,7 @@ kotlin {
             implementation(projects.core.platform)
             implementation(projects.core.network)
             implementation(projects.core.util)
+            implementation(projects.core.navigation)
         }
 
         androidMain.dependencies {
