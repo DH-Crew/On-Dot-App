@@ -46,6 +46,13 @@ kotlin {
             implementation(projects.core.network)
             implementation(projects.core.util)
             implementation(projects.core.navigation)
+            implementation(projects.feature.alarm)
+            implementation(projects.feature.edit)
+            implementation(projects.feature.general)
+            implementation(projects.feature.login)
+            implementation(projects.feature.main)
+            implementation(projects.feature.onboarding)
+            implementation(projects.feature.splash)
         }
 
         androidMain.dependencies {
