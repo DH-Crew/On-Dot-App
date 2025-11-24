@@ -11,16 +11,17 @@ import com.ondot.main.setting.preparation_time.navigation.PreparationTimeNavGrap
 import com.ondot.main.setting.term.navigation.ServiceTermNavGraph
 import com.ondot.navigation.base.NavGraphContributor
 import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val mainModule = module {
     viewModelOf(::MainViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SettingViewModel)
-    single<NavGraphContributor> { MainNavGraph }
-    single<NavGraphContributor> { DeleteAccountNavGraph }
-    single<NavGraphContributor> { HomeAddressNavGraph }
-    single<NavGraphContributor> { NavMapSettingNavGraph }
-    single<NavGraphContributor> { PreparationTimeNavGraph }
-    single<NavGraphContributor> { ServiceTermNavGraph }
+    single<NavGraphContributor>(named("main")) { MainNavGraph }
+    single<NavGraphContributor>(named("delete")) { DeleteAccountNavGraph }
+    single<NavGraphContributor>(named("home")) { HomeAddressNavGraph }
+    single<NavGraphContributor>(named("navMap")) { NavMapSettingNavGraph }
+    single<NavGraphContributor>(named("preparation")) { PreparationTimeNavGraph }
+    single<NavGraphContributor>(named("service")) { ServiceTermNavGraph }
 }
