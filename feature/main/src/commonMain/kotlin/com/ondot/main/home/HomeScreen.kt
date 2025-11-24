@@ -30,9 +30,18 @@ import com.dh.ondot.presentation.ui.theme.MAP_PROVIDER_TITLE
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
+import com.ondot.design_system.components.MapProviderItem
+import com.ondot.design_system.components.OnDotText
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.main.home.components.AddScheduleButton
+import com.ondot.main.home.components.EmptyScheduleContent
+import com.ondot.main.home.components.RemainingTimeText
+import com.ondot.main.home.components.ScheduleList
+import com.ondot.main.home.components.UserBadgeBanner
 import com.ondot.util.AnalyticsLogger
+import ondot.core.design_system.generated.resources.Res
+import ondot.core.design_system.generated.resources.ic_banner
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
