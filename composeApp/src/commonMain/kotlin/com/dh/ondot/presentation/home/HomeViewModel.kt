@@ -246,7 +246,10 @@ class HomeViewModel(
 
     private fun onFailDeleteSchedule(e: Throwable) {
         logger.e { e.message.toString() }
-        viewModelScope.launch { ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR) }
+        viewModelScope.launch {
+            ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR)
+            getScheduleList()
+        }
     }
 
     /**--------------------------------------------알람 취소-----------------------------------------------*/
