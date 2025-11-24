@@ -28,6 +28,7 @@ import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
 import com.dh.ondot.core.ui.util.ToastHost
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 import com.ondot.domain.model.enums.AlarmType
+import com.ondot.navigation.AppNavHost
 import com.ondot.util.AlarmNotifier
 
 @Composable
@@ -49,54 +50,7 @@ fun App() {
 
     OnDotTheme {
         DismissKeyboardOnClick {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = NavRoutes.SplashGraph.route,
-                    enterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = { fullWidth -> fullWidth },
-                            animationSpec = tween(300, easing = FastOutSlowInEasing)
-                        )
-                    },
-                    exitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = { fullWidth -> -fullWidth },
-                            animationSpec = tween(300, easing = FastOutSlowInEasing)
-                        )
-                    },
-                    popEnterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = { fullWidth -> -fullWidth },
-                            animationSpec = tween(300, easing = FastOutSlowInEasing)
-                        )
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = { fullWidth -> fullWidth },
-                            animationSpec = tween(300, easing = FastOutSlowInEasing)
-                        )
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    alarmNavGraph(navController)
-                    splashNavGraph(navController = navController)
-                    loginNavGraph(navController = navController)
-                    onboardingNavGraph(navController = navController)
-                    mainNavGraph(navController = navController)
-                    generalScheduleNavGraph(navController = navController)
-                    editScheduleNavGraph(navController = navController)
-                    deleteAccountNavGraph(navController = navController)
-                    serviceTermsNavGraph(navController = navController)
-                    homeAddressSettingGraph(navController = navController)
-                    navMapSettingNavGraph(navController = navController)
-                    preparationTimeSettingGraph(navController = navController)
-                }
-
-                ToastHost()
-            }
+            AppNavHost(navController)
         }
     }
 }
