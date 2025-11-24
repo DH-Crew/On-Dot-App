@@ -163,7 +163,7 @@ fun CalendarContent(
     onDateSelected: (LocalDate) -> Unit
 ) {
     val offset = month.dayOfWeek.isoDayNumber % 7   // 일요일(7) -> 0으로 시작
-    val days = DateTimeFormatter.monthDays(month.year, month.monthNumber)
+    val days = DateTimeFormatter.monthDays(month.year, month.month.number)
     val totalCells = ((offset + days.size + 6) / 7) * 7
 
     Column(
@@ -227,7 +227,7 @@ fun DayCell(
         contentAlignment = Alignment.Center
     ) {
         OnDotText(
-            text = date?.dayOfMonth?.toString().orEmpty(),
+            text = date?.day?.toString().orEmpty(),
             style = OnDotTextStyle.BodyLargeR2,
             color =
                 if (isPossible) { if (isSelected) Green400 else Gray100 }
