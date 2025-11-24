@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,11 +21,15 @@ import com.dh.ondot.presentation.ui.theme.SERVICE_TERMS_TITLE
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.platform.webview.WebView
+import com.ondot.util.AnalyticsLogger
 
 @Composable
 fun ServiceTermsScreen(
     popScreen: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_service_term")
+    }
 
     Column(
         modifier = Modifier

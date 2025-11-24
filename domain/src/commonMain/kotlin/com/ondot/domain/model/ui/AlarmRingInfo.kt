@@ -13,4 +13,5 @@ data class AlarmRingInfo(
     val startLng: Double = 0.0,
     val endLat: Double = 0.0,
     val endLng: Double = 0.0,
+    val repeatDays: List<Int> = emptyList()
 )

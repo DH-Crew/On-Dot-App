@@ -18,6 +18,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.ROUTE_CALCULATE_LABEL
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.util.AnalyticsLogger
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -37,6 +38,10 @@ fun RouteLoadingScreen(
         composition,
         iterations = Compottie.IterateForever
     )
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_route_loading")
+    }
 
     LaunchedEffect(Unit) {
         delay(2000L)

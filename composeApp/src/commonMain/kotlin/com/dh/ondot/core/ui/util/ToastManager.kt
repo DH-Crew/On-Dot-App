@@ -12,7 +12,7 @@ object ToastManager {
     )
     val toasts: SharedFlow<ToastData> = _toasts
 
-    suspend fun show(message: String, type: ToastType, duration: Long = 2000L) {
-        _toasts.emit(ToastData(message = message, type = type, duration = duration))
+    suspend fun show(message: String, type: ToastType, duration: Long = 2000L, callback: () -> Unit = {}) {
+        _toasts.emit(ToastData(message = message, type = type, duration = duration, callback = callback))
     }
 }

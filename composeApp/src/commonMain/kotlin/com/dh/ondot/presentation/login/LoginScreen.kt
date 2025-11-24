@@ -22,6 +22,7 @@ import com.dh.ondot.presentation.ui.theme.IOS
 import com.dh.ondot.presentation.ui.theme.KAKAO_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.domain.model.enums.ButtonType
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_login
 import org.jetbrains.compose.resources.painterResource
@@ -33,6 +34,10 @@ fun LoginScreen(
     navigateToOnboarding: () -> Unit,
     navigateToMain: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_login")
+    }
+
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect {
             when (it) {

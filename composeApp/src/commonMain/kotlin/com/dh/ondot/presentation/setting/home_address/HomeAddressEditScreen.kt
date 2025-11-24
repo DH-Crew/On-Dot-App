@@ -57,6 +57,7 @@ import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.domain.model.member.AddressInfo
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource
@@ -69,6 +70,10 @@ fun HomeAddressEditScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf(uiState.homeAddress.roadAddress) }
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_home_address_edit")
+    }
 
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect { event ->

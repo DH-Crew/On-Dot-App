@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ondot.util.AnalyticsLogger
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -38,6 +39,10 @@ fun SplashScreen(
         composition,
         iterations = Compottie.IterateForever
     )
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_splash")
+    }
 
     LaunchedEffect(Unit) {
         delay(2000L)

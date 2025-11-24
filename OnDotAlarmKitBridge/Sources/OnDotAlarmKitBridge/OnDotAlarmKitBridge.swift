@@ -142,6 +142,7 @@ public final class AlarmKitBridge: NSObject {
     public func scheduleCalendar(
         id: String?,
         dateComponents: DateComponents,   // hour/minute 필수. year/month/day가 있으면 fixed, 아니면 relative
+        repeatDays: [Int], // 1: 일, 2: 월, ..., 7: 토
         title: String,
         scheduleId: Int64,
         alarmId: Int64,
@@ -166,6 +167,8 @@ public final class AlarmKitBridge: NSObject {
                         systemImageName: "arrow.triangle.turn.up.right.circle.fill"
                     )
                     secondaryIntent = OpenMapsIntent(
+                        scheduleId: Int(scheduleId),
+                        alarmId: Int(alarmId),
                         startLat: startLat?.doubleValue,
                         startLng: startLng?.doubleValue,
                         endLat: endLat?.doubleValue,
@@ -198,6 +201,23 @@ public final class AlarmKitBridge: NSObject {
                 )
 
                 let schedule: Alarm.Schedule = {
+                    let weekdays = repeatDays.compactMap { weekday(from: $0) }
+                    
+                    if !weekdays.isEmpty {
+                        let hour = dateComponents.hour ?? 0
+                        let minute = dateComponents.minute ?? 0
+                        let time = Alarm.Schedule.Relative.Time(hour: hour, minute: minute)
+
+                        let recurrence: Alarm.Schedule.Relative.Recurrence =
+                            .weekly(weekdays)
+
+                        let relative = Alarm.Schedule.Relative(
+                            time: time,
+                            repeats: recurrence
+                        )
+                        return .relative(relative)
+                    }
+                    
                     if dateComponents.year != nil || dateComponents.month != nil || dateComponents.day != nil,
                        let date = Calendar.current.date(from: dateComponents) {
                         return .fixed(date)
@@ -212,7 +232,16 @@ public final class AlarmKitBridge: NSObject {
                 let config = AlarmManager.AlarmConfiguration.alarm(
                     schedule: schedule,
                     attributes: attrs,
-                    stopIntent: nil,
+                    stopIntent: alarmType == "departure" ? OpenMapsIntent(
+                        scheduleId: Int(scheduleId),
+                        alarmId: Int(alarmId),
+                        startLat: startLat?.doubleValue,
+                        startLng: startLng?.doubleValue,
+                        endLat: endLat?.doubleValue,
+                        endLng: endLng?.doubleValue,
+                        name: title,
+                        mapProvider: mapProvider
+                    ) : nil,
                     secondaryIntent: secondaryIntent,
                     sound: .default
                 )
@@ -239,6 +268,20 @@ public final class AlarmKitBridge: NSObject {
             completion?(false)
         }
     }
+    
+    // repeatDays를 AlarmKit에서 활용할 수 있도록 변환
+    private func weekday(from value: Int) -> Locale.Weekday? {
+        switch value {
+        case 1: return .sunday
+        case 2: return .monday
+        case 3: return .tuesday
+        case 4: return .wednesday
+        case 5: return .thursday
+        case 6: return .friday
+        case 7: return .saturday
+        default: return nil
+        }
+    }
 }
 
 @available(iOS 26.0, *)
@@ -246,6 +289,8 @@ struct OpenMapsIntent: LiveActivityIntent {
     static var title: LocalizedStringResource { "Open Maps" }
     static var openAppWhenRun: Bool { true }
 
+    @Parameter(title: "Schedule Id") var scheduleId: Int
+    @Parameter(title: "Alarm Id") var alarmId: Int
     @Parameter(title: "Start Latitude") var startLat: Double?
     @Parameter(title: "Start Longitude") var startLng: Double?
     @Parameter(title: "End Latitude")   var endLat: Double?
@@ -256,6 +301,8 @@ struct OpenMapsIntent: LiveActivityIntent {
     init() {}
 
     init(
+        scheduleId: Int,
+        alarmId: Int,
         startLat: Double?,
         startLng: Double?,
         endLat: Double?,
@@ -263,6 +310,8 @@ struct OpenMapsIntent: LiveActivityIntent {
         name: String?,
         mapProvider: String?
     ) {
+        self.scheduleId = scheduleId
+        self.alarmId = alarmId
         self.startLat = startLat
         self.startLng = startLng
         self.endLat   = endLat
@@ -281,6 +330,8 @@ struct OpenMapsIntent: LiveActivityIntent {
         if let ud = UserDefaults(suiteName: "group.com.dh.ondot.shared") {
             ud.set(
                 [
+                    "scheduleId": scheduleId,
+                    "alarmId": alarmId,
                     "slat": sLat,
                     "slng": sLng,
                     "elat": eLat,

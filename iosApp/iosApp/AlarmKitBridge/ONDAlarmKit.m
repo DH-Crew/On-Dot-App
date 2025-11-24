@@ -39,6 +39,7 @@
 
 + (void)scheduleCalendarWithId:(NSString * _Nullable)alarmUUID
                 dateComponents:(NSDateComponents *)dateComponents
+                    repeatDays:(NSArray<NSNumber *> * _Nullable)repeatDays
                          title:(NSString *)title
                     scheduleId:(long long)scheduleId
                        alarmId:(long long)alarmId
@@ -54,6 +55,7 @@
 {
     [AlarmKitBridgeShim scheduleCalendarWithId:alarmUUID
                                  dateComponents:dateComponents
+                                    repeatDays: repeatDays
                                           title:title
                                      scheduleId:scheduleId
                                         alarmId:alarmId

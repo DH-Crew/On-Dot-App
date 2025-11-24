@@ -69,6 +69,7 @@ import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter.toIsoDateString
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_pencil_white
@@ -82,6 +83,10 @@ fun CheckScheduleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequest = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_schedule_review")
+    }
 
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {

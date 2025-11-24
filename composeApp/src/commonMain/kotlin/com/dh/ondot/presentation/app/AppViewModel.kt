@@ -3,11 +3,16 @@ package com.dh.ondot.presentation.app
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.dh.ondot.core.DirectionsFacade
+import com.dh.ondot.core.TriggeredAlarmManager
 import com.dh.ondot.core.ui.base.BaseViewModel
 import com.dh.ondot.core.ui.util.ToastManager
+import com.dh.ondot.getPlatform
+import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
+import com.ondot.domain.model.enums.AlarmAction
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.SchedulePreparation
 import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.repository.MemberRepository
@@ -89,6 +94,12 @@ class AppViewModel(
         updateState(uiState.value.copy(showPreparationStartAnimation = true))
 
         logGA("preparation_start")
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.START_PREPARE
+        )
     }
 
     fun snoozePreparationAlarm() {
@@ -99,6 +110,12 @@ class AppViewModel(
         logGA(
             "alarm_snooze_click",
             "alarm_type" to "preparation",
+        )
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.SNOOZE
         )
     }
 
@@ -111,15 +128,21 @@ class AppViewModel(
             "alarm_snooze_click",
             "alarm_type" to "departure",
         )
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.SNOOZE
+        )
     }
 
     @OptIn(ExperimentalTime::class)
     fun startDeparture() {
         soundPlayer.stopSound()
 
-        val info = uiState.value.schedule
-        val invalidCoords = listOf(info.startLatitude, info.startLongitude, info.endLatitude, info.endLongitude).any { it.isNaN() }
-                || ((info.startLatitude == 0.0 && info.startLongitude == 0.0) || (info.endLatitude == 0.0 && info.endLongitude == 0.0))
+        val schedule = uiState.value.schedule
+        val invalidCoords = listOf(schedule.startLatitude, schedule.startLongitude, schedule.endLatitude, schedule.endLongitude).any { it.isNaN() }
+                || ((schedule.startLatitude == 0.0 && schedule.startLongitude == 0.0) || (schedule.endLatitude == 0.0 && schedule.endLongitude == 0.0))
         if (invalidCoords) {
             logger.e { "Invalid coords: $invalidCoords" }
             return
@@ -139,20 +162,92 @@ class AppViewModel(
 
         logGA(
             "directions_open",
-            "schedule_id" to info.scheduleId,
+            "schedule_id" to schedule.scheduleId,
             "provider" to uiState.value.mapProvider.toString().lowercase()
         )
 
-        emitEventFlow(AppEvent.NavigateToSplash)
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.VIEW_ROUTE
+        )
+
+        if (schedule.isRepeat && getPlatform().name == ANDROID) scheduleNextAlarm(schedule)
+
+        emitEventFlow(AppEvent.NavigateToHome)
         DirectionsFacade.openDirections(
-            startLat = info.startLatitude,
-            startLng = info.startLongitude,
-            endLat = info.endLatitude,
-            endLng = info.endLongitude,
+            startLat = schedule.startLatitude,
+            startLng = schedule.startLongitude,
+            endLat = schedule.endLatitude,
+            endLng = schedule.endLongitude,
             startName = "출발지",
             endName = "도착지",
             provider = uiState.value.mapProvider
         )
+    }
+
+    private fun scheduleNextAlarm(schedule: Schedule) {
+        // 일: 1, 월: 2 ... 토: 7
+        val repeatDays = schedule.repeatDays
+        if (repeatDays.isEmpty()) return
+        // 현재 알람이 울린 일정의 요일 정보
+        val currentDayOfWeek = DateTimeFormatter.extractDayOfWeek(schedule.appointmentAt)
+
+        // currentDayOfWeek 이후에 오는 가장 가까운 요일 찾기
+        val candidate = repeatDays.firstOrNull { it > currentDayOfWeek } ?: repeatDays.first()
+
+        // 요일 간 차이를 일수로 변환 (0이면 다음 주)
+        var daysToAdd = (candidate - currentDayOfWeek + 7) % 7
+        if (daysToAdd == 0) daysToAdd = 7
+
+        // appointmentAt, 준비/출발 알람 시간을 모두 daysToAdd 만큼 밀기
+        val nextAppointmentAt = DateTimeFormatter.plusDays(schedule.appointmentAt, daysToAdd)
+        val nextPreparationAt = DateTimeFormatter.plusDays(schedule.preparationAlarm.triggeredAt, daysToAdd)
+        val nextDepartureAt = DateTimeFormatter.plusDays(schedule.departureAlarm.triggeredAt, daysToAdd)
+
+        // 다음 스케줄 객체 생성
+        val nextSchedule = schedule.copy(
+            appointmentAt = nextAppointmentAt,
+            preparationAlarm = schedule.preparationAlarm.copy(
+                triggeredAt = nextPreparationAt
+            ),
+            departureAlarm = schedule.departureAlarm.copy(
+                triggeredAt = nextDepartureAt
+            )
+        )
+
+        viewModelScope.launch {
+            scheduleRepository.upsertLocalSchedule(nextSchedule)
+
+            if (nextSchedule.preparationAlarm.enabled) {
+                val alarmInfo = AlarmRingInfo(
+                    alarm = nextSchedule.preparationAlarm,
+                    alarmType = AlarmType.Preparation,
+                    appointmentAt = nextSchedule.appointmentAt,
+                    scheduleTitle = nextSchedule.scheduleTitle,
+                    scheduleId = nextSchedule.scheduleId,
+                    startLat = nextSchedule.startLatitude,
+                    startLng = nextSchedule.startLongitude,
+                    endLat = nextSchedule.endLatitude,
+                    endLng = nextSchedule.endLongitude
+                )
+
+                alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
+            }
+
+            val alarmInfo = AlarmRingInfo(
+                alarm = nextSchedule.departureAlarm,
+                alarmType = AlarmType.Departure,
+                appointmentAt = nextSchedule.appointmentAt,
+                scheduleTitle = nextSchedule.scheduleTitle,
+                scheduleId = nextSchedule.scheduleId,
+                startLat = nextSchedule.startLatitude,
+                startLng = nextSchedule.startLongitude,
+                endLat = nextSchedule.endLatitude,
+                endLng = nextSchedule.endLongitude
+            )
+            alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
+        }
     }
 
     fun initAnimationFlags() {
@@ -167,7 +262,7 @@ class AppViewModel(
         var newSchedule = uiState.value.schedule
         var currentAlarm = uiState.value.currentAlarm
         val timeZone = TimeZone.of("Asia/Seoul")
-        val snoozedLocal = kotlin.time.Clock.System.now()
+        val snoozedLocal = Clock.System.now()
             .plus(currentAlarm.snoozeInterval.toLong(), DateTimeUnit.MINUTE, timeZone)
             .toLocalDateTime(timeZone)
         val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(snoozedLocal.date, snoozedLocal.time)

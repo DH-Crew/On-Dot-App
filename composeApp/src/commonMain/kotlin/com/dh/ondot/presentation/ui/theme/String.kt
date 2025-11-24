@@ -80,7 +80,7 @@ const val ONBOARDING1_SUB_TITLE = "30분, 1시간 20분 등 자유롭게 적어�
 const val ONBOARDING1_HOUR_PLACEHOLDER = "1자 이내의 숫자"
 const val ONBOARDING1_MINUTE_PLACEHOLDER = "2자 이내의 숫자"
 
-const val ONBOARDING2_TITLE = "주소를 입력해 주세요."
+const val ONBOARDING2_TITLE = "빠른 일정 등록을 위한 주소를 입력해 주세요."
 const val ONBOARDING2_TITLE_HIGHLIGHT = "주소"
 const val ONBOARDING2_SUB_TITLE = "빠른 일정 등록에 꼭 필요한 정보예요. \n집 주소는 안전하게 저장되며 언제든 수정할 수 있어요."
 const val ONBOARDING2_PLACEHOLDER = "도로명 주소"
@@ -113,10 +113,11 @@ const val ADD_SCHEDULE = "알람 추가"
 const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
 const val CREATE_SCHEDULE_GUIDE = "일정을 등록해 보세요"
 const val ALARM_IMMINENT = "곧 알람이 울려요"
+fun appointmentTime(time: String) = "약속: $time"
 
 // General
-const val SCHEDULE_REPEAT_TITLE = "스케줄 날짜와 시간을 선택해주세요."
-const val PLACE_PICKER_TITLE = "출발지와 목적지를 알려주세요."
+const val SCHEDULE_REPEAT_TITLE = "약속시간과 날짜를 알려주세요."
+const val PLACE_PICKER_TITLE = "출발지와 약속 장소를 알려주세요."
 const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
 const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
 const val DEPARTURE_FROM_HOME = "집에서 출발해요"

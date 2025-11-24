@@ -52,6 +52,7 @@ import com.ondot.domain.model.enums.TopBarType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.platform.util.BackPressHandler
+import com.ondot.util.AnalyticsLogger
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -64,6 +65,10 @@ fun PlacePickerScreen(
     val departureFocusRequester = remember { FocusRequester() }
     val arrivalFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_place_picker")
+    }
 
     BackPressHandler(
         onBack = {

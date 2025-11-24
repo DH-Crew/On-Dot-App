@@ -20,7 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.dh.ondot.presentation.home.HomeUiState
 import com.dh.ondot.presentation.ui.components.OnDotSwitch
 import com.dh.ondot.presentation.ui.components.OnDotText
 import com.dh.ondot.presentation.ui.components.SwipableDeleteItem
@@ -33,6 +35,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.WORD_DEPARTURE
 import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION
+import com.dh.ondot.presentation.ui.theme.appointmentTime
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.alarm.Alarm
@@ -151,6 +154,7 @@ private fun ScheduleInfoToggleSection(
         verticalAlignment = Alignment.Top
     ) {
         Column(
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
             if (isRepeat) {
@@ -175,10 +179,26 @@ private fun ScheduleInfoToggleSection(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            OnDotText(text = title, style = OnDotTextStyle.BodyLargeR1, color = Gray200)
-        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val appointmentTime = HomeUiState.appointmentAtTime(date)
 
-        Spacer(modifier = Modifier.weight(1f))
+                OnDotText(
+                    text = appointmentTime(appointmentTime),
+                    style = OnDotTextStyle.BodyLargeR1,
+                    color = Gray0
+                )
+
+                OnDotText(
+                    text = " | $title",
+                    style = OnDotTextStyle.BodyLargeR1,
+                    color = Gray200,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
 
         OnDotSwitch(
             checked = isEnabled,

@@ -35,6 +35,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_SAVE
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.util.AnalyticsLogger
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -43,6 +44,10 @@ fun PreparationTimeEditScreen(
     viewModel: SettingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_preparation_time_edit")
+    }
 
     PreparationTimeEditContent(
         hourInput = uiState.hourInput,

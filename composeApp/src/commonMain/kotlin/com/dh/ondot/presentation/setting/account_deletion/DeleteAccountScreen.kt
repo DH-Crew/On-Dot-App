@@ -60,6 +60,7 @@ import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.domain.model.ui.UserAnswer
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_warning_red
 import org.jetbrains.compose.resources.painterResource
@@ -72,6 +73,10 @@ fun DeleteAccountScreen(
     navigateToLoginScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_account_delete")
+    }
 
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {

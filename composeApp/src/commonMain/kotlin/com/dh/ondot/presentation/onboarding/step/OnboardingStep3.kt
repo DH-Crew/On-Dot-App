@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +40,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.WORD_MUTE
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.ui.AlarmSound
+import com.ondot.util.AnalyticsLogger
 import ondot.composeapp.generated.resources.Res
 import ondot.composeapp.generated.resources.ic_sound
 import org.jetbrains.compose.resources.painterResource
@@ -58,6 +60,10 @@ fun OnboardingStep3(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(Unit) {
+        AnalyticsLogger.logEvent("screen_view_onboarding_step_3")
+    }
 
     Column(
         modifier = Modifier
