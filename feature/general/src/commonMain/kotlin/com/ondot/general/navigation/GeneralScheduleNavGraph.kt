@@ -27,7 +27,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
         ) {
             composable(NavRoutes.ScheduleRepeatSetting.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute)
+                    navController.getBackStackEntry(graphRoute.route)
                 }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
@@ -35,7 +35,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
                     viewModel = viewModel,
                     navigateToMain = {
                         navController.navigate(NavRoutes.Main.route) {
-                            popUpTo(graphRoute) { inclusive = true }
+                            popUpTo(graphRoute.route) { inclusive = true }
                             launchSingleTop = true
                         }
                     },
@@ -49,7 +49,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
 
             composable(NavRoutes.PlacePicker.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute)
+                    navController.getBackStackEntry(graphRoute.route)
                 }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
@@ -79,7 +79,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
 
             composable(NavRoutes.CheckSchedule.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute)
+                    navController.getBackStackEntry(graphRoute.route)
                 }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
@@ -88,7 +88,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
                     popScreen = { navController.popBackStack() },
                     navigateToMain = {
                         navController.navigate(NavRoutes.Main.route) {
-                            popUpTo(graphRoute) { inclusive = true }
+                            popUpTo(graphRoute.route) { inclusive = true }
                             launchSingleTop = true
                         }
                     }

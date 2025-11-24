@@ -25,7 +25,7 @@ object HomeAddressNavGraph: NavGraphContributor {
         ) {
             composable(NavRoutes.HomeAddressSetting.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute)
+                    navController.getBackStackEntry(graphRoute.route)
                 }
                 val viewModel: SettingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
@@ -42,7 +42,7 @@ object HomeAddressNavGraph: NavGraphContributor {
 
             composable(NavRoutes.HomeAddressEdit.route) { backStackEntry ->
                 val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute)
+                    navController.getBackStackEntry(graphRoute.route)
                 }
                 val viewModel: SettingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
