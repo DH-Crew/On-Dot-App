@@ -20,11 +20,12 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
 
         extensions.configure<KotlinMultiplatformExtension> {
             sourceSets.commonMain.dependencies {
-//                implementation(project(":domain"))
-//                implementation(project(":core:ui"))
-//                implementation(project(":core:navigation"))
-//                implementation(project(":core:platform"))
-//                implementation(project(":core:design-system"))
+                implementation(project(":domain"))
+                implementation(project(":core:ui"))
+                implementation(project(":core:navigation"))
+                implementation(project(":core:platform"))
+                implementation(project(":core:util"))
+                implementation(project(":core:design-system"))
 
                 implementation(libs.findLibrary("navigation").get())
             }
