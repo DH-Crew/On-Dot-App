@@ -22,6 +22,7 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
             sourceSets.commonMain.dependencies {
                 implementation(project(":domain"))
                 implementation(project(":core:ui"))
+                implementation(project(":core:bridge"))
                 implementation(project(":core:navigation"))
                 implementation(project(":core:platform"))
                 implementation(project(":core:util"))
