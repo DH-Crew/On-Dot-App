@@ -4,6 +4,7 @@ import com.ondot.ui.base.UiState
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 
@@ -20,7 +21,7 @@ data class EditBottomSheetUiState @OptIn(ExperimentalTime::class) constructor(
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .let { today ->
-            LocalDate(today.year, today.monthNumber, 1)
+            LocalDate(today.year, today.month.number, 1)
         },
 
     /**
