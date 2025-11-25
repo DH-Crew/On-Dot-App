@@ -5,7 +5,10 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.app.AlarmUiState
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
+import com.ondot.bridge.DirectionsFacade
+import com.ondot.bridge.TriggeredAlarmManager
 import com.ondot.design_system.getPlatform
+import com.ondot.domain.model.enums.AlarmAction
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.schedule.Schedule
@@ -93,11 +96,11 @@ class AlarmViewModel(
 
         logGA("preparation_start")
 
-//        TriggeredAlarmManager.recordTriggeredAlarm(
-//            scheduleId = uiState.value.schedule.scheduleId,
-//            alarmId = uiState.value.currentAlarm.alarmId,
-//            action = AlarmAction.START_PREPARE
-//        )
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.START_PREPARE
+        )
     }
 
     fun snoozePreparationAlarm() {
@@ -110,11 +113,11 @@ class AlarmViewModel(
             "alarm_type" to "preparation",
         )
 
-//        TriggeredAlarmManager.recordTriggeredAlarm(
-//            scheduleId = uiState.value.schedule.scheduleId,
-//            alarmId = uiState.value.currentAlarm.alarmId,
-//            action = AlarmAction.SNOOZE
-//        )
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.SNOOZE
+        )
     }
 
     fun snoozeDepartureAlarm() {
@@ -126,12 +129,12 @@ class AlarmViewModel(
             "alarm_snooze_click",
             "alarm_type" to "departure",
         )
-//
-//        TriggeredAlarmManager.recordTriggeredAlarm(
-//            scheduleId = uiState.value.schedule.scheduleId,
-//            alarmId = uiState.value.currentAlarm.alarmId,
-//            action = AlarmAction.SNOOZE
-//        )
+
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.SNOOZE
+        )
     }
 
     @OptIn(ExperimentalTime::class)
@@ -164,24 +167,24 @@ class AlarmViewModel(
             "provider" to uiState.value.mapProvider.toString().lowercase()
         )
 
-//        TriggeredAlarmManager.recordTriggeredAlarm(
-//            scheduleId = uiState.value.schedule.scheduleId,
-//            alarmId = uiState.value.currentAlarm.alarmId,
-//            action = AlarmAction.VIEW_ROUTE
-//        )
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            scheduleId = uiState.value.schedule.scheduleId,
+            alarmId = uiState.value.currentAlarm.alarmId,
+            action = AlarmAction.VIEW_ROUTE
+        )
 
         if (schedule.isRepeat && getPlatform() == ANDROID) scheduleNextAlarm(schedule)
 
         emitEventFlow(AlarmEvent.NavigateToHome)
-//        DirectionsFacade.openDirections(
-//            startLat = schedule.startLatitude,
-//            startLng = schedule.startLongitude,
-//            endLat = schedule.endLatitude,
-//            endLng = schedule.endLongitude,
-//            startName = "출발지",
-//            endName = "도착지",
-//            provider = uiState.value.mapProvider
-//        )
+        DirectionsFacade.openDirections(
+            startLat = schedule.startLatitude,
+            startLng = schedule.startLongitude,
+            endLat = schedule.endLatitude,
+            endLng = schedule.endLongitude,
+            startName = "출발지",
+            endName = "도착지",
+            provider = uiState.value.mapProvider
+        )
     }
 
     private fun scheduleNextAlarm(schedule: Schedule) {
