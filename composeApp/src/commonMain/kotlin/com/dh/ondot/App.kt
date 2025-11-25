@@ -1,34 +1,13 @@
 package com.dh.ondot
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.dh.ondot.core.navigation.NavRoutes
-import com.dh.ondot.core.navigation.alarmNavGraph
-import com.dh.ondot.core.navigation.deleteAccountNavGraph
-import com.dh.ondot.core.navigation.editScheduleNavGraph
-import com.dh.ondot.core.navigation.generalScheduleNavGraph
-import com.dh.ondot.core.navigation.homeAddressSettingGraph
-import com.dh.ondot.core.navigation.loginNavGraph
-import com.dh.ondot.core.navigation.mainNavGraph
-import com.dh.ondot.core.navigation.navMapSettingNavGraph
-import com.dh.ondot.core.navigation.onboardingNavGraph
-import com.dh.ondot.core.navigation.preparationTimeSettingGraph
-import com.dh.ondot.core.navigation.serviceTermsNavGraph
-import com.dh.ondot.core.navigation.splashNavGraph
-import com.dh.ondot.core.ui.util.DismissKeyboardOnClick
-import com.dh.ondot.core.ui.util.ToastHost
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.navigation.AppNavHost
+import com.ondot.navigation.NavRoutes
+import com.ondot.ui.util.DismissKeyboardOnClick
 import com.ondot.util.AlarmNotifier
 
 @Composable
