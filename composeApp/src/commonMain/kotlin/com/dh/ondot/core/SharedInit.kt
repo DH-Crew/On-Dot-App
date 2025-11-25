@@ -1,6 +1,5 @@
 package com.dh.ondot.core
 
-import com.dh.ondot.presentation.app.di.ringModule
 import com.ondot.alarm.di.alarmModule
 import com.ondot.data.di.dataSourceModule
 import com.ondot.data.di.databaseModule
@@ -25,7 +24,6 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
             listOf(
                 repositoryModule,
                 networkModule,
-                ringModule,
                 dataSourceModule,
                 databaseModule,
                 splashModule,
