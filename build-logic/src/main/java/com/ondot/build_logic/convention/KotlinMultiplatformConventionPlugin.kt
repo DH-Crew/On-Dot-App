@@ -45,12 +45,6 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 binaries.framework {
                     baseName = (findProperty("xcframework.basename") as String?) ?: project.name
                     isStatic = true
-
-                    if (project.name == "composeApp") {
-                        export(":core:util")
-
-                        transitiveExport = true
-                    }
                 }
             }
 
@@ -70,7 +64,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             }
 
             if (project.name == "composeApp") {
-                val xcFramework = XCFramework("ComposeApp")
+                val xcFramework = XCFramework("composeApp")
                 listOf("Debug","Release").forEach { bt ->
                     listOf(iosArm64T, iosSimArm64T, iosX64T).forEach { t ->
                         xcFramework.add(t.binaries.getFramework(bt))
