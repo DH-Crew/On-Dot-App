@@ -12,7 +12,7 @@ object MainNavGraph: NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.MainGraph
     override val startDestination: String
-        get() = NavRoutes.Home.route
+        get() = NavRoutes.Main.route
 
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
