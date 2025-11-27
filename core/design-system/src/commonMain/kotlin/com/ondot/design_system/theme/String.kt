@@ -113,7 +113,7 @@ const val ADD_SCHEDULE = "알람 추가"
 const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
 const val CREATE_SCHEDULE_GUIDE = "일정을 등록해 보세요"
 const val ALARM_IMMINENT = "곧 알람이 울려요"
-fun appointmentTime(time: String) = "약속: $time"
+fun appointmentTime(time: String) = "일정 $time"
 
 // General
 const val SCHEDULE_REPEAT_TITLE = "약속시간과 날짜를 알려주세요."
