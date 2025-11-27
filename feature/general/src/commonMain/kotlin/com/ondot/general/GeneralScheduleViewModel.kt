@@ -72,13 +72,6 @@ class GeneralScheduleViewModel(
                     }
                 }
                 .filter { it.isNotBlank() }
-                .onEach { q ->
-                    logGA(
-                        "place_search",
-                        "field" to uiState.value.lastFocusedTextField.name.lowercase(),
-                        "query_len" to q.length
-                    )
-                }
                 .flatMapLatest { q ->
                     placeRepository.searchPlace(q)
                 }
