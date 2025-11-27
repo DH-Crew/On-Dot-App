@@ -46,7 +46,8 @@ fun RoundedTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(
         keyboardType = KeyboardType.Number
     ),
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    contentAlignment: Alignment = Alignment.CenterStart
 ) {
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
@@ -73,7 +74,7 @@ fun RoundedTextField(
                     }
                 }
             ),
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = contentAlignment
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

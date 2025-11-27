@@ -196,7 +196,8 @@ fun CheckScheduleContent(
             ) {
                 OnDotBottomSheet(
                     onDismiss = onDismiss,
-                    content = { BottomSheetContent(onCreateSchedule = onCreateSchedule) }
+                    content = { BottomSheetContent(onCreateSchedule = onCreateSchedule) },
+                    scrollable = false
                 )
             }
         }
@@ -258,7 +259,8 @@ private fun BottomSheetContent(
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
-            )
+            ),
+            contentAlignment = Alignment.TopStart
         )
 
         Spacer(modifier = Modifier.height(26.dp))
