@@ -106,12 +106,12 @@ const val ONBOARDING5_ANSWER3 = "계획한 하루를 흐트러짐 없이 보내�
 const val ONBOARDING5_ANSWER4 = "지각 걱정 없이 신뢰받는 사람이 되고 싶어서"
 
 // Home
-const val EMPTY_SCHEDULE = "등록된 알람이 없어요"
+const val EMPTY_SCHEDULE = "지금 바로 알람을 생성해보세요!"
 const val QUICK_ADD = "빠른 일정 생성"
 const val GENERAL_ADD = "일반 일정 생성"
 const val ADD_SCHEDULE = "알람 추가"
 const val EMPTY_PREPARATION_ALARM = "준비시작 알람 없음"
-const val CREATE_SCHEDULE_GUIDE = "일정을 등록해 보세요"
+const val CREATE_SCHEDULE_GUIDE = "예정된 일정이 있나요?"
 const val ALARM_IMMINENT = "곧 알람이 울려요"
 fun appointmentTime(time: String) = "일정 $time"
 
@@ -121,7 +121,7 @@ const val PLACE_PICKER_TITLE = "출발지와 약속 장소를 알려주세요."
 const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
 const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
 const val DEPARTURE_FROM_HOME = "집에서 출발해요"
-const val ROUTE_CALCULATE_LABEL = "출발시간과 준비시간을 계산 중이에요"
+const val ROUTE_CALCULATE_LABEL = "약속 장소에 촉박하게 도착하지 않도록\n10분~15분 여유시간을 확보해 드릴게요"
 const val NEW_SCHEDULE_LABEL = "새로운 일정"
 const val DEPARTURE_ALARM_LABEL = "출발 알람"
 const val PREPARATION_ALARM_LABEL = "준비 알람"
