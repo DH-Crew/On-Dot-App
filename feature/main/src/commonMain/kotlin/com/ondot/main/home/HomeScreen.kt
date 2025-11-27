@@ -99,11 +99,7 @@ fun HomeContent(
                 .fillMaxSize()
                 .padding(horizontal = 22.dp)
         ) {
-            Spacer(modifier = Modifier.height(33.dp))
-
-            UserBadgeBanner()
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(23.dp))
 
             if (uiState.remainingTime.first != -1) {
                 RemainingTimeText(
@@ -115,7 +111,7 @@ fun HomeContent(
                 OnDotText(text = CREATE_SCHEDULE_GUIDE, style = OnDotTextStyle.TitleMediumSB, color = Gray0)
             }
 
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             if (uiState.scheduleList.isEmpty()) {
                 Image(
@@ -126,9 +122,14 @@ fun HomeContent(
                         .aspectRatio(349f/100f)
                 )
 
-                Spacer(modifier = Modifier.height(120.dp))
-
-                EmptyScheduleContent()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    EmptyScheduleContent()
+                }
             } else {
                 ScheduleList(
                     scheduleList = uiState.scheduleList,
