@@ -30,6 +30,7 @@ fun OnDotBottomSheet(
     contentPaddingTop: Dp = 32.dp,
     contentPaddingBottom: Dp = 50.dp,
     sheetMaxHeightFraction: Float = 0.6f,
+    scrollable: Boolean = true,
     onDismiss: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -61,7 +62,7 @@ fun OnDotBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(max = maxSheetHeight)
-                    .verticalScroll(scrollState)
+                    .verticalScroll(state = scrollState, enabled = scrollable)
                     .background(Gray700, RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
                     .imePadding()
                     .padding(horizontal = 22.dp)
