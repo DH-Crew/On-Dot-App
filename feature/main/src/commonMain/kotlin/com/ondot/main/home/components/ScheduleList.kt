@@ -3,6 +3,7 @@ package com.ondot.main.home.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -51,6 +53,7 @@ fun ScheduleList(
     interactionSource: MutableInteractionSource,
     onClickSwitch: (Long, Boolean) -> Unit,
     onClickSchedule: (Long) -> Unit,
+    onLongClick: (Long) -> Unit,
     onDelete: (Long) -> Unit,
 ) {
     LazyColumn(
@@ -77,7 +80,8 @@ fun ScheduleList(
                     item = it,
                     interactionSource = interactionSource,
                     onClickSwitch = onClickSwitch,
-                    onClickSchedule = onClickSchedule
+                    onClickSchedule = onClickSchedule,
+                    onLongClick = onLongClick
                 )
             }
 
@@ -91,17 +95,19 @@ fun ScheduleListItem(
     item: Schedule,
     interactionSource: MutableInteractionSource,
     onClickSwitch: (Long, Boolean) -> Unit,
-    onClickSchedule: (Long) -> Unit
+    onClickSchedule: (Long) -> Unit,
+    onLongClick: (Long) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Gray700, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
-            .clickable(
-                indication = null,
+            .combinedClickable(
                 interactionSource = interactionSource,
-                onClick = { onClickSchedule(item.scheduleId) }
+                indication = null,
+                onClick = { onClickSchedule(item.scheduleId) },
+                onLongClick = { onLongClick(item.scheduleId) }
             ),
         horizontalAlignment = Alignment.Start
     ) {

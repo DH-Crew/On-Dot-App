@@ -70,6 +70,7 @@ fun HomeScreen(
         onConfirmProvider = {
             viewModel.setMapProvider(it)
         },
+        onLongClick = viewModel::openDirections,
         onDelete = { viewModel.deleteSchedule(it) },
         navigateToGeneralSchedule = navigateToGeneralSchedule,
         navigateToEditSchedule = navigateToEditSchedule
@@ -83,6 +84,7 @@ fun HomeContent(
     onToggle: () -> Unit,
     onClickAlarmSwitch: (Long, Boolean) -> Unit,
     onConfirmProvider: (MapProvider) -> Unit,
+    onLongClick: (Long) -> Unit,
     onDelete: (Long) -> Unit,
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit
@@ -133,6 +135,7 @@ fun HomeContent(
                     interactionSource = interactionSource,
                     onClickSwitch = onClickAlarmSwitch,
                     onClickSchedule = navigateToEditSchedule,
+                    onLongClick = onLongClick,
                     onDelete = onDelete
                 )
             }

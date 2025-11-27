@@ -20,6 +20,7 @@ import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
@@ -32,7 +33,8 @@ class HomeViewModel(
     private val memberRepository: MemberRepository,
     private val alarmScheduler: AlarmScheduler,
     private val analyticsManager: AnalyticsManager,
-    private val notificationScheduler: LocalNotificationScheduler
+    private val notificationScheduler: LocalNotificationScheduler,
+    private val directionsOpener: DirectionsOpener
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
@@ -267,5 +269,21 @@ class HomeViewModel(
                 "preparation_alarm_id" to it.preparationAlarm.alarmId
             )
         }
+    }
+
+    /**--------------------------------------------경로 안내-----------------------------------------------*/
+
+    fun openDirections(id: Long) {
+        val schedule = uiState.value.scheduleList.first { it.scheduleId == id }
+
+        directionsOpener.openDirections(
+            startLat = schedule.startLatitude,
+            startLng = schedule.startLongitude,
+            endLat = schedule.endLatitude,
+            endLng = schedule.endLongitude,
+            provider = mapProvider,
+            startName = "출발지",
+            endName = "도착지"
+        )
     }
 }
