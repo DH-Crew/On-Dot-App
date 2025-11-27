@@ -152,7 +152,7 @@ private fun ScheduleInfoToggleSection(
     repeatDays: List<Int>,
     onToggleClick: (Boolean) -> Unit
 ) {
-    val formattedDate = DateTimeFormatter.formatDate(date, ".")
+    val formattedDate = DateTimeFormatter.formatDateWithDayOfWeek(date)
 
     Row(
         modifier = Modifier
