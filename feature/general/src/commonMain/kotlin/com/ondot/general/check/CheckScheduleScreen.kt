@@ -71,6 +71,7 @@ import com.ondot.general.GeneralScheduleUiState
 import com.ondot.general.GeneralScheduleViewModel
 import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter.toIsoDateString
+import com.ondot.util.platform
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_pencil_white
 import org.jetbrains.compose.resources.painterResource
@@ -197,7 +198,7 @@ fun CheckScheduleContent(
                 OnDotBottomSheet(
                     onDismiss = onDismiss,
                     content = { BottomSheetContent(onCreateSchedule = onCreateSchedule) },
-                    scrollable = false
+                    scrollable = platform() != ANDROID
                 )
             }
         }
