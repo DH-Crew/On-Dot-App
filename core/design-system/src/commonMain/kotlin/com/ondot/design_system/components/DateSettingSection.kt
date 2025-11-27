@@ -50,7 +50,7 @@ fun DateSettingSection(
     onTimeSelected: (LocalTime) -> Unit
 ) {
     val periodState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
-    val hourState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
+    val hourState = rememberLazyListState(initialFirstVisibleItemIndex = 12)
     val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
 
     Column(
