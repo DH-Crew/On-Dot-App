@@ -7,6 +7,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
  * 프로젝트 타깃, 빌드 산출물 설정
  * */
 class KotlinMultiplatformConventionPlugin : Plugin<Project> {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     override fun apply(project: Project) = with(project) {
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
         pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
@@ -61,18 +63,20 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 }
             }
 
-            val xcFramework = XCFramework("ComposeApp")
-            listOf("Debug","Release").forEach { bt ->
-                listOf(iosArm64T, iosSimArm64T, iosX64T).forEach { t ->
-                    xcFramework.add(t.binaries.getFramework(bt))
+            if (project.name == "composeApp") {
+                val xcFramework = XCFramework("composeApp")
+                listOf("Debug","Release").forEach { bt ->
+                    listOf(iosArm64T, iosSimArm64T, iosX64T).forEach { t ->
+                        xcFramework.add(t.binaries.getFramework(bt))
+                    }
                 }
-            }
 
-            tasks.register("packXCFramework") {
-                dependsOn(
-                    "linkDebugFrameworkIosArm64","linkDebugFrameworkIosSimulatorArm64","linkDebugFrameworkIosX64",
-                    "linkReleaseFrameworkIosArm64","linkReleaseFrameworkIosSimulatorArm64","linkReleaseFrameworkIosX64"
-                )
+                tasks.register("packXCFramework") {
+                    dependsOn(
+                        "linkDebugFrameworkIosArm64","linkDebugFrameworkIosSimulatorArm64","linkDebugFrameworkIosX64",
+                        "linkReleaseFrameworkIosArm64","linkReleaseFrameworkIosSimulatorArm64","linkReleaseFrameworkIosX64"
+                    )
+                }
             }
         }
     }

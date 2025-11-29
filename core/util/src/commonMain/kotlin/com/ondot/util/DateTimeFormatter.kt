@@ -70,6 +70,14 @@ object DateTimeFormatter {
 
     fun formatDate(iso: String, delimiter: String = "."): String = parseYMD(iso).format(delimiter)
 
+    /** 2025. 11. 28 (금) 형태로 포맷 */
+    fun formatDateWithDayOfWeek(iso: String): String {
+        val date = formatDate(iso, ". ")
+        val dayOfWeek = extractShortDayOfWeek(iso)
+
+        return "$date ($dayOfWeek)"
+    }
+
     /** 06월 13일 화요일 형태로 포맷 */
     fun formatKoreanDate(iso: String): String = parseYMD(iso).formatKoreanDate()
 
@@ -101,6 +109,23 @@ object DateTimeFormatter {
             DayOfWeek.FRIDAY    -> 6
             DayOfWeek.SATURDAY  -> 7
             DayOfWeek.SUNDAY    -> 1
+        }
+
+        return dayOfWeek
+    }
+
+    /** iso의 요일 정보를 짧은 요일로 추출 */
+    fun extractShortDayOfWeek(iso: String): String {
+        val ymd = parseYMD(iso)
+        val date = LocalDate(ymd.year, ymd.month, ymd.day)
+        val dayOfWeek = when (date.dayOfWeek) {
+            DayOfWeek.MONDAY    -> "월"
+            DayOfWeek.TUESDAY   -> "화"
+            DayOfWeek.WEDNESDAY -> "수"
+            DayOfWeek.THURSDAY  -> "목"
+            DayOfWeek.FRIDAY    -> "금"
+            DayOfWeek.SATURDAY  -> "토"
+            DayOfWeek.SUNDAY    -> "일"
         }
 
         return dayOfWeek
