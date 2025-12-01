@@ -223,6 +223,7 @@ class HomeViewModel(
             }
         }
 
+        cancelAlarms(scheduleId)
         updateState(uiState.value.copy(scheduleList = newList))
 
         viewModelScope.launch {
@@ -240,7 +241,6 @@ class HomeViewModel(
     }
 
     private fun onSuccessDeleteSchedule(scheduleId: Long) {
-        cancelAlarms(scheduleId)
         notificationScheduler.cancel(scheduleId.toString())
         updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }))
         getScheduleList()
