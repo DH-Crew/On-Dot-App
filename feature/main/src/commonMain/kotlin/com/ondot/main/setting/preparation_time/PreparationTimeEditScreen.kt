@@ -10,15 +10,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.ERROR_INVALID_MINUTE_INPUT
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE
+import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green300
@@ -51,7 +55,7 @@ fun PreparationTimeEditScreen(
     PreparationTimeEditContent(
         hourInput = uiState.hourInput,
         minuteInput = uiState.minuteInput,
-        buttonEnabled = uiState.hourInput.isNotEmpty() || uiState.minuteInput.isNotEmpty(),
+        buttonEnabled = viewModel.isPreparationTimeEditable(),
         onHourInputChanged = viewModel::onHourInputChanged,
         onMinuteInputChanged = viewModel::onMinuteInputChanged,
         onSaveClick = viewModel::updatePreparationTime,
@@ -81,6 +85,13 @@ fun PreparationTimeEditContent(
     onSaveClick: () -> Unit,
     popScreen: () -> Unit
 ) {
+    val showError by remember(minuteInput) {
+        derivedStateOf {
+            val m = minuteInput.toIntOrNull()
+            m != null && m > 59
+        }
+    }
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -111,6 +122,16 @@ fun PreparationTimeEditContent(
             onHourInputChanged = onHourInputChanged,
             onMinuteInputChanged = onMinuteInputChanged
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (showError) {
+            OnDotText(
+                text = ERROR_INVALID_MINUTE_INPUT,
+                style = OnDotTextStyle.BodySmallR1,
+                color = OnDotColor.Red
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 
