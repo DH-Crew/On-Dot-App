@@ -34,6 +34,7 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
             sourceSets.commonTest.dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.findLibrary("coroutines-test").get())
+                implementation(project(":domain:testing"))
             }
         }
     }
