@@ -94,6 +94,9 @@ koin = "4.1.1"
 amplitude = "1.+"
 amplitudeSessionReplay = "0.20.14"
 
+# Test
+coroutines-test = "1.10.2"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -224,3 +227,11 @@ koinComposeViewModel              = { module = "io.insert-koin:koin-compose-view
 
 amplitude-analytics             = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
 amplitude-session-replay        = { module = "com.amplitude:plugin-session-replay-android", version.ref = "amplitudeSessionReplay" }
+
+# Test
+coroutines-test                 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
+
+
+
+
+
