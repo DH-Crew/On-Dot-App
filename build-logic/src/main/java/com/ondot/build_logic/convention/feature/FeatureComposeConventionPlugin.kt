@@ -30,6 +30,11 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
 
                 implementation(libs.findLibrary("navigation").get())
             }
+
+            sourceSets.commonTest.dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.findLibrary("coroutines-test").get())
+            }
         }
     }
 }
