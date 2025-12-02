@@ -7,6 +7,8 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
+import com.ondot.bridge.TriggeredAlarmManager
+import com.ondot.domain.model.enums.AlarmAction
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
@@ -165,6 +167,7 @@ class HomeViewModel(
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
                 alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
+                TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
             }
         }
     }
@@ -223,6 +226,7 @@ class HomeViewModel(
             }
         }
 
+        cancelAlarms(scheduleId)
         updateState(uiState.value.copy(scheduleList = newList))
 
         viewModelScope.launch {
@@ -240,7 +244,6 @@ class HomeViewModel(
     }
 
     private fun onSuccessDeleteSchedule(scheduleId: Long) {
-        cancelAlarms(scheduleId)
         notificationScheduler.cancel(scheduleId.toString())
         updateState(uiState.value.copy(scheduleList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }))
         getScheduleList()

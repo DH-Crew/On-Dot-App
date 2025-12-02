@@ -285,4 +285,11 @@ class SettingViewModel(
     fun isButtonEnabled(): Boolean {
         return uiState.value.selectedReasonIndex != 5 || uiState.value.userInput.isNotEmpty()
     }
+
+    // 준비 시간 설정 버튼 활성화
+    fun isPreparationTimeEditable(): Boolean {
+        val hour = uiState.value.hourInput.toIntOrNull() ?: 0
+        val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
+        return hour > 0 || minute in 1..59
+    }
 }
