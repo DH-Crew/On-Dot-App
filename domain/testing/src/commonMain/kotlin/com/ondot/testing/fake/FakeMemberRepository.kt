@@ -57,41 +57,82 @@ class FakeMemberRepository: MemberRepository {
         }
     }
 
-    override suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>> {
-        TODO("Not yet implemented")
+    override suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>> = flow {
+        if (shouldFailHomeAddress) {
+            emit(Result.failure(Exception("home address 실패")))
+        } else {
+            val value = homeAddress ?: HomeAddressInfo(
+                roadAddress = "기본 주소",
+                latitude = 37.0,
+                longitude = 127.0
+            ).also { homeAddress = it }
+
+            emit(Result.success(value))
+        }
     }
 
-    override suspend fun getPreparationTime(): Flow<Result<PreparationTime>> {
-        TODO("Not yet implemented")
+    override suspend fun getPreparationTime(): Flow<Result<PreparationTime>> = flow {
+        if (shouldFailPreparationTime) {
+            emit(Result.failure(Exception("preparation time 실패")))
+        } else {
+            val value = preparationTime ?: PreparationTime(
+                preparationTime = 30
+            ).also { preparationTime = it }
+
+            emit(Result.success(value))
+        }
     }
 
-    override suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
+    override suspend fun withdrawUser(request: DeleteAccountRequest): Flow<Result<Unit>> = flow {
+        lastDeleteAccountRequest = request
+        if (shouldFailWithdraw) {
+            emit(Result.failure(Exception("withdraw 실패")))
+        } else {
+            emit(Result.success(Unit))
+        }
     }
 
-    override suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
+    override suspend fun updateMapProvider(request: MapProviderRequest): Flow<Result<Unit>> = flow {
+        lastMapProviderRequest = request
+        if (shouldFailUpdateMapProvider) {
+            emit(Result.failure(Exception("map provider 업데이트 실패")))
+        } else {
+            mapProviderFlow.value = request.mapProvider
+            emit(Result.success(Unit))
+        }
     }
 
-    override suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
+    override suspend fun updateHomeAddress(request: HomeAddressRequest): Flow<Result<Unit>> = flow {
+        lastHomeAddressRequest = request
+        if (shouldFailUpdateHomeAddress) {
+            emit(Result.failure(Exception("home address 업데이트 실패")))
+        } else {
+            homeAddress = HomeAddressInfo(
+                roadAddress = request.roadAddress,
+                latitude = request.latitude,
+                longitude = request.longitude
+            )
+            emit(Result.success(Unit))
+        }
     }
 
-    override suspend fun updatePreparationTime(request: PreparationTimeRequest): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
+    override suspend fun updatePreparationTime(request: PreparationTimeRequest): Flow<Result<Unit>> = flow {
+        lastPreparationTimeRequest = request
+        if (shouldFailUpdatePreparationTime) {
+            emit(Result.failure(Exception("preparation time 업데이트 실패")))
+        } else {
+            preparationTime = PreparationTime(preparationTime = request.preparationTime)
+            emit(Result.success(Unit))
+        }
     }
 
     override suspend fun setLocalMapProvider(mapProvider: MapProvider) {
-        TODO("Not yet implemented")
+        mapProviderFlow.value = mapProvider
     }
 
-    override fun getLocalMapProvider(): Flow<MapProvider> {
-        TODO("Not yet implemented")
-    }
+    override fun getLocalMapProvider(): Flow<MapProvider> = mapProviderFlow
 
-    override fun needsChooseProvider(): Flow<Boolean> {
-        TODO("Not yet implemented")
-    }
+    override fun needsChooseProvider(): Flow<Boolean> = needsChooseProviderFlow
 
     /** ------------ 테스트 편의용 헬퍼 ------------- */
 
