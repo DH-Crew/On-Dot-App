@@ -19,7 +19,7 @@ class FakeMemberRepository: MemberRepository {
     /**------------ 인메모리 상태 -------------*/
 
     private val mapProviderFlow = MutableStateFlow(MapProvider.KAKAO)
-    private val needsChooseProviderFlow = MutableStateFlow(false)
+    private val needsChooseProviderFlow = MutableStateFlow(true)
 
     private var homeAddress: HomeAddressInfo? = null
     private var preparationTime: PreparationTime? = null
