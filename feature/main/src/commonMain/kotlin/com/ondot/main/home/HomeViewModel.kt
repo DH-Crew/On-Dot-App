@@ -36,7 +36,8 @@ class HomeViewModel(
     private val alarmScheduler: AlarmScheduler,
     private val analyticsManager: AnalyticsManager,
     private val notificationScheduler: LocalNotificationScheduler,
-    private val directionsOpener: DirectionsOpener
+    private val directionsOpener: DirectionsOpener,
+    private val triggeredAlarmManager: TriggeredAlarmManager = TriggeredAlarmManager
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
@@ -68,7 +69,7 @@ class HomeViewModel(
     }
 
     fun onToggle() {
-        updateState(uiState.value.copy(isExpanded = !uiState.value.isExpanded))
+        updateStateSync(uiState.value.copy(isExpanded = !uiState.value.isExpanded))
     }
 
     fun onClickAlarmSwitch(id: Long, isEnabled: Boolean) {
@@ -167,7 +168,7 @@ class HomeViewModel(
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
                 alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
-                TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
+                triggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
             }
         }
     }
@@ -227,7 +228,7 @@ class HomeViewModel(
         }
 
         cancelAlarms(scheduleId)
-        updateState(uiState.value.copy(scheduleList = newList))
+        updateStateSync(uiState.value.copy(scheduleList = newList))
 
         viewModelScope.launch {
             ToastManager.show(
