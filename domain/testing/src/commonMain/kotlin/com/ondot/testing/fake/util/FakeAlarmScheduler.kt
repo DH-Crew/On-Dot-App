@@ -1,10 +1,12 @@
 package com.ondot.testing.fake.util
 
+import co.touchlab.kermit.Logger
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.service.AlarmScheduler
 
 class FakeAlarmScheduler: AlarmScheduler {
+    private val logger = Logger.withTag("FakeAlarmScheduler")
     val scheduled = mutableListOf<Pair<AlarmRingInfo, MapProvider>>()
     val cancelledIds = mutableListOf<Long>()
 
@@ -12,6 +14,7 @@ class FakeAlarmScheduler: AlarmScheduler {
         info: AlarmRingInfo,
         mapProvider: MapProvider
     ) {
+        logger.e { "scheduleAlarm: $info" }
         scheduled += info to mapProvider
     }
 
