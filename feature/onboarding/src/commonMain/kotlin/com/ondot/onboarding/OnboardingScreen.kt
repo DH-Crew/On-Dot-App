@@ -143,18 +143,6 @@ fun OnboardingContent(
                         onSelectSound = onSelectSound,
                         onVolumeChange = onVolumeChange,
                     )
-                    4 -> OnboardingStep4(
-                        answerList = uiState.answer1,
-                        selectedAnswerIndex = uiState.selectedAnswer1Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer1
-                    )
-                    5 -> OnboardingStep5(
-                        answerList = uiState.answer2,
-                        selectedAnswerIndex = uiState.selectedAnswer2Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer2
-                    )
                 }
             } else {
                 when (uiState.currentStep) {
@@ -169,18 +157,6 @@ fun OnboardingContent(
                         onAddressInputChanged = onAddressInputChanged,
                         addressList = uiState.addressList,
                         onClickPlace = onClickPlace
-                    )
-                    3 -> OnboardingStep4(
-                        answerList = uiState.answer1,
-                        selectedAnswerIndex = uiState.selectedAnswer1Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer1
-                    )
-                    4 -> OnboardingStep5(
-                        answerList = uiState.answer2,
-                        selectedAnswerIndex = uiState.selectedAnswer2Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer2
                     )
                 }
             }
