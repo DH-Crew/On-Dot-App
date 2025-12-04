@@ -39,7 +39,6 @@ fun OnboardingScreen(
     navigateToMain: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val interactionSource = remember { MutableInteractionSource() }
 
     BackPressHandler { viewModel.onClickBack() }
 
@@ -58,7 +57,6 @@ fun OnboardingScreen(
     OnboardingContent(
         uiState = uiState,
         isButtonEnabled = viewModel.isButtonEnabled(),
-        interactionSource = interactionSource,
         onClickNext = { viewModel.onClickNext() },
         onHourInputChanged = { viewModel.onHourInputChanged(it) },
         onMinuteInputChanged = { viewModel.onMinuteInputChanged(it) },
@@ -68,8 +66,6 @@ fun OnboardingScreen(
         onCategorySelected = { viewModel.onCategorySelected(it) },
         onSelectSound = { viewModel.onSelectSound(it) },
         onVolumeChange = { viewModel.onVolumeChange(it) },
-        onClickAnswer1 = { viewModel.onClickAnswer1(it) },
-        onClickAnswer2 = { viewModel.onClickAnswer2(it) },
         onClickBack = { viewModel.onClickBack() }
     )
 }
@@ -78,7 +74,6 @@ fun OnboardingScreen(
 fun OnboardingContent(
     uiState: OnboardingUiState,
     isButtonEnabled: Boolean = false,
-    interactionSource: MutableInteractionSource,
     onClickNext: () -> Unit,
     onHourInputChanged: (String) -> Unit,
     onMinuteInputChanged: (String) -> Unit,
@@ -88,8 +83,6 @@ fun OnboardingContent(
     onCategorySelected: (Int) -> Unit,
     onSelectSound: (String) -> Unit,
     onVolumeChange: (Float) -> Unit,
-    onClickAnswer1: (Int) -> Unit,
-    onClickAnswer2: (Int) -> Unit,
     onClickBack: () -> Unit
 ) {
     Column(
