@@ -36,8 +36,7 @@ class HomeViewModel(
     private val alarmScheduler: AlarmScheduler,
     private val analyticsManager: AnalyticsManager,
     private val notificationScheduler: LocalNotificationScheduler,
-    private val directionsOpener: DirectionsOpener,
-    private val triggeredAlarmManager: TriggeredAlarmManager = TriggeredAlarmManager
+    private val directionsOpener: DirectionsOpener
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
@@ -168,7 +167,7 @@ class HomeViewModel(
             // 스케줄러 예약
             alarmRingInfos.forEach { info ->
                 alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
-                triggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
+                TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
             }
         }
     }
