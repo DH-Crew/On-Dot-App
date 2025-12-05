@@ -1,5 +1,6 @@
 package com.ondot.platform.util
 
+import com.ondot.domain.model.enums.AlarmMode
 import com.ondot.domain.service.SoundPlayer
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFAudio.AVAudioPlayer
@@ -21,7 +22,7 @@ class IosSoundPlayer: SoundPlayer {
         AVAudioSession.sharedInstance().setActive(true, error = null)
     }
 
-    override fun playSound(soundResId: String, onComplete: () -> Unit) {
+    override fun playSound(soundResId: String, alarmMode: AlarmMode, onComplete: () -> Unit) {
         stopSound()
 
         val url: NSURL = NSBundle.mainBundle.URLForResource(

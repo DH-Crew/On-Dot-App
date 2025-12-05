@@ -31,7 +31,7 @@ class OnboardingViewModel(
         updateState(
             uiState.value.copy(
                 currentStep = 1,
-                totalStep = if (getPlatform() == ANDROID) 5 else 4
+                totalStep = if (getPlatform() == ANDROID) 3 else 2
             )
         )
     }
@@ -51,7 +51,6 @@ class OnboardingViewModel(
                 3 -> {
                     uiState.value.isMuted || uiState.value.selectedSound != null
                 }
-                4, 5 -> true
                 else -> {
                     false
                 }
@@ -66,7 +65,6 @@ class OnboardingViewModel(
                 2 -> {
                     uiState.value.selectedAddress != null
                 }
-                3, 4 -> true
                 else -> {
                     false
                 }
@@ -88,11 +86,6 @@ class OnboardingViewModel(
                 3 -> {
                     updateState(uiState.value.copy(currentStep = 4))
                     soundPlayer.stopSound()
-                }
-                4 -> {
-                    updateState(uiState.value.copy(currentStep = 5))
-                }
-                5 -> {
                     completeOnboarding()
                 }
             }
@@ -104,11 +97,6 @@ class OnboardingViewModel(
                 }
                 2 -> {
                     updateState(uiState.value.copy(currentStep = 3))
-                }
-                3 -> {
-                    updateState(uiState.value.copy(currentStep = 4))
-                }
-                4 -> {
                     completeOnboarding()
                 }
             }
@@ -126,12 +114,6 @@ class OnboardingViewModel(
                     updateState(uiState.value.copy(currentStep = 2))
                     soundPlayer.stopSound()
                 }
-                4 -> {
-                    updateState(uiState.value.copy(currentStep = 3))
-                }
-                5 -> {
-                    updateState(uiState.value.copy(currentStep = 4))
-                }
                 else -> {
                     return
                 }
@@ -140,12 +122,6 @@ class OnboardingViewModel(
             when (uiState.value.currentStep) {
                 2 -> {
                     updateState(uiState.value.copy(currentStep = 1))
-                }
-                3 -> {
-                    updateState(uiState.value.copy(currentStep = 2))
-                }
-                4 -> {
-                    updateState(uiState.value.copy(currentStep = 3))
                 }
                 else -> {
                     return
@@ -236,17 +212,6 @@ class OnboardingViewModel(
         soundPlayer.setVolume(newVolume)
     }
 
-    // ----------------------------------------- OnboardingStep4 ----------------------------
-
-    fun onClickAnswer1(index: Int) {
-        updateState(uiState.value.copy(selectedAnswer1Index = index))
-    }
-
-    // ----------------------------------------- OnboardingStep5 ----------------------------
-    fun onClickAnswer2(index: Int) {
-        updateState(uiState.value.copy(selectedAnswer2Index = index))
-    }
-
     private fun completeOnboarding() {
         viewModelScope.launch {
             val soundCategory = when(uiState.value.selectedCategoryIndex) {
@@ -274,11 +239,11 @@ class OnboardingViewModel(
                 questions = listOf(
                     QuestionAnswer(
                         questionId = 1,
-                        answerId = uiState.value.answer1[uiState.value.selectedAnswer1Index].id
+                        answerId = uiState.value.answer1[0].id
                     ),
                     QuestionAnswer(
                         questionId = 2,
-                        answerId = uiState.value.answer2[uiState.value.selectedAnswer2Index].id
+                        answerId = uiState.value.answer2[0].id
                     )
                 )
             )

@@ -23,6 +23,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.ui.UserAnswer
 import com.ondot.util.AnalyticsLogger
 
+@Deprecated("이제 사용하지 않는 화면")
 @Composable
 fun OnboardingStep4(
     answerList: List<UserAnswer>,

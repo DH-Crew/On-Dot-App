@@ -28,8 +28,6 @@ import com.ondot.domain.model.member.AddressInfo
 import com.ondot.onboarding.step.OnboardingStep1
 import com.ondot.onboarding.step.OnboardingStep2
 import com.ondot.onboarding.step.OnboardingStep3
-import com.ondot.onboarding.step.OnboardingStep4
-import com.ondot.onboarding.step.OnboardingStep5
 import com.ondot.platform.util.BackPressHandler
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -39,7 +37,6 @@ fun OnboardingScreen(
     navigateToMain: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val interactionSource = remember { MutableInteractionSource() }
 
     BackPressHandler { viewModel.onClickBack() }
 
@@ -58,7 +55,6 @@ fun OnboardingScreen(
     OnboardingContent(
         uiState = uiState,
         isButtonEnabled = viewModel.isButtonEnabled(),
-        interactionSource = interactionSource,
         onClickNext = { viewModel.onClickNext() },
         onHourInputChanged = { viewModel.onHourInputChanged(it) },
         onMinuteInputChanged = { viewModel.onMinuteInputChanged(it) },
@@ -68,8 +64,6 @@ fun OnboardingScreen(
         onCategorySelected = { viewModel.onCategorySelected(it) },
         onSelectSound = { viewModel.onSelectSound(it) },
         onVolumeChange = { viewModel.onVolumeChange(it) },
-        onClickAnswer1 = { viewModel.onClickAnswer1(it) },
-        onClickAnswer2 = { viewModel.onClickAnswer2(it) },
         onClickBack = { viewModel.onClickBack() }
     )
 }
@@ -78,7 +72,6 @@ fun OnboardingScreen(
 fun OnboardingContent(
     uiState: OnboardingUiState,
     isButtonEnabled: Boolean = false,
-    interactionSource: MutableInteractionSource,
     onClickNext: () -> Unit,
     onHourInputChanged: (String) -> Unit,
     onMinuteInputChanged: (String) -> Unit,
@@ -88,8 +81,6 @@ fun OnboardingContent(
     onCategorySelected: (Int) -> Unit,
     onSelectSound: (String) -> Unit,
     onVolumeChange: (Float) -> Unit,
-    onClickAnswer1: (Int) -> Unit,
-    onClickAnswer2: (Int) -> Unit,
     onClickBack: () -> Unit
 ) {
     Column(
@@ -143,18 +134,6 @@ fun OnboardingContent(
                         onSelectSound = onSelectSound,
                         onVolumeChange = onVolumeChange,
                     )
-                    4 -> OnboardingStep4(
-                        answerList = uiState.answer1,
-                        selectedAnswerIndex = uiState.selectedAnswer1Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer1
-                    )
-                    5 -> OnboardingStep5(
-                        answerList = uiState.answer2,
-                        selectedAnswerIndex = uiState.selectedAnswer2Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer2
-                    )
                 }
             } else {
                 when (uiState.currentStep) {
@@ -169,18 +148,6 @@ fun OnboardingContent(
                         onAddressInputChanged = onAddressInputChanged,
                         addressList = uiState.addressList,
                         onClickPlace = onClickPlace
-                    )
-                    3 -> OnboardingStep4(
-                        answerList = uiState.answer1,
-                        selectedAnswerIndex = uiState.selectedAnswer1Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer1
-                    )
-                    4 -> OnboardingStep5(
-                        answerList = uiState.answer2,
-                        selectedAnswerIndex = uiState.selectedAnswer2Index,
-                        interactionSource = interactionSource,
-                        onClickAnswer = onClickAnswer2
                     )
                 }
             }
