@@ -7,6 +7,7 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
 import co.touchlab.kermit.Logger
+import com.ondot.domain.model.enums.AlarmMode
 import com.ondot.domain.service.SoundPlayer
 
 class AndroidSoundPlayer(
@@ -20,11 +21,11 @@ class AndroidSoundPlayer(
     private var _onComplete: () -> Unit = {}
 
     @SuppressLint("DiscouragedApi")
-    override fun playSound(soundResId: String, onComplete: () -> Unit) {
-        // 이전 재생 정리
-//        stopSound()
+    override fun playSound(soundResId: String, alarmMode: AlarmMode, onComplete: () -> Unit) {
 
         _onComplete = onComplete
+
+        if (alarmMode != AlarmMode.SOUND) return
 
         // AudioAttributes 생성 (알람용)
         val audioAttributes = AudioAttributes.Builder()
@@ -71,7 +72,7 @@ class AndroidSoundPlayer(
                     onComplete()
                 }
 
-                // 상대 볼륨 최대화
+                // 볼륨 설정
                 setVolume(currentVolume, currentVolume)
 
                 // 시스템 알람 볼륨 최대화
