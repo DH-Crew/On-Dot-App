@@ -161,10 +161,10 @@ class AlarmService : Service(), KoinComponent {
                         .take(1)
                         .collect { alarm ->
                             logger.d { "Alarm RingTone: ${alarm.ringTone.lowercase()}" }
-                            if (alarm.enabled && alarm.alarmMode == AlarmMode.SOUND) {
+                            if (alarm.enabled) {
                                 markRinging(scheduleId, alarmId, type)
 
-                                soundPlayer.playSound(alarm.ringTone.lowercase()) {
+                                soundPlayer.playSound(alarm.ringTone.lowercase(), alarmMode = alarm.alarmMode) {
                                     serviceScope.launch { stopAndClear() }
                                 }
                             } else {
