@@ -28,8 +28,6 @@ import com.ondot.domain.model.member.AddressInfo
 import com.ondot.onboarding.step.OnboardingStep1
 import com.ondot.onboarding.step.OnboardingStep2
 import com.ondot.onboarding.step.OnboardingStep3
-import com.ondot.onboarding.step.OnboardingStep4
-import com.ondot.onboarding.step.OnboardingStep5
 import com.ondot.platform.util.BackPressHandler
 import org.koin.compose.viewmodel.koinViewModel
 
