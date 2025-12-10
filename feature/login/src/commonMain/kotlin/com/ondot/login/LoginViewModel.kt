@@ -35,14 +35,24 @@ class LoginViewModel(
     }
 
     private fun onSuccessKakaoLogin(result: AuthResult) {
-        saveToken(token = AuthTokens(accessToken = result.tokens.accessToken, refreshToken = result.tokens.refreshToken))
+        viewModelScope.launch {
+            val tokens = AuthTokens(
+                accessToken = result.tokens.accessToken,
+                refreshToken = result.tokens.refreshToken
+            )
 
-        when(result.isNewMember) {
-            true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
-            false -> emitEventFlow(LoginEvent.NavigateToMain)
+            saveToken(tokens)
+
+            if (result.memberId > 0) {
+                analyticsManager.setUserId(result.memberId.toString())
+            }
+
+            if (result.isNewMember) {
+                emitEventFlow(LoginEvent.NavigateToOnboarding)
+            } else {
+                emitEventFlow(LoginEvent.NavigateToMain)
+            }
         }
-
-        if (result.memberId > 0) setUserId(result.memberId)
     }
 
     private fun onFailedKakaoLogin(e: Throwable) {
@@ -71,20 +81,28 @@ class LoginViewModel(
     }
 
     private fun onSuccessAppleLogin(result: AuthResult) {
-        saveToken(token = AuthTokens(accessToken = result.tokens.accessToken, refreshToken = result.tokens.refreshToken))
+        viewModelScope.launch {
+            val tokens = AuthTokens(
+                accessToken = result.tokens.accessToken,
+                refreshToken = result.tokens.refreshToken
+            )
 
-        when(result.isNewMember) {
-            true -> emitEventFlow(LoginEvent.NavigateToOnboarding)
-            false -> emitEventFlow(LoginEvent.NavigateToMain)
+            saveToken(tokens)
+
+            if (result.memberId > 0) {
+                analyticsManager.setUserId(result.memberId.toString())
+            }
+
+            if (result.isNewMember) {
+                emitEventFlow(LoginEvent.NavigateToOnboarding)
+            } else {
+                emitEventFlow(LoginEvent.NavigateToMain)
+            }
         }
-
-        if (result.memberId > 0) setUserId(result.memberId)
     }
 
-    private fun saveToken(token: AuthTokens) {
-        viewModelScope.launch {
-            authRepository.saveToken(token)
-        }
+    private suspend fun saveToken(token: AuthTokens) {
+        authRepository.saveToken(token)
     }
 
     private fun setUserId(id: Long) {
