@@ -70,6 +70,10 @@ gradlePlugin {
             id = "ondot.compose.app"
             implementationClass = "com.ondot.build_logic.ComposeAppPlugin"
         }
+        register("ktor") {
+            id = "convention.ktor"
+            implementationClass = "com.ondot.build_logic.convention.KtorConventionPlugin"
+        }
 
         /**----------------------------Legacy----------------------------*/
 
