@@ -52,14 +52,6 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 commonMain.dependencies {
                     implementation(libs.findLibrary("kotlinx-coroutines-core").get())
                     implementation(libs.findLibrary("kotlinx-serialization-json").get())
-                    implementation(libs.findLibrary("ktor-client").get())
-                    implementation(libs.findLibrary("kermit").get())
-                }
-                androidMain.dependencies {
-                    implementation(libs.findLibrary("ktor-client-okhttp").get())
-                }
-                iosMain.dependencies {
-                    implementation(libs.findLibrary("ktor-client-darwin").get())
                 }
             }
 
