@@ -1,5 +1,6 @@
 
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
+import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import java.util.Properties
 import kotlin.apply
@@ -38,6 +39,13 @@ buildkonfig {
 }
 
 kotlin {
+
+    targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.withType<Framework>().configureEach {
+            export(project(":core:api"))
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.domain)
@@ -55,6 +63,9 @@ kotlin {
             implementation(projects.feature.main)
             implementation(projects.feature.onboarding)
             implementation(projects.feature.splash)
+            implementation(projects.core.apiImpl)
+
+            api(projects.core.api)
         }
 
         androidMain.dependencies {
