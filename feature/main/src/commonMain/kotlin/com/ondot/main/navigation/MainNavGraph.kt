@@ -43,7 +43,7 @@ object MainNavGraph: NavGraphContributor {
                         }
                     },
                     navigateToServiceTerms = {
-                        navController.navigate(NavRoutes.ServiceTermsGraph.route) {
+                        navController.navigate(NavRoutes.ServiceTerms.createRoute(false)) {
                             launchSingleTop = true
                         }
                     },
@@ -59,6 +59,11 @@ object MainNavGraph: NavGraphContributor {
                     },
                     navigateToPreparationTimeEdit = {
                         navController.navigate(NavRoutes.PreparationTimeSettingGraph.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNotification = {
+                        navController.navigate(NavRoutes.ServiceTerms.createRoute(true)) {
                             launchSingleTop = true
                         }
                     }

@@ -2,6 +2,7 @@ package com.ondot.main.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +42,7 @@ import com.ondot.main.home.components.ScheduleList
 import com.ondot.main.home.components.UserBadgeBanner
 import com.ondot.util.AnalyticsLogger
 import ondot.core.design_system.generated.resources.Res
-import ondot.core.design_system.generated.resources.ic_banner
+import ondot.core.design_system.generated.resources.ic_notification_banner
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -49,7 +50,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     navigateToGeneralSchedule: () -> Unit,
-    navigateToEditSchedule: (Long) -> Unit
+    navigateToEditSchedule: (Long) -> Unit,
+    navigateToNotificationScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -71,6 +73,7 @@ fun HomeScreen(
             viewModel.setMapProvider(it)
         },
         onLongClick = viewModel::openDirections,
+        onBannerClick = navigateToNotificationScreen,
         onDelete = { viewModel.deleteSchedule(it) },
         navigateToGeneralSchedule = navigateToGeneralSchedule,
         navigateToEditSchedule = navigateToEditSchedule
@@ -85,6 +88,7 @@ fun HomeContent(
     onClickAlarmSwitch: (Long, Boolean) -> Unit,
     onConfirmProvider: (MapProvider) -> Unit,
     onLongClick: (Long) -> Unit,
+    onBannerClick: () -> Unit,
     onDelete: (Long) -> Unit,
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit
@@ -115,11 +119,16 @@ fun HomeContent(
 
             if (uiState.scheduleList.isEmpty()) {
                 Image(
-                    painter = painterResource(Res.drawable.ic_banner),
+                    painter = painterResource(Res.drawable.ic_notification_banner),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(349f/100f)
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = onBannerClick
+                        )
                 )
 
                 Box(
@@ -136,6 +145,7 @@ fun HomeContent(
                     interactionSource = interactionSource,
                     onClickSwitch = onClickAlarmSwitch,
                     onClickSchedule = navigateToEditSchedule,
+                    onBannerClick = onBannerClick,
                     onLongClick = onLongClick,
                     onDelete = onDelete
                 )
