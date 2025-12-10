@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.rememberNavController
 import com.dh.ondot.presentation.ui.theme.OnDotTheme
+import com.ondot.api.AppNavBus
+import com.ondot.api.AppNavEvent
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.navigation.AppNavHost
 import com.ondot.navigation.NavRoutes
@@ -23,6 +25,20 @@ fun App() {
                 AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(event.scheduleId, event.alarmId)) {
                     launchSingleTop = true
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        AppNavBus.events.collect { event ->
+            when(event) {
+                is AppNavEvent.OpenAlarm -> TODO()
+                AppNavEvent.OpenGeneralSchedule -> {
+                    navController.navigate(NavRoutes.GeneralScheduleGraph.route) {
+                        launchSingleTop = true
+                    }
+                }
+                AppNavEvent.OpenToday -> TODO()
             }
         }
     }
