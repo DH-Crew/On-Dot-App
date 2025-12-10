@@ -40,6 +40,7 @@ class HomeViewModel(
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
+    private var lastScheduledAlarms: Set<Long> = emptySet()
 
     private fun logGA(name: String, vararg params: Pair<String, Any?>) {
         val clean = params.toMap().filterValues { it != null }
@@ -74,6 +75,8 @@ class HomeViewModel(
     fun onClickAlarmSwitch(id: Long, isEnabled: Boolean) {
         logGA("schedule_alarm_toggle", "schedule_id" to id, "enabled" to isEnabled)
 
+        val schedule = uiState.value.scheduleList.find { it.scheduleId == id } ?: return
+
         val newList = uiState.value.scheduleList.map {
             if (it.scheduleId == id) {
                 it.copy(
@@ -88,8 +91,16 @@ class HomeViewModel(
 
         updateState(uiState.value.copy(scheduleList = newList))
 
-        if (isEnabled) processAlarms(newList)
-        else cancelAlarms(id)
+        if (isEnabled) {
+            processAlarmsForSchedule(schedule.copy(
+                departureAlarm = schedule.departureAlarm.copy(enabled = true),
+                preparationAlarm = schedule.preparationAlarm.copy(enabled = true)
+            ))
+            lastScheduledAlarms = lastScheduledAlarms + setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
+        } else {
+            cancelAlarms(id)
+            lastScheduledAlarms = lastScheduledAlarms - setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
+        }
 
         viewModelScope.launch {
             scheduleRepository.toggleAlarm(scheduleId = id, request = ToggleAlarmRequest(isEnabled = isEnabled)).collect {
@@ -128,43 +139,53 @@ class HomeViewModel(
 
     private fun processAlarms(schedules: List<Schedule>) {
         viewModelScope.launch {
-            // 알람 리스트 추출
+
+            // 현재 스케줄 리스트를 기반으로 울려야 하는 알람 id를 추출
+            val currentAlarmIds = schedules.flatMap { schedule ->
+                buildList {
+                    if (schedule.preparationAlarm.enabled) add(schedule.preparationAlarm.alarmId)
+                    if (schedule.departureAlarm.enabled) add(schedule.departureAlarm.alarmId)
+                }
+            }.toSet()
+
+            // 삭제할 알람: 이전에는 있었지만 현재는 없는 것
+            val toCancel = lastScheduledAlarms - currentAlarmIds
+            toCancel.forEach { alarmId -> alarmScheduler.cancelAlarm(alarmId) }
+
+            // 추가/업데이트할 알람: 현재 있는 것만
             val alarmRingInfos = schedules.flatMap { schedule ->
                 buildList {
                     if (schedule.preparationAlarm.enabled) {
-                        add(
-                            AlarmRingInfo(
-                                alarm = schedule.preparationAlarm,
-                                alarmType = AlarmType.Preparation,
-                                appointmentAt = schedule.appointmentAt,
-                                scheduleTitle = schedule.scheduleTitle,
-                                scheduleId = schedule.scheduleId,
-                                startLat = schedule.startLatitude,
-                                startLng = schedule.startLongitude,
-                                endLat = schedule.endLatitude,
-                                endLng = schedule.endLongitude,
-                                repeatDays = schedule.repeatDays
-                            )
-                        )
+                        add(prepInfo(schedule))
                     }
-                    add(
-                        AlarmRingInfo(
-                            alarm = schedule.departureAlarm,
-                            alarmType = AlarmType.Departure,
-                            appointmentAt = schedule.appointmentAt,
-                            scheduleTitle = schedule.scheduleTitle,
-                            scheduleId = schedule.scheduleId,
-                            startLat = schedule.startLatitude,
-                            startLng = schedule.startLongitude,
-                            endLat = schedule.endLatitude,
-                            endLng = schedule.endLongitude,
-                            repeatDays = schedule.repeatDays
-                        )
-                    )
+                    if (schedule.departureAlarm.enabled) {
+                        add(depInfo(schedule))
+                    }
                 }
             }
 
             // 스케줄러 예약
+            alarmRingInfos.forEach { info ->
+                alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
+                TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
+            }
+
+            // 이전 스케줄 리스트를 업데이트
+            lastScheduledAlarms = currentAlarmIds
+        }
+    }
+
+    private fun processAlarmsForSchedule(schedule: Schedule) {
+        viewModelScope.launch {
+            val alarmRingInfos = buildList {
+                if (schedule.preparationAlarm.enabled) {
+                    add(prepInfo(schedule))
+                }
+                if (schedule.departureAlarm.enabled) {
+                    add(depInfo(schedule))
+                }
+            }
+
             alarmRingInfos.forEach { info ->
                 alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
                 TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
@@ -289,4 +310,32 @@ class HomeViewModel(
             endName = "도착지"
         )
     }
+
+    /**--------------------------------------------기타 유틸-----------------------------------------------*/
+
+    private fun prepInfo(schedule: Schedule) = AlarmRingInfo(
+        alarm = schedule.preparationAlarm,
+        alarmType = AlarmType.Preparation,
+        appointmentAt = schedule.appointmentAt,
+        scheduleTitle = schedule.scheduleTitle,
+        scheduleId = schedule.scheduleId,
+        startLat = schedule.startLatitude,
+        startLng = schedule.startLongitude,
+        endLat = schedule.endLatitude,
+        endLng = schedule.endLongitude,
+        repeatDays = schedule.repeatDays
+    )
+
+    private fun depInfo(schedule: Schedule) = AlarmRingInfo(
+        alarm = schedule.departureAlarm,
+        alarmType = AlarmType.Departure,
+        appointmentAt = schedule.appointmentAt,
+        scheduleTitle = schedule.scheduleTitle,
+        scheduleId = schedule.scheduleId,
+        startLat = schedule.startLatitude,
+        startLng = schedule.startLongitude,
+        endLat = schedule.endLatitude,
+        endLng = schedule.endLongitude,
+        repeatDays = schedule.repeatDays
+    )
 }
