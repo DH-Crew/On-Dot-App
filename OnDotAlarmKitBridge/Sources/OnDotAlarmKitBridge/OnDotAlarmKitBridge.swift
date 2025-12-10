@@ -263,8 +263,10 @@ public final class AlarmKitBridge: NSObject {
         do {
             let uuid = Self.stableUUID(for: id)
             try manager.cancel(id: uuid)
+            Self.clearStableUUID(for: id)
             completion?(true)
         } catch {
+            Self.clearStableUUID(for: id)
             completion?(false)
         }
     }
