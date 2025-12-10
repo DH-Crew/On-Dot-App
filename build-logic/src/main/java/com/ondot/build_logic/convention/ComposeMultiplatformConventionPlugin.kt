@@ -18,6 +18,7 @@ class ComposeMultiplatformConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("org.jetbrains.compose")
         pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
+        pluginManager.apply(KtorConventionPlugin::class.java)
 
         val libs = project.extensions
             .findByType<VersionCatalogsExtension>()!!
@@ -45,7 +46,6 @@ class ComposeMultiplatformConventionPlugin: Plugin<Project> {
 
         addComposeCommonDependencies(libs)
 
-
         // TODO(이후에 feature 모듈로 분리되어야 함)
         extensions.configure<KotlinMultiplatformExtension> {
             sourceSets.apply {
@@ -64,7 +64,6 @@ class ComposeMultiplatformConventionPlugin: Plugin<Project> {
 
                     implementation(libs.findLibrary("kotlinx-serialization-json").get())
 
-                    implementation(libs.findLibrary("ktor-client").get())
                     implementation(libs.findLibrary("ktor-client-content-negotiation").get())
                     implementation(libs.findLibrary("ktor-serialization").get())
                     implementation(libs.findLibrary("ktor-client-logging").get())
@@ -80,29 +79,6 @@ class ComposeMultiplatformConventionPlugin: Plugin<Project> {
 
                     implementation(libs.findLibrary("coroutines-extensions").get())
                 }
-
-//                androidMain.dependencies {
-//                    implementation(libs.findLibrary("androidx-activity-compose").get())
-//
-//                    implementation(libs.findLibrary("kotlinx-coroutines-android").get())
-//
-//                    implementation(libs.findLibrary("datastore-core").get())
-//                    implementation(libs.findLibrary("datastore-preferences").get())
-//
-//                    implementation(libs.findLibrary("ktor-client-okhttp").get())
-//
-//                    implementation(libs.findLibrary("kakao-login").get())
-//
-//                    implementation(libs.findLibrary("android-driver").get())
-//
-//                    implementation(libs.findLibrary("firebase-analytics").get())
-//                }
-//
-//                iosMain.dependencies {
-//                    implementation(libs.findLibrary("ktor-client-darwin").get())
-//
-//                    implementation(libs.findLibrary("native-driver").get())
-//                }
             }
         }
     }
