@@ -119,7 +119,7 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------RepeatSettingSection-----------------------------------------------*/
 
     fun onClickSwitch(newValue: Boolean) {
-        updateState(uiState.value.copy(isRepeat = newValue))
+        updateState(uiState.value.copy(isRepeat = newValue, selectedDate = null))
 
         logGA("repeat_toggle", "enabled" to newValue)
 
