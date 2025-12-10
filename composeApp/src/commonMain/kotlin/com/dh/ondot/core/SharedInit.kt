@@ -15,7 +15,6 @@ import com.ondot.network.di.networkModule
 import com.ondot.onboarding.di.onboardingModule
 import com.ondot.platform.di.providePlatformModules
 import com.ondot.splash.di.splashModule
-import org.koin.compose.getKoin
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
@@ -42,6 +41,9 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
     }
 }
 
+/**
+ * Swift에서 접근하기 위한 메서드
+ * */
 fun initDeepLinks() {
     DeepLinkKit.install(DefaultDeepLinkParser())
 }
