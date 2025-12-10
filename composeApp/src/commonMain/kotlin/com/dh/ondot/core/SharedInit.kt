@@ -1,6 +1,8 @@
 package com.dh.ondot.core
 
 import com.ondot.alarm.di.alarmModule
+import com.ondot.api.DeepLinkKit
+import com.ondot.api_impl.DefaultDeepLinkParser
 import com.ondot.data.di.dataSourceModule
 import com.ondot.data.di.databaseModule
 import com.ondot.data.di.provideDriverModule
@@ -13,6 +15,7 @@ import com.ondot.network.di.networkModule
 import com.ondot.onboarding.di.onboardingModule
 import com.ondot.platform.di.providePlatformModules
 import com.ondot.splash.di.splashModule
+import org.koin.compose.getKoin
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
@@ -37,4 +40,8 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
             )
         )
     }
+}
+
+fun initDeepLinks() {
+    DeepLinkKit.install(DefaultDeepLinkParser())
 }
