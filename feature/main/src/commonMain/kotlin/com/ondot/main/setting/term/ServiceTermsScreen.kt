@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
+import com.dh.ondot.presentation.ui.theme.SERVICE_NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SERVICE_TERMS_TITLE
 import com.ondot.design_system.components.OnDotText
 import com.ondot.design_system.components.TopBar
@@ -25,6 +26,7 @@ import com.ondot.util.AnalyticsLogger
 
 @Composable
 fun ServiceTermsScreen(
+    isNotification: Boolean,
     popScreen: () -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -49,7 +51,7 @@ fun ServiceTermsScreen(
             )
 
             OnDotText(
-                text = SERVICE_TERMS_TITLE,
+                text = if (isNotification) SERVICE_NOTIFICATION_TITLE else SERVICE_TERMS_TITLE,
                 style = OnDotTextStyle.TitleSmallM,
                 color = Gray0,
                 modifier = Modifier.padding(top = if (getPlatform() == ANDROID) 50.dp else 70.dp)
@@ -57,7 +59,7 @@ fun ServiceTermsScreen(
         }
 
         WebView(
-            url = "https://ondotdh.notion.site/Ondot-1e1d775a8a04802495c7cc44cac766cc",
+            url = if (isNotification) "https://www.notion.so/readyberry/251211-2c5d775a8a0480158f14c401c7823478?source=copy_link" else "https://ondotdh.notion.site/Ondot-1e1d775a8a04802495c7cc44cac766cc",
             modifier = Modifier.fillMaxSize()
         )
     }

@@ -2,8 +2,11 @@ package com.ondot.main.setting.term.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.ondot.main.setting.term.ServiceTermsScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
@@ -12,15 +15,22 @@ object ServiceTermNavGraph: NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.ServiceTermsGraph
     override val startDestination: String
-        get() = NavRoutes.ServiceTerms.route
+        get() = NavRoutes.ServiceTerms.ROUTE
 
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
-            startDestination = NavRoutes.ServiceTerms.route,
-            route = NavRoutes.ServiceTermsGraph.route
+            startDestination = startDestination,
+            route = graphRoute.route
         ) {
-            composable(NavRoutes.ServiceTerms.route) {
+            composable(
+                NavRoutes.ServiceTerms.ROUTE,
+                arguments = listOf(navArgument("isNotification") { type = NavType.BoolType })
+            ) {backStackEntry ->
+                val args = backStackEntry.toRoute<NavRoutes.ServiceTerms>()
+                val isNotification = args.isNotification
+
                 ServiceTermsScreen(
+                    isNotification = isNotification,
                     popScreen = { navController.popBackStack() }
                 )
             }
