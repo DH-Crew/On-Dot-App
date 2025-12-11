@@ -21,9 +21,13 @@ import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeR
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.member.PreparationTime
+import com.ondot.domain.model.schedule.Schedule
+import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.repository.AuthRepository
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.UrlOpener
 import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
@@ -32,10 +36,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
+    private val scheduleRepository: ScheduleRepository,
     private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository,
     private val placeRepository: PlaceRepository,
-    private val urlOpener: UrlOpener
+    private val urlOpener: UrlOpener,
+    private val alarmScheduler: AlarmScheduler
 ): BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
     private var searchJob: Job? = null
@@ -194,7 +200,7 @@ class SettingViewModel(
     fun updatePreparationTime() {
         val hours = uiState.value.hourInput.trim().toIntOrNull() ?: 0
         val minutes = uiState.value.minuteInput.trim().toIntOrNull() ?: 0
-        val preparationTime = hours + minutes
+        val preparationTime = hours * 60 + minutes
 
         viewModelScope.launch {
             memberRepository.updatePreparationTime(request = PreparationTimeRequest(preparationTime)).collect {
@@ -221,6 +227,14 @@ class SettingViewModel(
 
     fun logout() {
         viewModelScope.launch {
+
+            // 모든 알람이 성공적으로 취소됐을 때만 그 이후 로직 실행
+            val canceled = cancelAllSchedules()
+            if (!canceled) {
+                ToastManager.show(ERROR_LOGOUT, ToastType.ERROR)
+                return@launch
+            }
+
             authRepository.logout().collect {
                 resultResponse(it, ::onSuccessLogOut, ::onFailLogout)
             }
@@ -228,8 +242,10 @@ class SettingViewModel(
     }
 
     private fun onSuccessLogOut(result: Unit) {
-        viewModelScope.launch { ToastManager.show(LOGOUT_SUCCESS_MESSAGE, ToastType.INFO) }
-        emitEventFlow(SettingEvent.NavigateToLoginScreen)
+        viewModelScope.launch {
+            ToastManager.show(LOGOUT_SUCCESS_MESSAGE, ToastType.INFO)
+            emitEventFlow(SettingEvent.NavigateToLoginScreen)
+        }
     }
 
     private fun onFailLogout(e: Throwable) {
@@ -243,6 +259,14 @@ class SettingViewModel(
         val selectedReason = uiState.value.accountDeletionReasons[uiState.value.selectedReasonIndex]
 
         viewModelScope.launch {
+
+            // 모든 알람이 성공적으로 취소됐을 때만 그 이후 로직 실행
+            val canceled = cancelAllSchedules()
+            if (!canceled) {
+                ToastManager.show(ERROR_WITHDRAW, ToastType.ERROR)
+                return@launch
+            }
+
             memberRepository.withdrawUser(
                 request = DeleteAccountRequest(
                     withdrawalReasonId = selectedReason.id,
@@ -257,8 +281,8 @@ class SettingViewModel(
     private fun onSuccessWithdraw(result: Unit) {
         viewModelScope.launch {
             ToastManager.show(WITHDRAW_SUCCESS_MESSAGE, ToastType.INFO)
+            emitEventFlow(SettingEvent.NavigateToLoginScreen)
         }
-        emitEventFlow(SettingEvent.NavigateToLoginScreen)
     }
 
     private fun onFailWithdraw(e: Throwable) {
@@ -291,5 +315,47 @@ class SettingViewModel(
         val hour = uiState.value.hourInput.toIntOrNull() ?: 0
         val minute = uiState.value.minuteInput.toIntOrNull() ?: 0
         return hour > 0 || minute in 1..59
+    }
+
+    /**--------------------------------------------스케줄링 취소-----------------------------------------------*/
+
+    /**
+     * 모든 스케줄을 조회해서 알람을 취소한다.
+     * @return true: 전부 정상 처리 / false: 조회 또는 처리 중 에러
+     */
+    private suspend fun cancelAllSchedules(): Boolean {
+        var isSuccess = false
+
+        scheduleRepository.getScheduleList().collect { result ->
+            resultResponse(
+                result,
+                successCallback = { scheduleList ->
+                    onSuccessGetScheduleList(scheduleList)
+                    isSuccess = true
+                },
+                errorCallback = { e ->
+                    onFailCancelAllSchedules(e)
+                    isSuccess = false
+                }
+            )
+        }
+
+        return isSuccess
+    }
+
+    private fun onSuccessGetScheduleList(result: ScheduleList) {
+        result.scheduleList.forEach { schedule ->
+            cancelAlarms(schedule)
+        }
+    }
+
+    private fun onFailCancelAllSchedules(e: Throwable) {
+        logger.e { "onFailCancelAllSchedules: ${e.message}" }
+    }
+
+
+    private fun cancelAlarms(schedule: Schedule) {
+        alarmScheduler.cancelAlarm(schedule.departureAlarm.alarmId)
+        alarmScheduler.cancelAlarm(schedule.preparationAlarm.alarmId)
     }
 }
