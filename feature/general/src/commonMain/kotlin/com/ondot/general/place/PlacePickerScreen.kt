@@ -2,6 +2,7 @@ package com.ondot.general.place
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,6 +66,7 @@ fun PlacePickerScreen(
     val departureFocusRequester = remember { FocusRequester() }
     val arrivalFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         AnalyticsLogger.logEvent("screen_view_place_picker")
@@ -106,6 +108,7 @@ fun PlacePickerScreen(
     PlacePickerContent(
         uiState = uiState,
         buttonEnabled = viewModel.isButtonEnabled(),
+        interactionSource = interactionSource,
         departureFocusRequester = departureFocusRequester,
         arrivalFocusRequester = arrivalFocusRequester,
         onRouteInputChanged = viewModel::onRouteInputChanged,
@@ -132,6 +135,7 @@ fun PlacePickerScreen(
 fun PlacePickerContent(
     uiState: GeneralScheduleUiState,
     buttonEnabled: Boolean = false,
+    interactionSource: MutableInteractionSource,
     departureFocusRequester: FocusRequester = remember { FocusRequester() },
     arrivalFocusRequester: FocusRequester = remember { FocusRequester() },
     onRouteInputChanged: (String) -> Unit,
@@ -171,6 +175,7 @@ fun PlacePickerContent(
 
             HomeDepartureOption(
                 isChecked = uiState.isChecked,
+                interactionSource = interactionSource,
                 onClick = onClickCheckBox
             )
 
@@ -216,9 +221,15 @@ fun PlacePickerContent(
 @Composable
 fun HomeDepartureOption(
     isChecked: Boolean,
+    interactionSource: MutableInteractionSource,
     onClick: () -> Unit
 ) {
     Row(
+        modifier = Modifier.clickable(
+            interactionSource = interactionSource,
+            indication = null,
+            onClick = onClick
+        ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         OnDotCheckBox(isChecked = isChecked, onCheckedChange = onClick)
