@@ -44,7 +44,7 @@ import com.ondot.domain.model.schedule.Schedule
 import com.ondot.main.home.HomeUiState
 import com.ondot.util.DateTimeFormatter
 import ondot.core.design_system.generated.resources.Res
-import ondot.core.design_system.generated.resources.ic_banner
+import ondot.core.design_system.generated.resources.ic_notification_banner
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -53,6 +53,7 @@ fun ScheduleList(
     interactionSource: MutableInteractionSource,
     onClickSwitch: (Long, Boolean) -> Unit,
     onClickSchedule: (Long) -> Unit,
+    onBannerClick: () -> Unit,
     onLongClick: (Long) -> Unit,
     onDelete: (Long) -> Unit,
 ) {
@@ -62,11 +63,16 @@ fun ScheduleList(
     ) {
         item {
             Image(
-                painter = painterResource(Res.drawable.ic_banner),
+                painter = painterResource(Res.drawable.ic_notification_banner),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(349f/100f)
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource,
+                        onClick = onBannerClick
+                    )
             )
 
             Spacer(modifier = Modifier.height(24.dp))

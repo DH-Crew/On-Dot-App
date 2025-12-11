@@ -1,5 +1,6 @@
 package com.ondot.navigation
 
+import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -64,8 +65,15 @@ sealed class NavRoutes(@Transient val route: String = "") {
     data object DeleteAccount: NavRoutes("deleteAccount")
 
     // ServiceTerms
+    @Serializable
     data object ServiceTermsGraph: NavRoutes("serviceTermsGraph")
-    data object ServiceTerms: NavRoutes("serviceTerms")
+    @Serializable
+    data class ServiceTerms(val isNotification: Boolean): NavRoutes("serviceTerms/{isNotification}") {
+        companion object {
+            const val ROUTE: String = "serviceTerms/{isNotification}"
+            fun createRoute(isNotification: Boolean) = "serviceTerms/$isNotification"
+        }
+    }
 
     // HomeAddressSetting
     data object HomeAddressSettingGraph: NavRoutes("homeAddressSettingGraph")
