@@ -39,7 +39,7 @@ actual fun httpClient(): HttpClient = HttpClient(OkHttp) {
 
     install(Logging) {
         logger = Logger.SIMPLE
-        level  = if (BuildConfig.DEBUG) LogLevel.HEADERS else LogLevel.NONE
+        level  = if (BuildConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
     }
 
     install(ResponseObserver) {
