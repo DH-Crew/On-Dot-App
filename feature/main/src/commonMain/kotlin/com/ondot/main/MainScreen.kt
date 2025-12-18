@@ -41,10 +41,11 @@ import ondot.core.design_system.generated.resources.ic_settings_selected
 import ondot.core.design_system.generated.resources.ic_settings_unselected
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel { MainViewModel() },
+    viewModel: MainViewModel = koinViewModel(),
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit,
     navigateToLogin: () -> Unit,
