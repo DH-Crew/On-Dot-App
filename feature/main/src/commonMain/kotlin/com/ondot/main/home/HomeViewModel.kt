@@ -362,7 +362,7 @@ class HomeViewModel(
                 val newRemaining = DateTimeFormatter.calculateRemainingTime(target)
 
                 // 이미 0 이하라면 한 번 업데이트만 하고 종료
-                if (newRemaining.first == 0 && newRemaining.second == 0 && newRemaining.third == 0) {
+                if (newRemaining.first <= 0 && newRemaining.second <= 0 && newRemaining.third <= 0) {
                     updateStateSync(uiState.value.copy(remainingTime = newRemaining))
                     break
                 }
