@@ -47,11 +47,6 @@ class HomeViewModel(
     private var remainingTimeJob: Job? = null
     private var earliestAlarmAt: String? = null
 
-    private fun logGA(name: String, vararg params: Pair<String, Any?>) {
-        val clean = params.toMap().filterValues { it != null }
-        analyticsManager.logEvent(name, clean)
-    }
-
     init {
         needsChooseProvider()
         observeMapProvider()
@@ -78,8 +73,6 @@ class HomeViewModel(
     }
 
     fun onClickAlarmSwitch(id: Long, isEnabled: Boolean) {
-        logGA("schedule_alarm_toggle", "schedule_id" to id, "enabled" to isEnabled)
-
         val schedule = uiState.value.scheduleList.find { it.scheduleId == id } ?: return
 
         val newList = uiState.value.scheduleList.map {
@@ -117,8 +110,6 @@ class HomeViewModel(
     /**----------------------------------------------스케줄 조회---------------------------------------------*/
 
     fun getScheduleList() {
-        logGA("schedule_list_request")
-
         viewModelScope.launch {
             scheduleRepository.getScheduleList().collect {
                 resultResponse(it, ::onSuccessGetScheduleList, ::onFailureGetScheduleList)
@@ -226,8 +217,6 @@ class HomeViewModel(
     }
 
     fun setMapProvider(mapProvider: MapProvider) {
-        logGA("map_provider_select", "provider" to mapProvider.name.lowercase())
-
         viewModelScope.launch {
             memberRepository.updateMapProvider(request = MapProviderRequest(mapProvider)).collect {
                 resultResponse(
@@ -269,8 +258,6 @@ class HomeViewModel(
                 }
             )
         }
-
-        logGA("schedule_delete_request", "schedule_id" to scheduleId)
     }
 
     private fun onSuccessDeleteSchedule(scheduleId: Long) {
@@ -295,12 +282,6 @@ class HomeViewModel(
         schedule?.let {
             alarmScheduler.cancelAlarm(it.departureAlarm.alarmId)
             alarmScheduler.cancelAlarm(it.preparationAlarm.alarmId)
-            logGA(
-                "alarms_cancelled_for_schedule",
-                "schedule_id" to scheduleId,
-                "departure_alarm_id" to it.departureAlarm.alarmId,
-                "preparation_alarm_id" to it.preparationAlarm.alarmId
-            )
         }
     }
 
