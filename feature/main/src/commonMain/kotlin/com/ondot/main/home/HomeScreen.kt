@@ -57,10 +57,6 @@ fun HomeScreen(
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_home")
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.getScheduleList()
     }
 

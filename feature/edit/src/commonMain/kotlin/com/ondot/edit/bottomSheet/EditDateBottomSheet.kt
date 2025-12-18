@@ -39,10 +39,6 @@ fun EditDateBottomSheet(
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("bottom_sheet_view_edit_date")
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.initDate(isRepeat, repeatDays, currentDate)
     }
 

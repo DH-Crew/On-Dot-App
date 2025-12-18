@@ -61,10 +61,6 @@ fun OnboardingStep3(
     val interactionSource = remember { MutableInteractionSource() }
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_onboarding_step_3")
-    }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()

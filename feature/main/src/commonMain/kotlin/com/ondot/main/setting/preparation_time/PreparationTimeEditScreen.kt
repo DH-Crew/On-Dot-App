@@ -48,10 +48,6 @@ fun PreparationTimeEditScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_preparation_time_edit")
-    }
-
     PreparationTimeEditContent(
         hourInput = uiState.hourInput,
         minuteInput = uiState.minuteInput,

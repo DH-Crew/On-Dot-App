@@ -49,10 +49,6 @@ fun OnboardingStep2(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_onboarding_step_2")
-    }
-
     Column(
         modifier = Modifier
             .fillMaxWidth(),

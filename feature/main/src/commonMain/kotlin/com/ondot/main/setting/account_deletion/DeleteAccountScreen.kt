@@ -73,10 +73,6 @@ fun DeleteAccountScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_account_delete")
-    }
-
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {
             when(it) {

@@ -34,10 +34,6 @@ fun LoginScreen(
     navigateToMain: () -> Unit
 ) {
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_login")
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.eventFlow.collect {
             when (it) {
                 is LoginEvent.NavigateToOnboarding -> navigateToOnboarding()

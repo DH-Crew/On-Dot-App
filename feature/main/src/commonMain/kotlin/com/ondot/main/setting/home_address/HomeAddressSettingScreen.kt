@@ -56,10 +56,6 @@ fun HomeAddressSettingScreen(
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_home_address_setting")
-    }
-
-    LaunchedEffect(Unit) {
         if (uiState.homeAddress.roadAddress.isEmpty()) viewModel.getHomeAddress()
     }
 

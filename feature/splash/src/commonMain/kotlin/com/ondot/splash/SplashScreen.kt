@@ -40,10 +40,6 @@ fun SplashScreen(
     )
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_splash")
-    }
-
-    LaunchedEffect(Unit) {
         delay(2000L)
         if (uiState.skipLogin) navigateToHome()
         else navigateToLogin()

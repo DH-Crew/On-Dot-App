@@ -63,10 +63,6 @@ fun NavMapSettingScreen(
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_nav_map_setting")
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.getUserMapProvider()
     }
 

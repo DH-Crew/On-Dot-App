@@ -59,10 +59,6 @@ fun DepartureAlarmRingScreen(
     val viewModel: AlarmViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_departure_alarm_ring")
-    }
-
     LaunchedEffect(alarmId) {
         if (alarmId != -1L) {
             viewModel.getAlarmInfo(scheduleId, alarmId)

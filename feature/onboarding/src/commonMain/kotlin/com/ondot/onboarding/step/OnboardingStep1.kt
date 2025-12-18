@@ -44,10 +44,6 @@ fun OnboardingStep1(
         }
     }
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_onboarding_step_1")
-    }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
