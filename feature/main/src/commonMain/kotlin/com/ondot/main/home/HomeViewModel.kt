@@ -27,7 +27,9 @@ import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
 import com.ondot.util.DateTimeFormatter
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -41,6 +43,9 @@ class HomeViewModel(
     private val logger = Logger.withTag("HomeViewModel")
     private var mapProvider = MapProvider.KAKAO
     private var lastScheduledAlarms: Set<Long> = emptySet()
+
+    private var remainingTimeJob: Job? = null
+    private var earliestAlarmAt: String? = null
 
     private fun logGA(name: String, vararg params: Pair<String, Any?>) {
         val clean = params.toMap().filterValues { it != null }
@@ -122,6 +127,8 @@ class HomeViewModel(
     }
 
     private fun onSuccessGetScheduleList(result: ScheduleList) {
+        earliestAlarmAt = result.earliestAlarmAt.ifBlank { null }
+
         val remainingTime = if (result.earliestAlarmAt.isNotBlank()) {
             DateTimeFormatter.calculateRemainingTime(result.earliestAlarmAt)
         } else { Triple(-1, -1, -1) }
@@ -132,6 +139,8 @@ class HomeViewModel(
                 scheduleList = result.scheduleList
             )
         )
+
+        startRemainingTimeTicker()
 
         processAlarms(result.scheduleList)
         scheduleNotification(result.scheduleList)
@@ -338,4 +347,35 @@ class HomeViewModel(
         endLng = schedule.endLongitude,
         repeatDays = schedule.repeatDays
     )
+
+    private fun startRemainingTimeTicker() {
+        val target = earliestAlarmAt
+        if (target == null) {
+            remainingTimeJob?.cancel()
+            remainingTimeJob = null
+            return
+        }
+
+        remainingTimeJob?.cancel()
+        remainingTimeJob = viewModelScope.launch {
+            while (isActive) {
+                val newRemaining = DateTimeFormatter.calculateRemainingTime(target)
+
+                // 이미 0 이하라면 한 번 업데이트만 하고 종료
+                if (newRemaining.first <= 0 && newRemaining.second <= 0 && newRemaining.third <= 0) {
+                    updateStateSync(uiState.value.copy(remainingTime = newRemaining))
+                    break
+                }
+
+                // 매 분 갱신
+                updateStateSync(uiState.value.copy(remainingTime = newRemaining))
+                delay(60_000L)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        remainingTimeJob?.cancel()
+    }
 }
