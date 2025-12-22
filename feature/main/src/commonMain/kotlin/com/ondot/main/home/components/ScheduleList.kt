@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,6 +44,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.main.home.HomeUiState
+import com.ondot.ui.util.rotatingGlowStroke
 import com.ondot.util.DateTimeFormatter
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_notification_banner
@@ -78,12 +81,13 @@ fun ScheduleList(
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        items(scheduleList, key = { it.scheduleId }) {
+        itemsIndexed(scheduleList, key = { index, it -> it.scheduleId }) { index, item ->
             SwipableDeleteItem(
-                onDelete = { onDelete(it.scheduleId) }
+                onDelete = { onDelete(item.scheduleId) }
             ) {
                 ScheduleListItem(
-                    item = it,
+                    item = item,
+                    isFirst = index == 0,
                     interactionSource = interactionSource,
                     onClickSwitch = onClickSwitch,
                     onClickSchedule = onClickSchedule,
@@ -99,6 +103,7 @@ fun ScheduleList(
 @Composable
 fun ScheduleListItem(
     item: Schedule,
+    isFirst: Boolean = false,
     interactionSource: MutableInteractionSource,
     onClickSwitch: (Long, Boolean) -> Unit,
     onClickSchedule: (Long) -> Unit,
@@ -109,6 +114,19 @@ fun ScheduleListItem(
             .fillMaxWidth()
             .background(color = Gray700, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
+            .rotatingGlowStroke(
+                enabled = isFirst,
+                cornerRadius = 12.dp,
+                strokeWidth = 1.dp,
+                baseColor = Green500,
+                baseAlpha = 0.20f,
+                highlightStartColor = Gray700.copy(alpha = 0.4f),
+                highlightEndColor = Green500,
+                highlightLengthFraction = 0.45f,
+                periodMs = 1400,
+                cap = StrokeCap.Butt,
+                glowEnabled = true
+            )
             .combinedClickable(
                 interactionSource = interactionSource,
                 indication = null,
