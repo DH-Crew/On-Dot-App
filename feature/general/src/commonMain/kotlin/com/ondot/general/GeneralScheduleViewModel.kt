@@ -56,11 +56,6 @@ class GeneralScheduleViewModel(
     private val _query = MutableStateFlow("")
     private val query: StateFlow<String> = _query
 
-    private fun logGA(name: String, vararg params: Pair<String, Any?>) {
-        val clean = params.toMap().filterValues { it != null }
-        analyticsManager.logEvent(name, clean)
-    }
-
     init {
         viewModelScope.launch {
             query
@@ -121,8 +116,6 @@ class GeneralScheduleViewModel(
     fun onClickSwitch(newValue: Boolean) {
         updateState(uiState.value.copy(isRepeat = newValue, selectedDate = null))
 
-        logGA("repeat_toggle", "enabled" to newValue)
-
         if (!newValue) {
             updateState(
                 uiState.value.copy(
@@ -148,7 +141,6 @@ class GeneralScheduleViewModel(
         )
 
         val bucket = when (index) { 0 -> "full_week"; 1 -> "weekdays"; 2 -> "weekend"; else -> "custom" }
-        logGA("repeat_quick_select", "bucket" to bucket)
     }
 
     fun onClickTextChip(index: Int) {
@@ -178,18 +170,15 @@ class GeneralScheduleViewModel(
     fun onPrevMonth() {
         val target = uiState.value.calendarMonth.minus(DatePeriod(months = 1))
         updateState(uiState.value.copy(calendarMonth = target))
-        logGA("calendar_month_nav", "direction" to "prev", "month" to target.toString())
     }
 
     fun onNextMonth() {
         val target = uiState.value.calendarMonth.plus(DatePeriod(months = 1))
         updateState(uiState.value.copy(calendarMonth = target))
-        logGA("calendar_month_nav", "direction" to "next", "month" to target.toString())
     }
 
     fun onSelectDate(date: LocalDate) {
         updateState(uiState.value.copy(selectedDate = date, isActiveDial = true))
-        logGA("date_selected", "date" to date.toString())
     }
 
     fun onToggleDial() {
@@ -251,15 +240,12 @@ class GeneralScheduleViewModel(
                 )
             )
         }
-
-        logGA("place_selected")
     }
 
     fun onClickCheckBox() {
         val curValue = uiState.value.isChecked
 
         if (!curValue && uiState.value.homeAddress.title.isBlank()) {
-            logGA("general_schedule_home_address_request_on_checkbox")
             initHomeAddress()
             return
         }
@@ -402,19 +388,16 @@ class GeneralScheduleViewModel(
     }
 
     private fun onSuccessCreateSchedule(result: Unit) {
-        logGA("schedule_create_success")
         emitEventFlow(GeneralScheduleEvent.NavigateToMain)
     }
 
     private fun onFailedCreateSchedule(e: Throwable) {
         logger.e { "On Failed Create Schedule: ${e.message}" }
-        logGA("schedule_create_failed", "error" to (e.message ?: e::class.simpleName))
         viewModelScope.launch { ToastManager.show(ERROR_CREATE_SCHEDULE, ToastType.ERROR) }
     }
 
     fun updateScheduleTitle(title: String) {
         updateState(uiState.value.copy(scheduleTitle = title))
-        logGA("schedule_title_update", "length" to title)
     }
 
     fun updatePreparationAlarmEnabled() {

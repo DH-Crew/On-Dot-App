@@ -67,10 +67,6 @@ fun PreparationAlarmRingScreen(
     val viewModel: AlarmViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_preparation_alarm_ring")
-    }
-
     LaunchedEffect(alarmId) {
         if (alarmId != -1L) {
             viewModel.getAlarmInfo(scheduleId, alarmId)

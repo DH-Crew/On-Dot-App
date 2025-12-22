@@ -95,10 +95,6 @@ fun EditScheduleScreen(
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_edit_schedule")
-    }
-
-    LaunchedEffect(Unit) {
         delay(200)
         if (uiState.scheduleId == -1L) viewModel.updateScheduleId(scheduleId)
         if (!uiState.isInitialized) { viewModel.getScheduleDetail(scheduleId) }

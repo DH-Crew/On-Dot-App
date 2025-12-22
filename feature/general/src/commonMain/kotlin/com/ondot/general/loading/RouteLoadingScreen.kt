@@ -40,10 +40,6 @@ fun RouteLoadingScreen(
     )
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_route_loading")
-    }
-
-    LaunchedEffect(Unit) {
         delay(2000L)
         navigateToCheckSchedule()
     }

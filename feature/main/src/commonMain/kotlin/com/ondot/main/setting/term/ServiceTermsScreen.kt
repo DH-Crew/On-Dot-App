@@ -29,10 +29,6 @@ fun ServiceTermsScreen(
     isNotification: Boolean,
     popScreen: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_service_term")
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()

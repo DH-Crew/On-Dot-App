@@ -54,10 +54,6 @@ fun EditTimeBottomSheet(
     val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.minute.coerceIn(0, 59))
 
     LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("bottom_sheet_view_edit_time")
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.initTime(currentTime)
         currentAlarmDate?.let { viewModel.initDate(isRepeat = false, repeatDays = emptySet(), currentDate = it) }
     }

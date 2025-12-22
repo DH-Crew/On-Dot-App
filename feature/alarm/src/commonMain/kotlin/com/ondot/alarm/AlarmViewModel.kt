@@ -39,11 +39,6 @@ class AlarmViewModel(
 ): BaseViewModel<AlarmUiState>(AlarmUiState()) {
     private val logger = Logger.withTag("AppViewModel")
 
-    private fun logGA(name: String, vararg params: Pair<String, Any?>) {
-        val clean = params.toMap().filterValues { it != null }
-        analyticsManager.logEvent(name, clean)
-    }
-
     init {
         initMapProvider()
     }
@@ -76,15 +71,6 @@ class AlarmViewModel(
                     updateState(
                         uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm)
                     )
-
-                    val type = if (alarmId == it.preparationAlarm.alarmId) "preparation" else "departure"
-                    logGA(
-                        "alarm_open",
-                        "schedule_id" to it.scheduleId,
-                        "alarm_id" to currentAlarm.alarmId,
-                        "alarm_type" to type,
-                        "triggered_at" to currentAlarm.triggeredAt
-                    )
                 }
             }
         }
@@ -93,8 +79,6 @@ class AlarmViewModel(
     fun startPreparation() {
         soundPlayer.stopSound()
         updateState(uiState.value.copy(showPreparationStartAnimation = true))
-
-        logGA("preparation_start")
 
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
@@ -108,11 +92,6 @@ class AlarmViewModel(
         snoozeAlarm()
         updateState(uiState.value.copy(showPreparationSnoozeAnimation = true))
 
-        logGA(
-            "alarm_snooze_click",
-            "alarm_type" to "preparation",
-        )
-
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
             alarmId = uiState.value.currentAlarm.alarmId,
@@ -124,11 +103,6 @@ class AlarmViewModel(
         soundPlayer.stopSound()
         snoozeAlarm()
         updateState(uiState.value.copy(showDepartureSnoozeAnimation = true))
-
-        logGA(
-            "alarm_snooze_click",
-            "alarm_type" to "departure",
-        )
 
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
@@ -154,18 +128,6 @@ class AlarmViewModel(
         val localDateTime = now.toLocalDateTime(koreaZone)
         val isoDate = localDateTime.toString()
         val epochMs = now.toEpochMilliseconds()
-
-        logGA(
-            "departure_alarm_off",
-            "occurred_at_iso" to isoDate,
-            "occurred_at_ms" to epochMs
-        )
-
-        logGA(
-            "directions_open",
-            "schedule_id" to schedule.scheduleId,
-            "provider" to uiState.value.mapProvider.toString().lowercase()
-        )
 
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
@@ -301,15 +263,6 @@ class AlarmViewModel(
                     appointmentAt = newSchedule.appointmentAt
                 ),
                 mapProvider = uiState.value.mapProvider
-            )
-
-            logGA(
-                "alarm_snoozed",
-                "schedule_id" to newSchedule.scheduleId,
-                "alarm_id" to currentAlarm.alarmId,
-                "alarm_type" to type.name.lowercase(),
-                "snooze_interval_min" to currentAlarm.snoozeInterval,
-                "next_triggered_at" to newTriggeredAt
             )
         }
     }

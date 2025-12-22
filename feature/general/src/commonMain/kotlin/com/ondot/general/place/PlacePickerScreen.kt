@@ -68,10 +68,6 @@ fun PlacePickerScreen(
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_place_picker")
-    }
-
     BackPressHandler(
         onBack = {
             viewModel.onClickBackButton()

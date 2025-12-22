@@ -85,10 +85,6 @@ fun CheckScheduleScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequest = remember { FocusRequester() }
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_schedule_review")
-    }
-
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {
             when (it) {

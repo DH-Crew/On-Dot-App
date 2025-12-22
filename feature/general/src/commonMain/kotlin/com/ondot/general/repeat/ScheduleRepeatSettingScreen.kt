@@ -50,10 +50,6 @@ fun ScheduleRepeatSettingScreen(
     val interactionSource = remember { MutableInteractionSource() }
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_schedule_date_time")
-    }
-
     LaunchedEffect(uiState.totalStep) {
         if (uiState.totalStep == 0) {
             viewModel.initStep()

@@ -31,9 +31,6 @@ fun OnboardingStep5(
     interactionSource: MutableInteractionSource,
     onClickAnswer: (Int) -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_onboarding_step_5")
-    }
 
     Column(
         modifier = Modifier

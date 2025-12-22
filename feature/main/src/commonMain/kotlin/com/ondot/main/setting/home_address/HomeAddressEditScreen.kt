@@ -70,10 +70,6 @@ fun HomeAddressEditScreen(
     var query by remember { mutableStateOf(uiState.homeAddress.roadAddress) }
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(Unit) {
-        AnalyticsLogger.logEvent("screen_view_home_address_edit")
-    }
-
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect { event ->
             when (event) {
