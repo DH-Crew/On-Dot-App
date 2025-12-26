@@ -118,14 +118,11 @@ fun ScheduleListItem(
                 enabled = isFirst,
                 cornerRadius = 12.dp,
                 strokeWidth = 1.dp,
-                baseColor = Green500,
-                baseAlpha = 0.20f,
                 highlightStartColor = Gray700.copy(alpha = 0.4f),
                 highlightEndColor = Green500,
                 highlightLengthFraction = 0.45f,
                 periodMs = 1400,
-                cap = StrokeCap.Butt,
-                glowEnabled = true
+                cap = StrokeCap.Butt
             )
             .combinedClickable(
                 interactionSource = interactionSource,
