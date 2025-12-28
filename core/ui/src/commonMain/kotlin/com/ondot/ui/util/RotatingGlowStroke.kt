@@ -36,10 +36,10 @@ fun Modifier.rotatingGlowStroke(
 
     // 하이라이트가 테두리 전체 둘레 중 차지하는 비율(0~1).
     // 예: 0.65이면 둘레의 65% 길이가 하이라이트로 칠해진다.
-    highlightLengthFraction: Float = 0.65f,
+    highlightLengthFraction: Float = 0.5f,
 
     // 하이라이트가 한 바퀴 도는 주기(ms)
-    periodMs: Int = 2400,
+    periodMs: Int = 5000,
 
     // StrokeCap:
     // · Butt: 끝이 딱 잘린 형태(두 조각으로 나뉘는 wrap-around 구간에서 경계가 덜 티나게 설정)
