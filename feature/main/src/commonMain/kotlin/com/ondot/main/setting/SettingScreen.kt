@@ -31,7 +31,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.dh.ondot.presentation.ui.theme.SETTING_CUSTOMER_SERVICE
+import com.dh.ondot.presentation.ui.theme.SETTING_FEEDBACK
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
 import com.dh.ondot.presentation.ui.theme.SETTING_PREPARE_TIME
@@ -47,7 +47,6 @@ import com.dh.ondot.presentation.ui.theme.WORD_YES
 import com.ondot.design_system.components.OnDotDialog
 import com.ondot.design_system.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.util.AnalyticsLogger
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_arrow_right_gray400
 import org.jetbrains.compose.resources.painterResource
@@ -83,7 +82,7 @@ fun SettingScreen(
         onEditPreparationTimeClick = navigateToPreparationTimeEditScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
-        onCustomServiceClick = { viewModel.openUrl("http://pf.kakao.com/_xfdLfn/chat") },
+        onFeedbackClick = { viewModel.openUrl("https://docs.google.com/forms/d/1WLk_dOumaLz1HcvWjSPTbEUWsq3ZKHrzLY25DK9CSYE/edit?usp=forms_home&ouid=105325835482674991919&ths=true") },
         onLogout = viewModel::logout
     )
 }
@@ -98,7 +97,7 @@ fun SettingContent(
     onEditPreparationTimeClick: () -> Unit = {},
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
-    onCustomServiceClick: () -> Unit = {},
+    onFeedbackClick: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
@@ -123,7 +122,6 @@ fun SettingContent(
             sections = listOf(
                 Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
                 Pair(SETTING_NAV_MAP, onEditNavMapClick),
-//                Pair(SETTING_ALARM_DEFAULT, {}),
                 Pair(SETTING_PREPARE_TIME, onEditPreparationTimeClick)
             ),
             interactionSource = interactionSource
@@ -134,7 +132,7 @@ fun SettingContent(
             SettingSection(
                 header = WORD_HELP,
                 sections = listOf(
-                    Pair(SETTING_CUSTOMER_SERVICE, onCustomServiceClick),
+                    Pair(SETTING_FEEDBACK, onFeedbackClick),
                     Pair(SETTING_SERVICE_POLICY, onServiceTermsClick)
                 ),
                 interactionSource = interactionSource
