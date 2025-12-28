@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,19 +16,37 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.RenderEffect
+import androidx.compose.ui.graphics.Shader
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.EMPTY_PREPARATION_ALARM
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
@@ -42,6 +61,7 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.main.home.HomeUiState
+import com.ondot.ui.util.rotatingGlowStroke
 import com.ondot.util.DateTimeFormatter
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_notification_banner
@@ -78,13 +98,13 @@ fun ScheduleList(
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        items(scheduleList, key = { it.scheduleId }) {
+        itemsIndexed(scheduleList, key = { index, it -> it.scheduleId }) { index, item ->
             SwipableDeleteItem(
-                onDelete = { onDelete(it.scheduleId) }
+                onDelete = { onDelete(item.scheduleId) }
             ) {
                 ScheduleListItem(
-                    item = it,
-                    interactionSource = interactionSource,
+                    item = item,
+                    isFirst = index == 0,
                     onClickSwitch = onClickSwitch,
                     onClickSchedule = onClickSchedule,
                     onLongClick = onLongClick
@@ -99,16 +119,26 @@ fun ScheduleList(
 @Composable
 fun ScheduleListItem(
     item: Schedule,
-    interactionSource: MutableInteractionSource,
+    isFirst: Boolean = false,
     onClickSwitch: (Long, Boolean) -> Unit,
     onClickSchedule: (Long) -> Unit,
     onLongClick: (Long) -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Gray700, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
+            .rotatingGlowStroke(
+                enabled = isFirst,
+                cornerRadius = 12.dp,
+                strokeWidth = 1.dp,
+                highlightStartColor = Gray700.copy(alpha = 0.4f),
+                highlightEndColor = Green500,
+                cap = StrokeCap.Butt
+            )
             .combinedClickable(
                 interactionSource = interactionSource,
                 indication = null,
@@ -117,28 +147,40 @@ fun ScheduleListItem(
             ),
         horizontalAlignment = Alignment.Start
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Gray700, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .background(Gray700)
         ) {
-            ScheduleInfoToggleSection(
-                date = item.appointmentAt,
-                title = item.scheduleTitle,
-                isEnabled = item.hasActiveAlarm,
-                isRepeat = item.isRepeat,
-                repeatDays = item.repeatDays,
-                onToggleClick = {
-                    onClickSwitch(item.scheduleId, it)
-                }
-            )
+            if (isFirst) {
+                TopFogOverlay(
+                    modifier = Modifier.matchParentSize(),
+                    blurRadius = 10.dp,
+                    cornerRadius = 12.dp,
+                    rightGlowColor = Green500
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp)
+            ) {
+                ScheduleInfoToggleSection(
+                    date = item.appointmentAt,
+                    title = item.scheduleTitle,
+                    isEnabled = item.hasActiveAlarm,
+                    isRepeat = item.isRepeat,
+                    repeatDays = item.repeatDays,
+                    onToggleClick = { onClickSwitch(item.scheduleId, it) }
+                )
+            }
         }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Gray600, RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                .background(Gray600)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             AlarmInfoSection(
@@ -147,6 +189,75 @@ fun ScheduleListItem(
             )
         }
     }
+}
+
+@Composable
+fun TopFogOverlay(
+    modifier: Modifier = Modifier,
+    blurRadius: Dp = 22.dp,
+    cornerRadius: Dp = 12.dp,
+    leftFogColor: Color = Gray500,
+    rightGlowColor: Color,
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius))
+            .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+            .drawWithCache {
+                val w = size.width
+                val h = size.height
+
+                // 좌상단 회색 안개
+                val leftFog = Brush.linearGradient(
+                    colors = listOf(
+                        leftFogColor,
+                        Gray700,
+                        Color.Transparent
+                    ),
+                    start = Offset(0f, 0f),
+                    end = Offset(w * 0.55f, h * 1.25f)
+                )
+
+                // 우상단 초록 안개
+                val rightGlow = Brush.radialGradient(
+                    colors = listOf(
+                        rightGlowColor.copy(alpha = 0.2f),
+                        Gray700.copy(alpha = 0.2f),
+                        Color.Transparent
+                    ),
+                    center = Offset(w * 0.92f, -h * 0.25f),
+                    radius = w * 0.85f
+                )
+
+                // 화이트 헤이즈
+                val whiteHaze = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = 0.08f),
+                        Color.Transparent
+                    ),
+                    startY = 0f,
+                    endY = h
+                )
+
+                val fadeMask = Brush.verticalGradient(
+                    colorStops = arrayOf(
+                        0.00f to Color.White,
+                        0.65f to Color.White.copy(alpha = 0.70f),
+                        1.00f to Color.Transparent
+                    ),
+                    startY = 0f,
+                    endY = h
+                )
+
+                onDrawBehind {
+                    drawRect(leftFog)
+                    drawRect(rightGlow)
+                    drawRect(whiteHaze)
+                    drawRect(fadeMask, blendMode = BlendMode.DstIn)
+                }
+            }
+            .blur(blurRadius, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+    )
 }
 
 @Composable
