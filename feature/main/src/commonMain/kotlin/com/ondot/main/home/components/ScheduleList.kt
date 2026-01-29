@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -31,14 +30,9 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.RenderEffect
-import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -69,6 +63,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ScheduleList(
+    earliestScheduleId: Long,
     scheduleList: List<Schedule>,
     interactionSource: MutableInteractionSource,
     onClickSwitch: (Long, Boolean) -> Unit,
@@ -104,7 +99,7 @@ fun ScheduleList(
             ) {
                 ScheduleListItem(
                     item = item,
-                    isFirst = index == 0,
+                    enabled = earliestScheduleId == item.scheduleId,
                     onClickSwitch = onClickSwitch,
                     onClickSchedule = onClickSchedule,
                     onLongClick = onLongClick
@@ -119,7 +114,7 @@ fun ScheduleList(
 @Composable
 fun ScheduleListItem(
     item: Schedule,
-    isFirst: Boolean = false,
+    enabled: Boolean = false,
     onClickSwitch: (Long, Boolean) -> Unit,
     onClickSchedule: (Long) -> Unit,
     onLongClick: (Long) -> Unit
@@ -132,7 +127,7 @@ fun ScheduleListItem(
             .background(color = Gray700, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
             .rotatingGlowStroke(
-                enabled = isFirst,
+                enabled = enabled,
                 cornerRadius = 12.dp,
                 strokeWidth = 1.dp,
                 highlightStartColor = Gray700.copy(alpha = 0.4f),
@@ -152,7 +147,7 @@ fun ScheduleListItem(
                 .fillMaxWidth()
                 .background(Gray700)
         ) {
-            if (isFirst) {
+            if (enabled) {
                 TopFogOverlay(
                     modifier = Modifier.matchParentSize(),
                     blurRadius = 10.dp,

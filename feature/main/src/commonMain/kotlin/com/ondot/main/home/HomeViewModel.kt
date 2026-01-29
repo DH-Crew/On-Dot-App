@@ -104,6 +104,7 @@ class HomeViewModel(
             scheduleRepository.toggleAlarm(scheduleId = id, request = ToggleAlarmRequest(isEnabled = isEnabled)).collect {
                 resultResponse(it, {})
             }
+            getScheduleList()
         }
     }
 
@@ -127,7 +128,8 @@ class HomeViewModel(
         updateState(
             uiState.value.copy(
                 remainingTime = remainingTime,
-                scheduleList = result.scheduleList
+                scheduleList = result.scheduleList,
+                earliestScheduleId = result.earliestScheduleId,
             )
         )
 
