@@ -137,6 +137,7 @@ fun HomeContent(
                 }
             } else {
                 ScheduleList(
+                    earliestScheduleId = uiState.earliestScheduleId,
                     scheduleList = uiState.scheduleList,
                     interactionSource = interactionSource,
                     onClickSwitch = onClickAlarmSwitch,
