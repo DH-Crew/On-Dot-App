@@ -9,6 +9,7 @@ object ScheduleListResponseMapper: Mapper<ScheduleListResponse, ScheduleList> {
     override fun responseToModel(response: ScheduleListResponse?): ScheduleList {
         return response?.let {
             ScheduleList(
+                earliestScheduleId = it.earliestAlarmId ?: -1L,
                 earliestAlarmAt = it.earliestAlarmAt ?: "",
                 hasNext = it.hasNext ?: false,
                 scheduleList = it.scheduleList?.map { scheduleResponse ->
