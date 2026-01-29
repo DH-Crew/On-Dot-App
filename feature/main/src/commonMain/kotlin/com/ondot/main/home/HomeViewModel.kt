@@ -89,21 +89,22 @@ class HomeViewModel(
 
         updateState(uiState.value.copy(scheduleList = newList))
 
-        if (isEnabled) {
-            processAlarmsForSchedule(schedule.copy(
-                departureAlarm = schedule.departureAlarm.copy(enabled = true),
-                preparationAlarm = schedule.preparationAlarm.copy(enabled = true)
-            ))
-            lastScheduledAlarms = lastScheduledAlarms + setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
-        } else {
-            cancelAlarms(id)
-            lastScheduledAlarms = lastScheduledAlarms - setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
-        }
+//        if (isEnabled) {
+//            processAlarmsForSchedule(schedule.copy(
+//                departureAlarm = schedule.departureAlarm.copy(enabled = true),
+//                preparationAlarm = schedule.preparationAlarm.copy(enabled = true)
+//            ))
+//            lastScheduledAlarms = lastScheduledAlarms + setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
+//        } else {
+//            cancelAlarms(id)
+//            lastScheduledAlarms = lastScheduledAlarms - setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
+//        }
 
         viewModelScope.launch {
             scheduleRepository.toggleAlarm(scheduleId = id, request = ToggleAlarmRequest(isEnabled = isEnabled)).collect {
                 resultResponse(it, {})
             }
+            getScheduleList()
         }
     }
 
@@ -127,7 +128,8 @@ class HomeViewModel(
         updateState(
             uiState.value.copy(
                 remainingTime = remainingTime,
-                scheduleList = result.scheduleList
+                scheduleList = result.scheduleList,
+                earliestScheduleId = result.earliestScheduleId,
             )
         )
 
