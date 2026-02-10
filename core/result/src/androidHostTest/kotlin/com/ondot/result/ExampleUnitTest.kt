@@ -1,4 +1,4 @@
-package com.ondot.core
+package com.ondot.result
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
