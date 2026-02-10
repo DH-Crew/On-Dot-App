@@ -105,6 +105,8 @@ abstract class BaseViewModel<S : UiState, I : Intent, SE : SideEffect>(
             } catch (e: CancellationException) {
                 // 코루틴 취소는 에러로 취급하지 않기
                 throw e
+            } catch (t: Throwable) {
+                handleError(t)
             } finally {
                 onFinally?.invoke()
             }
