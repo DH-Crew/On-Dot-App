@@ -10,6 +10,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.domain)
             implementation(projects.core.designSystem)
+            implementation(projects.core.result)
         }
     }
 }
