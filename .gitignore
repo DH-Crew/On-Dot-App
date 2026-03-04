@@ -34,3 +34,5 @@ iosApp/GoogleService-Info.plist
 iosApp/iosApp/GoogleService-Info.plist
 iosApp/ComposeApp.xcframework
 iosApp/iosApp/Config.xcconfig
+
+.editorconfig
