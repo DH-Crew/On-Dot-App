@@ -52,4 +52,42 @@ class NetworkClient(
         } catch (e: Exception) {
             Result.failure(e)
         }
+
+    suspend inline fun <reified T> requestOrThrow(
+        method: HttpMethod,
+        path: String,
+        queryParams: Map<String, Any> = emptyMap(),
+        body: Any? = null,
+        addAuthHeader: Boolean = true,
+        isReissue: Boolean = false,
+    ): T {
+        val response =
+            httpClient.request("${BuildKonfig.BASE_URL}$path") {
+                this.method =
+                    when (method) {
+                        HttpMethod.GET -> io.ktor.http.HttpMethod.Get
+                        HttpMethod.POST -> io.ktor.http.HttpMethod.Post
+                        HttpMethod.PUT -> io.ktor.http.HttpMethod.Put
+                        HttpMethod.PATCH -> io.ktor.http.HttpMethod.Patch
+                        HttpMethod.DELETE -> io.ktor.http.HttpMethod.Delete
+                    }
+
+                queryParams.forEach { (key, value) ->
+                    url.parameters.append(key, value.toString())
+                }
+
+                if (body != null) setBody(body)
+
+                if (addAuthHeader) {
+                    tokenProvider.getToken()?.let { token ->
+                        header(
+                            "Authorization",
+                            "Bearer ${if (isReissue) token.refreshToken else token.accessToken}",
+                        )
+                    }
+                }
+            }
+
+        return response.body()
+    }
 }
