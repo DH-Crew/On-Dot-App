@@ -51,7 +51,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit,
-    navigateToNotificationScreen: () -> Unit
+    navigateToNotificationScreen: () -> Unit,
+    navigateToEverytimeScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -69,7 +70,7 @@ fun HomeScreen(
             viewModel.setMapProvider(it)
         },
         onLongClick = viewModel::openDirections,
-        onBannerClick = navigateToNotificationScreen,
+        onBannerClick = navigateToEverytimeScreen,
         onDelete = { viewModel.deleteSchedule(it) },
         navigateToGeneralSchedule = navigateToGeneralSchedule,
         navigateToEditSchedule = navigateToEditSchedule

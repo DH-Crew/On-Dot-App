@@ -66,6 +66,11 @@ object MainNavGraph: NavGraphContributor {
                         navController.navigate(NavRoutes.ServiceTerms.createRoute(true)) {
                             launchSingleTop = true
                         }
+                    },
+                    navigateToEverytime = {
+                        navController.navigate(NavRoutes.Landing.route) {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }

@@ -54,7 +54,8 @@ fun MainScreen(
     navigateToHomeAddressSetting: () -> Unit,
     navigateToNavMapSetting: () -> Unit,
     navigateToPreparationTimeEdit: () -> Unit,
-    navigateToNotification: () -> Unit
+    navigateToNotification: () -> Unit,
+    navigateToEverytime: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,7 +82,8 @@ fun MainScreen(
                 BottomNavType.HOME -> HomeScreen(
                     navigateToGeneralSchedule = navigateToGeneralSchedule,
                     navigateToEditSchedule = navigateToEditSchedule,
-                    navigateToNotificationScreen = navigateToNotification
+                    navigateToNotificationScreen = navigateToNotification,
+                    navigateToEverytimeScreen = navigateToEverytime,
                 )
                 BottomNavType.SETTING -> {
                     SettingScreen(
