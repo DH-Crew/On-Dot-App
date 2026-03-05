@@ -12,9 +12,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.coroutines.extensions)
+            implementation(libs.kotlinx.datetime)
 
             implementation(projects.domain)
             implementation(projects.core.network)
+            implementation(projects.core.result)
         }
 
         androidMain.dependencies {

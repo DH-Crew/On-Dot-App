@@ -3,11 +3,13 @@ package com.ondot.domain.repository
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.schedule.EverytimeValidateTimetable
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleAlarm
 import com.ondot.domain.model.schedule.ScheduleDetail
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 
 interface ScheduleRepository {
@@ -42,4 +44,6 @@ interface ScheduleRepository {
     suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?>
 
     suspend fun upsertLocalSchedule(schedule: Schedule)
+
+    suspend fun validateEverytimeTimetable(url: String): AppResult<EverytimeValidateTimetable>
 }

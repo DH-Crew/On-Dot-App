@@ -46,14 +46,21 @@ import com.ondot.everytime.component.HowToConnectSection
 import com.ondot.everytime.component.TrackableSection
 
 @Composable
-fun LandingRoute(popScreen: () -> Unit) {
+fun LandingRoute(
+    popScreen: () -> Unit,
+    navigateToUrlInput: () -> Unit,
+) {
     LandingScreen(
         onBack = popScreen,
+        onIntegrationClick = navigateToUrlInput,
     )
 }
 
 @Composable
-private fun LandingScreen(onBack: () -> Unit) {
+private fun LandingScreen(
+    onBack: () -> Unit,
+    onIntegrationClick: () -> Unit,
+) {
     val scrollState = rememberScrollState()
     val visibleMap = remember { mutableStateMapOf<String, Boolean>() }
     val density = LocalDensity.current
@@ -138,6 +145,7 @@ private fun LandingScreen(onBack: () -> Unit) {
                                 this.alpha = alpha
                                 translationY = offsetY.toPx()
                             },
+                    onClick = onIntegrationClick,
                 )
             }
         }

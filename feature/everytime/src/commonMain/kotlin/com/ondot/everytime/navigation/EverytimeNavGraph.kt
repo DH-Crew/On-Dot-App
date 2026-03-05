@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.ondot.everytime.LandingRoute
+import com.ondot.everytime.urlInput.EverytimeUrlInputRoute
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 
@@ -21,6 +22,17 @@ object EverytimeNavGraph : NavGraphContributor {
         ) {
             composable(NavRoutes.Landing.route) {
                 LandingRoute(
+                    popScreen = { navController.popBackStack() },
+                    navigateToUrlInput = {
+                        navController.navigate(NavRoutes.UrlInput.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+
+            composable(NavRoutes.UrlInput.route) {
+                EverytimeUrlInputRoute(
                     popScreen = { navController.popBackStack() },
                 )
             }

@@ -69,10 +69,13 @@ const val ERROR_UPDATE_HOME_ADDRESS = "집 주소 변경에 실패했습니다."
 const val ERROR_UPDATE_PREPARATION_TIME = "준비 시간 변경에 실패했습니다."
 const val ERROR_GET_SCHEDULE_PREPARATION = "준비 정보 조회에 실패했습니다."
 const val ERROR_INVALID_MINUTE_INPUT = "분은 59이하의 숫자로 입력해주세요."
+const val ERROR_VALIDATE_EVERYTIME_TIMETABLE = "시간표를 가져오기에 실패했습니다."
+const val ERROR_EMPTY_URL = "URL을 입력해주세요."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
 const val SUCCESS_EDIT_PREPARATION_TIME = "준비 시간이 수정되었어요."
+const val SUCCESS_VALIDATE_TIMETABLE = "시간표 연동에 성공했어요."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -231,3 +234,7 @@ const val HOW_TO_CONNECT_SECTION_CONTENT2 = "‘URL 복사' 클릭"
 const val HOW_TO_CONNECT_SECTION_DESCRIPTION2 = "설정 아이콘 → URL 복사"
 const val HOW_TO_CONNECT_SECTION_CONTENT3 = "복사한 URL 온닷에 붙여넣기"
 const val HOW_TO_CONNECT_SECTION_DESCRIPTION3 = "꾸욱-눌러 붙여넣어 주세요"
+const val URL_INPUT_TITLE = "복사한 URL링크를 붙여주세요."
+const val URL_INPUT_HIGHLIGHT = "복사한 URL링크"
+const val URL_INPUT_GUIDE = "시간표의 공개 범위를 잠시 ‘전체 공개'로 변경해 주세요.\n(설정 아이콘 → 공개 범위 변경 → 전체 공개)"
+const val PASTE_URL = "링크 붙여넣기"

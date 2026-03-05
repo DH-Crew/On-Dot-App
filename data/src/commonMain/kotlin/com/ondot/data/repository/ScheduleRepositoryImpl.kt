@@ -4,10 +4,14 @@ import com.ondot.data.mapper.ScheduleAlarmResponseMapper
 import com.ondot.data.mapper.ScheduleDetailResponseMapper
 import com.ondot.data.mapper.ScheduleListResponseMapper
 import com.ondot.data.mapper.SchedulePreparationResponseMapper
+import com.ondot.data.model.request.EverytimeValidateRequest
+import com.ondot.data.model.response.schedule.EverytimeValidateResponse
+import com.ondot.data.model.response.schedule.mapper.toDomain
 import com.ondot.domain.datasource.ScheduleLocalDataSource
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.schedule.EverytimeValidateTimetable
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleAlarm
 import com.ondot.domain.model.schedule.ScheduleDetail
@@ -17,11 +21,13 @@ import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.network.HttpMethod
 import com.ondot.network.NetworkClient
 import com.ondot.network.base.BaseRepository
+import com.ondot.network.execute.safeApiCall
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class ScheduleRepositoryImpl(
-    networkClient: NetworkClient,
+    private val networkClient: NetworkClient,
     private val local: ScheduleLocalDataSource,
 ) : BaseRepository(networkClient),
     ScheduleRepository {
@@ -78,6 +84,16 @@ class ScheduleRepositoryImpl(
     override suspend fun getSchedulePreparationInfo(scheduleId: Long): Flow<Result<SchedulePreparation>> =
         flow {
             emit(fetchMapped(HttpMethod.GET, "/schedules/$scheduleId/preparation", mapper = SchedulePreparationResponseMapper))
+        }
+
+    override suspend fun validateEverytimeTimetable(url: String): AppResult<EverytimeValidateTimetable> =
+        safeApiCall {
+            networkClient
+                .requestOrThrow<EverytimeValidateResponse>(
+                    method = HttpMethod.POST,
+                    path = "/schedules/everytime/validate",
+                    body = EverytimeValidateRequest(url),
+                ).toDomain()
         }
 
     /**
