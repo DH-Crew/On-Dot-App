@@ -55,6 +55,7 @@ kotlin {
             implementation(projects.feature.main)
             implementation(projects.feature.onboarding)
             implementation(projects.feature.splash)
+            implementation(projects.feature.everytime)
         }
 
         androidMain.dependencies {

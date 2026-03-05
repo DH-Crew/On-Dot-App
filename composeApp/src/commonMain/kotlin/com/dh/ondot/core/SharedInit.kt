@@ -6,6 +6,7 @@ import com.ondot.data.di.databaseModule
 import com.ondot.data.di.provideDriverModule
 import com.ondot.data.di.repositoryModule
 import com.ondot.edit.di.editScheduleModule
+import com.ondot.everytime.di.everytimeModule
 import com.ondot.general.di.generalModule
 import com.ondot.login.di.loginModule
 import com.ondot.main.di.mainModule
@@ -33,6 +34,7 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
                 generalModule,
                 mainModule,
                 onboardingModule,
+                everytimeModule,
                 provideDriverModule()
             )
         )
