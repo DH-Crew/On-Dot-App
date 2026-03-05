@@ -5,12 +5,14 @@ import com.ondot.build_logic.convention.internal.applyAppDefaults
 import com.ondot.build_logic.convention.internal.configureAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 import java.util.Properties
 
 class KmpAppConventionPlugin: Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.apply("com.android.application")
+        apply<KtlintConventionPlugin>()
 
         val properties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
