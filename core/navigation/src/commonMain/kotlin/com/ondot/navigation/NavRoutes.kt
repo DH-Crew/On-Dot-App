@@ -132,4 +132,6 @@ sealed class NavRoutes(
     data object EverytimeGraph : NavRoutes("everytimeGraph")
 
     data object Landing : NavRoutes("landing")
+
+    data object UrlInput : NavRoutes("urlInput")
 }
