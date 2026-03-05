@@ -238,7 +238,8 @@ amplitude-session-replay        = { module = "com.amplitude:plugin-session-repla
 # Test
 coroutines-test                 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
 
-
+# ktlint
+ktlint-gradle                   = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
 
 
