@@ -33,6 +33,13 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
 
         extensions.configure<KotlinMultiplatformExtension> {
             applyDefaultHierarchyTemplate()
+
+            jvm {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_17)
+                }
+            }
+
             val iosX64T = iosX64()
             val iosArm64T = iosArm64()
             val iosSimArm64T = iosSimulatorArm64()
