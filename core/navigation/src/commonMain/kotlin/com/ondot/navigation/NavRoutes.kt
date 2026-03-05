@@ -87,4 +87,8 @@ sealed class NavRoutes(@Transient val route: String = "") {
     // PreparationTimeSetting
     data object PreparationTimeSettingGraph: NavRoutes("preparationTimeSettingGraph")
     data object PreparationTimeEdit: NavRoutes("preparationTimeEdit")
+
+    // Everytime
+    data object EverytimeGraph: NavRoutes("everytimeGraph")
+    data object Landing: NavRoutes("landing")
 }

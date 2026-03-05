@@ -110,6 +110,9 @@ sqldelight              = { id = "app.cash.sqldelight", version.ref = "sqldeligh
 buildKonfig             = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 google-services         = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
+# Convention Plugin
+ondot-feature           = { id = "convention.feature", version = "unspecified" }
+
 [libraries]
 # Android Gradle Plugin
 android-gradle-plugin          = { module = "com.android.tools.build:gradle",              version.ref = "android-application" }

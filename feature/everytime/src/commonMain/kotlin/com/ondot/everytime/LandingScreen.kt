@@ -1,0 +1,236 @@
+package com.ondot.everytime
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.EaseOutCubic
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.LANDING_SCREEN_TITLE
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
+import com.dh.ondot.presentation.ui.theme.OnDotColor.HighlightRed
+import com.ondot.design_system.components.OnDotButton
+import com.ondot.design_system.components.OnDotHighlightText
+import com.ondot.design_system.components.OnDotText
+import com.ondot.design_system.components.TopBar
+import com.ondot.design_system.getPlatform
+import com.ondot.domain.model.enums.ButtonType
+import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TopBarType
+import kotlinx.coroutines.delay
+import ondot.core.design_system.generated.resources.Res
+import ondot.core.design_system.generated.resources.ic_landing_alarm
+import ondot.core.design_system.generated.resources.ic_landing_bus
+import ondot.core.design_system.generated.resources.ic_landing_logo
+import ondot.core.design_system.generated.resources.ic_landing_repeat
+import ondot.core.design_system.generated.resources.ic_landing_shower
+import ondot.core.design_system.generated.resources.ic_landing_step1
+import ondot.core.design_system.generated.resources.ic_landing_step2
+import ondot.core.design_system.generated.resources.ic_landing_step3
+import ondot.core.design_system.generated.resources.ic_schedule_preview_card
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+import kotlin.math.max
+import kotlin.math.min
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.boundsInWindow
+import com.dh.ondot.presentation.ui.theme.START_INTEGRATION
+import com.ondot.everytime.component.AutoAlarmSection
+import com.ondot.everytime.component.BenefitsSection
+import com.ondot.everytime.component.HeroSection
+import com.ondot.everytime.component.HowToConnectSection
+import com.ondot.everytime.component.TrackableSection
+
+@Composable
+fun LandingRoute(
+    popScreen: () -> Unit,
+) {
+    LandingScreen(
+        onBack = popScreen,
+    )
+}
+
+@Composable
+private fun LandingScreen(onBack: () -> Unit) {
+    val scrollState = rememberScrollState()
+    val visibleMap = remember { mutableStateMapOf<String, Boolean>() }
+    val density = LocalDensity.current
+    val minVisiblePx = remember(density) { with(density) { 80.dp.roundToPx() } }
+
+    // 실제 viewport bounds를 window 기준으로 저장
+    var viewportRect by remember { mutableStateOf<Rect?>(null) }
+
+    Column(
+        modifier = Modifier.fillMaxSize().background(Gray900),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        LandingTopBar(onBack = onBack)
+
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                // 이 Box가 viewport임. window 기준 bounds 확보
+                .onGloballyPositioned { viewportRect = it.boundsInWindow() }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState)
+                    .padding(top = 60.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TrackableSection(
+                    id = "hero",
+                    order = 0,
+                    viewportRect = viewportRect,
+                    minVisiblePx = minVisiblePx,
+                    visibleMap = visibleMap,
+                ) { HeroSection() }
+
+                TrackableSection(
+                    id = "auto",
+                    order = 1,
+                    viewportRect = viewportRect,
+                    minVisiblePx = minVisiblePx,
+                    visibleMap = visibleMap,
+                ) { AutoAlarmSection() }
+
+                TrackableSection(
+                    id = "benefit",
+                    order = 2,
+                    viewportRect = viewportRect,
+                    minVisiblePx = minVisiblePx,
+                    visibleMap = visibleMap,
+                ) { BenefitsSection() }
+
+                TrackableSection(
+                    id = "how",
+                    order = 3,
+                    viewportRect = viewportRect,
+                    minVisiblePx = minVisiblePx,
+                    visibleMap = visibleMap,
+                ) { HowToConnectSection(
+                    viewportRect = viewportRect,
+                    minVisiblePx = minVisiblePx,
+                    visibleMap = visibleMap,
+                ) }
+
+                // 마지막 버튼은 스크롤 하단 도달 시 렌더링
+                val showCta = scrollState.value > (scrollState.maxValue - with(density) { 80.dp.roundToPx() })
+                val alpha by animateFloatAsState(if (showCta) 1f else 0f, tween(500))
+                val offsetY by animateDpAsState(if (showCta) 0.dp else 40.dp, tween(500))
+
+                OnDotButton(
+                    buttonText = START_INTEGRATION,
+                    buttonType = ButtonType.Green500,
+                    modifier = Modifier
+                        .padding(horizontal = 22.dp)
+                        .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp)
+                        .graphicsLayer {
+                            this.alpha = alpha
+                            translationY = offsetY.toPx()
+                        }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LandingTopBar(
+    onBack: () -> Unit,
+) {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(Gray900)
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp),
+        contentAlignment = Alignment.Center,
+
+    ) {
+        TopBar(
+            type = TopBarType.BACK,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterStart),
+            onClick = onBack,
+        )
+
+        OnDotText(
+            text = LANDING_SCREEN_TITLE,
+            style = OnDotTextStyle.TitleSmallM,
+            color = Gray0,
+            modifier = Modifier.padding(top = if (getPlatform() == ANDROID) 50.dp else 70.dp)
+        )
+    }
+}
+
+@Composable
+fun BodyText(
+    text: String,
+    modifier: Modifier = Modifier,
+    emphasize: Boolean = false,
+) {
+    OnDotText(
+        text = text,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
+        textAlign = TextAlign.Center,
+        color = if (emphasize) Gray0 else Gray300,
+        style = if (emphasize) OnDotTextStyle.BodyMediumM else OnDotTextStyle.BodyMediumR,
+    )
+}

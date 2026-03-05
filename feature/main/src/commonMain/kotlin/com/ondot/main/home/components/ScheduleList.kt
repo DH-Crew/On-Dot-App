@@ -90,7 +90,7 @@ fun ScheduleList(
                     )
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
         }
 
         itemsIndexed(scheduleList, key = { index, it -> it.scheduleId }) { index, item ->

@@ -33,6 +33,7 @@ object OnDotColor {
 
     // Red
     val Red = Color(0xFFFF196D)
+    val HighlightRed = Color(0xFFF91F15)
 
     // Kakao
     val Kakao = Color(0xFFFAE100)
