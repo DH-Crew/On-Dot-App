@@ -33,8 +33,11 @@ class KmpDomainConventionPlugin: Plugin<Project> {
             sourceSets.apply {
                 commonMain {
                     dependencies {
+                        implementation(project(":core:result"))
+
                         implementation(libs.findLibrary("kotlinx-serialization-core").get())
                         implementation(libs.findLibrary("kotlinx-coroutines-core").get())
+                        implementation(libs.findLibrary("kotlinx-datetime").get())
                     }
                 }
             }

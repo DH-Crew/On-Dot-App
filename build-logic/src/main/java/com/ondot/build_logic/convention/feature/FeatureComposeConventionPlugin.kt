@@ -26,6 +26,7 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
                 implementation(project(":core:navigation"))
                 implementation(project(":core:platform"))
                 implementation(project(":core:util"))
+                implementation(project(":core:result"))
                 implementation(project(":core:design-system"))
 
                 implementation(libs.findLibrary("navigation").get())
