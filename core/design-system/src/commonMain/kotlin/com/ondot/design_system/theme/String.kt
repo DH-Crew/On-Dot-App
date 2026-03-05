@@ -188,3 +188,6 @@ const val SERVICE_NOTIFICATION_TITLE = "공지사항"
 
 // LocalNotification
 const val NOTIFICATION_TITLE = "준비물을 잊지 말고 챙기세요!"
+
+// LandingScreen
+const val LANDING_SCREEN_TITLE = "에브리타임 시간표 연동"
