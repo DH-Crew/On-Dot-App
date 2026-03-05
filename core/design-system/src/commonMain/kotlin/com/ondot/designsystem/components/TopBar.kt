@@ -25,6 +25,7 @@ import ondot.core.design_system.generated.resources.ic_back
 import ondot.core.design_system.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource
 
+// Deprecated, 점진적으로 CommonTopBar로 마이그레이션
 @Composable
 fun TopBar(
     type: TopBarType = TopBarType.BACK,
