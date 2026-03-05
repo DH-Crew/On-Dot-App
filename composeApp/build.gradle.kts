@@ -16,10 +16,11 @@ buildkonfig {
 
     exposeObjectWithName = "BuildKonfig"
 
-    val props = Properties().apply {
-        val file = rootProject.file("local.properties")
-        if (file.exists()) file.inputStream().use { load(it) }
-    }
+    val props =
+        Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) file.inputStream().use { load(it) }
+        }
     val baseUrl = props.getProperty("BASE_URL")
     val amplitudeKey = props.getProperty("AMPLITUDE_KEY")
 
@@ -27,12 +28,12 @@ buildkonfig {
         buildConfigField(
             Type.STRING,
             "BASE_URL",
-            baseUrl
+            baseUrl,
         )
         buildConfigField(
             Type.STRING,
             "AMPLITUDE_KEY",
-            amplitudeKey
+            amplitudeKey,
         )
     }
 }
@@ -74,7 +75,6 @@ kotlin {
 
             implementation(libs.amplitude.analytics)
             implementation(libs.amplitude.session.replay)
-
         }
 
         iosMain.dependencies {

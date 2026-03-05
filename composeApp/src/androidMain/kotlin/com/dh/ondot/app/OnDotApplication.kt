@@ -8,8 +8,7 @@ import com.dh.ondot.di.androidModule
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
 
-class OnDotApplication: Application() {
-
+class OnDotApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 

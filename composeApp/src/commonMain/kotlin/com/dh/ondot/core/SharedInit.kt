@@ -21,22 +21,22 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
     startKoin {
         modules(
             extraModules +
-            providePlatformModules() +
-            listOf(
-                repositoryModule,
-                networkModule,
-                dataSourceModule,
-                databaseModule,
-                splashModule,
-                loginModule,
-                alarmModule,
-                editScheduleModule,
-                generalModule,
-                mainModule,
-                onboardingModule,
-                everytimeModule,
-                provideDriverModule()
-            )
+                providePlatformModules() +
+                listOf(
+                    repositoryModule,
+                    networkModule,
+                    dataSourceModule,
+                    databaseModule,
+                    splashModule,
+                    loginModule,
+                    alarmModule,
+                    editScheduleModule,
+                    generalModule,
+                    mainModule,
+                    onboardingModule,
+                    everytimeModule,
+                    provideDriverModule(),
+                ),
         )
     }
 }
