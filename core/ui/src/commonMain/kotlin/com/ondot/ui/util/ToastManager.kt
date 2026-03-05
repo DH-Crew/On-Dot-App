@@ -21,4 +21,13 @@ object ToastManager {
     ) {
         _toasts.emit(ToastData(message = message, type = type, duration = duration, callback = callback))
     }
+
+    fun tryShow(
+        message: String,
+        type: ToastType,
+        duration: Long = 2000L,
+        callback: () -> Unit = {},
+    ) {
+        _toasts.tryEmit(ToastData(message = message, type = type, duration = duration, callback = callback))
+    }
 }
