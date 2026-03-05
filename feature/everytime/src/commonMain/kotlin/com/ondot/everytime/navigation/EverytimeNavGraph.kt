@@ -8,7 +8,7 @@ import com.ondot.everytime.LandingRoute
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 
-object EverytimeNavGraph: NavGraphContributor {
+object EverytimeNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.EverytimeGraph
     override val startDestination: String
@@ -17,11 +17,11 @@ object EverytimeNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             route = graphRoute.route,
-            startDestination = startDestination
+            startDestination = startDestination,
         ) {
             composable(NavRoutes.Landing.route) {
                 LandingRoute(
-                    popScreen = { navController.popBackStack() }
+                    popScreen = { navController.popBackStack() },
                 )
             }
         }

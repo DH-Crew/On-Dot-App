@@ -6,12 +6,13 @@ import androidx.core.net.toUri
 import com.ondot.domain.service.UrlOpener
 
 class AndroidUrlOpener(
-    private val context: Context
-): UrlOpener {
+    private val context: Context,
+) : UrlOpener {
     override fun openUrl(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        val intent =
+            Intent(Intent.ACTION_VIEW, url.toUri()).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         context.startActivity(intent)
     }
 }

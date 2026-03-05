@@ -13,28 +13,33 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class PlaceRepositoryImpl(
-    networkClient: NetworkClient
-): PlaceRepository, BaseRepository(networkClient) {
-    override suspend fun searchPlace(query: String): Flow<Result<List<AddressInfo>>> = flow {
-        emit(
-            fetchMapped(
-                method = HttpMethod.GET,
-                path = "/places/search",
-                query = mapOf("query" to query),
-                mapper = AddressListResponseMapper
+    networkClient: NetworkClient,
+) : BaseRepository(networkClient),
+    PlaceRepository {
+    override suspend fun searchPlace(query: String): Flow<Result<List<AddressInfo>>> =
+        flow {
+            emit(
+                fetchMapped(
+                    method = HttpMethod.GET,
+                    path = "/places/search",
+                    query = mapOf("query" to query),
+                    mapper = AddressListResponseMapper,
+                ),
             )
-        )
-    }
+        }
 
-    override suspend fun getPlaceHistory(): Flow<Result<List<PlaceHistory>>> = flow {
-        emit(fetchMapped(HttpMethod.GET, "/places/history", mapper = PlaceHistoryResponseMapper))
-    }
+    override suspend fun getPlaceHistory(): Flow<Result<List<PlaceHistory>>> =
+        flow {
+            emit(fetchMapped(HttpMethod.GET, "/places/history", mapper = PlaceHistoryResponseMapper))
+        }
 
-    override suspend fun savePlaceHistory(place: AddressInfo): Flow<Result<Unit>> = flow {
-        emit(fetch(HttpMethod.POST, "/places/history", body = place))
-    }
+    override suspend fun savePlaceHistory(place: AddressInfo): Flow<Result<Unit>> =
+        flow {
+            emit(fetch(HttpMethod.POST, "/places/history", body = place))
+        }
 
-    override suspend fun deletePlaceHistory(request: DeletePlaceHistoryRequest): Flow<Result<Unit>> = flow {
-        emit(fetch(HttpMethod.DELETE, "/places/history", body = request))
-    }
+    override suspend fun deletePlaceHistory(request: DeletePlaceHistoryRequest): Flow<Result<Unit>> =
+        flow {
+            emit(fetch(HttpMethod.DELETE, "/places/history", body = request))
+        }
 }

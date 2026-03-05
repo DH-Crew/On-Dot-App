@@ -10,7 +10,7 @@ import platform.UIKit.UIApplication
 import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
 
-class IosDirectionsOpener: DirectionsOpener {
+class IosDirectionsOpener : DirectionsOpener {
     override fun openDirections(
         startLat: Double,
         startLng: Double,
@@ -18,11 +18,14 @@ class IosDirectionsOpener: DirectionsOpener {
         endLng: Double,
         provider: MapProvider,
         startName: String,
-        endName: String
+        endName: String,
     ) {
         val app = UIApplication.sharedApplication
 
-        fun open(url: String, fallback: String? = null) {
+        fun open(
+            url: String,
+            fallback: String? = null,
+        ) {
             val u = NSURL.URLWithString(url) ?: return
 
             ensureMain {
@@ -46,7 +49,8 @@ class IosDirectionsOpener: DirectionsOpener {
             MapProvider.NAVER -> {
                 val mode = "public"
                 val bundleId = NSBundle.mainBundle.bundleIdentifier ?: "com.dh.ondot.iosApp"
-                val url = "nmap://route/$mode" +
+                val url =
+                    "nmap://route/$mode" +
                         "?slat=$startLat&slng=$startLng&sname=${startName.toUtf8()}" +
                         "&dlat=$endLat&dlng=$endLng&dname=${endName.toUtf8()}" +
                         "&appname=$bundleId"

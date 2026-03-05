@@ -2,7 +2,7 @@ package com.ondot.main.home
 
 import androidx.compose.runtime.Immutable
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.ui.base.UiState
@@ -16,18 +16,20 @@ data class HomeUiState(
     val scheduleList: List<Schedule> = emptyList(),
     val needsChooseProvider: Boolean = false,
     val mapProviders: List<MapProvider> =
-        if (getPlatform() == ANDROID) listOf(
-            MapProvider.KAKAO,
-            MapProvider.NAVER,
-        )
-        else  listOf(
-            MapProvider.KAKAO,
-            MapProvider.NAVER,
-            MapProvider.APPLE
-        )
-): UiState {
+        if (getPlatform() == ANDROID) {
+            listOf(
+                MapProvider.KAKAO,
+                MapProvider.NAVER,
+            )
+        } else {
+            listOf(
+                MapProvider.KAKAO,
+                MapProvider.NAVER,
+                MapProvider.APPLE,
+            )
+        },
+) : UiState {
     companion object {
-        fun appointmentAtTime(date: String) =
-            DateTimeFormatter.formatHourMinute(date)
+        fun appointmentAtTime(date: String) = DateTimeFormatter.formatHourMinute(date)
     }
 }

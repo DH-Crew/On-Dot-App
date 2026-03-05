@@ -32,10 +32,14 @@ private object AppleAuthHolder {
 
 private class AppleSignInDelegate(
     private val onSuccess: (String?, String?) -> Unit,
-    private val onFailure: (Throwable) -> Unit
-) : NSObject(), ASAuthorizationControllerDelegateProtocol, ASAuthorizationControllerPresentationContextProvidingProtocol {
-
-    override fun authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization: ASAuthorization) {
+    private val onFailure: (Throwable) -> Unit,
+) : NSObject(),
+    ASAuthorizationControllerDelegateProtocol,
+    ASAuthorizationControllerPresentationContextProvidingProtocol {
+    override fun authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization: ASAuthorization,
+    ) {
         val credential = didCompleteWithAuthorization.credential as? ASAuthorizationAppleIDCredential
         if (credential != null) {
             val idToken = credential.identityToken?.utf8OrBase64()
@@ -48,14 +52,16 @@ private class AppleSignInDelegate(
         }
     }
 
-    override fun authorizationController(controller: ASAuthorizationController, didCompleteWithError: NSError) {
+    override fun authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithError: NSError,
+    ) {
         cleanup()
         onFailure(RuntimeException(didCompleteWithError.localizedDescription))
     }
 
-    override fun presentationAnchorForAuthorizationController(controller: ASAuthorizationController): ASPresentationAnchor {
-        return currentPresentationAnchor() ?: ASPresentationAnchor()
-    }
+    override fun presentationAnchorForAuthorizationController(controller: ASAuthorizationController): ASPresentationAnchor =
+        currentPresentationAnchor() ?: ASPresentationAnchor()
 
     private fun cleanup() {
         AppleAuthHolder.delegate = null
@@ -70,8 +76,9 @@ private fun NSData.utf8OrBase64(): String = toUtf8String()
 
 private fun currentPresentationAnchor(): ASPresentationAnchor {
     // 활성 씬 찾기
-    val scene = UIApplication.sharedApplication.connectedScenes
-        .firstOrNull { (it as? UIWindowScene)?.activationState == UISceneActivationStateForegroundActive }
+    val scene =
+        UIApplication.sharedApplication.connectedScenes
+            .firstOrNull { (it as? UIWindowScene)?.activationState == UISceneActivationStateForegroundActive }
             as? UIWindowScene
 
     // UIWindowScene.windows 는 Obj-C 배열(NSArray) → firstObject 사용 + 안전 캐스팅
@@ -83,19 +90,21 @@ private fun currentPresentationAnchor(): ASPresentationAnchor {
 
 actual fun appleSignIn(
     onSuccess: (identityToken: String?, authorizationCode: String?) -> Unit,
-    onFailure: (Throwable) -> Unit
+    onFailure: (Throwable) -> Unit,
 ) {
     dispatch_async(dispatch_get_main_queue()) {
         val provider = ASAuthorizationAppleIDProvider()
-        val request = provider.createRequest().apply {
-            requestedScopes = listOf(ASAuthorizationScopeEmail, ASAuthorizationScopeFullName)
-        }
+        val request =
+            provider.createRequest().apply {
+                requestedScopes = listOf(ASAuthorizationScopeEmail, ASAuthorizationScopeFullName)
+            }
 
         val delegate = AppleSignInDelegate(onSuccess, onFailure)
-        val controller = ASAuthorizationController(listOf(request)).apply {
-            this.delegate = delegate               // weak → 강한 참조를 Holder에도 보관
-            this.presentationContextProvider = delegate
-        }
+        val controller =
+            ASAuthorizationController(listOf(request)).apply {
+                this.delegate = delegate // weak → 강한 참조를 Holder에도 보관
+                this.presentationContextProvider = delegate
+            }
 
         AppleAuthHolder.delegate = delegate
         AppleAuthHolder.controller = controller

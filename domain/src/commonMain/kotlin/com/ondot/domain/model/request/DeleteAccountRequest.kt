@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DeleteAccountRequest(
     val withdrawalReasonId: Long,
-    val customReason: String
+    val customReason: String,
 )

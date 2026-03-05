@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeletePlaceHistoryRequest(
-    val searchedAt: String = ""
+    val searchedAt: String = "",
 )

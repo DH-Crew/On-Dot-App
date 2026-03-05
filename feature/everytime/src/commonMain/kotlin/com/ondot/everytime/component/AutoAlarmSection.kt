@@ -25,7 +25,7 @@ import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE1
 import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE2
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.everytime.BodyText
 import ondot.core.design_system.generated.resources.Res
@@ -35,9 +35,10 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun AutoAlarmSection() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 80.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OnDotText(
@@ -57,7 +58,7 @@ fun AutoAlarmSection() {
         Spacer(Modifier.height(16.dp))
 
         BodyText(
-            text = AUTO_ALARM_SECTION_CONTENT1
+            text = AUTO_ALARM_SECTION_CONTENT1,
         )
 
         Spacer(Modifier.height(16.dp))
@@ -79,10 +80,11 @@ private fun SchedulePreviewCard() {
     val scale by infiniteTransition.animateFloat(
         initialValue = 0.96f,
         targetValue = 1.04f,
-        animationSpec = infiniteRepeatable(
-            tween(2200, easing = EaseInOut),
-            RepeatMode.Reverse
-        )
+        animationSpec =
+            infiniteRepeatable(
+                tween(2200, easing = EaseInOut),
+                RepeatMode.Reverse,
+            ),
     )
 
     Image(

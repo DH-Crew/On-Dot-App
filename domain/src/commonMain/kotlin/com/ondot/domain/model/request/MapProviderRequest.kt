@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MapProviderRequest(
-    val mapProvider: MapProvider
+    val mapProvider: MapProvider,
 )

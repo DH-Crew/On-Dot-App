@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class HomeAddressResponse(
     val roadAddress: String = "",
     val latitude: Double = 0.0,
-    val longitude: Double = 0.0
+    val longitude: Double = 0.0,
 )

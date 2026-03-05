@@ -29,8 +29,8 @@ import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun providePlatformModules(): List<Module> {
-    return listOf(
+actual fun providePlatformModules(): List<Module> =
+    listOf(
         module {
             single<HttpClient> { httpClient() }
             single<OnDotDataStore> { OnDotDataStore(get()) }
@@ -46,6 +46,5 @@ actual fun providePlatformModules(): List<Module> {
             single<UrlOpener> { AndroidUrlOpener(get<Context>()) }
             single<KaKaoSignInProvider> { AndroidKaKaoSignInProvider(get<Context>()) }
             single<LocalNotificationScheduler> { AndroidLocalNotificationScheduler(get<Context>()) }
-        }
+        },
     )
-}

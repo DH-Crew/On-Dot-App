@@ -23,8 +23,8 @@ import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun providePlatformModules(): List<Module> {
-    return listOf(
+actual fun providePlatformModules(): List<Module> =
+    listOf(
         module {
             single<HttpClient> { httpClient() }
             single<TokenProvider> { IosTokenProvider() }
@@ -36,6 +36,5 @@ actual fun providePlatformModules(): List<Module> {
             single<SoundPlayer> { IosSoundPlayer() }
             single<KaKaoSignInProvider> { IosKaKaoSignInProvider() }
             single<LocalNotificationScheduler> { IosLocalNotificationScheduler() }
-        }
+        },
     )
-}

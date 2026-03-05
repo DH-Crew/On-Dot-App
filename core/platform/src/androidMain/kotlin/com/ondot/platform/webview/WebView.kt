@@ -12,23 +12,27 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-actual fun WebView(url: String, modifier: Modifier) {
+actual fun WebView(
+    url: String,
+    modifier: Modifier,
+) {
     AndroidView(
         factory = { ctx ->
             WebView(ctx).apply {
                 settings.apply {
-                    javaScriptEnabled    = true
-                    domStorageEnabled    = true    // localStorage/sessionStorage 켜기
-                    mixedContentMode     = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                    javaScriptEnabled = true
+                    domStorageEnabled = true // localStorage/sessionStorage 켜기
+                    mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
 
                     val defaultUA = userAgentString
-                    userAgentString = defaultUA
-                        .replace("; wv", "")
-                        .replace("Version/4.0", "Chrome/115.0.0.0")
-                        .let { "$it Mobile Safari/537.36" }
+                    userAgentString =
+                        defaultUA
+                            .replace("; wv", "")
+                            .replace("Version/4.0", "Chrome/115.0.0.0")
+                            .let { "$it Mobile Safari/537.36" }
 
-                    useWideViewPort     = true
-                    loadWithOverviewMode= true
+                    useWideViewPort = true
+                    loadWithOverviewMode = true
                     setSupportZoom(true)
                     builtInZoomControls = true
                     displayZoomControls = false
@@ -46,6 +50,6 @@ actual fun WebView(url: String, modifier: Modifier) {
         update = { view ->
             if (view.url != url) view.loadUrl(url)
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }

@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class ScheduleLocalDataSourceImpl(
-    private val db: OndotDatabase
-): ScheduleLocalDataSource {
+    private val db: OndotDatabase,
+) : ScheduleLocalDataSource {
     private val q = db.scheduleEntityQueries
 
     /**
@@ -27,7 +27,8 @@ class ScheduleLocalDataSourceImpl(
      * 4. map { it.toDomain }: Flow<List<Schedule>>
      * */
     override fun observeList(): Flow<List<Schedule>> =
-        q.getAll()
+        q
+            .getAll()
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { list -> list.map { it.toDomain() } }
@@ -39,7 +40,8 @@ class ScheduleLocalDataSourceImpl(
      * 파라미터로 넘겨주는 Dispatcher를 내부적으로 실행시켜줌
      * */
     override fun observeById(id: Long): Flow<Schedule?> =
-        q.getById(id)
+        q
+            .getById(id)
             .asFlow()
             .mapToOneOrNull(Dispatchers.IO)
             .map { entity -> entity?.toDomain() }
@@ -59,17 +61,19 @@ class ScheduleLocalDataSourceImpl(
      * 반복문을 실행할 때 forEach는 inline lambda라서 I/O가 많아질 때 불필요한 람다 객체 생성을 유발할 수 있음
      * 단순 반복은 for 루프가 조금 더 효율적인 편
      * */
-    override suspend fun upsertAll(items: List<Schedule>) = withContext(Dispatchers.IO) {
-        db.transaction {
-            for (item in items) {
-                q.upsertSchedule(item)
+    override suspend fun upsertAll(items: List<Schedule>) =
+        withContext(Dispatchers.IO) {
+            db.transaction {
+                for (item in items) {
+                    q.upsertSchedule(item)
+                }
             }
         }
-    }
 
-    override suspend fun upsert(item: Schedule) = withContext(Dispatchers.IO) {
-        q.upsertSchedule(item)
-    }
+    override suspend fun upsert(item: Schedule) =
+        withContext(Dispatchers.IO) {
+            q.upsertSchedule(item)
+        }
 
     private fun ScheduleEntityQueries.upsertSchedule(item: Schedule) {
         upsert(
@@ -84,7 +88,7 @@ class ScheduleLocalDataSourceImpl(
             appointmentAt = item.appointmentAt,
             preparationAlarm = item.preparationAlarm,
             departureAlarm = item.departureAlarm,
-            hasActiveAlarm = item.hasActiveAlarm
+            hasActiveAlarm = item.hasActiveAlarm,
         )
     }
 

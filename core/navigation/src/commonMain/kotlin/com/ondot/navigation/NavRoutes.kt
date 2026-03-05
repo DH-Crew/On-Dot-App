@@ -1,94 +1,135 @@
 package com.ondot.navigation
 
-import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-sealed class NavRoutes(@Transient val route: String = "") {
+sealed class NavRoutes(
+    @Transient val route: String = "",
+) {
     // Alarm
     @Serializable
-    data object AlarmGraph: NavRoutes("alarmGraph")
+    data object AlarmGraph : NavRoutes("alarmGraph")
+
     @Serializable
-    data class PreparationAlarm(val scheduleId: Long, val alarmId: Long) : NavRoutes("preparationAlarm/{scheduleId}/{alarmId}") {
+    data class PreparationAlarm(
+        val scheduleId: Long,
+        val alarmId: Long,
+    ) : NavRoutes("preparationAlarm/{scheduleId}/{alarmId}") {
         companion object {
             const val ROUTE: String = "preparationAlarm/{scheduleId}/{alarmId}"
-            fun createRoute(scheduleId: Long, alarmId: Long) = "preparationAlarm/$scheduleId/$alarmId"
+
+            fun createRoute(
+                scheduleId: Long,
+                alarmId: Long,
+            ) = "preparationAlarm/$scheduleId/$alarmId"
         }
     }
+
     @Serializable
-    data class DepartureAlarm(val scheduleId: Long, val alarmId: Long) : NavRoutes("departureAlarm/{scheduleId}/{alarmId}") {
+    data class DepartureAlarm(
+        val scheduleId: Long,
+        val alarmId: Long,
+    ) : NavRoutes("departureAlarm/{scheduleId}/{alarmId}") {
         companion object {
             const val ROUTE: String = "departureAlarm/{scheduleId}/{alarmId}"
-            fun createRoute(scheduleId: Long, alarmId: Long) = "departureAlarm/$scheduleId/$alarmId"
+
+            fun createRoute(
+                scheduleId: Long,
+                alarmId: Long,
+            ) = "departureAlarm/$scheduleId/$alarmId"
         }
     }
 
     // Splash
-    data object SplashGraph: NavRoutes("splashGraph")
-    data object Splash: NavRoutes("splash")
+    data object SplashGraph : NavRoutes("splashGraph")
+
+    data object Splash : NavRoutes("splash")
 
     // Login
-    data object LoginGraph: NavRoutes("loginGraph")
-    data object Login: NavRoutes("login")
+    data object LoginGraph : NavRoutes("loginGraph")
+
+    data object Login : NavRoutes("login")
 
     // Onboarding
-    data object OnboardingGraph: NavRoutes("onboardingGraph")
-    data object Onboarding: NavRoutes("onboarding")
+    data object OnboardingGraph : NavRoutes("onboardingGraph")
+
+    data object Onboarding : NavRoutes("onboarding")
 
     // Main
-    data object MainGraph: NavRoutes("mainGraph")
-    data object Main: NavRoutes("main")
-    data object Home: NavRoutes("home")
-    data object Setting: NavRoutes("setting")
+    data object MainGraph : NavRoutes("mainGraph")
+
+    data object Main : NavRoutes("main")
+
+    data object Home : NavRoutes("home")
+
+    data object Setting : NavRoutes("setting")
 
     // General
-    data object GeneralScheduleGraph: NavRoutes("generalScheduleGraph")
-    data object ScheduleRepeatSetting: NavRoutes("scheduleRepeatSetting")
-    data object PlacePicker: NavRoutes("placePicker")
-    data object RouteLoading: NavRoutes("routeLoading")
-    data object CheckSchedule: NavRoutes("checkSchedule")
+    data object GeneralScheduleGraph : NavRoutes("generalScheduleGraph")
+
+    data object ScheduleRepeatSetting : NavRoutes("scheduleRepeatSetting")
+
+    data object PlacePicker : NavRoutes("placePicker")
+
+    data object RouteLoading : NavRoutes("routeLoading")
+
+    data object CheckSchedule : NavRoutes("checkSchedule")
 
     // EditSchedule
     @Serializable
-    data object EditScheduleGraph: NavRoutes("editScheduleGraph")
+    data object EditScheduleGraph : NavRoutes("editScheduleGraph")
+
     @Serializable
-    data class EditSchedule(val scheduleId: Long): NavRoutes("editSchedule/{scheduleId}") {
+    data class EditSchedule(
+        val scheduleId: Long,
+    ) : NavRoutes("editSchedule/{scheduleId}") {
         companion object {
             const val ROUTE: String = "editSchedule/{scheduleId}"
+
             fun createRoute(id: Long) = "editSchedule/$id"
         }
     }
 
     // DeleteAccount
-    data object DeleteAccountGraph: NavRoutes("deleteAccountGraph")
-    data object DeleteAccount: NavRoutes("deleteAccount")
+    data object DeleteAccountGraph : NavRoutes("deleteAccountGraph")
+
+    data object DeleteAccount : NavRoutes("deleteAccount")
 
     // ServiceTerms
     @Serializable
-    data object ServiceTermsGraph: NavRoutes("serviceTermsGraph")
+    data object ServiceTermsGraph : NavRoutes("serviceTermsGraph")
+
     @Serializable
-    data class ServiceTerms(val isNotification: Boolean): NavRoutes("serviceTerms/{isNotification}") {
+    data class ServiceTerms(
+        val isNotification: Boolean,
+    ) : NavRoutes("serviceTerms/{isNotification}") {
         companion object {
             const val ROUTE: String = "serviceTerms/{isNotification}"
+
             fun createRoute(isNotification: Boolean) = "serviceTerms/$isNotification"
         }
     }
 
     // HomeAddressSetting
-    data object HomeAddressSettingGraph: NavRoutes("homeAddressSettingGraph")
-    data object HomeAddressSetting: NavRoutes("homeAddressSetting")
-    data object HomeAddressEdit: NavRoutes("homeAddressEdit")
+    data object HomeAddressSettingGraph : NavRoutes("homeAddressSettingGraph")
+
+    data object HomeAddressSetting : NavRoutes("homeAddressSetting")
+
+    data object HomeAddressEdit : NavRoutes("homeAddressEdit")
 
     // NavMapSetting
-    data object NavMapSettingGraph: NavRoutes("navMapSettingGraph")
-    data object NavMapSetting: NavRoutes("navMapSetting")
+    data object NavMapSettingGraph : NavRoutes("navMapSettingGraph")
+
+    data object NavMapSetting : NavRoutes("navMapSetting")
 
     // PreparationTimeSetting
-    data object PreparationTimeSettingGraph: NavRoutes("preparationTimeSettingGraph")
-    data object PreparationTimeEdit: NavRoutes("preparationTimeEdit")
+    data object PreparationTimeSettingGraph : NavRoutes("preparationTimeSettingGraph")
+
+    data object PreparationTimeEdit : NavRoutes("preparationTimeEdit")
 
     // Everytime
-    data object EverytimeGraph: NavRoutes("everytimeGraph")
-    data object Landing: NavRoutes("landing")
+    data object EverytimeGraph : NavRoutes("everytimeGraph")
+
+    data object Landing : NavRoutes("landing")
 }

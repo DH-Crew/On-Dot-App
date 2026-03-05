@@ -16,20 +16,21 @@ fun Schedule_entity.toDomain(): Schedule =
         appointmentAt = appointmentAt,
         preparationAlarm = preparationAlarm,
         departureAlarm = departureAlarm,
-        hasActiveAlarm = hasActiveAlarm
+        hasActiveAlarm = hasActiveAlarm,
     )
 
-fun Schedule.toEntity() = Schedule_entity(
-    scheduleId       = scheduleId,
-    startLongitude   = startLongitude,
-    startLatitude    = startLatitude,
-    endLongitude     = endLongitude,
-    endLatitude      = endLatitude,
-    scheduleTitle    = scheduleTitle,
-    isRepeat         = isRepeat,
-    repeatDays       = repeatDays,
-    appointmentAt    = appointmentAt,
-    preparationAlarm = preparationAlarm,
-    departureAlarm   = departureAlarm,
-    hasActiveAlarm   = hasActiveAlarm
-)
+fun Schedule.toEntity() =
+    Schedule_entity(
+        scheduleId = scheduleId,
+        startLongitude = startLongitude,
+        startLatitude = startLatitude,
+        endLongitude = endLongitude,
+        endLatitude = endLatitude,
+        scheduleTitle = scheduleTitle,
+        isRepeat = isRepeat,
+        repeatDays = repeatDays,
+        appointmentAt = appointmentAt,
+        preparationAlarm = preparationAlarm,
+        departureAlarm = departureAlarm,
+        hasActiveAlarm = hasActiveAlarm,
+    )

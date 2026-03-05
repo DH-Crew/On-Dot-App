@@ -11,7 +11,7 @@ import com.ondot.edit.EditScheduleScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 
-object EditScheduleNavGraph: NavGraphContributor {
+object EditScheduleNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.EditScheduleGraph
     override val startDestination: String
@@ -20,18 +20,18 @@ object EditScheduleNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(
                 NavRoutes.EditSchedule.ROUTE,
-                arguments = listOf(navArgument("scheduleId") { type = NavType.LongType })
+                arguments = listOf(navArgument("scheduleId") { type = NavType.LongType }),
             ) { backStackEntry ->
                 val args = backStackEntry.toRoute<NavRoutes.EditSchedule>()
                 val scheduleId = args.scheduleId
 
                 EditScheduleScreen(
                     scheduleId = scheduleId,
-                    popScreen = { navController.popBackStack() }
+                    popScreen = { navController.popBackStack() },
                 )
             }
         }

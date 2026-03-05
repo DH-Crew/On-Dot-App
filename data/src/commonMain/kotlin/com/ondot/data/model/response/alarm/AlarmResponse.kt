@@ -18,5 +18,5 @@ data class AlarmResponse(
     val snoozeCount: Int = 0,
     val soundCategory: String = "",
     val ringTone: String = "",
-    val volume: Double = 0.0
+    val volume: Double = 0.0,
 )

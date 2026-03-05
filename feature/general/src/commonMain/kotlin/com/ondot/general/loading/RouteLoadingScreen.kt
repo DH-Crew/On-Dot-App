@@ -16,9 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.ROUTE_CALCULATE_LABEL
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.util.AnalyticsLogger
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -28,15 +27,13 @@ import kotlinx.coroutines.delay
 import ondot.core.design_system.generated.resources.Res
 
 @Composable
-fun RouteLoadingScreen(
-    navigateToCheckSchedule: () -> Unit,
-) {
+fun RouteLoadingScreen(navigateToCheckSchedule: () -> Unit) {
     val composition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/time_calculate.json").decodeToString())
     }
     val progress by animateLottieCompositionAsState(
         composition,
-        iterations = Compottie.IterateForever
+        iterations = Compottie.IterateForever,
     )
 
     LaunchedEffect(Unit) {
@@ -45,20 +42,23 @@ fun RouteLoadingScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray900),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Gray900),
+        contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = rememberLottiePainter(
-                composition = composition,
-                progress = { progress }
-            ),
+            painter =
+                rememberLottiePainter(
+                    composition = composition,
+                    progress = { progress },
+                ),
             contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Fit
+            modifier =
+                Modifier
+                    .fillMaxSize(),
+            contentScale = ContentScale.Fit,
         )
 
         OnDotText(
@@ -66,7 +66,7 @@ fun RouteLoadingScreen(
             style = OnDotTextStyle.BodyLargeSB,
             color = Gray0,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 230.dp)
+            modifier = Modifier.padding(top = 230.dp),
         )
     }
 }

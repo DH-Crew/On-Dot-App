@@ -3,5 +3,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ToggleAlarmRequest(
-    val isEnabled: Boolean
+    val isEnabled: Boolean,
 )

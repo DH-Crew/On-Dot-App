@@ -7,7 +7,8 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val editScheduleModule = module {
-    viewModelOf(::EditScheduleViewModel)
-    single<NavGraphContributor>(named("editSchedule")) { EditScheduleNavGraph }
-}
+val editScheduleModule =
+    module {
+        viewModelOf(::EditScheduleViewModel)
+        single<NavGraphContributor>(named("editSchedule")) { EditScheduleNavGraph }
+    }

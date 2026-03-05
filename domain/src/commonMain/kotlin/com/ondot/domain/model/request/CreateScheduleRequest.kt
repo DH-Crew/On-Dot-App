@@ -15,5 +15,5 @@ data class CreateScheduleRequest(
     val departurePlace: AddressInfo,
     val arrivalPlace: AddressInfo,
     val preparationAlarm: Alarm,
-    val departureAlarm: Alarm
+    val departureAlarm: Alarm,
 )

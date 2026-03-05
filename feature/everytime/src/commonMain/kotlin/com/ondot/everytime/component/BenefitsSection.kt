@@ -29,8 +29,8 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_landing_alarm
@@ -43,16 +43,17 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun BenefitsSection() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 80.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OnDotHighlightText(
             highlight = BENEFITS_SECTION_TITLE1_HIGHLIGHT,
             highlightColor = Green500,
             text = BENEFITS_SECTION_TITLE1,
-            style = OnDotTextStyle.TitleMediumSB
+            style = OnDotTextStyle.TitleMediumSB,
         )
 
         Spacer(Modifier.height(40.dp))
@@ -60,7 +61,7 @@ fun BenefitsSection() {
         BenefitItem(
             icon = Res.drawable.ic_landing_alarm,
             title = BENEFITS_SECTION_CONTENT1,
-            description = BENEFITS_SECTION_DESCRIPTION1
+            description = BENEFITS_SECTION_DESCRIPTION1,
         )
 
         Spacer(Modifier.height(16.dp))
@@ -68,7 +69,7 @@ fun BenefitsSection() {
         BenefitItem(
             icon = Res.drawable.ic_landing_shower,
             title = BENEFITS_SECTION_CONTENT2,
-            description = BENEFITS_SECTION_DESCRIPTION2
+            description = BENEFITS_SECTION_DESCRIPTION2,
         )
 
         Spacer(Modifier.height(16.dp))
@@ -76,7 +77,7 @@ fun BenefitsSection() {
         BenefitItem(
             icon = Res.drawable.ic_landing_bus,
             title = BENEFITS_SECTION_CONTENT3,
-            description = BENEFITS_SECTION_DESCRIPTION3
+            description = BENEFITS_SECTION_DESCRIPTION3,
         )
 
         Spacer(Modifier.height(16.dp))
@@ -84,7 +85,7 @@ fun BenefitsSection() {
         BenefitItem(
             icon = Res.drawable.ic_landing_repeat,
             title = BENEFITS_SECTION_CONTENT4,
-            description = BENEFITS_SECTION_DESCRIPTION4
+            description = BENEFITS_SECTION_DESCRIPTION4,
         )
     }
 }
@@ -96,17 +97,18 @@ private fun BenefitItem(
     description: String,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 22.dp)
-            .background(Gray700, RoundedCornerShape(12.dp))
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 22.dp)
+                .background(Gray700, RoundedCornerShape(12.dp))
+                .padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(icon),
             contentDescription = null,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
 
         Spacer(Modifier.width(16.dp))

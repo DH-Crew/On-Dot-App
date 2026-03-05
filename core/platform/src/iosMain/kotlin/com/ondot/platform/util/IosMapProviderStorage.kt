@@ -9,7 +9,7 @@ import platform.Foundation.NSOperationQueue
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.NSUserDefaultsDidChangeNotification
 
-class IosMapProviderStorage: MapProviderStorage {
+class IosMapProviderStorage : MapProviderStorage {
     private val defaults = NSUserDefaults.standardUserDefaults
     private val key = "map_provider"
     private val flagKey = "map_provider_confirm"
@@ -21,7 +21,7 @@ class IosMapProviderStorage: MapProviderStorage {
         NSNotificationCenter.defaultCenter.addObserverForName(
             name = NSUserDefaultsDidChangeNotification,
             `object` = defaults,
-            queue = NSOperationQueue.mainQueue
+            queue = NSOperationQueue.mainQueue,
         ) { _ ->
             state.value = load()
             needsState.value = loadNeedsChoose()

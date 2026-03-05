@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.map
 
 val Context.dataStore by preferencesDataStore(name = "ondot_prefs")
 
-class OnDotDataStore(context: Context) {
+class OnDotDataStore(
+    context: Context,
+) {
     private val dataStore = context.applicationContext.dataStore
     private val logger = Logger.withTag("OnDotDataStore")
 
@@ -48,19 +50,24 @@ class OnDotDataStore(context: Context) {
 
     /**--------------------------------------------RingingState-----------------------------------------------*/
 
-    suspend fun setRinging(scheduleId: Long, alarmId: Long, type: AlarmType, instanceId: Long) {
+    suspend fun setRinging(
+        scheduleId: Long,
+        alarmId: Long,
+        type: AlarmType,
+        instanceId: Long,
+    ) {
         dataStore.edit {
-            it[KEY_IS_RINGING]  = true
+            it[KEY_IS_RINGING] = true
             it[KEY_SCHEDULE_ID] = scheduleId
-            it[KEY_ALARM_ID]    = alarmId
-            it[KEY_TYPE]        = type.name
+            it[KEY_ALARM_ID] = alarmId
+            it[KEY_TYPE] = type.name
             it[KEY_INSTANCE_ID] = instanceId
         }
     }
 
     suspend fun clearRinging() {
         dataStore.edit {
-            it[KEY_IS_RINGING]  = false
+            it[KEY_IS_RINGING] = false
             it.remove(KEY_SCHEDULE_ID)
             it.remove(KEY_ALARM_ID)
             it.remove(KEY_TYPE)
@@ -68,14 +75,15 @@ class OnDotDataStore(context: Context) {
         }
     }
 
-    fun flow() = dataStore.data.map { p ->
-        val on = p[KEY_IS_RINGING] == true
-        val sid = p[KEY_SCHEDULE_ID] ?: -1L
-        val aid = p[KEY_ALARM_ID] ?: -1L
-        val t = runCatching { AlarmType.valueOf(p[KEY_TYPE].orEmpty()) }.getOrDefault(AlarmType.Departure)
-        val instanceId = p[KEY_INSTANCE_ID] ?: -1L
-        RingingState(on, sid, aid, t, instanceId)
-    }
+    fun flow() =
+        dataStore.data.map { p ->
+            val on = p[KEY_IS_RINGING] == true
+            val sid = p[KEY_SCHEDULE_ID] ?: -1L
+            val aid = p[KEY_ALARM_ID] ?: -1L
+            val t = runCatching { AlarmType.valueOf(p[KEY_TYPE].orEmpty()) }.getOrDefault(AlarmType.Departure)
+            val instanceId = p[KEY_INSTANCE_ID] ?: -1L
+            RingingState(on, sid, aid, t, instanceId)
+        }
 
     suspend fun currentRinging(): RingingState = flow().first()
 
@@ -84,10 +92,10 @@ class OnDotDataStore(context: Context) {
     companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
-        val KEY_IS_RINGING   = booleanPreferencesKey("is_ringing")
-        val KEY_SCHEDULE_ID  = longPreferencesKey("schedule_id")
-        val KEY_ALARM_ID     = longPreferencesKey("alarm_id")
-        val KEY_TYPE         = stringPreferencesKey("type")
-        val KEY_INSTANCE_ID  = longPreferencesKey("instance_id")
+        val KEY_IS_RINGING = booleanPreferencesKey("is_ringing")
+        val KEY_SCHEDULE_ID = longPreferencesKey("schedule_id")
+        val KEY_ALARM_ID = longPreferencesKey("alarm_id")
+        val KEY_TYPE = stringPreferencesKey("type")
+        val KEY_INSTANCE_ID = longPreferencesKey("instance_id")
     }
 }

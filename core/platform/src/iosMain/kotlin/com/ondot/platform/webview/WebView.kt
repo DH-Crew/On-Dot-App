@@ -10,7 +10,10 @@ import platform.Foundation.NSURL
 import platform.WebKit.WKWebView
 
 @Composable
-actual fun WebView(url: String, modifier: Modifier) {
+actual fun WebView(
+    url: String,
+    modifier: Modifier,
+) {
     val webView = remember { WKWebView() }
     val request = NSMutableURLRequest.requestWithURL(URL = NSURL(string = url))
 
@@ -21,6 +24,6 @@ actual fun WebView(url: String, modifier: Modifier) {
 
     UIKitView(
         factory = { webView },
-        modifier = Modifier.fillMaxSize().then(modifier)
+        modifier = Modifier.fillMaxSize().then(modifier),
     )
 }

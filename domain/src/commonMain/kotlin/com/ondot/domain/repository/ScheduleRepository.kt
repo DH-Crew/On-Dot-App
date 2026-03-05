@@ -15,17 +15,31 @@ interface ScheduleRepository {
      * Remote
      * */
     suspend fun getScheduleList(): Flow<Result<ScheduleList>>
+
     suspend fun getScheduleAlarms(request: ScheduleAlarmRequest): Flow<Result<ScheduleAlarm>>
+
     suspend fun createSchedule(request: CreateScheduleRequest): Flow<Result<Unit>>
+
     suspend fun getScheduleDetail(scheduleId: Long): Flow<Result<ScheduleDetail>>
+
     suspend fun deleteSchedule(scheduleId: Long): Flow<Result<Unit>>
-    suspend fun editSchedule(scheduleId: Long, request: ScheduleDetail): Flow<Result<Unit>>
-    suspend fun toggleAlarm(scheduleId: Long, request: ToggleAlarmRequest): Flow<Result<Unit>>
+
+    suspend fun editSchedule(
+        scheduleId: Long,
+        request: ScheduleDetail,
+    ): Flow<Result<Unit>>
+
+    suspend fun toggleAlarm(
+        scheduleId: Long,
+        request: ToggleAlarmRequest,
+    ): Flow<Result<Unit>>
+
     suspend fun getSchedulePreparationInfo(scheduleId: Long): Flow<Result<SchedulePreparation>>
 
     /**
      * Local
      * */
     suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?>
+
     suspend fun upsertLocalSchedule(schedule: Schedule)
 }

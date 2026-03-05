@@ -30,8 +30,8 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_landing_step1
@@ -47,16 +47,17 @@ fun HowToConnectSection(
     visibleMap: MutableMap<String, Boolean>,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 80.dp, bottom = 94.dp)
-            .padding(horizontal = 28.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 80.dp, bottom = 94.dp)
+                .padding(horizontal = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OnDotText(
             text = HOW_TO_CONNECT_SECTION_TITLE1,
             color = Gray0,
-            style = OnDotTextStyle.TitleMediumSB
+            style = OnDotTextStyle.TitleMediumSB,
         )
 
         Spacer(Modifier.height(4.dp))
@@ -67,7 +68,6 @@ fun HowToConnectSection(
             text = HOW_TO_CONNECT_SECTION_TITLE2,
             style = OnDotTextStyle.TitleMediumSB,
         )
-
 
         Spacer(Modifier.height(40.dp))
 
@@ -83,7 +83,7 @@ fun HowToConnectSection(
                 number = 1,
                 title = HOW_TO_CONNECT_SECTION_CONTENT1,
                 description = HOW_TO_CONNECT_SECTION_DESCRIPTION1,
-                image = Res.drawable.ic_landing_step1
+                image = Res.drawable.ic_landing_step1,
             )
         }
 
@@ -100,7 +100,7 @@ fun HowToConnectSection(
                 number = 2,
                 title = HOW_TO_CONNECT_SECTION_CONTENT2,
                 description = HOW_TO_CONNECT_SECTION_DESCRIPTION2,
-                image = Res.drawable.ic_landing_step2
+                image = Res.drawable.ic_landing_step2,
             )
         }
 
@@ -117,7 +117,7 @@ fun HowToConnectSection(
                 number = 3,
                 title = HOW_TO_CONNECT_SECTION_CONTENT3,
                 description = HOW_TO_CONNECT_SECTION_DESCRIPTION3,
-                image = Res.drawable.ic_landing_step3
+                image = Res.drawable.ic_landing_step3,
             )
         }
     }
@@ -132,20 +132,22 @@ private fun StepItem(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            modifier = Modifier
-                .size(20.dp)
-                .background(Green600, RoundedCornerShape(7.dp)),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(20.dp)
+                    .background(Green600, RoundedCornerShape(7.dp)),
+            contentAlignment = Alignment.Center,
         ) {
             OnDotText(
                 text = number.toString(),
                 color = Gray900,
-                style = OnDotTextStyle.BodyMediumSB
+                style = OnDotTextStyle.BodyMediumSB,
             )
         }
 
@@ -154,7 +156,7 @@ private fun StepItem(
         OnDotText(
             text = title,
             color = Gray0,
-            style = OnDotTextStyle.BodyLargeSB
+            style = OnDotTextStyle.BodyLargeSB,
         )
 
         Spacer(Modifier.height(4.dp))
@@ -162,7 +164,7 @@ private fun StepItem(
         OnDotText(
             text = description,
             color = Gray300,
-            style = OnDotTextStyle.BodyMediumR
+            style = OnDotTextStyle.BodyMediumR,
         )
 
         Spacer(Modifier.height(24.dp))
@@ -170,9 +172,10 @@ private fun StepItem(
         Image(
             painter = painterResource(image),
             contentDescription = null,
-            modifier = Modifier
-                .widthIn(max = 420.dp)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .widthIn(max = 420.dp)
+                    .fillMaxWidth(),
         )
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ondot.util.AnalyticsLogger
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -28,7 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun SplashScreen(
     viewModel: SplashViewModel = koinViewModel(),
     navigateToLogin: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val composition by rememberLottieComposition {
@@ -36,31 +35,37 @@ fun SplashScreen(
     }
     val progress by animateLottieCompositionAsState(
         composition,
-        iterations = Compottie.IterateForever
+        iterations = Compottie.IterateForever,
     )
 
     LaunchedEffect(Unit) {
         delay(2000L)
-        if (uiState.skipLogin) navigateToHome()
-        else navigateToLogin()
+        if (uiState.skipLogin) {
+            navigateToHome()
+        } else {
+            navigateToLogin()
+        }
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xff1B1B1B)),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color(0xff1B1B1B)),
+        contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = rememberLottiePainter(
-                composition = composition,
-                progress = { progress }
-            ),
+            painter =
+                rememberLottiePainter(
+                    composition = composition,
+                    progress = { progress },
+                ),
             contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 92.dp),
-            contentScale = ContentScale.Fit
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 92.dp),
+            contentScale = ContentScale.Fit,
         )
     }
 }

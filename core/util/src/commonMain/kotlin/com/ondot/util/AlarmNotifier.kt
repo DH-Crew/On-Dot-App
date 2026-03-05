@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 
 object AlarmNotifier {
-    private val _events = MutableSharedFlow<AlarmEvent>(
-        replay = 1,
-        extraBufferCapacity = 0,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _events =
+        MutableSharedFlow<AlarmEvent>(
+            replay = 1,
+            extraBufferCapacity = 0,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
     val events: SharedFlow<AlarmEvent> = _events.asSharedFlow()
 
     fun notify(event: AlarmEvent) {
@@ -24,6 +25,5 @@ object AlarmNotifier {
     /**
      * 최초 1회 내비게이션만 일으키도록, 마지막으로 처리한 이벤트는 걸러줌
      * */
-    fun flow(): Flow<AlarmEvent> =
-        events.distinctUntilChangedBy { it.key }
+    fun flow(): Flow<AlarmEvent> = events.distinctUntilChangedBy { it.key }
 }

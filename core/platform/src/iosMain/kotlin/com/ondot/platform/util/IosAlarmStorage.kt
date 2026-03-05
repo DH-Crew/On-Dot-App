@@ -8,9 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSUserDefaults
 
-class IosAlarmStorage: AlarmStorage {
-
-    private val ALARMS_KEY = "alarm_list"
+class IosAlarmStorage : AlarmStorage {
+    private val alarmsKey = "alarm_list"
 
     private val defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
     private val _alarmsFlow = MutableStateFlow(getAlarms())
@@ -19,7 +18,7 @@ class IosAlarmStorage: AlarmStorage {
     override suspend fun saveAlarms(alarms: List<AlarmRingInfo>) {
         // JSON 으로 직렬화하여 UserDefaults 에 저장
         val json = Json.encodeToString(alarms)
-        defaults.setObject(json, ALARMS_KEY)
+        defaults.setObject(json, alarmsKey)
         defaults.synchronize()
 
         // Flow 에 새 값 방출
@@ -28,7 +27,7 @@ class IosAlarmStorage: AlarmStorage {
 
     private fun getAlarms(): List<AlarmRingInfo> {
         // UserDefaults 에서 꺼낸 문자열이 없으면 빈 리스트
-        val json = defaults.stringForKey(ALARMS_KEY) ?: return emptyList()
+        val json = defaults.stringForKey(alarmsKey) ?: return emptyList()
         return try {
             Json.decodeFromString(json)
         } catch (t: Throwable) {

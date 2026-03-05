@@ -34,15 +34,15 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.PLACE_PICKER_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.OnDotCheckBox
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.PlaceHistoryItem
-import com.ondot.design_system.components.PlaceSearchResultItem
-import com.ondot.design_system.components.RouteInputSection
-import com.ondot.design_system.components.StepProgressIndicator
-import com.ondot.design_system.components.TopBar
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.OnDotCheckBox
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.PlaceHistoryItem
+import com.ondot.designsystem.components.PlaceSearchResultItem
+import com.ondot.designsystem.components.RouteInputSection
+import com.ondot.designsystem.components.StepProgressIndicator
+import com.ondot.designsystem.components.TopBar
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.RouterType
@@ -53,14 +53,13 @@ import com.ondot.general.GeneralScheduleEvent
 import com.ondot.general.GeneralScheduleUiState
 import com.ondot.general.GeneralScheduleViewModel
 import com.ondot.platform.util.BackPressHandler
-import com.ondot.util.AnalyticsLogger
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PlacePickerScreen(
     viewModel: GeneralScheduleViewModel,
     popScreen: () -> Unit,
-    navigateToRouteLoading: () -> Unit
+    navigateToRouteLoading: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val departureFocusRequester = remember { FocusRequester() }
@@ -72,7 +71,7 @@ fun PlacePickerScreen(
         onBack = {
             viewModel.onClickBackButton()
             popScreen()
-        }
+        },
     )
 
     LaunchedEffect(Unit) {
@@ -123,7 +122,7 @@ fun PlacePickerScreen(
         popScreen = {
             viewModel.onClickBackButton()
             popScreen()
-        }
+        },
     )
 }
 
@@ -141,17 +140,18 @@ fun PlacePickerContent(
     onHistoryClose: (PlaceHistory) -> Unit,
     onClickCheckBox: () -> Unit,
     onClickButton: () -> Unit,
-    popScreen: () -> Unit
+    popScreen: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray900)
-            .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp),
-        horizontalAlignment = Alignment.Start
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Gray900)
+                .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp),
+        horizontalAlignment = Alignment.Start,
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 22.dp)
+            modifier = Modifier.padding(horizontal = 22.dp),
         ) {
             TopBar(type = TopBarType.BACK, onClick = popScreen)
 
@@ -164,7 +164,7 @@ fun PlacePickerContent(
             OnDotText(
                 text = PLACE_PICKER_TITLE,
                 style = OnDotTextStyle.TitleMediumM,
-                color = Gray0
+                color = Gray0,
             )
 
             Spacer(modifier = Modifier.height(48.dp))
@@ -172,7 +172,7 @@ fun PlacePickerContent(
             HomeDepartureOption(
                 isChecked = uiState.isChecked,
                 interactionSource = interactionSource,
-                onClick = onClickCheckBox
+                onClick = onClickCheckBox,
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -183,7 +183,7 @@ fun PlacePickerContent(
                 departureFocusRequester = departureFocusRequester,
                 arrivalFocusRequester = arrivalFocusRequester,
                 onRouteInputChanged = onRouteInputChanged,
-                onRouteInputFocused = onRouteInputFocused
+                onRouteInputFocused = onRouteInputFocused,
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -195,13 +195,14 @@ fun PlacePickerContent(
             PlaceList(
                 list = uiState.placeList,
                 historyList = uiState.placeHistory,
-                addressInput = when (uiState.lastFocusedTextField) {
-                    RouterType.Departure -> uiState.departurePlaceInput
-                    RouterType.Arrival -> uiState.arrivalPlaceInput
-                },
+                addressInput =
+                    when (uiState.lastFocusedTextField) {
+                        RouterType.Departure -> uiState.departurePlaceInput
+                        RouterType.Arrival -> uiState.arrivalPlaceInput
+                    },
                 onPlaceSelected = onPlaceSelected,
                 onHistoryClose = { onHistoryClose(uiState.placeHistory[it]) },
-                onHistoryPlaceSelected = onHistoryPlaceSelected
+                onHistoryPlaceSelected = onHistoryPlaceSelected,
             )
         }
 
@@ -209,7 +210,7 @@ fun PlacePickerContent(
             buttonText = WORD_NEXT,
             buttonType = if (buttonEnabled) ButtonType.Green500 else ButtonType.Gray300,
             onClick = { if (buttonEnabled) onClickButton() },
-            modifier = Modifier.padding(horizontal = 22.dp)
+            modifier = Modifier.padding(horizontal = 22.dp),
         )
     }
 }
@@ -218,15 +219,16 @@ fun PlacePickerContent(
 fun HomeDepartureOption(
     isChecked: Boolean,
     interactionSource: MutableInteractionSource,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.clickable(
-            interactionSource = interactionSource,
-            indication = null,
-            onClick = onClick
-        ),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         OnDotCheckBox(isChecked = isChecked, onCheckedChange = onClick)
 
@@ -235,7 +237,7 @@ fun HomeDepartureOption(
         OnDotText(
             text = DEPARTURE_FROM_HOME,
             style = OnDotTextStyle.BodyLargeR1,
-            color = Gray200
+            color = Gray200,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -252,27 +254,34 @@ fun PlaceList(
     onHistoryClose: (Int) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 22.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 22.dp),
     ) {
         if (addressInput.isBlank()) {
             itemsIndexed(historyList, key = { _, item -> "${item.title}_${item.searchedAt}" }) { index, item ->
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onHistoryPlaceSelected(item) }
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { onHistoryPlaceSelected(item) },
                 ) {
-                    PlaceHistoryItem(item = item, onClick = { onHistoryClose(index) }, formatDate = { GeneralScheduleUiState.formattedDate(it) })
+                    PlaceHistoryItem(
+                        item = item,
+                        onClick = { onHistoryClose(index) },
+                        formatDate = { GeneralScheduleUiState.formattedDate(it) },
+                    )
                     HorizontalDivider(thickness = (0.5).dp, color = Gray800)
                 }
             }
         } else {
             itemsIndexed(list, key = { _, item -> "${item.latitude}_${item.longitude}_${item.title}" }) { index, item ->
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onPlaceSelected(item) }
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { onPlaceSelected(item) },
                 ) {
                     PlaceSearchResultItem(addressInput = addressInput, item = item)
                     HorizontalDivider(thickness = (0.5).dp, color = Gray800)

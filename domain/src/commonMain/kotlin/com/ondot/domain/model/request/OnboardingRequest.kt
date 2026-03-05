@@ -18,5 +18,5 @@ data class OnboardingRequest(
     val soundCategory: SoundCategory,
     val ringTone: RingTone,
     val volume: Float,
-    val questions: List<QuestionAnswer>
+    val questions: List<QuestionAnswer>,
 )
