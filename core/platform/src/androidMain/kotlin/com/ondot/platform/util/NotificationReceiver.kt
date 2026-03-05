@@ -6,9 +6,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.RequiresPermission
 
-class NotificationReceiver: BroadcastReceiver() {
+class NotificationReceiver : BroadcastReceiver() {
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         if (intent.action != AndroidLocalNotificationScheduler.ACTION_SHOW_LOCAL_NOTIFICATION) return
 
         val id = intent.getStringExtra(AndroidLocalNotificationScheduler.EXTRA_ID) ?: return
@@ -19,7 +22,7 @@ class NotificationReceiver: BroadcastReceiver() {
         AndroidLocalNotificationScheduler(context).showNow(
             id = id,
             title = title,
-            body = body
+            body = body,
         )
     }
 }

@@ -8,11 +8,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class EffectEmitter<SE : SideEffect>(
     private val logger: Logger,
 ) {
-    private val _flow = MutableSharedFlow<SE>(
-        replay = 0,
-        extraBufferCapacity = 64,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _flow =
+        MutableSharedFlow<SE>(
+            replay = 0,
+            extraBufferCapacity = 64,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
     val flow: Flow<SE> = _flow
 
     suspend fun emit(effect: SE) = _flow.emit(effect)

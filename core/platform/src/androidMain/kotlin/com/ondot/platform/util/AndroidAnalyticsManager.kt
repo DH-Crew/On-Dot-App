@@ -8,14 +8,13 @@ import com.ondot.domain.service.AnalyticsManager
 
 class AndroidAnalyticsManager(
     private val context: Context,
-    private val amplitude: Amplitude
-): AnalyticsManager {
-
+    private val amplitude: Amplitude,
+) : AnalyticsManager {
     private val fa: FirebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
 
     override fun logEvent(
         name: String,
-        params: Map<String, Any?>
+        params: Map<String, Any?>,
     ) {
         val b = Bundle()
         params.forEach { (k, v) ->
@@ -34,9 +33,10 @@ class AndroidAnalyticsManager(
 
         amplitude.track(
             eventType = name,
-            eventProperties = params
-                .filterKeys { it.isNotBlank() }
-                .mapValues { (_, v) -> normalizeForAmplitude(v) }
+            eventProperties =
+                params
+                    .filterKeys { it.isNotBlank() }
+                    .mapValues { (_, v) -> normalizeForAmplitude(v) },
         )
     }
 
@@ -45,12 +45,16 @@ class AndroidAnalyticsManager(
         amplitude.setUserId(id)
     }
 
-    override fun setUserProperty(name: String, value: String) {
+    override fun setUserProperty(
+        name: String,
+        value: String,
+    ) {
         fa.setUserProperty(name, value)
     }
 
-    private fun normalizeForAmplitude(v: Any?): Any? = when (v) {
-        is String, is Int, is Long, is Double, is Float, is Boolean, null -> v
-        else -> v.toString()
-    }
+    private fun normalizeForAmplitude(v: Any?): Any? =
+        when (v) {
+            is String, is Int, is Long, is Double, is Float, is Boolean, null -> v
+            else -> v.toString()
+        }
 }

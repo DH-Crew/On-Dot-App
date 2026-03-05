@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class QuestionAnswer(
     val questionId: Long,
-    val answerId: Long
+    val answerId: Long,
 )

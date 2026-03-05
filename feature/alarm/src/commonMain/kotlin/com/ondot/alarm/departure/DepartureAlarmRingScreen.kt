@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ondot.alarm.preparation.ScheduleInfoSection
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.DEPARTURE_ALARM_RING_TITLE
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
@@ -30,16 +29,16 @@ import com.dh.ondot.presentation.ui.theme.departureSnoozedTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.ondot.alarm.AlarmEvent
 import com.ondot.alarm.AlarmViewModel
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.getPlatform
+import com.ondot.alarm.preparation.ScheduleInfoSection
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.getPlatform
+import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.SchedulePreparation
-import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
@@ -54,7 +53,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun DepartureAlarmRingScreen(
     scheduleId: Long,
     alarmId: Long,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     val viewModel: AlarmViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -67,7 +66,7 @@ fun DepartureAlarmRingScreen(
 
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {
-            when(it) {
+            when (it) {
                 is AlarmEvent.NavigateToHome -> navigateToHome()
             }
         }
@@ -80,7 +79,7 @@ fun DepartureAlarmRingScreen(
             schedulePreparation = uiState.schedulePreparation,
             showDepartureSnoozeAnimation = uiState.showDepartureSnoozeAnimation,
             onSnoozeDepartureAlarm = viewModel::snoozeDepartureAlarm,
-            onShowRouteInfo = viewModel::startDeparture
+            onShowRouteInfo = viewModel::startDeparture,
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -94,7 +93,7 @@ fun DepartureAlarmRingContent(
     schedulePreparation: SchedulePreparation,
     showDepartureSnoozeAnimation: Boolean,
     onSnoozeDepartureAlarm: () -> Unit,
-    onShowRouteInfo: () -> Unit
+    onShowRouteInfo: () -> Unit,
 ) {
     val appointmentDate = DateTimeFormatter.formatKoreanDate(schedule.appointmentAt)
     val appointmentTime = DateTimeFormatter.formatHourMinute(schedule.appointmentAt)
@@ -103,24 +102,26 @@ fun DepartureAlarmRingContent(
     }
     val progress by animateLottieCompositionAsState(
         composition,
-        iterations = Compottie.IterateForever
+        iterations = Compottie.IterateForever,
     )
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Gray900)
-                .padding(horizontal = 22.dp)
-                .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Gray900)
+                    .padding(horizontal = 22.dp)
+                    .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(69.dp))
 
@@ -128,7 +129,7 @@ fun DepartureAlarmRingContent(
                     text = DEPARTURE_ALARM_RING_TITLE,
                     style = OnDotTextStyle.TitleMediumSB,
                     color = Gray0,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 ScheduleInfoSection(
@@ -137,29 +138,31 @@ fun DepartureAlarmRingContent(
                     appointmentTime = appointmentTime,
                     scheduleTitle = schedule.scheduleTitle,
                     schedulePreparation = schedulePreparation,
-                    onClickSnooze = onSnoozeDepartureAlarm
+                    onClickSnooze = onSnoozeDepartureAlarm,
                 )
             }
 
             OnDotButton(
                 buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
                 buttonType = ButtonType.Gradient,
-                onClick = onShowRouteInfo
+                onClick = onShowRouteInfo,
             )
         }
 
         if (showDepartureSnoozeAnimation) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Gray900),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(Gray900),
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    painter = rememberLottiePainter(
-                        composition = composition,
-                        progress = { progress }
-                    ),
+                    painter =
+                        rememberLottiePainter(
+                            composition = composition,
+                            progress = { progress },
+                        ),
                     contentDescription = null,
                     modifier = Modifier.matchParentSize(),
                 )
@@ -167,7 +170,7 @@ fun DepartureAlarmRingContent(
                 AlarmSnoozedSection(
                     schedule = schedule,
                     snoozeInterval = alarm.snoozeInterval,
-                    onShowRouteInfo = onShowRouteInfo
+                    onShowRouteInfo = onShowRouteInfo,
                 )
             }
         }
@@ -178,7 +181,7 @@ fun DepartureAlarmRingContent(
 private fun AlarmSnoozedSection(
     schedule: Schedule,
     snoozeInterval: Int,
-    onShowRouteInfo: () -> Unit
+    onShowRouteInfo: () -> Unit,
 ) {
     val remainingTime = DateTimeFormatter.diffBetweenIsoTimes(schedule.departureAlarm.triggeredAt, schedule.appointmentAt)
     val formattedTime = "${remainingTime.second.toString().padStart(2, '0')}:${remainingTime.third.toString().padStart(2, '0')}"
@@ -198,10 +201,11 @@ private fun AlarmSnoozedSection(
     val timeText = formatRemainingSnoozeTime(minutes, seconds)
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 22.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 22.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(69.dp))
 
@@ -211,7 +215,7 @@ private fun AlarmSnoozedSection(
             highlight = formattedTime,
             highlightColor = Green500,
             style = OnDotTextStyle.TitleMediumSB,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(79.dp))
@@ -219,7 +223,7 @@ private fun AlarmSnoozedSection(
         OnDotText(
             text = timeText,
             style = OnDotTextStyle.TitleLargeM,
-            color = Red
+            color = Red,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -227,7 +231,7 @@ private fun AlarmSnoozedSection(
         OnDotButton(
             buttonText = SHOW_ROUTE_INFORMATION_BUTTON_TEXT,
             buttonType = ButtonType.Gradient,
-            onClick = onShowRouteInfo
+            onClick = onShowRouteInfo,
         )
 
         Spacer(modifier = if (getPlatform() == ANDROID) Modifier.height(16.dp) else Modifier.height(37.dp))

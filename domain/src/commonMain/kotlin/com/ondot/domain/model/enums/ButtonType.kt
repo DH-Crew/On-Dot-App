@@ -8,5 +8,5 @@ enum class ButtonType {
     Gray300,
     Gray400,
     Gradient,
-    Red
+    Red,
 }

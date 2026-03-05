@@ -8,7 +8,7 @@ import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 import com.ondot.splash.SplashScreen
 
-object SplashNavGraph: NavGraphContributor {
+object SplashNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.SplashGraph
     override val startDestination: String
@@ -17,7 +17,7 @@ object SplashNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(NavRoutes.Splash.route) {
                 SplashScreen(
@@ -32,7 +32,7 @@ object SplashNavGraph: NavGraphContributor {
                             popUpTo(NavRoutes.Splash.route) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

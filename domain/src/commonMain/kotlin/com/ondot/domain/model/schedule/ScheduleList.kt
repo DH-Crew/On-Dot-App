@@ -6,5 +6,5 @@ data class ScheduleList(
     val earliestScheduleId: Long = -1L,
     val earliestAlarmAt: String = "",
     val hasNext: Boolean = false,
-    val scheduleList: List<Schedule> = emptyList()
+    val scheduleList: List<Schedule> = emptyList(),
 )

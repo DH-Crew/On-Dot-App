@@ -18,17 +18,18 @@ buildkonfig {
 
     exposeObjectWithName = "BuildKonfig"
 
-    val props = Properties().apply {
-        val file = rootProject.file("local.properties")
-        if (file.exists()) file.inputStream().use { load(it) }
-    }
+    val props =
+        Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) file.inputStream().use { load(it) }
+        }
     val baseUrl = props.getProperty("BASE_URL")
 
     defaultConfigs {
         buildConfigField(
             Type.STRING,
             "BASE_URL",
-            baseUrl
+            baseUrl,
         )
     }
 }

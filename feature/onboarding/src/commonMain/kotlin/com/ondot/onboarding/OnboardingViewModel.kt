@@ -2,15 +2,15 @@ package com.ondot.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.AlarmMode
 import com.ondot.domain.model.enums.RingTone
 import com.ondot.domain.model.enums.SoundCategory
 import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.QuestionAnswer
-import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.domain.service.SoundPlayer
@@ -23,16 +23,15 @@ class OnboardingViewModel(
     private val placeRepository: PlaceRepository,
     private val memberRepository: MemberRepository,
     private val soundPlayer: SoundPlayer,
-    private val tokenProvider: TokenProvider
-): BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
-
+    private val tokenProvider: TokenProvider,
+) : BaseViewModel<OnboardingUiState>(OnboardingUiState()) {
     // 온보딩 단계가 초기화되지 않은 경우 초기화하는 메서드
     fun initStep() {
         updateState(
             uiState.value.copy(
                 currentStep = 1,
-                totalStep = if (getPlatform() == ANDROID) 3 else 2
-            )
+                totalStep = if (getPlatform() == ANDROID) 3 else 2,
+            ),
         )
     }
 
@@ -143,8 +142,14 @@ class OnboardingViewModel(
     }
 
     private fun calculatePreparationTime() {
-        val hour = uiState.value.hourInput.toIntOrNull()?.coerceAtLeast(0) ?: 0
-        val minute = uiState.value.minuteInput.toIntOrNull()?.coerceAtLeast(0) ?: 0
+        val hour =
+            uiState.value.hourInput
+                .toIntOrNull()
+                ?.coerceAtLeast(0) ?: 0
+        val minute =
+            uiState.value.minuteInput
+                .toIntOrNull()
+                ?.coerceAtLeast(0) ?: 0
 
         val totalMinutes = hour * 60 + minute
         updateState(uiState.value.copy(preparationTime = totalMinutes))
@@ -180,8 +185,8 @@ class OnboardingViewModel(
             uiState.value.copy(
                 addressInput = info.title,
                 selectedAddress = info,
-                addressList = emptyList()
-            )
+                addressList = emptyList(),
+            ),
         )
     }
 
@@ -189,15 +194,17 @@ class OnboardingViewModel(
 
     fun onToggleMute(newValue: Boolean) {
         updateState(uiState.value.copy(isMuted = newValue))
-        if (newValue) { soundPlayer.stopSound() }
+        if (newValue) {
+            soundPlayer.stopSound()
+        }
     }
 
     fun onCategorySelected(newIndex: Int) {
         updateState(
             uiState.value.copy(
                 selectedCategoryIndex = newIndex,
-                filteredSounds = uiState.value.sounds.filter { it.category == uiState.value.categories[newIndex] }
-            )
+                filteredSounds = uiState.value.sounds.filter { it.category == uiState.value.categories[newIndex] },
+            ),
         )
     }
 
@@ -214,39 +221,43 @@ class OnboardingViewModel(
 
     private fun completeOnboarding() {
         viewModelScope.launch {
-            val soundCategory = when(uiState.value.selectedCategoryIndex) {
-                0 -> SoundCategory.BRIGHT_ENERGY
-                1 -> SoundCategory.FAST_INTENSE
-                else -> SoundCategory.BRIGHT_ENERGY
-            }
+            val soundCategory =
+                when (uiState.value.selectedCategoryIndex) {
+                    0 -> SoundCategory.BRIGHT_ENERGY
+                    1 -> SoundCategory.FAST_INTENSE
+                    else -> SoundCategory.BRIGHT_ENERGY
+                }
 
-            val address = requireNotNull(uiState.value.selectedAddress) {
-                "OnboardingViewModel: selectedAddress가 null인 상태에서 변환을 시도했습니다."
-            }
+            val address =
+                requireNotNull(uiState.value.selectedAddress) {
+                    "OnboardingViewModel: selectedAddress가 null인 상태에서 변환을 시도했습니다."
+                }
 
-            val request = OnboardingRequest(
-                preparationTime = uiState.value.preparationTime,
-                roadAddress = address.roadAddress,
-                longitude = address.longitude,
-                latitude = address.latitude,
-                alarmMode = if (uiState.value.isMuted) AlarmMode.SILENT else AlarmMode.SOUND,
-                isSnoozeEnabled = true,
-                snoozeInterval = 1,
-                snoozeCount = 3,
-                soundCategory = soundCategory,
-                ringTone = RingTone.getNameById(uiState.value.selectedSound ?: ""),
-                volume = uiState.value.volume,
-                questions = listOf(
-                    QuestionAnswer(
-                        questionId = 1,
-                        answerId = uiState.value.answer1[0].id
-                    ),
-                    QuestionAnswer(
-                        questionId = 2,
-                        answerId = uiState.value.answer2[0].id
-                    )
+            val request =
+                OnboardingRequest(
+                    preparationTime = uiState.value.preparationTime,
+                    roadAddress = address.roadAddress,
+                    longitude = address.longitude,
+                    latitude = address.latitude,
+                    alarmMode = if (uiState.value.isMuted) AlarmMode.SILENT else AlarmMode.SOUND,
+                    isSnoozeEnabled = true,
+                    snoozeInterval = 1,
+                    snoozeCount = 3,
+                    soundCategory = soundCategory,
+                    ringTone = RingTone.getNameById(uiState.value.selectedSound ?: ""),
+                    volume = uiState.value.volume,
+                    questions =
+                        listOf(
+                            QuestionAnswer(
+                                questionId = 1,
+                                answerId = uiState.value.answer1[0].id,
+                            ),
+                            QuestionAnswer(
+                                questionId = 2,
+                                answerId = uiState.value.answer2[0].id,
+                            ),
+                        ),
                 )
-            )
 
             memberRepository.completeOnboarding(request).collect {
                 resultResponse(it, ::onSuccessCompleteOnboarding, ::onFailedCompleteOnboarding)

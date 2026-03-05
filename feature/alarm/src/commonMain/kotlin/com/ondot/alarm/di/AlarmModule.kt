@@ -7,7 +7,8 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val alarmModule = module {
-    viewModelOf(::AlarmViewModel)
-    single<NavGraphContributor>(named("alarm")) { AlarmNavGraph }
-}
+val alarmModule =
+    module {
+        viewModelOf(::AlarmViewModel)
+        single<NavGraphContributor>(named("alarm")) { AlarmNavGraph }
+    }

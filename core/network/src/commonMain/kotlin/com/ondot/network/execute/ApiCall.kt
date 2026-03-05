@@ -11,32 +11,32 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
-val errorJson = Json {
-    ignoreUnknownKeys = true
-    isLenient = true
-}
+val errorJson =
+    Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
 
-suspend inline fun <T> safeApiCall(
-    crossinline call: suspend () -> T
-): AppResult<T> {
-    return try {
+suspend inline fun <T> safeApiCall(crossinline call: suspend () -> T): AppResult<T> =
+    try {
         AppResult.Success(call())
     } catch (e: CancellationException) {
         throw e
     } catch (e: ResponseException) {
         val status = e.response.status.value
         val raw = runCatching { e.response.bodyAsText() }.getOrNull()
-        val parsed = runCatching {
-            raw?.let { errorJson.decodeFromString<ErrorResponse>(it) }
-        }.getOrNull()
+        val parsed =
+            runCatching {
+                raw?.let { errorJson.decodeFromString<ErrorResponse>(it) }
+            }.getOrNull()
 
         AppResult.Error(
             AppError.Http(
                 status = status,
                 errorCode = parsed?.errorCode,
                 message = parsed?.message,
-                rawBody = raw
-            )
+                rawBody = raw,
+            ),
         )
     } catch (e: SocketTimeoutException) {
         AppResult.Error(AppError.Timeout(e))
@@ -47,4 +47,3 @@ suspend inline fun <T> safeApiCall(
     } catch (e: Throwable) {
         AppResult.Error(AppError.Unknown(e))
     }
-}

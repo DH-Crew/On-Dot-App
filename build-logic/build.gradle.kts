@@ -22,6 +22,7 @@ dependencies {
     // Kotlin Multiplatform 플러그인 사용을 위한 의존성
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.android.gradle.plugin)
+    implementation(libs.ktlint.gradle)
 }
 
 gradlePlugin {
@@ -69,6 +70,11 @@ gradlePlugin {
         register("compose-app") {
             id = "ondot.compose.app"
             implementationClass = "com.ondot.build_logic.ComposeAppPlugin"
+        }
+
+        register("ktlintConvention") {
+            id = "convention.ktlint"
+            implementationClass = "com.ondot.build_logic.KtlintConventionPlugin"
         }
 
         /**----------------------------Legacy----------------------------*/

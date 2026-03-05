@@ -23,20 +23,19 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SCHEDULE_REPEAT_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
-import com.ondot.design_system.components.DateSettingSection
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.RepeatSettingSection
-import com.ondot.design_system.components.StepProgressIndicator
-import com.ondot.design_system.components.TopBar
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.components.DateSettingSection
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.RepeatSettingSection
+import com.ondot.designsystem.components.StepProgressIndicator
+import com.ondot.designsystem.components.TopBar
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.general.GeneralScheduleEvent
 import com.ondot.general.GeneralScheduleUiState
 import com.ondot.general.GeneralScheduleViewModel
-import com.ondot.util.AnalyticsLogger
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -44,7 +43,7 @@ import kotlinx.datetime.LocalTime
 fun ScheduleRepeatSettingScreen(
     viewModel: GeneralScheduleViewModel,
     navigateToMain: () -> Unit,
-    navigateToPlacePicker: () -> Unit
+    navigateToPlacePicker: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -85,7 +84,7 @@ fun ScheduleRepeatSettingScreen(
         onDateSelected = viewModel::onSelectDate,
         onTimeSelected = viewModel::onTimeSelected,
         navigateToMain = navigateToMain,
-        onClickButton = viewModel::onClickNextButton
+        onClickButton = viewModel::onClickNextButton,
     )
 }
 
@@ -105,13 +104,14 @@ fun ScheduleRepeatSettingContent(
     onDateSelected: (LocalDate) -> Unit,
     onTimeSelected: (LocalTime) -> Unit,
     navigateToMain: () -> Unit,
-    onClickButton: () -> Unit
+    onClickButton: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray900)
-            .padding(horizontal = 22.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Gray900)
+                .padding(horizontal = 22.dp),
     ) {
         TopBar(type = TopBarType.CLOSE, onClick = navigateToMain)
 
@@ -124,19 +124,21 @@ fun ScheduleRepeatSettingContent(
         OnDotText(
             text = SCHEDULE_REPEAT_TITLE,
             style = OnDotTextStyle.TitleMediumM,
-            color = Gray0
+            color = Gray0,
         )
 
         Spacer(modifier = Modifier.height(48.dp))
 
         Box(
-            modifier = Modifier
-                .weight(1f)
-                .padding(bottom = 30.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(bottom = 30.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
+                modifier =
+                    Modifier
+                        .verticalScroll(scrollState),
             ) {
                 RepeatSettingSection(
                     isRepeat = uiState.isRepeat,
@@ -144,7 +146,7 @@ fun ScheduleRepeatSettingContent(
                     activeWeekDays = uiState.activeWeekDays,
                     onClickSwitch = onClickSwitch,
                     onClickCheckTextChip = onClickCheckTextChip,
-                    onClickTextChip = onClickTextChip
+                    onClickTextChip = onClickTextChip,
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -164,7 +166,7 @@ fun ScheduleRepeatSettingContent(
                     onPrevMonth = onPrevMonth,
                     onNextMonth = onNextMonth,
                     onDateSelected = onDateSelected,
-                    onTimeSelected = onTimeSelected
+                    onTimeSelected = onTimeSelected,
                 )
             }
         }
@@ -172,10 +174,9 @@ fun ScheduleRepeatSettingContent(
         OnDotButton(
             buttonText = WORD_NEXT,
             buttonType = if (isButtonEnabled) ButtonType.Green500 else ButtonType.Gray300,
-            onClick = { if (isButtonEnabled) onClickButton() }
+            onClick = { if (isButtonEnabled) onClickButton() },
         )
 
         Spacer(modifier = Modifier.height(if (getPlatform() == ANDROID) 16.dp else 37.dp))
     }
 }
-

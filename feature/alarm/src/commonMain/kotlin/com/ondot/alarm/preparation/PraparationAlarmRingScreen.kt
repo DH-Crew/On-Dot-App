@@ -21,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ondot.alarm.AlarmViewModel
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
@@ -35,17 +34,17 @@ import com.dh.ondot.presentation.ui.theme.alarmRingTitle
 import com.dh.ondot.presentation.ui.theme.formatRemainingSnoozeTime
 import com.dh.ondot.presentation.ui.theme.schedulePreparation
 import com.dh.ondot.presentation.ui.theme.snoozeIntervalLabel
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.SchedulePreparationItem
-import com.ondot.design_system.getPlatform
+import com.ondot.alarm.AlarmViewModel
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.SchedulePreparationItem
+import com.ondot.designsystem.getPlatform
+import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.SchedulePreparation
-import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
@@ -62,7 +61,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun PreparationAlarmRingScreen(
     scheduleId: Long,
     alarmId: Long,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     val viewModel: AlarmViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -87,7 +86,7 @@ fun PreparationAlarmRingScreen(
             showPreparationSnoozeAnimation = uiState.showPreparationSnoozeAnimation,
             onClickPreparationStartButton = { viewModel.startPreparation() },
             onSnoozePreparationAlarm = viewModel::snoozePreparationAlarm,
-            onPreparationStartAnimationFinished = { navigateToHome() }
+            onPreparationStartAnimationFinished = { navigateToHome() },
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -102,7 +101,7 @@ fun PreparationAlarmRingContent(
     showPreparationSnoozeAnimation: Boolean,
     onClickPreparationStartButton: () -> Unit,
     onSnoozePreparationAlarm: () -> Unit,
-    onPreparationStartAnimationFinished: () -> Unit
+    onPreparationStartAnimationFinished: () -> Unit,
 ) {
     val remainingTime = DateTimeFormatter.diffBetweenIsoTimes(schedule.preparationAlarm.triggeredAt, schedule.departureAlarm.triggeredAt)
     val formattedTime = "${remainingTime.second.toString().padStart(2, '0')}:${remainingTime.third.toString().padStart(2, '0')}"
@@ -115,14 +114,14 @@ fun PreparationAlarmRingContent(
     val startProgress by animateLottieCompositionAsState(
         composition = startComposition,
         iterations = 1,
-        isPlaying = showPreparationStartAnimation
+        isPlaying = showPreparationStartAnimation,
     )
     val snoozedComposition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/preparation_alarm_snoozed.json").decodeToString())
     }
     val snoozedProgress by animateLottieCompositionAsState(
         snoozedComposition,
-        iterations = Compottie.IterateForever
+        iterations = Compottie.IterateForever,
     )
 
     LaunchedEffect(showPreparationStartAnimation, startProgress) {
@@ -130,20 +129,22 @@ fun PreparationAlarmRingContent(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Gray900)
-                .padding(horizontal = 22.dp)
-                .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Gray900)
+                    .padding(horizontal = 22.dp)
+                    .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(69.dp))
 
@@ -154,27 +155,27 @@ fun PreparationAlarmRingContent(
                     appointmentDate = appointmentDate,
                     appointmentTime = appointmentTime,
                     scheduleTitle = schedule.scheduleTitle,
-                    onClickSnooze = onSnoozePreparationAlarm
+                    onClickSnooze = onSnoozePreparationAlarm,
                 )
             }
 
             OnDotButton(
                 buttonText = PREPARATION_START_BUTTON_TEXT,
                 buttonType = ButtonType.Green500,
-                onClick = onClickPreparationStartButton
+                onClick = onClickPreparationStartButton,
             )
         }
 
-
         if (showPreparationStartAnimation) {
             Box(
-                modifier = Modifier.fillMaxSize().background(Gray900)
+                modifier = Modifier.fillMaxSize().background(Gray900),
             ) {
                 Image(
-                    painter = rememberLottiePainter(
-                        composition = startComposition,
-                        progress = { startProgress }
-                    ),
+                    painter =
+                        rememberLottiePainter(
+                            composition = startComposition,
+                            progress = { startProgress },
+                        ),
                     contentDescription = null,
                     modifier = Modifier.matchParentSize(),
                 )
@@ -183,16 +184,18 @@ fun PreparationAlarmRingContent(
 
         if (showPreparationSnoozeAnimation) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Gray900),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(Gray900),
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    painter = rememberLottiePainter(
-                        composition = snoozedComposition,
-                        progress = { snoozedProgress }
-                    ),
+                    painter =
+                        rememberLottiePainter(
+                            composition = snoozedComposition,
+                            progress = { snoozedProgress },
+                        ),
                     contentDescription = null,
                     modifier = Modifier.matchParentSize(),
                 )
@@ -201,7 +204,7 @@ fun PreparationAlarmRingContent(
                     alarmRingTitle = alarmRingTitle,
                     formattedText = formattedTime,
                     snoozeInterval = alarm.snoozeInterval,
-                    onStartPreparation = onClickPreparationStartButton
+                    onStartPreparation = onClickPreparationStartButton,
                 )
             }
         }
@@ -219,22 +222,23 @@ fun AlarmRingTitle(
         highlight = highlight,
         highlightColor = Green500,
         style = OnDotTextStyle.TitleMediumSB,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
 @Composable
 fun SnoozeButton(
     snoozeInterval: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .background(Gray700, RoundedCornerShape(12.dp))
-            .padding(vertical = 18.dp, horizontal = 28.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { onClick() },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .background(Gray700, RoundedCornerShape(12.dp))
+                .padding(vertical = 18.dp, horizontal = 28.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .clickable { onClick() },
+        contentAlignment = Alignment.Center,
     ) {
         OnDotText(text = snoozeIntervalLabel(snoozeInterval), style = OnDotTextStyle.TitleSmallSB, color = Gray200)
     }
@@ -247,25 +251,26 @@ fun ScheduleInfoSection(
     appointmentTime: String,
     scheduleTitle: String,
     schedulePreparation: SchedulePreparation = SchedulePreparation(),
-    onClickSnooze: () -> Unit
+    onClickSnooze: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(54.dp))
 
         OnDotText(
             text = appointmentDate,
             style = OnDotTextStyle.TitleSmallM,
-            color = Gray0
+            color = Gray0,
         )
 
         OnDotText(
             text = appointmentTime,
             style = OnDotTextStyle.TitleLargeM,
-            color = Gray0
+            color = Gray0,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -273,7 +278,7 @@ fun ScheduleInfoSection(
         OnDotText(
             text = scheduleTitle,
             style = OnDotTextStyle.BodyLargeR1,
-            color = Gray0
+            color = Gray0,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -281,7 +286,7 @@ fun ScheduleInfoSection(
         if (schedulePreparation.isMedicationRequired) {
             SchedulePreparationItem(
                 content = SCHEDULE_MEDICINE,
-                resourceId = Res.drawable.ic_pill
+                resourceId = Res.drawable.ic_pill,
             )
         }
 
@@ -290,7 +295,7 @@ fun ScheduleInfoSection(
 
             SchedulePreparationItem(
                 content = schedulePreparation(schedulePreparation.preparationNote),
-                resourceId = Res.drawable.ic_circle_check_green
+                resourceId = Res.drawable.ic_circle_check_green,
             )
         }
 
@@ -298,7 +303,7 @@ fun ScheduleInfoSection(
 
         SnoozeButton(
             snoozeInterval = snoozeInterval,
-            onClick = onClickSnooze
+            onClick = onClickSnooze,
         )
 
         Spacer(modifier = Modifier.height(64.dp))
@@ -310,7 +315,7 @@ private fun AlarmSnoozedSection(
     alarmRingTitle: String,
     formattedText: String,
     snoozeInterval: Int,
-    onStartPreparation: () -> Unit
+    onStartPreparation: () -> Unit,
 ) {
     val totalSeconds = snoozeInterval * 60
     val timeLeftSecond by produceState(initialValue = totalSeconds) {
@@ -327,10 +332,11 @@ private fun AlarmSnoozedSection(
     val timeText = formatRemainingSnoozeTime(minutes, seconds)
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 22.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 22.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(69.dp))
 
@@ -341,7 +347,7 @@ private fun AlarmSnoozedSection(
         OnDotText(
             text = timeText,
             style = OnDotTextStyle.TitleLargeM,
-            color = Red
+            color = Red,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -349,7 +355,7 @@ private fun AlarmSnoozedSection(
         OnDotButton(
             buttonText = PREPARATION_START_BUTTON_TEXT,
             buttonType = ButtonType.Green500,
-            onClick = onStartPreparation
+            onClick = onStartPreparation,
         )
 
         Spacer(modifier = if (getPlatform() == ANDROID) Modifier.height(16.dp) else Modifier.height(37.dp))

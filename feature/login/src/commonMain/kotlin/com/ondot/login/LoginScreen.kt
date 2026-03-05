@@ -18,10 +18,9 @@ import com.dh.ondot.presentation.ui.theme.APPLE_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.IOS
 import com.dh.ondot.presentation.ui.theme.KAKAO_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.ButtonType
-import com.ondot.util.AnalyticsLogger
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_login
 import org.jetbrains.compose.resources.painterResource
@@ -31,7 +30,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
     navigateToOnboarding: () -> Unit,
-    navigateToMain: () -> Unit
+    navigateToMain: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect {
@@ -44,40 +43,43 @@ fun LoginScreen(
 
     LoginContent(
         onKakaoLogin = { viewModel.performKakaoLogin() },
-        onAppleLogin = { viewModel.performAppleLogin() }
+        onAppleLogin = { viewModel.performAppleLogin() },
     )
 }
 
 @Composable
 fun LoginContent(
     onKakaoLogin: () -> Unit,
-    onAppleLogin: () -> Unit
+    onAppleLogin: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(OnDotColor.Gray900),
-        contentAlignment = Alignment.TopCenter
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(OnDotColor.Gray900),
+        contentAlignment = Alignment.TopCenter,
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 100.dp)
-                .background(OnDotColor.GradientLogin)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 100.dp)
+                    .background(OnDotColor.GradientLogin),
         )
 
         Image(
             painter = painterResource(Res.drawable.ic_login),
             contentDescription = null,
-            modifier = Modifier
-                .padding(top = 189.dp)
-                .width(240.dp)
-                .height(85.dp)
+            modifier =
+                Modifier
+                    .padding(top = 189.dp)
+                    .width(240.dp)
+                    .height(85.dp),
         )
 
         LoginButtons(
             onKakaoLogin = onKakaoLogin,
-            onAppleLogin = onAppleLogin
+            onAppleLogin = onAppleLogin,
         )
     }
 }
@@ -85,19 +87,20 @@ fun LoginContent(
 @Composable
 fun LoginButtons(
     onKakaoLogin: () -> Unit = {},
-    onAppleLogin: () -> Unit = {}
+    onAppleLogin: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 22.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 22.dp),
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
         OnDotButton(
             buttonText = KAKAO_LOGIN_BUTTON_TEXT,
             buttonType = ButtonType.Kakao,
-            onClick = onKakaoLogin
+            onClick = onKakaoLogin,
         )
 
         if (getPlatform() == IOS) {
@@ -106,7 +109,7 @@ fun LoginButtons(
             OnDotButton(
                 buttonText = APPLE_LOGIN_BUTTON_TEXT,
                 buttonType = ButtonType.Apple,
-                onClick = onAppleLogin
+                onClick = onAppleLogin,
             )
 
             Spacer(modifier = Modifier.height(21.dp))

@@ -8,7 +8,7 @@ import com.ondot.main.MainScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 
-object MainNavGraph: NavGraphContributor {
+object MainNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.MainGraph
     override val startDestination: String
@@ -17,7 +17,7 @@ object MainNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(NavRoutes.Main.route) {
                 MainScreen(
@@ -71,7 +71,7 @@ object MainNavGraph: NavGraphContributor {
                         navController.navigate(NavRoutes.Landing.route) {
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

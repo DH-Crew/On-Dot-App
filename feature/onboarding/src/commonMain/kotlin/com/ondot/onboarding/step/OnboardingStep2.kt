@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -28,13 +27,12 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING2_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.PlaceSearchResultItem
-import com.ondot.design_system.components.RoundedTextField
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.PlaceSearchResultItem
+import com.ondot.designsystem.components.RoundedTextField
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.member.AddressInfo
-import com.ondot.util.AnalyticsLogger
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_search
 import org.jetbrains.compose.resources.painterResource
@@ -44,24 +42,25 @@ fun OnboardingStep2(
     addressInput: String,
     onAddressInputChanged: (String) -> Unit,
     addressList: List<AddressInfo>,
-    onClickPlace: (AddressInfo) -> Unit
+    onClickPlace: (AddressInfo) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.Start
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        horizontalAlignment = Alignment.Start,
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 22.dp)
+            modifier = Modifier.padding(horizontal = 22.dp),
         ) {
             OnDotHighlightText(
                 text = ONBOARDING2_TITLE,
                 highlight = ONBOARDING2_TITLE_HIGHLIGHT,
                 style = OnDotTextStyle.TitleMediumM,
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -69,7 +68,7 @@ fun OnboardingStep2(
             OnDotText(
                 text = ONBOARDING2_SUB_TITLE,
                 style = OnDotTextStyle.BodyMediumR,
-                color = OnDotColor.Green300
+                color = OnDotColor.Green300,
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -84,51 +83,56 @@ fun OnboardingStep2(
                     Image(
                         painter = painterResource(Res.drawable.ic_search),
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                 },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text
-                )
+                keyboardOptions =
+                    KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                    ),
             )
 
             Spacer(modifier = Modifier.height(24.dp))
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .background(color = OnDotColor.Gray800)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .background(color = OnDotColor.Gray800),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 22.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 22.dp),
         ) {
             itemsIndexed(addressList) { index, item ->
                 Column(
-                    modifier = Modifier
-                        .clickable {
-                            onClickPlace(addressList[index])
-                            focusManager.clearFocus()
-                            keyboardController?.hide()
-                        }
+                    modifier =
+                        Modifier
+                            .clickable {
+                                onClickPlace(addressList[index])
+                                focusManager.clearFocus()
+                                keyboardController?.hide()
+                            },
                 ) {
                     PlaceSearchResultItem(
                         addressInput = addressInput,
-                        item = item
+                        item = item,
                     )
 
                     if (index < addressList.size - 1) {
                         HorizontalDivider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(0.5.dp),
-                            color = OnDotColor.Gray800
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(0.5.dp),
+                            color = OnDotColor.Gray800,
                         )
                     }
                 }

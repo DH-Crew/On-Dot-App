@@ -9,16 +9,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class AlarmRepositoryImpl(
-    private val networkClient: NetworkClient
-): AlarmRepository, BaseRepository(networkClient) {
+    private val networkClient: NetworkClient,
+) : BaseRepository(networkClient),
+    AlarmRepository {
     override suspend fun recordTriggeredAlarm(request: TriggeredAlarmRequest): Flow<Result<Unit>> =
         flow {
             emit(
                 fetch(
                     method = HttpMethod.POST,
                     path = "/alarms/triggers",
-                    body = request
-                )
+                    body = request,
+                ),
             )
         }
 }

@@ -17,13 +17,14 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun UserBadgeBanner() {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     ) {
         Image(
             painter = painterResource(Res.drawable.ic_ondot),
             contentDescription = null,
-            modifier = Modifier.size(width = 103.dp, height = 20.dp)
+            modifier = Modifier.size(width = 103.dp, height = 20.dp),
         )
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -31,7 +32,7 @@ fun UserBadgeBanner() {
         Image(
             painter = painterResource(Res.drawable.ic_free),
             contentDescription = null,
-            modifier = Modifier.size(width = 38.dp, height = 19.dp)
+            modifier = Modifier.size(width = 38.dp, height = 19.dp),
         )
 
         Spacer(modifier = Modifier.weight(1f))

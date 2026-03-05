@@ -12,7 +12,7 @@ import com.ondot.alarm.preparation.PreparationAlarmRingScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 
-object AlarmNavGraph: NavGraphContributor {
+object AlarmNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.AlarmGraph
     override val startDestination: String
@@ -21,14 +21,15 @@ object AlarmNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(
                 NavRoutes.PreparationAlarm.ROUTE,
-                arguments = listOf(
-                    navArgument("scheduleId") { type = NavType.LongType },
-                    navArgument("alarmId") { type = NavType.LongType }
-                )
+                arguments =
+                    listOf(
+                        navArgument("scheduleId") { type = NavType.LongType },
+                        navArgument("alarmId") { type = NavType.LongType },
+                    ),
             ) { backStackEntry ->
                 val args = backStackEntry.toRoute<NavRoutes.PreparationAlarm>()
                 val scheduleId = args.scheduleId
@@ -42,17 +43,17 @@ object AlarmNavGraph: NavGraphContributor {
                             popUpTo(NavRoutes.AlarmGraph.route) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
-
             }
 
             composable(
                 NavRoutes.DepartureAlarm.ROUTE,
-                arguments = listOf(
-                    navArgument("scheduleId") { type = NavType.LongType },
-                    navArgument("alarmId") { type = NavType.LongType }
-                )
+                arguments =
+                    listOf(
+                        navArgument("scheduleId") { type = NavType.LongType },
+                        navArgument("alarmId") { type = NavType.LongType },
+                    ),
             ) { backStackEntry ->
                 val args = backStackEntry.toRoute<NavRoutes.DepartureAlarm>()
                 val scheduleId = args.scheduleId
@@ -66,7 +67,7 @@ object AlarmNavGraph: NavGraphContributor {
                             popUpTo(NavRoutes.AlarmGraph.route) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class TriggeredAlarmRequest(
     val scheduleId: Long,
     val alarmId: Long,
-    val action: AlarmAction
+    val action: AlarmAction,
 )

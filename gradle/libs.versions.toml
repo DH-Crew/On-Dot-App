@@ -97,6 +97,9 @@ amplitudeSessionReplay = "0.20.14"
 # Test
 coroutines-test = "1.10.2"
 
+# Ktlint
+ktlint = "14.0.1"
+
 [plugins]
 androidApplication      = { id = "com.android.application",          version.ref = "agp" }
 androidLibrary          = { id = "com.android.library",              version.ref = "agp" }
@@ -109,6 +112,7 @@ serialization           = { id = "org.jetbrains.kotlin.plugin.serialization", ve
 sqldelight              = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 buildKonfig             = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 google-services         = { id = "com.google.gms.google-services", version.ref = "google-services" }
+ktlint                  = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 # Convention Plugin
 ondot-feature           = { id = "convention.feature", version = "unspecified" }
@@ -234,7 +238,8 @@ amplitude-session-replay        = { module = "com.amplitude:plugin-session-repla
 # Test
 coroutines-test                 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
 
-
+# ktlint
+ktlint-gradle                   = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
 
 

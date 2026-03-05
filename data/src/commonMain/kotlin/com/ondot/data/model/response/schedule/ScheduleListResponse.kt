@@ -7,5 +7,5 @@ data class ScheduleListResponse(
     val earliestAlarmId: Long?,
     val earliestAlarmAt: String?,
     val hasNext: Boolean?,
-    val scheduleList: List<ScheduleResponse>?
+    val scheduleList: List<ScheduleResponse>?,
 )

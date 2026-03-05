@@ -5,10 +5,11 @@ import com.ondot.domain.repository.AlarmRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakeAlarmRepository: AlarmRepository {
-    override suspend fun recordTriggeredAlarm(request: TriggeredAlarmRequest): Flow<Result<Unit>> = flow {
-        emit(
-            Result.success(Unit)
-        )
-    }
+class FakeAlarmRepository : AlarmRepository {
+    override suspend fun recordTriggeredAlarm(request: TriggeredAlarmRequest): Flow<Result<Unit>> =
+        flow {
+            emit(
+                Result.success(Unit),
+            )
+        }
 }

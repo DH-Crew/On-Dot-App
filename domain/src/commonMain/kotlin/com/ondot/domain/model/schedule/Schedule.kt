@@ -15,5 +15,5 @@ data class Schedule(
     val preparationAlarm: Alarm = Alarm(),
     val departureAlarm: Alarm = Alarm(),
     val hasActiveAlarm: Boolean = false,
-    val preparationNote: String = ""
+    val preparationNote: String = "",
 )

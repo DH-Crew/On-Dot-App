@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<STATE: UiState>(
-    initialState: STATE
-): ViewModel() {
+abstract class BaseViewModel<STATE : UiState>(
+    initialState: STATE,
+) : ViewModel() {
     private val logger = Logger.withTag(tag = "BaseViewModel")
 
     private val _uiState = MutableStateFlow(initialState)
@@ -37,10 +37,10 @@ abstract class BaseViewModel<STATE: UiState>(
         }
     }
 
-    protected fun<D> resultResponse(
+    protected fun <D> resultResponse(
         response: Result<D>,
         successCallback: (D) -> Unit,
-        errorCallback: ((Throwable) -> Unit)? = null
+        errorCallback: ((Throwable) -> Unit)? = null,
     ) {
         viewModelScope.launch {
             response.fold(
@@ -50,7 +50,7 @@ abstract class BaseViewModel<STATE: UiState>(
                 onFailure = { throwable ->
                     logger.e { "에러 발생: ${throwable.stackTraceToString()}" }
                     errorCallback?.invoke(throwable)
-                }
+                },
             )
         }
     }

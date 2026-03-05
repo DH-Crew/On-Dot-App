@@ -21,34 +21,36 @@ object DateTimeFormatter {
 
     /**----------------------------------------------날짜---------------------------------------------*/
 
-    data class YMD(val year: Int, val month: Int, val day: Int) {
+    data class YMD(
+        val year: Int,
+        val month: Int,
+        val day: Int,
+    ) {
         /** 두 자리 문자열 (5 → "05") */
         private fun Int.to2() = this.toString().padStart(2, '0')
 
         /** 원하는 구분자(delim)로 "yyyy{delim}MM{delim}DD" 포맷 */
-        fun format(delim: String = "."): String =
-            listOf(year, month.to2(), day.to2()).joinToString(delim)
+        fun format(delim: String = "."): String = listOf(year, month.to2(), day.to2()).joinToString(delim)
 
         /** 06월 13일 화요일 형태로 포맷 */
         fun formatKoreanDate(): String {
             val date = LocalDate(year, month, day)
-            val dayOfWeekKorean = when (date.dayOfWeek) {
-                DayOfWeek.MONDAY    -> "월요일"
-                DayOfWeek.TUESDAY   -> "화요일"
-                DayOfWeek.WEDNESDAY -> "수요일"
-                DayOfWeek.THURSDAY  -> "목요일"
-                DayOfWeek.FRIDAY    -> "금요일"
-                DayOfWeek.SATURDAY  -> "토요일"
-                DayOfWeek.SUNDAY    -> "일요일"
-            }
+            val dayOfWeekKorean =
+                when (date.dayOfWeek) {
+                    DayOfWeek.MONDAY -> "월요일"
+                    DayOfWeek.TUESDAY -> "화요일"
+                    DayOfWeek.WEDNESDAY -> "수요일"
+                    DayOfWeek.THURSDAY -> "목요일"
+                    DayOfWeek.FRIDAY -> "금요일"
+                    DayOfWeek.SATURDAY -> "토요일"
+                    DayOfWeek.SUNDAY -> "일요일"
+                }
 
             return "${month.pad2()}월 ${day.pad2()}일 $dayOfWeekKorean"
         }
 
         /** 06월 13일 형태로 포맷 */
-        fun formatKoreanDateMonthDay(): String {
-            return "${month.pad2()}월 ${day.pad2()}일"
-        }
+        fun formatKoreanDateMonthDay(): String = "${month.pad2()}월 ${day.pad2()}일"
     }
 
     private fun parseYMD(iso: String): YMD {
@@ -64,11 +66,14 @@ object DateTimeFormatter {
         return YMD(
             year = y.toIntOrNull() ?: throw IllegalArgumentException("Invalid year in $iso"),
             month = m.toIntOrNull() ?: throw IllegalArgumentException("Invalid month in $iso"),
-            day = d.toIntOrNull() ?: throw IllegalArgumentException("Invalid day in $iso")
+            day = d.toIntOrNull() ?: throw IllegalArgumentException("Invalid day in $iso"),
         )
     }
 
-    fun formatDate(iso: String, delimiter: String = "."): String = parseYMD(iso).format(delimiter)
+    fun formatDate(
+        iso: String,
+        delimiter: String = ".",
+    ): String = parseYMD(iso).format(delimiter)
 
     /** 2025. 11. 28 (금) 형태로 포맷 */
     fun formatDateWithDayOfWeek(iso: String): String {
@@ -85,7 +90,10 @@ object DateTimeFormatter {
     fun formatKoreanDateMonthDay(iso: String): String = parseYMD(iso).formatKoreanDateMonthDay()
 
     /** 주어진 연,월의 1일부터 마지막 일까지 리스트로 생성 */
-    fun monthDays(year: Int, month: Int): List<LocalDate> {
+    fun monthDays(
+        year: Int,
+        month: Int,
+    ): List<LocalDate> {
         val first = LocalDate(year, month, 1)
         val last = first.plus(DatePeriod(months = 1)).minus(DatePeriod(days = 1))
         return (1..last.day).map { day -> LocalDate(year, month, day) }
@@ -101,15 +109,16 @@ object DateTimeFormatter {
     fun extractDayOfWeek(iso: String): Int {
         val ymd = parseYMD(iso)
         val date = LocalDate(ymd.year, ymd.month, ymd.day)
-        val dayOfWeek = when (date.dayOfWeek) {
-            DayOfWeek.MONDAY    -> 2
-            DayOfWeek.TUESDAY   -> 3
-            DayOfWeek.WEDNESDAY -> 4
-            DayOfWeek.THURSDAY  -> 5
-            DayOfWeek.FRIDAY    -> 6
-            DayOfWeek.SATURDAY  -> 7
-            DayOfWeek.SUNDAY    -> 1
-        }
+        val dayOfWeek =
+            when (date.dayOfWeek) {
+                DayOfWeek.MONDAY -> 2
+                DayOfWeek.TUESDAY -> 3
+                DayOfWeek.WEDNESDAY -> 4
+                DayOfWeek.THURSDAY -> 5
+                DayOfWeek.FRIDAY -> 6
+                DayOfWeek.SATURDAY -> 7
+                DayOfWeek.SUNDAY -> 1
+            }
 
         return dayOfWeek
     }
@@ -118,21 +127,25 @@ object DateTimeFormatter {
     fun extractShortDayOfWeek(iso: String): String {
         val ymd = parseYMD(iso)
         val date = LocalDate(ymd.year, ymd.month, ymd.day)
-        val dayOfWeek = when (date.dayOfWeek) {
-            DayOfWeek.MONDAY    -> "월"
-            DayOfWeek.TUESDAY   -> "화"
-            DayOfWeek.WEDNESDAY -> "수"
-            DayOfWeek.THURSDAY  -> "목"
-            DayOfWeek.FRIDAY    -> "금"
-            DayOfWeek.SATURDAY  -> "토"
-            DayOfWeek.SUNDAY    -> "일"
-        }
+        val dayOfWeek =
+            when (date.dayOfWeek) {
+                DayOfWeek.MONDAY -> "월"
+                DayOfWeek.TUESDAY -> "화"
+                DayOfWeek.WEDNESDAY -> "수"
+                DayOfWeek.THURSDAY -> "목"
+                DayOfWeek.FRIDAY -> "금"
+                DayOfWeek.SATURDAY -> "토"
+                DayOfWeek.SUNDAY -> "일"
+            }
 
         return dayOfWeek
     }
 
     /** iso 문자열을 days 만큼 뒤로 미룸 */
-    fun plusDays(iso: String, days: Int): String {
+    fun plusDays(
+        iso: String,
+        days: Int,
+    ): String {
         require(iso.isNotBlank()) { "ISO 문자열은 공백이 아니어야 함" }
         if (days == 0) return iso
 
@@ -150,20 +163,22 @@ object DateTimeFormatter {
     data class AmPmTime(
         val period: String,
         val hour12: Int,
-        val minute: Int
+        val minute: Int,
     ) {
         private fun Int.pad2() = this.toString().padStart(2, '0')
+
         /** "오전 1:05" 같은 형태로 포맷 */
         fun format(): String = "$period $hour12:${minute.pad2()}"
 
         /** 23:05 같은 형태로 포맷 */
         fun formatHourMinute(): String {
-            val hour24 = when {
-                period == WORD_AM && hour12 == 12 -> 0
-                period == WORD_AM -> hour12
-                period == WORD_PM && hour12 == 12 -> 12
-                else -> hour12 + 12
-            }
+            val hour24 =
+                when {
+                    period == WORD_AM && hour12 == 12 -> 0
+                    period == WORD_AM -> hour12
+                    period == WORD_PM && hour12 == 12 -> 12
+                    else -> hour12 + 12
+                }
             return "${hour24.pad2()}:${minute.pad2()}"
         }
     }
@@ -171,32 +186,33 @@ object DateTimeFormatter {
     data class HourMinuteSecond(
         val hour: Int,
         val minute: Int,
-        val second: Int
+        val second: Int,
     ) {
         private fun Int.pad2() = this.toString().padStart(2, '0')
+
         /** "01:00:00" 형태로 포맷 */
         fun format(): String = "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
     }
 
     private fun parseAmPmTime(iso: String): AmPmTime {
-        val (h24, minute) = if ('T' in iso) {
-            val dt = LocalDateTime.parse(iso)
-            dt.hour to dt.minute
-        } else {
-            val t = LocalTime.parse(iso)
-            t.hour to t.minute
-        }
+        val (h24, minute) =
+            if ('T' in iso) {
+                val dt = LocalDateTime.parse(iso)
+                dt.hour to dt.minute
+            } else {
+                val t = LocalTime.parse(iso)
+                t.hour to t.minute
+            }
 
         val period = if (h24 < 12) WORD_AM else WORD_PM
-        val hour12 = when (val m = h24 % 12) {
-            0   -> 12
-            else -> m
-        }
+        val hour12 =
+            when (val m = h24 % 12) {
+                0 -> 12
+                else -> m
+            }
 
         return AmPmTime(period, hour12, minute)
     }
-
-
 
     /** "오전 01:05" 같은 형태로 포맷 */
     fun formatAmPmTime(iso: String): String = parseAmPmTime(iso).format()
@@ -206,7 +222,7 @@ object DateTimeFormatter {
 
     private fun parseHourMinuteSecond(iso: String): HourMinuteSecond {
         val localDt = LocalDateTime.parse(iso)
-        val h24    = localDt.hour
+        val h24 = localDt.hour
         val minute = localDt.minute
         val second = localDt.second
 
@@ -227,10 +243,13 @@ object DateTimeFormatter {
         val localDt = LocalDateTime.parse(iso)
         val alarmInstant = localDt.toInstant(TimeZone.currentSystemDefault())
 
-        val nowInstant: Instant = kotlin.time.Clock.System.now()
-        val nowInSeoul: Instant = nowInstant
-            .toLocalDateTime(TimeZone.of("Asia/Seoul"))
-            .toInstant(TimeZone.of("Asia/Seoul"))
+        val nowInstant: Instant =
+            kotlin.time.Clock.System
+                .now()
+        val nowInSeoul: Instant =
+            nowInstant
+                .toLocalDateTime(TimeZone.of("Asia/Seoul"))
+                .toInstant(TimeZone.of("Asia/Seoul"))
 
         val diff: Duration = alarmInstant - nowInSeoul
         if (diff.isNegative() || diff == Duration.ZERO) {
@@ -245,7 +264,10 @@ object DateTimeFormatter {
 
     /** 두 개의 ISO8601 문자열 간의 시간 차이를 계산 */
     @OptIn(ExperimentalTime::class)
-    fun diffBetweenIsoTimes(iso1: String, iso2: String): Triple<Int, Int, Int> {
+    fun diffBetweenIsoTimes(
+        iso1: String,
+        iso2: String,
+    ): Triple<Int, Int, Int> {
         return try {
             val dt1 = LocalDateTime.parse(iso1).toInstant(TimeZone.of("Asia/Seoul"))
             val dt2 = LocalDateTime.parse(iso2).toInstant(TimeZone.of("Asia/Seoul"))
@@ -268,10 +290,11 @@ object DateTimeFormatter {
 
     fun LocalTime.formatAmPmTime(): String {
         val period = if (hour < 12) WORD_AM else WORD_PM
-        val hour12 = when (val h = hour % 12) {
-            0 -> 12
-            else -> h
-        }
+        val hour12 =
+            when (val h = hour % 12) {
+                0 -> 12
+                else -> h
+            }
 
         val hh = hour12.toString().padStart(2, '0')
         val mm = minute.toString().padStart(2, '0')
@@ -283,16 +306,16 @@ object DateTimeFormatter {
 
     private fun Int.pad2() = this.toString().padStart(2, '0')
 
-    fun LocalDate.toIsoDateString(): String =
-        "${year.toString().padStart(4, '0')}-" + "${month.number.pad2()}-" + day.pad2()
+    fun LocalDate.toIsoDateString(): String = "${year.toString().padStart(4, '0')}-" + "${month.number.pad2()}-" + day.pad2()
 
-    fun LocalTime.toIsoTimeString(): String =
-        "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
+    fun LocalTime.toIsoTimeString(): String = "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
 
-    fun formatIsoDateTime(date: LocalDate, time: LocalTime): String =
-        "${date.toIsoDateString()}T${time.toIsoTimeString()}"
+    fun formatIsoDateTime(
+        date: LocalDate,
+        time: LocalTime,
+    ): String = "${date.toIsoDateString()}T${time.toIsoTimeString()}"
 
-    /**----------------------------------------------ISO8601 변환---------------------------------------------*/
+    // ----------------------------------------------ISO8601 변환---------------------------------------------
 
     /** Iso8601 기반의 문자열을 밀리초로 변환하는 메서드 */
     @OptIn(ExperimentalTime::class)
@@ -305,12 +328,10 @@ object DateTimeFormatter {
     }
 
     /** ISO-8601 문자열에서 날짜만 파싱 */
-    fun String.toLocalDateFromIso(): LocalDate =
-        LocalDate.parse(substringBefore('T'))
+    fun String.toLocalDateFromIso(): LocalDate = LocalDate.parse(substringBefore('T'))
 
     /** ISO-8601 문자열에서 시간만 파싱 */
-    fun String.toLocalTimeFromIso(): LocalTime =
-        LocalTime.parse(substringAfter('T'))
+    fun String.toLocalTimeFromIso(): LocalTime = LocalTime.parse(substringAfter('T'))
 
     /** LocalTime에 interval(분) 만큼 더하기 */
     fun LocalTime.plusMinutes(interval: Int): LocalTime {
@@ -327,10 +348,13 @@ object DateTimeFormatter {
         return LocalTime(newHour, newMinute, newSecond)
     }
 
-    /**----------------------------------------------기타---------------------------------------------*/
+    // ----------------------------------------------기타---------------------------------------------
 
     /** 두개의 ISO8601 날짜가 하루 차이인지 판단하는 메서드 */
-    fun isYesterday(scheduleDate: String, alarmDate: String): Boolean {
+    fun isYesterday(
+        scheduleDate: String,
+        alarmDate: String,
+    ): Boolean {
         if (scheduleDate.isBlank() || alarmDate.isBlank()) return false
 
         return try {

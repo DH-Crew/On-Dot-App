@@ -4,9 +4,9 @@ import com.ondot.data.model.response.alarm.AlarmResponse
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.network.base.Mapper
 
-object AlarmResponseMapper: Mapper<AlarmResponse, Alarm> {
-    override fun responseToModel(response: AlarmResponse?): Alarm {
-        return response?.let {
+object AlarmResponseMapper : Mapper<AlarmResponse, Alarm> {
+    override fun responseToModel(response: AlarmResponse?): Alarm =
+        response?.let {
             Alarm(
                 alarmId = it.alarmId,
                 alarmMode = it.alarmMode,
@@ -17,8 +17,7 @@ object AlarmResponseMapper: Mapper<AlarmResponse, Alarm> {
                 snoozeCount = it.snoozeCount,
                 soundCategory = it.soundCategory,
                 ringTone = it.ringTone,
-                volume = it.volume
+                volume = it.volume,
             )
         } ?: Alarm()
-    }
 }

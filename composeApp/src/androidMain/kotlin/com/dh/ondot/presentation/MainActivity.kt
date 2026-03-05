@@ -32,12 +32,10 @@ import com.ondot.domain.model.ui.AlarmEvent
 import com.ondot.platform.data.OnDotDataStore
 import com.ondot.platform.model.RingingState
 import com.ondot.util.AlarmNotifier
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
-
     private val logger = Logger.withTag("MainActivity")
     private val dataStore: OnDotDataStore by inject()
     private var lastNavKey: Triple<Long, Long, Long>? = null
@@ -48,8 +46,8 @@ class MainActivity : ComponentActivity() {
     private fun Intent?.dump(prefix: String = "intent"): String {
         if (this == null) return "$prefix=null"
         val keys = extras?.keySet()?.joinToString() ?: "extra 없음"
-        val sid  = getLongExtra("scheduleId", -1L)
-        val aid  = getLongExtra("alarmId", -1L)
+        val sid = getLongExtra("scheduleId", -1L)
+        val aid = getLongExtra("alarmId", -1L)
         val type = getStringExtra("type")
         return "$prefix: action=$action, data=$data, extras=[$keys], scheduleId=$sid, alarmId=$aid, type=$type"
     }
@@ -57,8 +55,13 @@ class MainActivity : ComponentActivity() {
     /**
      * Log: RingingState 출력
      * */
-    private fun logRingingState(source: String, state: RingingState?) {
-        logger.i { "[SoT][$source] state=$state (isRinging=${state?.isRinging}, scheduleId=${state?.scheduleId}, alarmId=${state?.alarmId}, type=${state?.type}, instanceId=${state?.instanceId})" }
+    private fun logRingingState(
+        source: String,
+        state: RingingState?,
+    ) {
+        logger.i {
+            "[SoT][$source] state=$state (isRinging=${state?.isRinging}, scheduleId=${state?.scheduleId}, alarmId=${state?.alarmId}, type=${state?.type}, instanceId=${state?.instanceId})"
+        }
     }
 
     private val requestNotificationPermission =
@@ -70,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 startActivity(
                     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", packageName, null)
-                    }
+                    },
                 )
             }
         }
@@ -80,11 +83,12 @@ class MainActivity : ComponentActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val am = getSystemService(AlarmManager::class.java)
                 if (am != null && !am.canScheduleExactAlarms()) {
-                    Toast.makeText(
-                        this,
-                        "알람 권한이 필요합니다",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast
+                        .makeText(
+                            this,
+                            "알람 권한이 필요합니다",
+                            Toast.LENGTH_LONG,
+                        ).show()
                 }
             }
         }
@@ -95,9 +99,11 @@ class MainActivity : ComponentActivity() {
         logger.i { "[Lifecycle] onCreate() start, ${intent.dump("launchIntent")}" }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val has = ContextCompat.checkSelfPermission(
-                this, Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
+            val has =
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ) == PackageManager.PERMISSION_GRANTED
 
             if (!has) {
                 logger.d { "알림 권한이 필요하여 런타임 요청을 시작합니다." }
@@ -124,7 +130,8 @@ class MainActivity : ComponentActivity() {
          * */
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dataStore.flow()
+                dataStore
+                    .flow()
                     .collect { state ->
                         if (state.isRinging) {
                             logRingingState("onCreate", state)
@@ -142,10 +149,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Box(
-                modifier = Modifier
-                    .windowInsetsPadding(
-                        WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
-                    )
+                modifier =
+                    Modifier
+                        .windowInsetsPadding(
+                            WindowInsets.navigationBars.only(WindowInsetsSides.Bottom),
+                        ),
             ) {
                 App()
             }
@@ -163,9 +171,10 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val am = getSystemService(AlarmManager::class.java)
             if (am != null && !am.canScheduleExactAlarms()) {
-                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = "package:$packageName".toUri()
-                }
+                val intent =
+                    Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                        data = "package:$packageName".toUri()
+                    }
                 exactAlarmLauncher.launch(intent)
             }
         }
@@ -175,8 +184,8 @@ class MainActivity : ComponentActivity() {
         logger.i { "[INTENT] handleAlarmIntent(): ${intent.dump()}" }
         intent ?: return
 
-        val sid  = intent.getLongExtra("scheduleId", -1L)
-        val aid  = intent.getLongExtra("alarmId", -1L)
+        val sid = intent.getLongExtra("scheduleId", -1L)
+        val aid = intent.getLongExtra("alarmId", -1L)
         val type = intent.getStringExtra("type") ?: return
 
         if (sid > 0 && aid > 0) {

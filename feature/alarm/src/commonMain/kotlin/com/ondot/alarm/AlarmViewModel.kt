@@ -7,7 +7,7 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_PREPARATION
 import com.ondot.bridge.DirectionsFacade
 import com.ondot.bridge.TriggeredAlarmManager
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.AlarmAction
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ToastType
@@ -35,8 +35,8 @@ class AlarmViewModel(
     private val soundPlayer: SoundPlayer,
     private val memberRepository: MemberRepository,
     private val scheduleRepository: ScheduleRepository,
-    private val analyticsManager: AnalyticsManager
-): BaseViewModel<AlarmUiState>(AlarmUiState()) {
+    private val analyticsManager: AnalyticsManager,
+) : BaseViewModel<AlarmUiState>(AlarmUiState()) {
     private val logger = Logger.withTag("AppViewModel")
 
     init {
@@ -53,23 +53,27 @@ class AlarmViewModel(
         }
     }
 
-    fun getAlarmInfo(scheduleId: Long, alarmId: Long) {
+    fun getAlarmInfo(
+        scheduleId: Long,
+        alarmId: Long,
+    ) {
         viewModelScope.launch {
             scheduleRepository.getLocalScheduleById(scheduleId).collect { schedule ->
                 schedule?.let {
-                    val currentAlarm = when(alarmId) {
-                        it.preparationAlarm.alarmId -> it.preparationAlarm
-                        it.departureAlarm.alarmId -> it.departureAlarm
-                        else -> {
-                            logger.e { "유효하지 않은 알람: $alarmId" }
-                            return@collect
+                    val currentAlarm =
+                        when (alarmId) {
+                            it.preparationAlarm.alarmId -> it.preparationAlarm
+                            it.departureAlarm.alarmId -> it.departureAlarm
+                            else -> {
+                                logger.e { "유효하지 않은 알람: $alarmId" }
+                                return@collect
+                            }
                         }
-                    }
 
                     getSchedulePreparation(scheduleId)
 
                     updateState(
-                        uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm)
+                        uiState.value.copy(schedule = schedule, currentAlarm = currentAlarm),
                     )
                 }
             }
@@ -83,7 +87,7 @@ class AlarmViewModel(
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
             alarmId = uiState.value.currentAlarm.alarmId,
-            action = AlarmAction.START_PREPARE
+            action = AlarmAction.START_PREPARE,
         )
     }
 
@@ -95,7 +99,7 @@ class AlarmViewModel(
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
             alarmId = uiState.value.currentAlarm.alarmId,
-            action = AlarmAction.SNOOZE
+            action = AlarmAction.SNOOZE,
         )
     }
 
@@ -107,7 +111,7 @@ class AlarmViewModel(
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
             alarmId = uiState.value.currentAlarm.alarmId,
-            action = AlarmAction.SNOOZE
+            action = AlarmAction.SNOOZE,
         )
     }
 
@@ -116,8 +120,12 @@ class AlarmViewModel(
         soundPlayer.stopSound()
 
         val schedule = uiState.value.schedule
-        val invalidCoords = listOf(schedule.startLatitude, schedule.startLongitude, schedule.endLatitude, schedule.endLongitude).any { it.isNaN() }
-                || ((schedule.startLatitude == 0.0 && schedule.startLongitude == 0.0) || (schedule.endLatitude == 0.0 && schedule.endLongitude == 0.0))
+        val invalidCoords =
+            listOf(schedule.startLatitude, schedule.startLongitude, schedule.endLatitude, schedule.endLongitude).any { it.isNaN() } ||
+                (
+                    (schedule.startLatitude == 0.0 && schedule.startLongitude == 0.0) ||
+                        (schedule.endLatitude == 0.0 && schedule.endLongitude == 0.0)
+                )
         if (invalidCoords) {
             logger.e { "Invalid coords: $invalidCoords" }
             return
@@ -132,7 +140,7 @@ class AlarmViewModel(
         TriggeredAlarmManager.recordTriggeredAlarm(
             scheduleId = uiState.value.schedule.scheduleId,
             alarmId = uiState.value.currentAlarm.alarmId,
-            action = AlarmAction.VIEW_ROUTE
+            action = AlarmAction.VIEW_ROUTE,
         )
 
         if (schedule.isRepeat && getPlatform() == ANDROID) scheduleNextAlarm(schedule)
@@ -145,7 +153,7 @@ class AlarmViewModel(
             endLng = schedule.endLongitude,
             startName = "출발지",
             endName = "도착지",
-            provider = uiState.value.mapProvider
+            provider = uiState.value.mapProvider,
         )
     }
 
@@ -169,55 +177,62 @@ class AlarmViewModel(
         val nextDepartureAt = DateTimeFormatter.plusDays(schedule.departureAlarm.triggeredAt, daysToAdd)
 
         // 다음 스케줄 객체 생성
-        val nextSchedule = schedule.copy(
-            appointmentAt = nextAppointmentAt,
-            preparationAlarm = schedule.preparationAlarm.copy(
-                triggeredAt = nextPreparationAt
-            ),
-            departureAlarm = schedule.departureAlarm.copy(
-                triggeredAt = nextDepartureAt
+        val nextSchedule =
+            schedule.copy(
+                appointmentAt = nextAppointmentAt,
+                preparationAlarm =
+                    schedule.preparationAlarm.copy(
+                        triggeredAt = nextPreparationAt,
+                    ),
+                departureAlarm =
+                    schedule.departureAlarm.copy(
+                        triggeredAt = nextDepartureAt,
+                    ),
             )
-        )
 
         viewModelScope.launch {
             scheduleRepository.upsertLocalSchedule(nextSchedule)
 
             if (nextSchedule.preparationAlarm.enabled) {
-                val alarmInfo = AlarmRingInfo(
-                    alarm = nextSchedule.preparationAlarm,
-                    alarmType = AlarmType.Preparation,
+                val alarmInfo =
+                    AlarmRingInfo(
+                        alarm = nextSchedule.preparationAlarm,
+                        alarmType = AlarmType.Preparation,
+                        appointmentAt = nextSchedule.appointmentAt,
+                        scheduleTitle = nextSchedule.scheduleTitle,
+                        scheduleId = nextSchedule.scheduleId,
+                        startLat = nextSchedule.startLatitude,
+                        startLng = nextSchedule.startLongitude,
+                        endLat = nextSchedule.endLatitude,
+                        endLng = nextSchedule.endLongitude,
+                    )
+
+                alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
+            }
+
+            val alarmInfo =
+                AlarmRingInfo(
+                    alarm = nextSchedule.departureAlarm,
+                    alarmType = AlarmType.Departure,
                     appointmentAt = nextSchedule.appointmentAt,
                     scheduleTitle = nextSchedule.scheduleTitle,
                     scheduleId = nextSchedule.scheduleId,
                     startLat = nextSchedule.startLatitude,
                     startLng = nextSchedule.startLongitude,
                     endLat = nextSchedule.endLatitude,
-                    endLng = nextSchedule.endLongitude
+                    endLng = nextSchedule.endLongitude,
                 )
-
-                alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
-            }
-
-            val alarmInfo = AlarmRingInfo(
-                alarm = nextSchedule.departureAlarm,
-                alarmType = AlarmType.Departure,
-                appointmentAt = nextSchedule.appointmentAt,
-                scheduleTitle = nextSchedule.scheduleTitle,
-                scheduleId = nextSchedule.scheduleId,
-                startLat = nextSchedule.startLatitude,
-                startLng = nextSchedule.startLongitude,
-                endLat = nextSchedule.endLatitude,
-                endLng = nextSchedule.endLongitude
-            )
             alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
         }
     }
 
     fun initAnimationFlags() {
-        updateState(uiState.value.copy(
-            showPreparationSnoozeAnimation = false,
-            showDepartureSnoozeAnimation = false
-        ))
+        updateState(
+            uiState.value.copy(
+                showPreparationSnoozeAnimation = false,
+                showDepartureSnoozeAnimation = false,
+            ),
+        )
     }
 
     @OptIn(ExperimentalTime::class)
@@ -225,25 +240,31 @@ class AlarmViewModel(
         var newSchedule = uiState.value.schedule
         var currentAlarm = uiState.value.currentAlarm
         val timeZone = TimeZone.of("Asia/Seoul")
-        val snoozedLocal = Clock.System.now()
-            .plus(currentAlarm.snoozeInterval.toLong(), DateTimeUnit.MINUTE, timeZone)
-            .toLocalDateTime(timeZone)
+        val snoozedLocal =
+            Clock.System
+                .now()
+                .plus(currentAlarm.snoozeInterval.toLong(), DateTimeUnit.MINUTE, timeZone)
+                .toLocalDateTime(timeZone)
         val newTriggeredAt = DateTimeFormatter.formatIsoDateTime(snoozedLocal.date, snoozedLocal.time)
         val type = if (currentAlarm.alarmId == newSchedule.preparationAlarm.alarmId) AlarmType.Preparation else AlarmType.Departure
 
-        currentAlarm = when(type) {
-            AlarmType.Departure -> newSchedule.departureAlarm.copy(
-                triggeredAt = newTriggeredAt
-            )
-            AlarmType.Preparation -> newSchedule.preparationAlarm.copy(
-                triggeredAt = newTriggeredAt
-            )
-        }
+        currentAlarm =
+            when (type) {
+                AlarmType.Departure ->
+                    newSchedule.departureAlarm.copy(
+                        triggeredAt = newTriggeredAt,
+                    )
+                AlarmType.Preparation ->
+                    newSchedule.preparationAlarm.copy(
+                        triggeredAt = newTriggeredAt,
+                    )
+            }
 
-        newSchedule = when(type) {
-            AlarmType.Departure -> newSchedule.copy(departureAlarm = currentAlarm)
-            AlarmType.Preparation -> newSchedule.copy(preparationAlarm = currentAlarm)
-        }
+        newSchedule =
+            when (type) {
+                AlarmType.Departure -> newSchedule.copy(departureAlarm = currentAlarm)
+                AlarmType.Preparation -> newSchedule.copy(preparationAlarm = currentAlarm)
+            }
 
         viewModelScope.launch {
             // 저장소에 저장
@@ -260,9 +281,9 @@ class AlarmViewModel(
                     endLat = newSchedule.endLatitude,
                     endLng = newSchedule.endLongitude,
                     scheduleTitle = newSchedule.scheduleTitle,
-                    appointmentAt = newSchedule.appointmentAt
+                    appointmentAt = newSchedule.appointmentAt,
                 ),
-                mapProvider = uiState.value.mapProvider
+                mapProvider = uiState.value.mapProvider,
             )
         }
     }

@@ -14,13 +14,13 @@ import com.dh.ondot.presentation.ui.theme.SUCCESS_EDIT_PREPARATION_TIME
 import com.dh.ondot.presentation.ui.theme.WITHDRAW_SUCCESS_MESSAGE
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
-import com.ondot.domain.model.request.DeleteAccountRequest
-import com.ondot.domain.model.request.MapProviderRequest
-import com.ondot.domain.model.request.settings.home_address.HomeAddressRequest
-import com.ondot.domain.model.request.settings.preparation_time.PreparationTimeRequest
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.member.PreparationTime
+import com.ondot.domain.model.request.DeleteAccountRequest
+import com.ondot.domain.model.request.MapProviderRequest
+import com.ondot.domain.model.request.settings.homeAddress.HomeAddressRequest
+import com.ondot.domain.model.request.settings.preparationTime.PreparationTimeRequest
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.repository.AuthRepository
@@ -41,8 +41,8 @@ class SettingViewModel(
     private val memberRepository: MemberRepository,
     private val placeRepository: PlaceRepository,
     private val urlOpener: UrlOpener,
-    private val alarmScheduler: AlarmScheduler
-): BaseViewModel<SettingUiState>(SettingUiState()) {
+    private val alarmScheduler: AlarmScheduler,
+) : BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
     private var searchJob: Job? = null
 
@@ -72,12 +72,13 @@ class SettingViewModel(
 
         searchJob?.cancel()
 
-        searchJob = viewModelScope.launch {
-            delay(200)
-            placeRepository.searchPlace(query).collect {
-                resultResponse(it, ::onSuccessSearchPlace, ::onFailSearchPlace)
+        searchJob =
+            viewModelScope.launch {
+                delay(200)
+                placeRepository.searchPlace(query).collect {
+                    resultResponse(it, ::onSuccessSearchPlace, ::onFailSearchPlace)
+                }
             }
-        }
     }
 
     private fun onSuccessSearchPlace(result: List<AddressInfo>) {
@@ -94,34 +95,38 @@ class SettingViewModel(
     }
 
     fun updateHomeAddress() {
-        val newHomeAddress = HomeAddressInfo(
-            roadAddress = uiState.value.selectedHomeAddress.roadAddress,
-            latitude = uiState.value.selectedHomeAddress.latitude,
-            longitude = uiState.value.selectedHomeAddress.longitude
-        )
+        val newHomeAddress =
+            HomeAddressInfo(
+                roadAddress = uiState.value.selectedHomeAddress.roadAddress,
+                latitude = uiState.value.selectedHomeAddress.latitude,
+                longitude = uiState.value.selectedHomeAddress.longitude,
+            )
 
         viewModelScope.launch {
-            memberRepository.updateHomeAddress(
-                request = HomeAddressRequest(
-                    roadAddress = newHomeAddress.roadAddress,
-                    latitude = newHomeAddress.latitude,
-                    longitude = newHomeAddress.longitude
-                )
-            ).collect {
-                resultResponse(it, ::onSuccessUpdateHomeAddress, ::onFailUpdateHomeAddress)
-            }
+            memberRepository
+                .updateHomeAddress(
+                    request =
+                        HomeAddressRequest(
+                            roadAddress = newHomeAddress.roadAddress,
+                            latitude = newHomeAddress.latitude,
+                            longitude = newHomeAddress.longitude,
+                        ),
+                ).collect {
+                    resultResponse(it, ::onSuccessUpdateHomeAddress, ::onFailUpdateHomeAddress)
+                }
         }
     }
 
     private fun onSuccessUpdateHomeAddress(result: Unit) {
         updateState(
             uiState.value.copy(
-                homeAddress = HomeAddressInfo(
-                    roadAddress = uiState.value.selectedHomeAddress.roadAddress,
-                    latitude = uiState.value.selectedHomeAddress.latitude,
-                    longitude = uiState.value.selectedHomeAddress.longitude
-                )
-            )
+                homeAddress =
+                    HomeAddressInfo(
+                        roadAddress = uiState.value.selectedHomeAddress.roadAddress,
+                        latitude = uiState.value.selectedHomeAddress.latitude,
+                        longitude = uiState.value.selectedHomeAddress.longitude,
+                    ),
+            ),
         )
 
         emitEventFlow(SettingEvent.PopScreen)
@@ -148,11 +153,12 @@ class SettingViewModel(
 
     fun updateMapProvider() {
         viewModelScope.launch {
-            memberRepository.updateMapProvider(
-                request = MapProviderRequest(mapProvider = uiState.value.selectedProvider)
-            ).collect {
-                resultResponse(it, ::onSuccessUpdateMapProvider, ::onFailUpdateMapProvider)
-            }
+            memberRepository
+                .updateMapProvider(
+                    request = MapProviderRequest(mapProvider = uiState.value.selectedProvider),
+                ).collect {
+                    resultResponse(it, ::onSuccessUpdateMapProvider, ::onFailUpdateMapProvider)
+                }
         }
     }
 
@@ -184,8 +190,8 @@ class SettingViewModel(
         updateState(
             uiState.value.copy(
                 hourInput = if (hour == 0) "" else hour.toString(),
-                minuteInput = if (minute == 0) "" else minute.toString()
-            )
+                minuteInput = if (minute == 0) "" else minute.toString(),
+            ),
         )
     }
 
@@ -198,8 +204,14 @@ class SettingViewModel(
     }
 
     fun updatePreparationTime() {
-        val hours = uiState.value.hourInput.trim().toIntOrNull() ?: 0
-        val minutes = uiState.value.minuteInput.trim().toIntOrNull() ?: 0
+        val hours =
+            uiState.value.hourInput
+                .trim()
+                .toIntOrNull() ?: 0
+        val minutes =
+            uiState.value.minuteInput
+                .trim()
+                .toIntOrNull() ?: 0
         val preparationTime = hours * 60 + minutes
 
         viewModelScope.launch {
@@ -227,7 +239,6 @@ class SettingViewModel(
 
     fun logout() {
         viewModelScope.launch {
-
             // 모든 알람이 성공적으로 취소됐을 때만 그 이후 로직 실행
             val canceled = cancelAllSchedules()
             if (!canceled) {
@@ -259,7 +270,6 @@ class SettingViewModel(
         val selectedReason = uiState.value.accountDeletionReasons[uiState.value.selectedReasonIndex]
 
         viewModelScope.launch {
-
             // 모든 알람이 성공적으로 취소됐을 때만 그 이후 로직 실행
             val canceled = cancelAllSchedules()
             if (!canceled) {
@@ -267,14 +277,16 @@ class SettingViewModel(
                 return@launch
             }
 
-            memberRepository.withdrawUser(
-                request = DeleteAccountRequest(
-                    withdrawalReasonId = selectedReason.id,
-                    customReason = ""
-                )
-            ).collect {
-                resultResponse(it, ::onSuccessWithdraw, ::onFailWithdraw)
-            }
+            memberRepository
+                .withdrawUser(
+                    request =
+                        DeleteAccountRequest(
+                            withdrawalReasonId = selectedReason.id,
+                            customReason = "",
+                        ),
+                ).collect {
+                    resultResponse(it, ::onSuccessWithdraw, ::onFailWithdraw)
+                }
         }
     }
 
@@ -303,12 +315,10 @@ class SettingViewModel(
         urlOpener.openUrl(url)
     }
 
-    /**--------------------------------------------상태 처리-----------------------------------------------*/
+    // --------------------------------------------상태 처리-----------------------------------------------
 
     // 탈퇴 버튼 활성화
-    fun isButtonEnabled(): Boolean {
-        return uiState.value.selectedReasonIndex != 5 || uiState.value.userInput.isNotEmpty()
-    }
+    fun isButtonEnabled(): Boolean = uiState.value.selectedReasonIndex != 5 || uiState.value.userInput.isNotEmpty()
 
     // 준비 시간 설정 버튼 활성화
     fun isPreparationTimeEditable(): Boolean {
@@ -317,7 +327,7 @@ class SettingViewModel(
         return hour > 0 || minute in 1..59
     }
 
-    /**--------------------------------------------스케줄링 취소-----------------------------------------------*/
+    // --------------------------------------------스케줄링 취소-----------------------------------------------
 
     /**
      * 모든 스케줄을 조회해서 알람을 취소한다.
@@ -336,7 +346,7 @@ class SettingViewModel(
                 errorCallback = { e ->
                     onFailCancelAllSchedules(e)
                     isSuccess = false
-                }
+                },
             )
         }
 
@@ -352,7 +362,6 @@ class SettingViewModel(
     private fun onFailCancelAllSchedules(e: Throwable) {
         logger.e { "onFailCancelAllSchedules: ${e.message}" }
     }
-
 
     private fun cancelAlarms(schedule: Schedule) {
         alarmScheduler.cancelAlarm(schedule.departureAlarm.alarmId)

@@ -9,12 +9,12 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.ToastType
-import com.ondot.domain.model.request.CreateScheduleRequest
-import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.member.PlaceHistory
+import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.DeletePlaceHistoryRequest
+import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.schedule.ScheduleAlarm
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
@@ -26,7 +26,6 @@ import com.ondot.util.DateTimeFormatter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -47,14 +46,13 @@ class GeneralScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val placeRepository: PlaceRepository,
     private val memberRepository: MemberRepository,
-    private val analyticsManager: AnalyticsManager
+    private val analyticsManager: AnalyticsManager,
 ) : BaseViewModel<GeneralScheduleUiState>(GeneralScheduleUiState()) {
     private val logger = Logger.withTag("GeneralScheduleViewModel")
     private val fullWeek = (0..6).toList()
     private val weekDays = (1..5).toList()
     private val weekend = listOf(0, 6)
-    private val _query = MutableStateFlow("")
-    private val query: StateFlow<String> = _query
+    private val query = MutableStateFlow("")
 
     init {
         viewModelScope.launch {
@@ -65,16 +63,14 @@ class GeneralScheduleViewModel(
                     if (value.isBlank()) {
                         updateState(uiState.value.copy(placeList = emptyList()))
                     }
-                }
-                .filter { it.isNotBlank() }
+                }.filter { it.isNotBlank() }
                 .flatMapLatest { q ->
                     placeRepository.searchPlace(q)
-                }
-                .collect { response ->
+                }.collect { response ->
                     resultResponse(
                         response,
                         ::onSuccessSearchPlace,
-                        ::onFailedSearchPlace
+                        ::onFailedSearchPlace,
                     )
                 }
         }
@@ -95,14 +91,15 @@ class GeneralScheduleViewModel(
     private fun onSuccessGetHomeAddress(result: HomeAddressInfo) {
         updateState(
             uiState.value.copy(
-                homeAddress = AddressInfo(
-                    title = result.roadAddress,
-                    roadAddress = result.roadAddress,
-                    latitude = result.latitude,
-                    longitude = result.longitude
-                ),
-                isHomeAddressInitialized = true
-            )
+                homeAddress =
+                    AddressInfo(
+                        title = result.roadAddress,
+                        roadAddress = result.roadAddress,
+                        latitude = result.latitude,
+                        longitude = result.longitude,
+                    ),
+                isHomeAddressInitialized = true,
+            ),
         )
     }
 
@@ -120,8 +117,8 @@ class GeneralScheduleViewModel(
             updateState(
                 uiState.value.copy(
                     activeCheckChip = null,
-                    activeWeekDays = emptySet()
-                )
+                    activeWeekDays = emptySet(),
+                ),
             )
         }
     }
@@ -131,34 +128,47 @@ class GeneralScheduleViewModel(
             uiState.value.copy(
                 activeCheckChip = index,
                 isActiveCalendar = true,
-                activeWeekDays = when (index) {
-                    0 -> fullWeek.toSet()
-                    1 -> weekDays.toSet()
-                    2 -> weekend.toSet()
-                    else -> emptySet()
-                }
-            )
+                activeWeekDays =
+                    when (index) {
+                        0 -> fullWeek.toSet()
+                        1 -> weekDays.toSet()
+                        2 -> weekend.toSet()
+                        else -> emptySet()
+                    },
+            ),
         )
 
-        val bucket = when (index) { 0 -> "full_week"; 1 -> "weekdays"; 2 -> "weekend"; else -> "custom" }
+        val bucket =
+            when (index) {
+                0 -> "full_week"
+                1 -> "weekdays"
+                2 -> "weekend"
+                else -> "custom"
+            }
     }
 
     fun onClickTextChip(index: Int) {
         val activeWeekDays = uiState.value.activeWeekDays.toMutableSet()
 
-        if (activeWeekDays.contains(index)) activeWeekDays.remove(index)
-        else activeWeekDays.add(index)
+        if (activeWeekDays.contains(index)) {
+            activeWeekDays.remove(index)
+        } else {
+            activeWeekDays.add(index)
+        }
 
-        updateState(uiState.value.copy(
-            isActiveCalendar = true,
-            activeWeekDays = activeWeekDays,
-            activeCheckChip = when (activeWeekDays) {
-                fullWeek.toSet() -> 0
-                weekDays.toSet()  -> 1
-                weekend.toSet()  -> 2
-                else -> null
-            }
-        ))
+        updateState(
+            uiState.value.copy(
+                isActiveCalendar = true,
+                activeWeekDays = activeWeekDays,
+                activeCheckChip =
+                    when (activeWeekDays) {
+                        fullWeek.toSet() -> 0
+                        weekDays.toSet() -> 1
+                        weekend.toSet() -> 2
+                        else -> null
+                    },
+            ),
+        )
     }
 
     /**--------------------------------------------DateSettingSection-----------------------------------------------*/
@@ -197,7 +207,7 @@ class GeneralScheduleViewModel(
 
     fun onRouteInputChanged(value: String) {
         onInputValueChanged(value)
-        _query.value = value
+        query.value = value
     }
 
     private fun onInputValueChanged(value: String) {
@@ -225,27 +235,31 @@ class GeneralScheduleViewModel(
                     uiState.value.copy(
                         selectedDeparturePlace = place,
                         placeList = emptyList(),
-                        departurePlaceInput = place.title
-                    )
+                        departurePlaceInput = place.title,
+                    ),
                 )
                 emitEventFlow(GeneralScheduleEvent.RequestArrivalFocus)
                 onRouteInputFieldFocused(RouterType.Arrival)
-                _query.value = ""
+                query.value = ""
             }
-            RouterType.Arrival -> updateState(
-                uiState.value.copy(
-                    selectedArrivalPlace = place,
-                    placeList = emptyList(),
-                    arrivalPlaceInput = place.title
+            RouterType.Arrival ->
+                updateState(
+                    uiState.value.copy(
+                        selectedArrivalPlace = place,
+                        placeList = emptyList(),
+                        arrivalPlaceInput = place.title,
+                    ),
                 )
-            )
         }
     }
 
     fun onClickCheckBox() {
         val curValue = uiState.value.isChecked
 
-        if (!curValue && uiState.value.homeAddress.title.isBlank()) {
+        if (!curValue &&
+            uiState.value.homeAddress.title
+                .isBlank()
+        ) {
             initHomeAddress()
             return
         }
@@ -254,8 +268,8 @@ class GeneralScheduleViewModel(
             uiState.value.copy(
                 isChecked = !curValue,
                 selectedDeparturePlace = if (!curValue) uiState.value.homeAddress else null,
-                departurePlaceInput = if (!curValue) uiState.value.homeAddress.roadAddress else ""
-            )
+                departurePlaceInput = if (!curValue) uiState.value.homeAddress.roadAddress else "",
+            ),
         )
     }
 
@@ -293,12 +307,13 @@ class GeneralScheduleViewModel(
     }
 
     fun onHistoryPlaceSelected(place: PlaceHistory) {
-        val address = AddressInfo(
-            title = place.title,
-            roadAddress = place.roadAddress,
-            latitude = place.latitude,
-            longitude = place.longitude
-        )
+        val address =
+            AddressInfo(
+                title = place.title,
+                roadAddress = place.roadAddress,
+                latitude = place.latitude,
+                longitude = place.longitude,
+            )
 
         onPlaceSelected(address)
     }
@@ -324,23 +339,29 @@ class GeneralScheduleViewModel(
         val (departurePlace, arrivalPlace) = places
 
         val zone = TimeZone.currentSystemDefault()
-        val today = kotlin.time.Clock.System.now().toLocalDateTime(zone).date
+        val today =
+            kotlin.time.Clock.System
+                .now()
+                .toLocalDateTime(zone)
+                .date
         val dateOrToday = date ?: today
 
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(dateOrToday, time)
 
         viewModelScope.launch {
-            scheduleRepository.getScheduleAlarms(
-                request = ScheduleAlarmRequest(
-                    appointmentAt = appointmentAt,
-                    startLatitude = departurePlace.latitude,
-                    startLongitude = departurePlace.longitude,
-                    endLatitude = arrivalPlace.latitude,
-                    endLongitude = arrivalPlace.longitude
-                )
-            ).collect {
-                resultResponse(it, ::onSuccessGetScheduleAlarms, ::onFailedGetScheduleAlarms)
-            }
+            scheduleRepository
+                .getScheduleAlarms(
+                    request =
+                        ScheduleAlarmRequest(
+                            appointmentAt = appointmentAt,
+                            startLatitude = departurePlace.latitude,
+                            startLongitude = departurePlace.longitude,
+                            endLatitude = arrivalPlace.latitude,
+                            endLongitude = arrivalPlace.longitude,
+                        ),
+                ).collect {
+                    resultResponse(it, ::onSuccessGetScheduleAlarms, ::onFailedGetScheduleAlarms)
+                }
         }
     }
 
@@ -356,29 +377,40 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------CheckSchedule-----------------------------------------------*/
 
     @OptIn(ExperimentalTime::class)
-    fun createSchedule(isChecked: Boolean, input: String) {
+    fun createSchedule(
+        isChecked: Boolean,
+        input: String,
+    ) {
         val (dateRepeat, time, places) = validateScheduleInputs()
         val (date, repeatDays) = dateRepeat
         val (departurePlace, arrivalPlace) = places
 
         val zone = TimeZone.currentSystemDefault()
-        val today = kotlin.time.Clock.System.now().toLocalDateTime(zone).date
+        val today =
+            kotlin.time.Clock.System
+                .now()
+                .toLocalDateTime(zone)
+                .date
         val dateOrToday = date ?: today
 
         val appointmentAt = DateTimeFormatter.formatIsoDateTime(dateOrToday, time)
 
-        val request = CreateScheduleRequest(
-            title = uiState.value.scheduleTitle,
-            isRepeat = uiState.value.isRepeat,
-            repeatDays = uiState.value.activeWeekDays.map { it + 1 }.toList(),
-            isMedicationRequired = isChecked,
-            preparationNote = input,
-            departurePlace = departurePlace,
-            arrivalPlace = arrivalPlace,
-            appointmentAt = appointmentAt,
-            preparationAlarm = uiState.value.preparationAlarm,
-            departureAlarm = uiState.value.departureAlarm
-        )
+        val request =
+            CreateScheduleRequest(
+                title = uiState.value.scheduleTitle,
+                isRepeat = uiState.value.isRepeat,
+                repeatDays =
+                    uiState.value.activeWeekDays
+                        .map { it + 1 }
+                        .toList(),
+                isMedicationRequired = isChecked,
+                preparationNote = input,
+                departurePlace = departurePlace,
+                arrivalPlace = arrivalPlace,
+                appointmentAt = appointmentAt,
+                preparationAlarm = uiState.value.preparationAlarm,
+                departureAlarm = uiState.value.departureAlarm,
+            )
 
         viewModelScope.launch {
             scheduleRepository.createSchedule(request = request).collect {
@@ -401,7 +433,9 @@ class GeneralScheduleViewModel(
     }
 
     fun updatePreparationAlarmEnabled() {
-        updateState(uiState.value.copy(preparationAlarm = uiState.value.preparationAlarm.copy(enabled = !uiState.value.preparationAlarm.enabled)))
+        updateState(
+            uiState.value.copy(preparationAlarm = uiState.value.preparationAlarm.copy(enabled = !uiState.value.preparationAlarm.enabled)),
+        )
     }
 
     fun updateBottomSheetVisible(visible: Boolean) {
@@ -410,13 +444,12 @@ class GeneralScheduleViewModel(
 
     /**--------------------------------------------ETC-----------------------------------------------*/
 
-    fun isButtonEnabled(): Boolean {
-        return when (uiState.value.currentStep) {
+    fun isButtonEnabled(): Boolean =
+        when (uiState.value.currentStep) {
             1 -> uiState.value.selectedTime != null && (uiState.value.selectedDate != null || uiState.value.activeWeekDays.isNotEmpty())
             2 -> uiState.value.selectedDeparturePlace != null && uiState.value.selectedArrivalPlace != null
             else -> false
         }
-    }
 
     fun onClickNextButton() {
         when (uiState.value.currentStep) {
@@ -442,7 +475,7 @@ class GeneralScheduleViewModel(
     private fun validateScheduleInputs(): Triple<Pair<LocalDate?, Set<Int>>, LocalTime, Pair<AddressInfo, AddressInfo>> {
         val time = requireNotNull(uiState.value.selectedTime) { "selectedTime가 null입니다." }
         val from = requireNotNull(uiState.value.selectedDeparturePlace) { "selectedDeparturePlace가 null입니다." }
-        val to   = requireNotNull(uiState.value.selectedArrivalPlace)   { "selectedArrivalPlace가 null입니다." }
+        val to = requireNotNull(uiState.value.selectedArrivalPlace) { "selectedArrivalPlace가 null입니다." }
 
         val date = uiState.value.selectedDate
         val repeatDays = uiState.value.activeWeekDays

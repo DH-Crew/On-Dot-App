@@ -14,27 +14,23 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class AndroidMapProviderStorage(
-    private val context: Context
-): MapProviderStorage {
-
+    private val context: Context,
+) : MapProviderStorage {
     private val dataStore = context.dataStore
 
-    override fun getMapProvider(): Flow<MapProvider> {
-        return dataStore.data
+    override fun getMapProvider(): Flow<MapProvider> =
+        dataStore.data
             .catch { emit(emptyPreferences()) }
             .map { prefs ->
                 val raw = prefs[KEY]
                 runCatching { raw?.let { enumValueOf<MapProvider>(it) } }
                     .getOrNull() ?: MapProvider.KAKAO
-            }
-            .distinctUntilChanged()
-    }
+            }.distinctUntilChanged()
 
-    override fun needsChooseProvider(): Flow<Boolean> {
-        return dataStore.data.map { prefs ->
+    override fun needsChooseProvider(): Flow<Boolean> =
+        dataStore.data.map { prefs ->
             prefs[KEY_CONFIRM] != true
         }
-    }
 
     override suspend fun setMapProvider(mapProvider: MapProvider) {
         dataStore.edit { prefs ->

@@ -6,16 +6,17 @@ import com.ondot.navigation.NavRoutes
 import com.ondot.ui.base.BaseViewModel
 
 class MainViewModel(
-    private val analyticsManager: AnalyticsManager
+    private val analyticsManager: AnalyticsManager,
 ) : BaseViewModel<MainUiState>(MainUiState()) {
     fun setBottomNavType(route: String) {
-        val type = when(route) {
-            NavRoutes.Home.route -> BottomNavType.HOME
-            NavRoutes.Setting.route -> BottomNavType.SETTING
-            else -> BottomNavType.HOME
-        }
+        val type =
+            when (route) {
+                NavRoutes.Home.route -> BottomNavType.HOME
+                NavRoutes.Setting.route -> BottomNavType.SETTING
+                else -> BottomNavType.HOME
+            }
 
-        when(route) {
+        when (route) {
             NavRoutes.Home.route -> analyticsManager.logEvent("screen_view_home")
             NavRoutes.Setting.route -> analyticsManager.logEvent("screen_view_setting")
         }

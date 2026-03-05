@@ -30,8 +30,8 @@ import com.dh.ondot.presentation.ui.theme.HERO_SECTION_TITLE2
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.HighlightRed
 import com.dh.ondot.presentation.ui.theme.WORD_EVERYTIME
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.everytime.BodyText
 import ondot.core.design_system.generated.resources.Res
@@ -41,9 +41,10 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HeroSection() {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
     ) {
         Box(
             Modifier
@@ -52,20 +53,23 @@ fun HeroSection() {
                 .offset(y = 50.dp)
                 .drawBehind {
                     drawCircle(
-                        brush = Brush.radialGradient(
-                            colors = listOf(
-                                HighlightRed.copy(alpha = 0.3f),
-                                HighlightRed.copy(alpha = 0.0f)
-                            )
-                        ),
+                        brush =
+                            Brush.radialGradient(
+                                colors =
+                                    listOf(
+                                        HighlightRed.copy(alpha = 0.3f),
+                                        HighlightRed.copy(alpha = 0.0f),
+                                    ),
+                            ),
                         radius = size.maxDimension,
                     )
-                }
+                },
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             OnDotHighlightText(
@@ -86,7 +90,7 @@ fun HeroSection() {
             Spacer(Modifier.height(16.dp))
 
             BodyText(
-                text = HERO_SECTION_CONTENT1
+                text = HERO_SECTION_CONTENT1,
             )
 
             Spacer(Modifier.height(16.dp))
@@ -116,11 +120,12 @@ private fun FloatingLogo() {
     val offsetY by infiniteTransition.animateFloat(
         initialValue = -8f,
         targetValue = 8f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2500, easing = EaseInOut),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = ""
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(2500, easing = EaseInOut),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "",
     )
 
     Image(
@@ -129,6 +134,6 @@ private fun FloatingLogo() {
         modifier =
             Modifier
                 .size(120.dp)
-                .offset(y = offsetY.dp)
+                .offset(y = offsetY.dp),
     )
 }

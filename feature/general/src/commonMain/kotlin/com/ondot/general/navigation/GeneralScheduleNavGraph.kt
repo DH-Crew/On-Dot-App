@@ -14,7 +14,7 @@ import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 import org.koin.compose.viewmodel.koinViewModel
 
-object GeneralScheduleNavGraph: NavGraphContributor {
+object GeneralScheduleNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.GeneralScheduleGraph
     override val startDestination: String
@@ -23,12 +23,13 @@ object GeneralScheduleNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(NavRoutes.ScheduleRepeatSetting.route) { backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute.route)
-                }
+                val parentEntry =
+                    remember(backStackEntry) {
+                        navController.getBackStackEntry(graphRoute.route)
+                    }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
                 ScheduleRepeatSettingScreen(
@@ -43,14 +44,15 @@ object GeneralScheduleNavGraph: NavGraphContributor {
                         navController.navigate(NavRoutes.PlacePicker.route) {
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
 
             composable(NavRoutes.PlacePicker.route) { backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute.route)
-                }
+                val parentEntry =
+                    remember(backStackEntry) {
+                        navController.getBackStackEntry(graphRoute.route)
+                    }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
                 PlacePickerScreen(
@@ -60,7 +62,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
                         navController.navigate(NavRoutes.RouteLoading.route) {
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
 
@@ -73,14 +75,15 @@ object GeneralScheduleNavGraph: NavGraphContributor {
                             }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
 
             composable(NavRoutes.CheckSchedule.route) { backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(graphRoute.route)
-                }
+                val parentEntry =
+                    remember(backStackEntry) {
+                        navController.getBackStackEntry(graphRoute.route)
+                    }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
                 CheckScheduleScreen(
@@ -91,7 +94,7 @@ object GeneralScheduleNavGraph: NavGraphContributor {
                             popUpTo(graphRoute.route) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

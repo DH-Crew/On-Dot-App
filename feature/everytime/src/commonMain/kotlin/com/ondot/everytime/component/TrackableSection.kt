@@ -33,19 +33,21 @@ fun TrackableSection(
     var animateIn by remember { mutableStateOf(false) }
 
     // 현재 섹션이 충분히 보이는지 계산해서 visibleMap 업데이트
-    val trackModifier = Modifier.onGloballyPositioned { coords ->
-        val vp = viewportRect ?: return@onGloballyPositioned
-        val bounds = coords.boundsInWindow()
-        val overlap = (min(bounds.bottom, vp.bottom) - max(bounds.top, vp.top))
-            .toInt()
-            .coerceAtLeast(0)
-        val isVisibleNow = overlap >= minVisiblePx
+    val trackModifier =
+        Modifier.onGloballyPositioned { coords ->
+            val vp = viewportRect ?: return@onGloballyPositioned
+            val bounds = coords.boundsInWindow()
+            val overlap =
+                (min(bounds.bottom, vp.bottom) - max(bounds.top, vp.top))
+                    .toInt()
+                    .coerceAtLeast(0)
+            val isVisibleNow = overlap >= minVisiblePx
 
-        // 값이 바뀔 때만 갱신
-        if (visibleMap[id] != isVisibleNow) {
-            visibleMap[id] = isVisibleNow
+            // 값이 바뀔 때만 갱신
+            if (visibleMap[id] != isVisibleNow) {
+                visibleMap[id] = isVisibleNow
+            }
         }
-    }
     val isVisible = visibleMap[id] == true
 
     // 뷰포트 진입/이탈에 따라 애니메이션 상태를 토글
@@ -63,26 +65,27 @@ fun TrackableSection(
     val alpha by animateFloatAsState(
         targetValue = if (animateIn) 1f else 0f,
         animationSpec = tween(durationMillis = 320, easing = EaseOutCubic),
-        label = "alpha"
+        label = "alpha",
     )
     val translateY by animateDpAsState(
         targetValue = if (animateIn) 0.dp else 24.dp,
         animationSpec = tween(durationMillis = 650, easing = EaseOutCubic),
-        label = "ty"
+        label = "ty",
     )
     val scale by animateFloatAsState(
         targetValue = if (animateIn) 1f else 0.97f,
         animationSpec = tween(durationMillis = 650, easing = EaseOutCubic),
-        label = "scale"
+        label = "scale",
     )
 
     Box(
-        modifier = trackModifier.graphicsLayer {
-            this.alpha = alpha
-            translationY = translateY.toPx()
-            scaleX = scale
-            scaleY = scale
-        }
+        modifier =
+            trackModifier.graphicsLayer {
+                this.alpha = alpha
+                translationY = translateY.toPx()
+                scaleX = scale
+                scaleY = scale
+            },
     ) {
         content()
     }

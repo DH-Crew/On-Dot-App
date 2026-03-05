@@ -28,22 +28,18 @@ fun Modifier.rotatingGlowStroke(
     enabled: Boolean,
     cornerRadius: Dp = 12.dp,
     strokeWidth: Dp = 1.0.dp,
-
     // 하이라이트(움직이는 구간)의 선두/꼬리 색상.
     // startColor → endColor로 그라데이션이 흐른다.
     highlightStartColor: Color,
     highlightEndColor: Color,
-
     // 하이라이트가 테두리 전체 둘레 중 차지하는 비율(0~1).
     // 예: 0.65이면 둘레의 65% 길이가 하이라이트로 칠해진다.
     highlightLengthFraction: Float = 0.5f,
-
     // 하이라이트가 한 바퀴 도는 주기(ms)
     periodMs: Int = 5000,
-
     // StrokeCap:
     // · Butt: 끝이 딱 잘린 형태(두 조각으로 나뉘는 wrap-around 구간에서 경계가 덜 티나게 설정)
-    cap: StrokeCap = StrokeCap.Butt
+    cap: StrokeCap = StrokeCap.Butt,
 ): Modifier {
     if (!enabled) return this
 
@@ -58,14 +54,14 @@ fun Modifier.rotatingGlowStroke(
     val progress by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = periodMs, easing = LinearEasing)
-        ),
-        label = "progress"
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(durationMillis = periodMs, easing = LinearEasing),
+            ),
+        label = "progress",
     )
 
     return this.then(
-
         /**
          * drawWithCache를 사용하면 strokePx, radiusPx borderPath 등을 매 프레임마다 계산하지 않고 캐싱 적용
          * */
@@ -92,17 +88,18 @@ fun Modifier.rotatingGlowStroke(
              * addRoundRect로 이 Path에 라운드 사각형 윤곽을 추가함
              * 즉, 테두리 전체를 나타내는 경로가 됨
              * */
-            val borderPath = Path().apply {
-                addRoundRect(
-                    RoundRect(
-                        left = inset,
-                        top = inset,
-                        right = size.width - inset,
-                        bottom = size.height - inset,
-                        cornerRadius = CornerRadius(radiusPx, radiusPx)
+            val borderPath =
+                Path().apply {
+                    addRoundRect(
+                        RoundRect(
+                            left = inset,
+                            top = inset,
+                            right = size.width - inset,
+                            bottom = size.height - inset,
+                            cornerRadius = CornerRadius(radiusPx, radiusPx),
+                        ),
                     )
-                )
-            }
+                }
 
             /**
              * PathMeasure란?
@@ -113,18 +110,21 @@ fun Modifier.rotatingGlowStroke(
              *
              * 즉, 테두리의 길이를 측정한 다음, 그 길이의 일부분만 잘라서 그리는 것이 가능함
              * */
-            val borderMeasure = PathMeasure().apply {
-                /**
-                 * setPath(path, forceClosed):
-                 * · forceClosed = false: path가 닫혀있지 않아도 있는 그대로 측정함
-                 * · 라운드 사각형은 사실상 폐곡선처럼 동작하지만 여기서는 false로 설정
-                 * */
-                setPath(borderPath, false)
-            }
+            val borderMeasure =
+                PathMeasure().apply {
+                    /**
+                     * setPath(path, forceClosed):
+                     * · forceClosed = false: path가 닫혀있지 않아도 있는 그대로 측정함
+                     * · 라운드 사각형은 사실상 폐곡선처럼 동작하지만 여기서는 false로 설정
+                     * */
+                    setPath(borderPath, false)
+                }
+
             /**
              * 테두리 전체 길이(둘레). 0 방지를 위해 최소 1f로 보정
              * */
             val borderLength = borderMeasure.length.coerceAtLeast(1f)
+
             /**
              * 하이라이트 구간의 길이
              * · 전체 둘레(borderLength) * 비율(highlightLengthFraction)
@@ -138,7 +138,7 @@ fun Modifier.rotatingGlowStroke(
             fun DrawScope.drawSegmentWithGradient(
                 segPath: Path,
                 c0: Color,
-                c1: Color
+                c1: Color,
             ) {
                 /**
                  * segPath도 Path이므로 PathMeasure로 길이를 측정할 수 있음
@@ -159,21 +159,21 @@ fun Modifier.rotatingGlowStroke(
                  * start → end 방향으로 선형 그라데이션을 생성
                  * 여기서 start = p0, end = p1으로 설정하면 segment 진행 방향으로 색이 흐르게 됨
                  * */
-                val brush = Brush.linearGradient(
-                    colors = listOf(c0, c1),
-                    start = p0,
-                    end = p1
-                )
+                val brush =
+                    Brush.linearGradient(
+                        colors = listOf(c0, c1),
+                        start = p0,
+                        end = p1,
+                    )
 
                 drawPath(
                     path = segPath,
                     brush = brush,
-                    style = Stroke(width = strokePx, cap = cap)
+                    style = Stroke(width = strokePx, cap = cap),
                 )
             }
 
             onDrawWithContent {
-
                 /**
                  * 원래 콘텐츠를 먼저 그림
                  * Modifier가 적용된 컴포넌트 자체가 먼저 그려짐
@@ -214,15 +214,15 @@ fun Modifier.rotatingGlowStroke(
                     drawSegmentWithGradient(
                         segPath = segPath,
                         c0 = highlightStartColor,
-                        c1 = highlightEndColor
+                        c1 = highlightEndColor,
                     )
                 } else {
                     // 두 조각으로 나눠 그리기
                     val segPath1 = Path()
                     val segPath2 = Path()
 
-                    val len1 = borderLength - start       // 1조각 길이
-                    val len2 = end - borderLength         // 2조각 길이
+                    val len1 = borderLength - start // 1조각 길이
+                    val len2 = end - borderLength // 2조각 길이
 
                     borderMeasure.getSegment(start, borderLength, segPath1, true)
                     borderMeasure.getSegment(0f, len2, segPath2, true)
@@ -240,6 +240,6 @@ fun Modifier.rotatingGlowStroke(
                     drawSegmentWithGradient(segPath2, midColor, highlightEndColor)
                 }
             }
-        }
+        },
     )
 }

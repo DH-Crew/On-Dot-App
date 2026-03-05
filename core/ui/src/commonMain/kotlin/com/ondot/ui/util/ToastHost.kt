@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.WORD_RESTORE_ACTION
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.ui.ToastData
@@ -42,9 +42,7 @@ import ondot.core.design_system.generated.resources.ic_circle_error_red
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ToastHost(
-    modifier: Modifier = Modifier
-) {
+fun ToastHost(modifier: Modifier = Modifier) {
     val toasts = ToastManager.toasts
     var current by remember { mutableStateOf<ToastData?>(null) }
 
@@ -59,17 +57,17 @@ fun ToastHost(
 
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
+        contentAlignment = Alignment.BottomCenter,
     ) {
         current?.let { toast ->
             AnimatedVisibility(
                 visible = true,
                 enter = slideInVertically { -it } + fadeIn(),
-                exit = slideOutVertically { -it } + fadeOut()
+                exit = slideOutVertically { -it } + fadeOut(),
             ) {
                 ToastItem(
                     data = toast,
-                    onDismiss = { current = null }
+                    onDismiss = { current = null },
                 )
             }
         }
@@ -79,35 +77,40 @@ fun ToastHost(
 @Composable
 private fun ToastItem(
     data: ToastData,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val bg = OnDotColor.Gray500
-    val icon = when(data.type) {
-        ToastType.INFO    -> Res.drawable.ic_circle_check_green
-        ToastType.DELETE -> Res.drawable.ic_circle_check_red
-        ToastType.ERROR   -> Res.drawable.ic_circle_error_red
-    }
-    val textColor = when(data.type) {
-        ToastType.INFO    -> OnDotColor.Green700
-        ToastType.DELETE, ToastType.ERROR -> OnDotColor.Red
-    }
+    val icon =
+        when (data.type) {
+            ToastType.INFO -> Res.drawable.ic_circle_check_green
+            ToastType.DELETE -> Res.drawable.ic_circle_check_red
+            ToastType.ERROR -> Res.drawable.ic_circle_error_red
+        }
+    val textColor =
+        when (data.type) {
+            ToastType.INFO -> OnDotColor.Green700
+            ToastType.DELETE, ToastType.ERROR -> OnDotColor.Red
+        }
 
-    Box(modifier = Modifier
-        .padding(bottom = 90.dp)
-        .padding(horizontal = 22.dp)
+    Box(
+        modifier =
+            Modifier
+                .padding(bottom = 90.dp)
+                .padding(horizontal = 22.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(bg, RoundedCornerShape(12.dp))
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .clickable { onDismiss() }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(bg, RoundedCornerShape(12.dp))
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .clickable { onDismiss() },
         ) {
             Image(
                 painter = painterResource(icon),
                 contentDescription = null,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(16.dp),
             )
 
             Spacer(Modifier.width(8.dp))
@@ -116,7 +119,7 @@ private fun ToastItem(
                 text = data.message,
                 color = textColor,
                 style = OnDotTextStyle.BodyLargeSB,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             if (data.type == ToastType.DELETE) {
@@ -124,7 +127,11 @@ private fun ToastItem(
                     text = WORD_RESTORE_ACTION,
                     style = OnDotTextStyle.BodyMediumR,
                     color = Gray200,
-                    modifier = Modifier.clickable { data.callback(); onDismiss() }
+                    modifier =
+                        Modifier.clickable {
+                            data.callback()
+                            onDismiss()
+                        },
                 )
             }
         }

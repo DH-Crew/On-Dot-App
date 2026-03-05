@@ -57,14 +57,14 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.WORD_DELETE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
-import com.ondot.design_system.components.AlarmInfoItem
-import com.ondot.design_system.components.DateTimeInfoBar
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.OnDotDialog
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.RouteInputSection
-import com.ondot.design_system.components.TopBar
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.components.AlarmInfoItem
+import com.ondot.designsystem.components.DateTimeInfoBar
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.OnDotDialog
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.RouteInputSection
+import com.ondot.designsystem.components.TopBar
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
@@ -73,7 +73,6 @@ import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.edit.bottomSheet.EditDateBottomSheet
 import com.ondot.edit.bottomSheet.EditTimeBottomSheet
-import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter.toLocalDateFromIso
 import com.ondot.util.DateTimeFormatter.toLocalTimeFromIso
 import kotlinx.coroutines.delay
@@ -88,7 +87,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun EditScheduleScreen(
     scheduleId: Long,
     viewModel: EditScheduleViewModel = koinViewModel(),
-    popScreen: () -> Unit
+    popScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
@@ -97,7 +96,9 @@ fun EditScheduleScreen(
     LaunchedEffect(Unit) {
         delay(200)
         if (uiState.scheduleId == -1L) viewModel.updateScheduleId(scheduleId)
-        if (!uiState.isInitialized) { viewModel.getScheduleDetail(scheduleId) }
+        if (!uiState.isInitialized) {
+            viewModel.getScheduleDetail(scheduleId)
+        }
     }
 
     LaunchedEffect(viewModel.eventFlow) {
@@ -125,7 +126,7 @@ fun EditScheduleScreen(
             onShowDateBottomSheet = viewModel::showDateBottomSheet,
             onShowTimeBottomSheet = viewModel::showTimeBottomSheet,
             onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
-            onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet
+            onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet,
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -149,49 +150,53 @@ fun EditScheduleContent(
     onShowDateBottomSheet: () -> Unit,
     onShowTimeBottomSheet: (TimeType) -> Unit,
     onDismissDateBottomSheet: () -> Unit,
-    onDismissTimeBottomSheet: () -> Unit
+    onDismissTimeBottomSheet: () -> Unit,
 ) {
     val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
     val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Gray900)
-                .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Gray900)
+                    .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .weight(1f),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(GradientGreenTop)
-                        .padding(horizontal = 22.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(GradientGreenTop)
+                            .padding(horizontal = 22.dp),
                 ) {
                     TopBarSection(
                         scheduleTitle = uiState.schedule.title,
                         focusRequester = focusRequester,
                         onClickClose = onClickClose,
-                        onValueChanged = onValueChanged
+                        onValueChanged = onValueChanged,
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
                 }
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(scrollState),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(GradientGreenBottom)
-                            .padding(horizontal = 22.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(GradientGreenBottom)
+                                .padding(horizontal = 22.dp),
                     ) {
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -201,7 +206,7 @@ fun EditScheduleContent(
                             time = appointmentDate,
                             interactionSource = interactionSource,
                             onClickDate = onShowDateBottomSheet,
-                            onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) }
+                            onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) },
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -209,7 +214,7 @@ fun EditScheduleContent(
                         RouteInputSection(
                             departurePlaceInput = uiState.schedule.departurePlace.title,
                             arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
-                            readOnly = true
+                            readOnly = true,
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -218,9 +223,10 @@ fun EditScheduleContent(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 22.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 22.dp),
                     ) {
                         AlarmInfoItem(
                             info = uiState.schedule.preparationAlarm,
@@ -228,7 +234,7 @@ fun EditScheduleContent(
                             scheduleDate = uiState.schedule.appointmentAt,
                             interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
-                            onToggleSwitch = onToggleSwitch
+                            onToggleSwitch = onToggleSwitch,
                         )
 
                         Spacer(modifier = Modifier.height(20.dp))
@@ -238,7 +244,7 @@ fun EditScheduleContent(
                             type = AlarmType.Departure,
                             scheduleDate = uiState.schedule.appointmentAt,
                             interactionSource = interactionSource,
-                            onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) }
+                            onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) },
                         )
 
                         Spacer(modifier = Modifier.height(32.dp))
@@ -254,7 +260,7 @@ fun EditScheduleContent(
                 buttonText = WORD_SAVE,
                 buttonType = ButtonType.Green500,
                 modifier = Modifier.padding(horizontal = 22.dp),
-                onClick = onSaveSchedule
+                onClick = onSaveSchedule,
             )
         }
 
@@ -264,7 +270,7 @@ fun EditScheduleContent(
                 dialogContent = DELETE_ALARM_CONTENT,
                 onPositiveClick = onDeleteSchedule,
                 onNegativeClick = onDismissDialog,
-                onDismiss = onDismissDialog
+                onDismiss = onDismissDialog,
             )
         }
 
@@ -273,14 +279,14 @@ fun EditScheduleContent(
                 visible = uiState.showDateBottomSheet,
                 modifier = Modifier.fillMaxSize(),
                 enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
-                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut(),
             ) {
                 EditDateBottomSheet(
                     isRepeat = uiState.schedule.isRepeat,
                     repeatDays = uiState.schedule.repeatDays.toSet(),
                     currentDate = uiState.schedule.appointmentAt.toLocalDateFromIso(),
                     onEditDate = onEditDate,
-                    onDismiss = onDismissDateBottomSheet
+                    onDismiss = onDismissDateBottomSheet,
                 )
             }
         }
@@ -290,7 +296,7 @@ fun EditScheduleContent(
                 visible = true,
                 modifier = Modifier.fillMaxSize(),
                 enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
-                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut(),
             ) {
                 EditTimeBottomSheet(
                     currentTime = uiState.selectedTime,
@@ -303,7 +309,7 @@ fun EditScheduleContent(
                     onTimeSelected = { date, time ->
                         onEditTime(date, time)
                         onDismissTimeBottomSheet()
-                    }
+                    },
                 )
             }
         }
@@ -311,22 +317,21 @@ fun EditScheduleContent(
 }
 
 @Composable
-private fun DeleteScheduleButton(
-    onClick: () -> Unit
-) {
+private fun DeleteScheduleButton(onClick: () -> Unit) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Gray700, RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { onClick() }
-            .padding(vertical = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(Gray700, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(12.dp))
+                .clickable { onClick() }
+                .padding(vertical = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         OnDotText(
             text = WORD_DELETE,
             style = OnDotTextStyle.BodyLargeSB,
-            color = Red
+            color = Red,
         )
     }
 }
@@ -336,14 +341,14 @@ private fun TopBarSection(
     scheduleTitle: String,
     focusRequester: FocusRequester,
     onClickClose: () -> Unit,
-    onValueChanged: (String) -> Unit
+    onValueChanged: (String) -> Unit,
 ) {
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(
                 text = scheduleTitle,
-                selection = TextRange(scheduleTitle.length) // 커서를 끝에
-            )
+                selection = TextRange(scheduleTitle.length), // 커서를 끝에
+            ),
         )
     }
     val focusManager = LocalFocusManager.current
@@ -355,7 +360,7 @@ private fun TopBarSection(
         content = {
             Row(
                 modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 BasicTextField(
                     value = textFieldValue,
@@ -365,35 +370,43 @@ private fun TopBarSection(
                     singleLine = true,
                     textStyle = OnDotTypo().titleSmallM.copy(color = Gray800),
                     cursorBrush = SolidColor(Gray0),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onValueChanged(textFieldValue.text)
-                            focusManager.clearFocus()
-                        }
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged {
-                            if (!it.isFocused) onValueChanged(textFieldValue.text)
-                            else textFieldValue = textFieldValue.copy(
-                                selection = TextRange(textFieldValue.text.length)
-                            )
-                        }
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                        ),
+                    keyboardActions =
+                        KeyboardActions(
+                            onDone = {
+                                onValueChanged(textFieldValue.text)
+                                focusManager.clearFocus()
+                            },
+                        ),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .focusRequester(focusRequester)
+                            .onFocusChanged {
+                                if (!it.isFocused) {
+                                    onValueChanged(textFieldValue.text)
+                                } else {
+                                    textFieldValue =
+                                        textFieldValue.copy(
+                                            selection = TextRange(textFieldValue.text.length),
+                                        )
+                                }
+                            },
                 )
 
                 Image(
                     painter = painterResource(Res.drawable.ic_pencil_white),
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { focusRequester.requestFocus() },
-                    colorFilter = ColorFilter.tint(Gray800)
+                    modifier =
+                        Modifier
+                            .size(20.dp)
+                            .clickable { focusRequester.requestFocus() },
+                    colorFilter = ColorFilter.tint(Gray800),
                 )
             }
-        }
+        },
     )
 }
