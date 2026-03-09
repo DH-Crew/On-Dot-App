@@ -71,6 +71,7 @@ const val ERROR_GET_SCHEDULE_PREPARATION = "준비 정보 조회에 실패했습
 const val ERROR_INVALID_MINUTE_INPUT = "분은 59이하의 숫자로 입력해주세요."
 const val ERROR_VALIDATE_EVERYTIME_TIMETABLE = "시간표를 가져오기에 실패했습니다."
 const val ERROR_EMPTY_URL = "URL을 입력해주세요."
+const val ERROR_SELECT_FIRST_CLASS = "요일별 첫 수업을 선택해주세요."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
@@ -126,7 +127,7 @@ const val PLACE_PICKER_TITLE = "출발지와 약속 장소를 알려주세요."
 const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
 const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
 const val DEPARTURE_FROM_HOME = "집에서 출발해요"
-const val ROUTE_CALCULATE_LABEL = "약속 장소에 촉박하게 도착하지 않도록\n10분~15분 여유시간을 확보해 드릴게요"
+const val ROUTE_CALCULATE_LABEL = "여유있는 도착을 위해\n10~15분을 확보해 드릴게요"
 const val NEW_SCHEDULE_LABEL = "새로운 일정"
 const val DEPARTURE_ALARM_LABEL = "출발 알람"
 const val PREPARATION_ALARM_LABEL = "준비 알람"
@@ -238,3 +239,9 @@ const val URL_INPUT_TITLE = "복사한 URL링크를 붙여주세요."
 const val URL_INPUT_HIGHLIGHT = "복사한 URL링크"
 const val URL_INPUT_GUIDE = "시간표의 공개 범위를 잠시 ‘전체 공개'로 변경해 주세요.\n(설정 아이콘 → 공개 범위 변경 → 전체 공개)"
 const val PASTE_URL = "링크 붙여넣기"
+
+// EverytimeTimetableScreen
+const val TIMETABLE_SELECT_SCREEN_TITLE = "에브리타임 시간표 연동"
+const val TIMETABLE_SELECT_TITLE = "요일별로 등교 알람을 받을\n첫 수업을 모두 골라주세요."
+const val TIMETABLE_SELECT_HIGHLIGHT = "첫 수업"
+const val TIMETABLE_SELECT_GUIDE = "비대면 수업이나 개인 일정은 제외하고,\n실제 등교하는 수업만 골라주세요."
