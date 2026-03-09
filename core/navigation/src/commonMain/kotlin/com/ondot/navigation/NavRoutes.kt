@@ -134,4 +134,6 @@ sealed class NavRoutes(
     data object Landing : NavRoutes("landing")
 
     data object UrlInput : NavRoutes("urlInput")
+
+    data object Timetable : NavRoutes("timetable")
 }

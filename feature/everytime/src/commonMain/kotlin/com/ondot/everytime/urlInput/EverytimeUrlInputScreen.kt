@@ -51,6 +51,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun EverytimeUrlInputRoute(
     viewModel: EverytimeViewModel = koinViewModel(),
     popScreen: () -> Unit,
+    navigateToTimetable: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -58,6 +59,9 @@ fun EverytimeUrlInputRoute(
                 is EverytimeSideEffect.ShowToast -> {
                     ToastManager.show(message = sideEffect.message, type = sideEffect.toastType)
                 }
+
+                EverytimeSideEffect.NavigateToNext -> Unit
+                EverytimeSideEffect.NavigateToTimetable -> navigateToTimetable()
             }
         }
     }

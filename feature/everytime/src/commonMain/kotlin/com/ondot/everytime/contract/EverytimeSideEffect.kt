@@ -8,4 +8,8 @@ sealed interface EverytimeSideEffect : SideEffect {
         val message: String,
         val toastType: ToastType,
     ) : EverytimeSideEffect
+
+    data object NavigateToTimetable : EverytimeSideEffect
+
+    data object NavigateToNext : EverytimeSideEffect
 }
