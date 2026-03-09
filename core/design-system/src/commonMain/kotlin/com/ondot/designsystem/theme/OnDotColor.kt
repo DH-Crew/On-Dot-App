@@ -60,4 +60,14 @@ object OnDotColor {
         Brush.verticalGradient(
             colors = listOf(Color(0xFF1B1B1B), Color(0xFF2A340D)),
         )
+
+    val GradientTimetable =
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFF506B00), Color(0xFF698C00).copy(alpha = 0.2f)),
+        )
+
+    val GradientTimetableUnselected =
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFF666666), Color(0xFF666666).copy(alpha = 0.2f)),
+        )
 }
