@@ -61,7 +61,12 @@ class GeneralScheduleViewModel(
                 .distinctUntilChanged()
                 .onEach { value ->
                     if (value.isBlank()) {
-                        updateState(uiState.value.copy(placeList = emptyList()))
+                        val current = uiState.value
+                        updateState(
+                            uiState.value.copy(
+                                placePickerState = current.placePickerState.copy(placeList = emptyList()),
+                            ),
+                        )
                     }
                 }.filter { it.isNotBlank() }
                 .flatMapLatest { q ->
@@ -202,7 +207,11 @@ class GeneralScheduleViewModel(
     /**--------------------------------------------PlacePicker-----------------------------------------------*/
 
     fun onRouteInputFieldFocused(type: RouterType) {
-        updateStateSync(uiState.value.copy(lastFocusedTextField = type))
+        updateStateSync(
+            uiState.value.copy(
+                placePickerState = uiState.value.placePickerState.copy(lastFocusedTextField = type),
+            ),
+        )
     }
 
     fun onRouteInputChanged(value: String) {
@@ -211,14 +220,34 @@ class GeneralScheduleViewModel(
     }
 
     private fun onInputValueChanged(value: String) {
-        when (uiState.value.lastFocusedTextField) {
-            RouterType.Departure -> updateState(uiState.value.copy(departurePlaceInput = value))
-            RouterType.Arrival -> updateState(uiState.value.copy(arrivalPlaceInput = value))
+        when (uiState.value.placePickerState.lastFocusedTextField) {
+            RouterType.Departure ->
+                updateState(
+                    uiState.value.copy(
+                        placePickerState =
+                            uiState.value.placePickerState.copy(
+                                departurePlaceInput = value,
+                            ),
+                    ),
+                )
+            RouterType.Arrival ->
+                updateState(
+                    uiState.value.copy(
+                        placePickerState =
+                            uiState.value.placePickerState.copy(
+                                arrivalPlaceInput = value,
+                            ),
+                    ),
+                )
         }
     }
 
     private fun onSuccessSearchPlace(result: List<AddressInfo>) {
-        updateState(uiState.value.copy(placeList = result))
+        updateState(
+            uiState.value.copy(
+                placePickerState = uiState.value.placePickerState.copy(placeList = result),
+            ),
+        )
     }
 
     private fun onFailedSearchPlace(e: Throwable) {
@@ -229,13 +258,16 @@ class GeneralScheduleViewModel(
     fun onPlaceSelected(place: AddressInfo) {
         savePlaceHistory(place)
 
-        when (uiState.value.lastFocusedTextField) {
+        when (uiState.value.placePickerState.lastFocusedTextField) {
             RouterType.Departure -> {
                 updateState(
                     uiState.value.copy(
                         selectedDeparturePlace = place,
-                        placeList = emptyList(),
-                        departurePlaceInput = place.title,
+                        placePickerState =
+                            uiState.value.placePickerState.copy(
+                                placeList = emptyList(),
+                                departurePlaceInput = place.title,
+                            ),
                     ),
                 )
                 emitEventFlow(GeneralScheduleEvent.RequestArrivalFocus)
@@ -246,15 +278,18 @@ class GeneralScheduleViewModel(
                 updateState(
                     uiState.value.copy(
                         selectedArrivalPlace = place,
-                        placeList = emptyList(),
-                        arrivalPlaceInput = place.title,
+                        placePickerState =
+                            uiState.value.placePickerState.copy(
+                                placeList = emptyList(),
+                                arrivalPlaceInput = place.title,
+                            ),
                     ),
                 )
         }
     }
 
     fun onClickCheckBox() {
-        val curValue = uiState.value.isChecked
+        val curValue = uiState.value.placePickerState.isChecked
 
         if (!curValue &&
             uiState.value.homeAddress.title
@@ -266,9 +301,12 @@ class GeneralScheduleViewModel(
 
         updateState(
             uiState.value.copy(
-                isChecked = !curValue,
+                placePickerState =
+                    uiState.value.placePickerState.copy(
+                        isChecked = !curValue,
+                        departurePlaceInput = if (!curValue) uiState.value.homeAddress.roadAddress else "",
+                    ),
                 selectedDeparturePlace = if (!curValue) uiState.value.homeAddress else null,
-                departurePlaceInput = if (!curValue) uiState.value.homeAddress.roadAddress else "",
             ),
         )
     }
@@ -286,7 +324,14 @@ class GeneralScheduleViewModel(
     }
 
     private fun onSuccessGetPlaceHistory(result: List<PlaceHistory>) {
-        updateState(uiState.value.copy(placeHistory = result))
+        updateState(
+            uiState.value.copy(
+                placePickerState =
+                    uiState.value.placePickerState.copy(
+                        placeHistory = result,
+                    ),
+            ),
+        )
     }
 
     private fun onFailedGetPlaceHistory(e: Throwable) {

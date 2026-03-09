@@ -8,7 +8,7 @@ import androidx.navigation.navigation
 import com.ondot.general.GeneralScheduleViewModel
 import com.ondot.general.check.CheckScheduleScreen
 import com.ondot.general.loading.RouteLoadingScreen
-import com.ondot.general.place.PlacePickerScreen
+import com.ondot.general.place.PlacePickerRoute
 import com.ondot.general.repeat.ScheduleRepeatSettingScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
@@ -55,7 +55,7 @@ object GeneralScheduleNavGraph : NavGraphContributor {
                     }
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                PlacePickerScreen(
+                PlacePickerRoute(
                     viewModel = viewModel,
                     popScreen = { navController.popBackStack() },
                     navigateToRouteLoading = {

@@ -2,10 +2,9 @@ package com.ondot.general
 
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
 import com.ondot.domain.model.alarm.Alarm
-import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.member.AddressInfo
-import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.ui.base.UiState
+import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
 import com.ondot.util.DateTimeFormatter
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -46,16 +45,11 @@ data class GeneralScheduleUiState
                 },
         // PlacePicker
         val isInitialPlacePicker: Boolean = true,
-        val isChecked: Boolean = false,
-        val placeList: List<AddressInfo> = emptyList(),
-        val lastFocusedTextField: RouterType = RouterType.Departure,
-        val departurePlaceInput: String = "",
-        val arrivalPlaceInput: String = "",
         val selectedDeparturePlace: AddressInfo? = null,
         val selectedArrivalPlace: AddressInfo? = null,
         val homeAddress: AddressInfo = AddressInfo(),
         val isHomeAddressInitialized: Boolean = false,
-        val placeHistory: List<PlaceHistory> = emptyList(),
+        val placePickerState: PlacePickerUiModel = PlacePickerUiModel(),
         // RouteLoading
         val preparationAlarm: Alarm = Alarm(),
         val departureAlarm: Alarm = Alarm(),
