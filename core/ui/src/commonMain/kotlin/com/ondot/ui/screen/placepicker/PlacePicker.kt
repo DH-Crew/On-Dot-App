@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.DEPARTURE_FROM_HOME
+import com.dh.ondot.presentation.ui.theme.EVERYTIME_PLACE_PICKER_TITLE
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
@@ -49,18 +51,30 @@ import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
 @Composable
 fun PlacePickerScreen(
     state: PlacePickerUiModel,
+    isEverytime: Boolean = false,
     buttonEnabled: Boolean = false,
     departureFocusRequester: FocusRequester = remember { FocusRequester() },
     arrivalFocusRequester: FocusRequester = remember { FocusRequester() },
     onRouteInputChanged: (String) -> Unit,
     onRouteInputFocused: (RouterType) -> Unit,
     onPlaceSelected: (AddressInfo) -> Unit,
-    onHistoryPlaceSelected: (PlaceHistory) -> Unit,
-    onHistoryClose: (PlaceHistory) -> Unit,
-    onClickCheckBox: () -> Unit,
-    onClickButton: () -> Unit,
+    onHistorySelected: (PlaceHistory) -> Unit,
+    onDeleteHistory: (PlaceHistory) -> Unit,
+    onToggleCheckBox: () -> Unit,
+    onNext: () -> Unit,
     popScreen: () -> Unit,
 ) {
+    val buttonType =
+        if (buttonEnabled) {
+            if (isEverytime) {
+                ButtonType.Gradient
+            } else {
+                ButtonType.Green500
+            }
+        } else {
+            ButtonType.Gray300
+        }
+
     Column(
         modifier =
             Modifier
@@ -83,7 +97,7 @@ fun PlacePickerScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             OnDotText(
-                text = PLACE_PICKER_TITLE,
+                text = if (isEverytime) EVERYTIME_PLACE_PICKER_TITLE else PLACE_PICKER_TITLE,
                 style = OnDotTextStyle.TitleMediumM,
                 color = Gray0,
             )
@@ -92,7 +106,7 @@ fun PlacePickerScreen(
 
             HomeDepartureOption(
                 isChecked = state.isChecked,
-                onClick = onClickCheckBox,
+                onClick = onToggleCheckBox,
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -121,15 +135,15 @@ fun PlacePickerScreen(
                         RouterType.Arrival -> state.arrivalPlaceInput
                     },
                 onPlaceSelected = onPlaceSelected,
-                onHistoryClose = { onHistoryClose(state.placeHistory[it]) },
-                onHistoryPlaceSelected = onHistoryPlaceSelected,
+                onHistoryClose = { onDeleteHistory(state.placeHistory[it]) },
+                onHistoryPlaceSelected = onHistorySelected,
             )
         }
 
         OnDotButton(
-            buttonText = WORD_NEXT,
-            buttonType = if (buttonEnabled) ButtonType.Green500 else ButtonType.Gray300,
-            onClick = { if (buttonEnabled) onClickButton() },
+            buttonText = if (isEverytime) CREATE_SCHEDULE else WORD_NEXT,
+            buttonType = buttonType,
+            onClick = { if (buttonEnabled) onNext() },
             modifier = Modifier.padding(horizontal = 22.dp),
         )
     }
