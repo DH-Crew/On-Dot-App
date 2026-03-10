@@ -60,8 +60,9 @@ fun EverytimeUrlInputRoute(
                     ToastManager.show(message = sideEffect.message, type = sideEffect.toastType)
                 }
 
-                EverytimeSideEffect.NavigateToNext -> Unit
                 EverytimeSideEffect.NavigateToTimetable -> navigateToTimetable()
+
+                else -> Unit
             }
         }
     }

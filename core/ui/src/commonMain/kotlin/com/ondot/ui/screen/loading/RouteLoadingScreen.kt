@@ -1,4 +1,4 @@
-package com.ondot.general.loading
+package com.ondot.ui.screen.loading
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 import ondot.core.design_system.generated.resources.Res
 
 @Composable
-fun RouteLoadingScreen(navigateToCheckSchedule: () -> Unit) {
+fun RouteLoadingScreen(navigateToNext: () -> Unit) {
     val composition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/time_calculate.json").decodeToString())
     }
@@ -38,7 +38,7 @@ fun RouteLoadingScreen(navigateToCheckSchedule: () -> Unit) {
 
     LaunchedEffect(Unit) {
         delay(2000L)
-        navigateToCheckSchedule()
+        navigateToNext()
     }
 
     Box(

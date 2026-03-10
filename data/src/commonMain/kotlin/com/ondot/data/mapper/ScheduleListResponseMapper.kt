@@ -27,7 +27,7 @@ object ScheduleListResponseMapper : Mapper<ScheduleListResponse, ScheduleList> {
                             preparationAlarm = AlarmResponseMapper.responseToModel(scheduleResponse.preparationAlarm),
                             departureAlarm = AlarmResponseMapper.responseToModel(scheduleResponse.departureAlarm),
                             hasActiveAlarm = scheduleResponse.hasActiveAlarm,
-                            preparationNote = scheduleResponse.preparationNote,
+                            preparationNote = scheduleResponse.preparationNote ?: "",
                         )
                     } ?: emptyList(),
             )

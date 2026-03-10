@@ -9,7 +9,7 @@ object SchedulePreparationResponseMapper : Mapper<SchedulePreparationResponse, S
         response?.let {
             SchedulePreparation(
                 isMedicationRequired = it.isMedicationRequired,
-                preparationNote = it.preparationNote,
+                preparationNote = it.preparationNote ?: "",
             )
         } ?: SchedulePreparation()
 }

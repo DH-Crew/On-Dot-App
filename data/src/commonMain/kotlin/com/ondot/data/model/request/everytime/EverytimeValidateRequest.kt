@@ -1,4 +1,4 @@
-package com.ondot.data.model.request
+package com.ondot.data.model.request.everytime
 
 import kotlinx.serialization.Serializable
 

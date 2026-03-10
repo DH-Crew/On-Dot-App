@@ -11,5 +11,9 @@ sealed interface EverytimeSideEffect : SideEffect {
 
     data object NavigateToTimetable : EverytimeSideEffect
 
-    data object NavigateToNext : EverytimeSideEffect
+    data object NavigateToPlacePicker : EverytimeSideEffect
+
+    data object RequestArrivalFocus : EverytimeSideEffect
+
+    data object NavigateToRouteLoading : EverytimeSideEffect
 }

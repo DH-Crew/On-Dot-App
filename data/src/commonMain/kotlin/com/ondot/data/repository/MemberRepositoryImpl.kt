@@ -2,6 +2,8 @@ package com.ondot.data.repository
 
 import com.ondot.data.mapper.HomeAddressResponseMapper
 import com.ondot.data.mapper.PreparationTimeResponseMapper
+import com.ondot.data.model.response.member.HomeAddressResponse
+import com.ondot.data.model.response.member.mapper.toDomain
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.member.HomeAddressInfo
@@ -17,6 +19,8 @@ import com.ondot.domain.service.TokenProvider
 import com.ondot.network.HttpMethod
 import com.ondot.network.NetworkClient
 import com.ondot.network.base.BaseRepository
+import com.ondot.network.execute.safeApiCall
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -85,5 +89,15 @@ class MemberRepositoryImpl(
     override fun needsChooseProvider(): Flow<Boolean> =
         flow {
             emitAll(mapProviderStorage.needsChooseProvider())
+        }
+
+    // --------------MVI
+    override suspend fun fetchHomeAddress(): AppResult<HomeAddressInfo> =
+        safeApiCall {
+            networkClient
+                .requestOrThrow<HomeAddressResponse>(
+                    method = HttpMethod.GET,
+                    path = "/members/home-address",
+                ).toDomain()
         }
 }
