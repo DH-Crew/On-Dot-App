@@ -7,10 +7,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.ondot.everytime.LandingRoute
 import com.ondot.everytime.contract.EverytimeViewModel
+import com.ondot.everytime.placepicker.EverytimePlacePickerRoute
 import com.ondot.everytime.timetable.EverytimeTimetableRoute
 import com.ondot.everytime.urlInput.EverytimeUrlInputRoute
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
+import com.ondot.ui.screen.loading.RouteLoadingScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 object EverytimeNavGraph : NavGraphContributor {
@@ -63,7 +65,40 @@ object EverytimeNavGraph : NavGraphContributor {
                 EverytimeTimetableRoute(
                     viewModel = viewModel,
                     popScreen = { navController.popBackStack() },
-                    navigateNext = {},
+                    navigateToPlacePicker = {
+                        navController.navigate(NavRoutes.EverytimePlacePicker.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+
+            composable(NavRoutes.EverytimePlacePicker.route) { backStackEntry ->
+                val parentEntry =
+                    remember(backStackEntry) {
+                        navController.getBackStackEntry(graphRoute.route)
+                    }
+                val viewModel: EverytimeViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                EverytimePlacePickerRoute(
+                    viewModel = viewModel,
+                    popScreen = { navController.popBackStack() },
+                    navigateToRouteLoading = {
+                        navController.navigate(NavRoutes.EverytimeRouteLoading.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+
+            composable(NavRoutes.EverytimeRouteLoading.route) {
+                RouteLoadingScreen(
+                    navigateToNext = {
+                        navController.navigate(NavRoutes.MainGraph.route) {
+                            popUpTo(NavRoutes.EverytimeGraph.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
                 )
             }
         }
