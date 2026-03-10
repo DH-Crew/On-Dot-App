@@ -40,7 +40,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun EverytimeTimetableRoute(
     viewModel: EverytimeViewModel = koinViewModel(),
     popScreen: () -> Unit,
-    navigateNext: () -> Unit,
+    navigateToPlacePicker: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -54,11 +54,11 @@ fun EverytimeTimetableRoute(
                     )
                 }
 
-                EverytimeSideEffect.NavigateToNext -> {
-                    navigateNext()
+                EverytimeSideEffect.NavigateToPlacePicker -> {
+                    navigateToPlacePicker()
                 }
 
-                EverytimeSideEffect.NavigateToTimetable -> Unit
+                else -> Unit
             }
         }
     }
@@ -67,7 +67,7 @@ fun EverytimeTimetableRoute(
         uiState = uiState,
         onBack = popScreen,
         onSelectClass = { viewModel.dispatch(EverytimeIntent.SelectClass(it)) },
-        onNext = { viewModel.dispatch(EverytimeIntent.ClickNext) },
+        onNext = { viewModel.dispatch(EverytimeIntent.ValidateSelectedClass) },
     )
 }
 
