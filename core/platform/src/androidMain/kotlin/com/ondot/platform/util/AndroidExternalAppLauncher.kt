@@ -9,29 +9,48 @@ class AndroidExternalAppLauncher(
     private val context: Context,
 ) : ExternalAppLauncher {
     override fun openEverytime() {
-        val schemeIntent =
+        val launchIntent =
+            context.packageManager
+                .getLaunchIntentForPackage(EVERYTIME_PACKAGE_NAME)
+                ?.apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+
+        if (launchIntent != null) {
+            context.startActivity(launchIntent)
+            return
+        }
+
+        openEverytimeInPlayStore()
+    }
+
+    private fun openEverytimeInPlayStore() {
+        val marketIntent =
             Intent(
                 Intent.ACTION_VIEW,
-                "everytime://".toUri(),
+                "market://details?id=$EVERYTIME_PACKAGE_NAME".toUri(),
             ).apply {
-                setPackage("com.everytime.v2")
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
-        val fallbackIntent =
+        val webIntent =
             Intent(
                 Intent.ACTION_VIEW,
-                "everytime://".toUri(),
+                "https://play.google.com/store/apps/details?id=$EVERYTIME_PACKAGE_NAME".toUri(),
             ).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
         runCatching {
-            context.startActivity(schemeIntent)
+            context.startActivity(marketIntent)
         }.getOrElse {
             runCatching {
-                context.startActivity(fallbackIntent)
+                context.startActivity(webIntent)
             }
         }
+    }
+
+    private companion object {
+        const val EVERYTIME_PACKAGE_NAME = "com.everytime.v2"
     }
 }

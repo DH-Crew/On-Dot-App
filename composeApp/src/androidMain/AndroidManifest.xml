@@ -12,6 +12,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!--알림 권한-->
 
+    <queries>
+        <package android:name="com.everytime.v2" />
+    </queries>
+
     <application
         android:name=".app.OnDotApplication"
         android:allowBackup="true"
