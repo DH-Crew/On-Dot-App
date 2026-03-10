@@ -2,7 +2,6 @@ package com.ondot.general
 
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
 import com.ondot.domain.model.alarm.Alarm
-import com.ondot.domain.model.member.AddressInfo
 import com.ondot.ui.base.UiState
 import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
 import com.ondot.util.DateTimeFormatter
@@ -45,9 +44,6 @@ data class GeneralScheduleUiState
                 },
         // PlacePicker
         val isInitialPlacePicker: Boolean = true,
-        val selectedDeparturePlace: AddressInfo? = null,
-        val selectedArrivalPlace: AddressInfo? = null,
-        val homeAddress: AddressInfo = AddressInfo(),
         val isHomeAddressInitialized: Boolean = false,
         val placePickerState: PlacePickerUiModel = PlacePickerUiModel(),
         // RouteLoading

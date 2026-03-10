@@ -1,6 +1,5 @@
 package com.ondot.general.place
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,7 +24,6 @@ fun PlacePickerRoute(
     val departureFocusRequester = remember { FocusRequester() }
     val arrivalFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val interactionSource = remember { MutableInteractionSource() }
 
     BackPressHandler(
         onBack = {
@@ -35,7 +33,10 @@ fun PlacePickerRoute(
     )
 
     LaunchedEffect(Unit) {
-        if (uiState.homeAddress.title.isBlank() && !uiState.isHomeAddressInitialized) {
+        if (uiState.placePickerState.homeAddress.title
+                .isBlank() &&
+            !uiState.isHomeAddressInitialized
+        ) {
             viewModel.initHomeAddress()
         }
     }
@@ -71,13 +72,13 @@ fun PlacePickerRoute(
             viewModel.onPlaceSelected(it)
             focusManager.clearFocus()
         },
-        onHistoryPlaceSelected = {
+        onHistorySelected = {
             viewModel.onHistoryPlaceSelected(it)
             focusManager.clearFocus()
         },
-        onHistoryClose = viewModel::deletePlaceHistory,
-        onClickCheckBox = viewModel::onClickCheckBox,
-        onClickButton = viewModel::onClickNextButton,
+        onDeleteHistory = viewModel::deletePlaceHistory,
+        onToggleCheckBox = viewModel::onClickCheckBox,
+        onNext = viewModel::onClickNextButton,
         popScreen = {
             viewModel.onClickBackButton()
             popScreen()
