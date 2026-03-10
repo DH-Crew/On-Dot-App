@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -41,6 +42,7 @@ import com.ondot.designsystem.components.topbar.CommonTopBar
 import com.ondot.designsystem.components.topbar.model.TopBarStyle
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.service.ClipboardReader
 import com.ondot.domain.service.ExternalAppLauncher
 import com.ondot.everytime.contract.EverytimeIntent
 import com.ondot.everytime.contract.EverytimeSideEffect
@@ -48,6 +50,7 @@ import com.ondot.everytime.contract.EverytimeViewModel
 import com.ondot.ui.util.ToastManager
 import com.ondot.ui.util.buttonPadding
 import com.ondot.ui.util.noRippleClickable
+import kotlinx.coroutines.launch
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource
@@ -58,6 +61,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun EverytimeUrlInputRoute(
     viewModel: EverytimeViewModel = koinViewModel(),
     appLauncher: ExternalAppLauncher = koinInject(),
+    clipboardReader: ClipboardReader = koinInject(),
     popScreen: () -> Unit,
     navigateToTimetable: () -> Unit,
 ) {
@@ -79,6 +83,7 @@ fun EverytimeUrlInputRoute(
         onBack = popScreen,
         onOpenEverytime = { appLauncher.openEverytime() },
         onNext = { viewModel.dispatch(EverytimeIntent.Validate(it)) },
+        readClipboardText = { clipboardReader.readText() },
     )
 }
 
@@ -87,8 +92,10 @@ private fun EverytimeUrlInputScreen(
     onBack: () -> Unit,
     onOpenEverytime: () -> Unit,
     onNext: (String) -> Unit,
+    readClipboardText: suspend () -> String?,
 ) {
     var input by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier =
@@ -123,6 +130,16 @@ private fun EverytimeUrlInputScreen(
         UrlInputTextField(
             input = input,
             onValueChange = { input = it },
+            onFocused = {
+                if (input.isBlank()) {
+                    scope.launch {
+                        val clipboardText = readClipboardText()
+                        if (!clipboardText.isNullOrBlank()) {
+                            input = clipboardText
+                        }
+                    }
+                }
+            },
         )
 
         EverytimeOpenTextButton(onClick = onOpenEverytime)
@@ -144,6 +161,7 @@ private fun EverytimeUrlInputScreen(
 private fun UrlInputTextField(
     input: String,
     onValueChange: (String) -> Unit,
+    onFocused: () -> Unit,
 ) {
     RoundedTextField(
         value = input,
@@ -164,6 +182,7 @@ private fun UrlInputTextField(
                 )
             }
         },
+        onFocused = onFocused,
     )
 }
 
