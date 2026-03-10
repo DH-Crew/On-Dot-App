@@ -7,11 +7,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.ondot.general.GeneralScheduleViewModel
 import com.ondot.general.check.CheckScheduleScreen
-import com.ondot.general.loading.RouteLoadingScreen
 import com.ondot.general.place.PlacePickerRoute
 import com.ondot.general.repeat.ScheduleRepeatSettingScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
+import com.ondot.ui.screen.loading.RouteLoadingScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 object GeneralScheduleNavGraph : NavGraphContributor {
@@ -68,7 +68,7 @@ object GeneralScheduleNavGraph : NavGraphContributor {
 
             composable(NavRoutes.RouteLoading.route) {
                 RouteLoadingScreen(
-                    navigateToCheckSchedule = {
+                    navigateToNext = {
                         navController.navigate(NavRoutes.CheckSchedule.route) {
                             popUpTo(NavRoutes.PlacePicker.route) {
                                 inclusive = false
