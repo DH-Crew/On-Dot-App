@@ -2,6 +2,7 @@ package com.ondot.platform.di
 
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.ClipboardReader
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.ExternalAppLauncher
 import com.ondot.domain.service.KaKaoSignInProvider
@@ -15,6 +16,7 @@ import com.ondot.platform.network.IosTokenProvider
 import com.ondot.platform.network.httpClient
 import com.ondot.platform.util.IosAlarmScheduler
 import com.ondot.platform.util.IosAnalyticsManager
+import com.ondot.platform.util.IosClipboardReader
 import com.ondot.platform.util.IosDirectionsOpener
 import com.ondot.platform.util.IosExternalAppLauncher
 import com.ondot.platform.util.IosLocalNotificationScheduler
@@ -39,5 +41,6 @@ actual fun providePlatformModules(): List<Module> =
             single<KaKaoSignInProvider> { IosKaKaoSignInProvider() }
             single<LocalNotificationScheduler> { IosLocalNotificationScheduler() }
             single<ExternalAppLauncher> { IosExternalAppLauncher() }
+            single<ClipboardReader> { IosClipboardReader() }
         },
     )

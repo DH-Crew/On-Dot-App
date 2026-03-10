@@ -4,6 +4,7 @@ import android.content.Context
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AlarmStorage
 import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.ClipboardReader
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.ExternalAppLauncher
 import com.ondot.domain.service.KaKaoSignInProvider
@@ -21,6 +22,7 @@ import com.ondot.platform.util.AlarmService
 import com.ondot.platform.util.AndroidAlarmScheduler
 import com.ondot.platform.util.AndroidAlarmStorage
 import com.ondot.platform.util.AndroidAnalyticsManager
+import com.ondot.platform.util.AndroidClipboardReader
 import com.ondot.platform.util.AndroidDirectionsOpener
 import com.ondot.platform.util.AndroidExternalAppLauncher
 import com.ondot.platform.util.AndroidLocalNotificationScheduler
@@ -49,5 +51,6 @@ actual fun providePlatformModules(): List<Module> =
             single<KaKaoSignInProvider> { AndroidKaKaoSignInProvider(get<Context>()) }
             single<LocalNotificationScheduler> { AndroidLocalNotificationScheduler(get<Context>()) }
             single<ExternalAppLauncher> { AndroidExternalAppLauncher(get<Context>()) }
+            single<ClipboardReader> { AndroidClipboardReader(get<Context>()) }
         },
     )
