@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,6 +44,7 @@ fun RoundedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     readOnly: Boolean = false,
     onClickWhenReadOnly: () -> Unit = {},
+    onFocused: () -> Unit = {}, // 포커스 됐을 때 콜백. 클립보드 자동 복사에 사용
     keyboardOptions: KeyboardOptions =
         KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number,
@@ -109,7 +111,14 @@ fun RoundedTextField(
                     keyboardActions = keyboardActions,
                     cursorBrush = SolidColor(OnDotColor.Gray0),
                     readOnly = readOnly,
-                    modifier = Modifier.focusRequester(focusRequester),
+                    modifier =
+                        Modifier
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState ->
+                                if (focusState.isFocused) {
+                                    onFocused()
+                                }
+                            },
                 )
             }
 
