@@ -1,5 +1,6 @@
 package com.ondot.domain.repository
 
+import com.ondot.domain.model.command.CreateEverytimeScheduleCommand
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
@@ -38,12 +39,14 @@ interface ScheduleRepository {
 
     suspend fun getSchedulePreparationInfo(scheduleId: Long): Flow<Result<SchedulePreparation>>
 
+    suspend fun validateEverytimeTimetable(url: String): AppResult<EverytimeValidateTimetable>
+
+    suspend fun createEverytimeSchedule(command: CreateEverytimeScheduleCommand): AppResult<Unit>
+
     /**
      * Local
      * */
     suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?>
 
     suspend fun upsertLocalSchedule(schedule: Schedule)
-
-    suspend fun validateEverytimeTimetable(url: String): AppResult<EverytimeValidateTimetable>
 }

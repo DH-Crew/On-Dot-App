@@ -9,6 +9,7 @@ import com.ondot.domain.model.request.MapProviderRequest
 import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.settings.homeAddress.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparationTime.PreparationTimeRequest
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {
@@ -31,4 +32,8 @@ interface MemberRepository {
     fun getLocalMapProvider(): Flow<MapProvider>
 
     fun needsChooseProvider(): Flow<Boolean>
+
+    // -------------------MVI Migration
+
+    suspend fun fetchHomeAddress(): AppResult<HomeAddressInfo>
 }
