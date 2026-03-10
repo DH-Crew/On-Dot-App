@@ -136,4 +136,8 @@ sealed class NavRoutes(
     data object UrlInput : NavRoutes("urlInput")
 
     data object Timetable : NavRoutes("timetable")
+
+    data object EverytimePlacePicker : NavRoutes("everytimePlacePicker")
+
+    data object EverytimeRouteLoading : NavRoutes("everytimeRouteLoading")
 }
