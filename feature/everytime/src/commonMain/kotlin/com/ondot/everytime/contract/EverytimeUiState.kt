@@ -4,11 +4,13 @@ import androidx.compose.runtime.Immutable
 import com.ondot.domain.model.enums.DayOfWeekKey
 import com.ondot.domain.model.schedule.EverytimeValidateTimetable
 import com.ondot.ui.base.UiState
+import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
 
 @Immutable
 data class EverytimeUiState(
     val timetable: EverytimeValidateTimetable? = null,
     val selectedClassIdByDay: Map<DayOfWeekKey, String> = emptyMap(),
+    val placePickerState: PlacePickerUiModel = PlacePickerUiModel(),
 ) : UiState {
     val classes: List<TimetableClassUiModel>
         get() {
@@ -40,7 +42,7 @@ data class EverytimeUiState(
         get() = selectedClassIdByDay.isNotEmpty()
 }
 
-private val DayOfWeekKey.order: Int
+val DayOfWeekKey.order: Int
     get() =
         when (this) {
             DayOfWeekKey.MONDAY -> 0
