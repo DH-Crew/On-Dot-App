@@ -12,9 +12,12 @@ data class PlacePickerUiModel(
     val isChecked: Boolean = false, // 집에서 출발 체크박스 상태
     val departurePlaceInput: String = "", // 출발지 입력 상태
     val arrivalPlaceInput: String = "", // 도착지 입력 상태,
+    val selectedDeparturePlace: AddressInfo? = null,
+    val selectedArrivalPlace: AddressInfo? = null,
     val placeList: List<AddressInfo> = emptyList(), // 검색 결과 리스트,
     val placeHistory: List<PlaceHistory> = emptyList(), // 검색 기록 리스트,
     val lastFocusedTextField: RouterType = RouterType.Departure, // 두개의 텍스트 필드 중 가장 마지막으로 포커스된 텍스트 필드
+    val homeAddress: AddressInfo = AddressInfo(),
 ) {
     companion object {
         fun formattedDate(date: String) = DateTimeFormatter.formatKoreanDateMonthDay(date)
