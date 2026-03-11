@@ -77,12 +77,17 @@ fun ToastHost(modifier: Modifier = Modifier) {
     }
 
     fun dismiss() {
+        val toastAtDismiss = current ?: return
+
         dismissJob?.cancel()
-        visible = false
-        scope.launch {
-            delay(animationMs.toLong())
-            current = null
-        }
+        dismissJob =
+            scope.launch {
+                visible = false
+                delay(animationMs.toLong())
+                if (current == toastAtDismiss) {
+                    current = null
+                }
+            }
     }
 
     Box(
