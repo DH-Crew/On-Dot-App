@@ -35,11 +35,10 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Show installed Xcodes
-        run: |
-          ls /Applications | grep Xcode || true
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.3.app
 
-      - name: Show current Xcode and Swift version
+      - name: Verify selected Xcode
         run: |
           xcodebuild -version
           swift --version
