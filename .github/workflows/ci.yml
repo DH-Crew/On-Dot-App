@@ -35,8 +35,14 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Show installed Xcodes
+        run: |
+          ls /Applications | grep Xcode || true
+
+      - name: Show current Xcode and Swift version
+        run: |
+          xcodebuild -version
+          swift --version
 
       - name: Build iOS without signing
         run: |
