@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
@@ -145,7 +145,6 @@ private fun ToastItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier =
                 Modifier
-                    .fillMaxWidth()
                     .background(bg, cornerRadius)
                     .border(1.dp, strokeColor, cornerRadius)
                     .padding(horizontal = 20.dp, vertical = 14.dp),
@@ -162,10 +161,12 @@ private fun ToastItem(
                 text = data.message,
                 color = textColor,
                 style = OnDotTextStyle.BodyLargeSB,
-                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Start,
             )
 
             if (data.type == ToastType.DELETE) {
+                Spacer(Modifier.width(20.dp))
+
                 OnDotText(
                     text = WORD_RESTORE_ACTION,
                     style = OnDotTextStyle.BodyMediumR,
