@@ -19,9 +19,17 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Run unit tests
+        env:
+          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
         run: ./gradlew test
 
       - name: Build Android release bundle
+        env:
+          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
         run: ./gradlew :composeApp:bundleRelease
 
   ios-ci:
