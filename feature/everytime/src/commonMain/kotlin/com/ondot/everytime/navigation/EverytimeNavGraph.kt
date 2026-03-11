@@ -5,6 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dh.ondot.presentation.ui.theme.SUCCESS_CREATE_EVERYTIME_SCHEDULE
+import com.ondot.domain.model.enums.ToastType
 import com.ondot.everytime.LandingRoute
 import com.ondot.everytime.contract.EverytimeViewModel
 import com.ondot.everytime.placepicker.EverytimePlacePickerRoute
@@ -13,6 +15,7 @@ import com.ondot.everytime.urlInput.EverytimeUrlInputRoute
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 import com.ondot.ui.screen.loading.RouteLoadingScreen
+import com.ondot.ui.util.ToastManager
 import org.koin.compose.viewmodel.koinViewModel
 
 object EverytimeNavGraph : NavGraphContributor {
@@ -94,6 +97,7 @@ object EverytimeNavGraph : NavGraphContributor {
             composable(NavRoutes.EverytimeRouteLoading.route) {
                 RouteLoadingScreen(
                     navigateToNext = {
+                        ToastManager.tryShow(SUCCESS_CREATE_EVERYTIME_SCHEDULE, ToastType.INFO)
                         navController.navigate(NavRoutes.MainGraph.route) {
                             popUpTo(NavRoutes.EverytimeGraph.route) { inclusive = true }
                             launchSingleTop = true
