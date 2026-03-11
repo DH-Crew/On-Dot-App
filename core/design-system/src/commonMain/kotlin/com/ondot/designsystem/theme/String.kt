@@ -75,9 +75,10 @@ const val ERROR_SELECT_FIRST_CLASS = "요일별 첫 수업을 선택해주세요
 const val ERROR_CREATE_SCHEDULE_EMPTY_PLACE = "출발지와 도착지를 모두 선택해주세요."
 
 // SUCCESS
-const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었어요."
+const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었습니다."
 const val SUCCESS_EDIT_PREPARATION_TIME = "준비 시간이 수정되었어요."
 const val SUCCESS_VALIDATE_TIMETABLE = "시간표 연동에 성공했어요."
+const val SUCCESS_CREATE_EVERYTIME_SCHEDULE = "시간표에 맞춰 알람을 생성했어요."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
