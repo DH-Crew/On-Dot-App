@@ -61,7 +61,7 @@ fun TimetableGrid(
     val rowSpacing = 4.dp
 
     val startHour = 9
-    val endHour = 21
+    val endHour = 22
     val rowCount = endHour - startHour
 
     Column(modifier = modifier.fillMaxWidth()) {
