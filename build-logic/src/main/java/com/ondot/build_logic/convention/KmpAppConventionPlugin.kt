@@ -17,7 +17,10 @@ class KmpAppConventionPlugin: Plugin<Project> {
         val properties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
         }
-        val kakaoKey = properties.getProperty("KAKAO_APP_KEY") ?: error("KAKAO_APP_KEY not found in local.properties")
+        val kakaoKey =
+            properties.getProperty("KAKAO_APP_KEY")
+                ?: System.getenv("KAKAO_APP_KEY")
+                ?: error("KAKAO_APP_KEY not found in local.properties")
 
         extensions.getByType<BaseAppModuleExtension>().apply {
             namespace = "com.dh.ondot"
