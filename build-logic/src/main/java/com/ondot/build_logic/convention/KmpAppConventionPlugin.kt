@@ -14,13 +14,25 @@ class KmpAppConventionPlugin: Plugin<Project> {
         pluginManager.apply("com.android.application")
         apply<KtlintConventionPlugin>()
 
-        val properties = Properties().apply {
-            load(rootProject.file("local.properties").inputStream())
+        val properties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { properties.load(it) }
         }
+
         val kakaoKey =
             properties.getProperty("KAKAO_APP_KEY")
                 ?: System.getenv("KAKAO_APP_KEY")
                 ?: error("KAKAO_APP_KEY not found in local.properties")
+        val baseUrl =
+            properties.getProperty("BASE_URL")
+                ?: System.getenv("BASE_URL")
+                ?: error("BASE_URL이 존재하지 않습니다.")
+        val amplitudeKey =
+            properties.getProperty("AMPLITUDE_KEY")
+                ?: System.getenv("AMPLITUDE_KEY")
+                ?: error("AMPLITUDE_KEY이 존재하지 않습니다.")
 
         extensions.getByType<BaseAppModuleExtension>().apply {
             namespace = "com.dh.ondot"
@@ -38,6 +50,8 @@ class KmpAppConventionPlugin: Plugin<Project> {
                 versionName = (findProperty("version.name") as String?) ?: "1.0.0"
 
                 buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
+                buildConfigField("String", "BASE_URL", baseUrl)
+                buildConfigField("String", "AMPLITUDE_KEY", amplitudeKey)
                 manifestPlaceholders["KAKAO_HOST_SCHEME"] = "kakao$kakaoKey"
             }
 

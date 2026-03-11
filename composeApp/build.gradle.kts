@@ -1,47 +1,10 @@
 
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import java.util.Properties
-import kotlin.apply
 
 plugins {
     id("ondot.compose.app")
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.buildKonfig)
-}
-
-buildkonfig {
-    packageName = "com.dh.ondot.composeApp"
-
-    exposeObjectWithName = "BuildKonfig"
-
-    val props =
-        Properties().apply {
-            val file = rootProject.file("local.properties")
-            if (file.exists()) file.inputStream().use { load(it) }
-        }
-    val baseUrl =
-        props.getProperty("BASE_URL")
-            ?: System.getenv("BASE_URL")
-            ?: error("BASE_URL이 존재하지 않습니다.")
-    val amplitudeKey =
-        props.getProperty("AMPLITUDE_KEY")
-            ?: System.getenv("AMPLITUDE_KEY")
-            ?: error("AMPLITUDE_KEY이 존재하지 않습니다.")
-
-    defaultConfigs {
-        buildConfigField(
-            Type.STRING,
-            "BASE_URL",
-            baseUrl,
-        )
-        buildConfigField(
-            Type.STRING,
-            "AMPLITUDE_KEY",
-            amplitudeKey,
-        )
-    }
 }
 
 kotlin {
