@@ -36,6 +36,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.WORD_RESTORE_ACTION
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
@@ -133,7 +134,7 @@ private fun ToastItem(
     val strokeColor =
         when (data.type) {
             ToastType.INFO -> Green900
-            else -> ErrorStroke
+            else -> Red
         }
     val cornerRadius = RoundedCornerShape(99.dp)
 
