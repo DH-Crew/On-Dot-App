@@ -19,6 +19,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
 
       - uses: gradle/actions/setup-gradle@v4
 
@@ -28,11 +29,11 @@ jobs:
         run: |
           echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > composeApp/google-services.json
         
-      - name: Run unit tests
-        run: ./gradlew test
-
-      - name: Build Android release bundle
-        run: ./gradlew :composeApp:bundleRelease
+      - name: Android CI
+        run: ./gradlew \
+          :feature:main:testDebugUnitTest \
+          :composeApp:bundleRelease \
+          --stacktrace
 
   ios-ci:
     runs-on: macos-latest
@@ -59,6 +60,7 @@ jobs:
 
       - name: Build iOS without signing
         run: |
+          set -o pipefail
           xcodebuild \
             -project iosApp/iosApp.xcodeproj \
             -scheme iosApp \
