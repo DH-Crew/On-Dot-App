@@ -50,8 +50,8 @@ class KmpAppConventionPlugin: Plugin<Project> {
                 versionName = (findProperty("version.name") as String?) ?: "1.0.0"
 
                 buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoKey\"")
-                buildConfigField("String", "BASE_URL", baseUrl)
-                buildConfigField("String", "AMPLITUDE_KEY", amplitudeKey)
+                buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+                buildConfigField("String", "AMPLITUDE_KEY", "\"$amplitudeKey\"")
                 manifestPlaceholders["KAKAO_HOST_SCHEME"] = "kakao$kakaoKey"
             }
 
