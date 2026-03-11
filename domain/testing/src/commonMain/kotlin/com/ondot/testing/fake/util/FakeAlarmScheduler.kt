@@ -14,11 +14,14 @@ class FakeAlarmScheduler : AlarmScheduler {
         info: AlarmRingInfo,
         mapProvider: MapProvider,
     ) {
-        logger.e { "scheduleAlarm: $info" }
-        scheduled += info to mapProvider
+        if (!scheduled.any { it.first.alarm.alarmId == info.alarm.alarmId }) {
+            logger.e { "scheduleAlarm: $info" }
+            scheduled += info to mapProvider
+        }
     }
 
     override fun cancelAlarm(alarmId: Long) {
+        scheduled.removeAll { it.first.alarm.alarmId == alarmId }
         cancelledIds += alarmId
     }
 

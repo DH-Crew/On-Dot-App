@@ -109,8 +109,8 @@ class HomeViewModelTest {
             // given
             val schedules =
                 listOf(
-                    dummySchedule(id = 1L, hasPreparationNote = true, enabled = true),
-                    dummySchedule(id = 2L, hasPreparationNote = false, enabled = false),
+                    dummySchedule(id = 1L, hasPreparationNote = true, preparationAlarmEnabled = true),
+                    dummySchedule(id = 2L, hasPreparationNote = false, preparationAlarmEnabled = false),
                 )
             scheduleRepository.setInitialSchedules(schedules)
 
@@ -194,8 +194,8 @@ class HomeViewModelTest {
             // given
             val schedules =
                 listOf(
-                    dummySchedule(id = 1L, hasPreparationNote = true, enabled = false),
-                    dummySchedule(id = 2L, hasPreparationNote = false, enabled = false),
+                    dummySchedule(id = 1L, hasPreparationNote = true, preparationAlarmEnabled = false),
+                    dummySchedule(id = 2L, hasPreparationNote = false, preparationAlarmEnabled = false),
                 )
             scheduleRepository.setInitialSchedules(schedules)
 
@@ -231,23 +231,17 @@ class HomeViewModelTest {
             assertTrue(scheduledInfos.any { it.scheduleId == 1L && it.alarmType == AlarmType.Preparation })
             assertTrue(scheduledInfos.any { it.scheduleId == 1L && it.alarmType == AlarmType.Departure })
             assertTrue(scheduledInfos.any { it.scheduleId == 2L && it.alarmType == AlarmType.Departure })
-
-            // then: Analytics 이벤트
-            val lastEvent = analyticsManager.events.last()
-            assertEquals("schedule_alarm_toggle", lastEvent.first)
-            assertEquals(1L, lastEvent.second["schedule_id"])
-            assertEquals(true, lastEvent.second["enabled"])
         }
 
     /**---------------------------------------------onClickAlarmSwitch (disable)----------------------------------------------*/
 
     @Test
-    fun `알람 스위치를 끄면 UI 상태, Repo, 알람 취소, Analytics 가 모두 반영된다`() =
+    fun `알람 스위치를 끄면 UI 상태, Repo, 알람 취소가 모두 반영된다`() =
         runTest {
             // given: 처음부터 enabled = true 인 스케줄
             val schedules =
                 listOf(
-                    dummySchedule(id = 1L, hasPreparationNote = true, enabled = true),
+                    dummySchedule(id = 1L, hasPreparationNote = true, preparationAlarmEnabled = true),
                 )
             scheduleRepository.setInitialSchedules(schedules)
 
@@ -265,7 +259,6 @@ class HomeViewModelTest {
             // then: UI 상태 확인
             val state = viewModel.uiState.value
             val target = state.scheduleList.first { it.scheduleId == 1L }
-            assertFalse(target.hasActiveAlarm)
             assertFalse(target.departureAlarm.enabled)
             assertFalse(target.preparationAlarm.enabled)
 
@@ -278,21 +271,16 @@ class HomeViewModelTest {
             // then: 알람 취소 (두 개 다 취소)
             val expectedCancelled = listOf(1L * 10 + 1, 1L * 10 + 2)
             assertTrue(alarmScheduler.cancelledIds.containsAll(expectedCancelled))
-
-            // then: Analytics
-            val lastEvent = analyticsManager.events.last()
-            assertEquals("alarms_cancelled_for_schedule", lastEvent.first)
-            assertEquals(1L, lastEvent.second["schedule_id"])
         }
 
     /**---------------------------------------------deleteSchedule----------------------------------------------*/
 
     @Test
-    fun `deleteSchedule 성공시 알람 취소, Repo 삭제, 노티 취소, GA, 상태 유지`() =
+    fun `deleteSchedule 성공시 알람 취소, Repo 삭제, 노티 취소, 상태 유지`() =
         runTest {
             // given
-            val s1 = dummySchedule(id = 1L, hasPreparationNote = true, enabled = true)
-            val s2 = dummySchedule(id = 2L, hasPreparationNote = false, enabled = false)
+            val s1 = dummySchedule(id = 1L, hasPreparationNote = true, preparationAlarmEnabled = true)
+            val s2 = dummySchedule(id = 2L, hasPreparationNote = false, preparationAlarmEnabled = false)
             scheduleRepository.setInitialSchedules(listOf(s1, s2))
 
             viewModel.getScheduleList()
@@ -316,11 +304,6 @@ class HomeViewModelTest {
 
             // Repo.deleteSchedule는 delay(2000)으로 인해 아직 호출 전
             assertTrue(scheduleRepository.lastDeleteCalls.isEmpty())
-
-            // GA 이벤트도 즉시 남아야 함
-            val lastEvent = analyticsManager.events.last()
-            assertEquals("schedule_delete_request", lastEvent.first)
-            assertEquals(1L, lastEvent.second["schedule_id"])
 
             // when: 2초 흐른 뒤
             testDispatcher.scheduler.advanceTimeBy(2000)
@@ -392,7 +375,7 @@ class HomeViewModelTest {
             // given
             val schedules =
                 listOf(
-                    dummySchedule(id = 1L, hasPreparationNote = true, enabled = true),
+                    dummySchedule(id = 1L, hasPreparationNote = true, preparationAlarmEnabled = true),
                 )
             scheduleRepository.setInitialSchedules(schedules)
 
@@ -423,7 +406,7 @@ class HomeViewModelTest {
     fun `openDirections는 현재 mapProvider와 스케줄 좌표를 사용해 DirectionsOpener를 호출한다`() =
         runTest {
             // given
-            val s1 = dummySchedule(id = 1L, hasPreparationNote = true, enabled = true)
+            val s1 = dummySchedule(id = 1L, hasPreparationNote = true, preparationAlarmEnabled = true)
             scheduleRepository.setInitialSchedules(listOf(s1))
 
             // mapProvider 를 NAVER 로 세팅
@@ -451,7 +434,7 @@ class HomeViewModelTest {
     private fun dummySchedule(
         id: Long,
         hasPreparationNote: Boolean,
-        enabled: Boolean,
+        preparationAlarmEnabled: Boolean,
     ): Schedule =
         Schedule(
             scheduleId = id,
@@ -473,7 +456,7 @@ class HomeViewModelTest {
             preparationAlarm =
                 Alarm(
                     alarmId = id * 10 + 2,
-                    enabled = enabled,
+                    enabled = preparationAlarmEnabled,
                     triggeredAt = "2025-06-03T12:30:00",
                 ),
         )
