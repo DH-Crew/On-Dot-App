@@ -81,7 +81,10 @@ class KmpAppConventionPlugin: Plugin<Project> {
 
             buildTypes {
                 getByName("release") {
-                    signingConfig = signingConfigs.getByName("release")
+                    if (hasReleaseSigning) {
+                        signingConfig = signingConfigs.getByName("release")
+                    }
+
                     isMinifyEnabled = true
                     isShrinkResources = true
                     proguardFiles(
