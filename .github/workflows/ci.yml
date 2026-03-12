@@ -64,4 +64,11 @@ jobs:
             -scheme iosApp \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=YES \
+            ARCHS=arm64 \
             build | tee xcodebuild.log
+      
+      - name: Show iOS compile errors
+        if: failure()
+        run: |
+          grep -n "error:" xcodebuild.log || true
