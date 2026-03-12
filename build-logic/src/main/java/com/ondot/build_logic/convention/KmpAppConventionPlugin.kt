@@ -34,6 +34,26 @@ class KmpAppConventionPlugin: Plugin<Project> {
                 ?: System.getenv("AMPLITUDE_KEY")
                 ?: error("AMPLITUDE_KEY이 존재하지 않습니다.")
 
+        val keystorePath =
+            properties.getProperty("ANDROID_KEYSTORE_PATH")
+                ?: System.getenv("ANDROID_KEYSTORE_PATH")
+                ?: error("ANDROID_KEYSTORE_PATH is missing.")
+
+        val keystorePassword =
+            properties.getProperty("ANDROID_KEYSTORE_PASSWORD")
+                ?: System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                ?: error("ANDROID_KEYSTORE_PASSWORD is missing.")
+
+        val keyAlias =
+            properties.getProperty("ANDROID_KEY_ALIAS")
+                ?: System.getenv("ANDROID_KEY_ALIAS")
+                ?: error("ANDROID_KEY_ALIAS is missing.")
+
+        val keyPassword =
+            properties.getProperty("ANDROID_KEY_PASSWORD")
+                ?: System.getenv("ANDROID_KEY_PASSWORD")
+                ?: error("ANDROID_KEY_PASSWORD is missing.")
+
         extensions.getByType<BaseAppModuleExtension>().apply {
             namespace = "com.dh.ondot"
             configureAndroid(this@with)
@@ -55,8 +75,18 @@ class KmpAppConventionPlugin: Plugin<Project> {
                 manifestPlaceholders["KAKAO_HOST_SCHEME"] = "kakao$kakaoKey"
             }
 
+            signingConfigs {
+                create("release") {
+                    storeFile = file(keystorePath)
+                    storePassword = keystorePassword
+                    this.keyAlias = keyAlias
+                    this.keyPassword = keyPassword
+                }
+            }
+
             buildTypes {
                 getByName("release") {
+                    signingConfig = signingConfigs.getByName("release")
                     isMinifyEnabled = true
                     isShrinkResources = true
                     proguardFiles(
