@@ -21,18 +21,31 @@ class KmpAppConventionPlugin: Plugin<Project> {
             localPropertiesFile.inputStream().use { properties.load(it) }
         }
 
-        val kakaoKey =
-            properties.getProperty("KAKAO_APP_KEY")
-                ?: System.getenv("KAKAO_APP_KEY")
-                ?: error("KAKAO_APP_KEY not found in local.properties")
-        val baseUrl =
-            properties.getProperty("BASE_URL")
-                ?: System.getenv("BASE_URL")
-                ?: error("BASE_URL이 존재하지 않습니다.")
-        val amplitudeKey =
-            properties.getProperty("AMPLITUDE_KEY")
-                ?: System.getenv("AMPLITUDE_KEY")
-                ?: error("AMPLITUDE_KEY이 존재하지 않습니다.")
+        fun getRequiredValue(key: String, errorMessage: String): String {
+            return properties.getProperty(key)
+                ?: System.getenv(key)
+                ?: error(errorMessage)
+        }
+
+        fun getOptionalValue(key: String): String? {
+            return properties.getProperty(key)
+                ?: System.getenv(key)
+        }
+
+        val kakaoKey = getRequiredValue("KAKAO_APP_KEY", "KAKAO_APP_KEY not found")
+        val baseUrl = getRequiredValue("BASE_URL", "BASE_URL이 존재하지 않습니다.")
+        val amplitudeKey = getRequiredValue("AMPLITUDE_KEY", "AMPLITUDE_KEY이 존재하지 않습니다.")
+
+        val keystorePath = getOptionalValue("ANDROID_KEYSTORE_PATH")
+        val keystorePassword = getOptionalValue("ANDROID_KEYSTORE_PASSWORD")
+        val keyAlias = getOptionalValue("ANDROID_KEY_ALIAS")
+        val keyPassword = getOptionalValue("ANDROID_KEY_PASSWORD")
+
+        val hasReleaseSigning =
+            !keystorePath.isNullOrBlank() &&
+                    !keystorePassword.isNullOrBlank() &&
+                    !keyAlias.isNullOrBlank() &&
+                    !keyPassword.isNullOrBlank()
 
         extensions.getByType<BaseAppModuleExtension>().apply {
             namespace = "com.dh.ondot"
@@ -55,8 +68,23 @@ class KmpAppConventionPlugin: Plugin<Project> {
                 manifestPlaceholders["KAKAO_HOST_SCHEME"] = "kakao$kakaoKey"
             }
 
+            if (hasReleaseSigning) {
+                signingConfigs {
+                    create("release") {
+                        storeFile = file(keystorePath!!)
+                        storePassword = keystorePassword
+                        this.keyAlias = keyAlias
+                        this.keyPassword = keyPassword
+                    }
+                }
+            }
+
             buildTypes {
                 getByName("release") {
+                    if (hasReleaseSigning) {
+                        signingConfig = signingConfigs.getByName("release")
+                    }
+
                     isMinifyEnabled = true
                     isShrinkResources = true
                     proguardFiles(
