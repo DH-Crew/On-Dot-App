@@ -3,9 +3,22 @@ name: Release Main
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Which platform to deploy"
+        required: true
+        type: choice
+        options:
+          - all
+          - android
+          - ios
 
 jobs:
   android-release:
+    if: >
+      (github.event_name == 'push' && !contains(github.event.head_commit.message, '[ios-only]')) ||
+      (github.event_name == 'workflow_dispatch' && (inputs.platform == 'all' || inputs.platform == 'android'))
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -65,9 +78,15 @@ jobs:
         run: bundle exec fastlane android deploy_internal --verbose
 
   ios-release:
+    if: >
+      (github.event_name == 'push' && !contains(github.event.head_commit.message, '[android-only]')) ||
+      (github.event_name == 'workflow_dispatch' && (inputs.platform == 'all' || inputs.platform == 'ios'))
     runs-on: macos-26
     environment: production
     env:
+      KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+      AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
       APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 }}
