@@ -6,7 +6,7 @@ android-minSdk = "26"
 android-targetSdk = "36"
 android-application = "8.12.3"
 
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 jetbrainsKotlinJvm = "2.2.20"
 
 # Compose Multiplatform
