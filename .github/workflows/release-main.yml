@@ -28,6 +28,19 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Ruby debug
+        run: |
+          ruby -v
+          bundle -v
+          bundle env
+          bundle exec fastlane --version
+
       - name: Restore google-services.json
         env:
           GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
@@ -41,10 +54,10 @@ jobs:
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_KEYSTORE_PATH"
 
       - name: Deploy Android internal
-        run: bundle exec fastlane android deploy_internal
+        run: bundle exec fastlane android deploy_internal --verbose
 
   ios-release:
-    runs-on: macos-latest
+    runs-on: macos-26
     environment: production
     env:
       APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
@@ -61,6 +74,9 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: List Xcode apps
+        run: ls /Applications | grep Xcode
+
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.3.app
 
@@ -72,7 +88,15 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3"
           bundler-cache: true
+
+      - name: Ruby debug
+        run: |
+          ruby -v
+          bundle -v
+          bundle env
+          bundle exec fastlane --version
 
       - name: Create temp directory
         run: mkdir -p fastlane_tmp
@@ -96,4 +120,4 @@ jobs:
           echo "$IOS_WIDGET_PROFILE_BASE64" | base64 --decode > fastlane_tmp/OnDotAlarmWidget_AppStore.mobileprovision
 
       - name: Deploy iOS TestFlight
-        run: bundle exec fastlane ios deploy_testflight
+        run: bundle exec fastlane ios deploy_testflight --verbose
