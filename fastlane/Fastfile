@@ -18,9 +18,9 @@ platform :android do
     )
 
     upload_to_play_store(
+      json_key: "fastlane_tmp/android_service_account.json",
       track: "internal",
       aab: "./composeApp/build/outputs/bundle/release/composeApp-release.aab",
-      json_key_data: ENV["ANDROID_SERVICE_ACCOUNT_JSON"],
       package_name: "com.dh.ondot",
       skip_upload_apk: true,
       skip_upload_metadata: true,
@@ -38,9 +38,9 @@ platform :android do
     )
 
     upload_to_play_store(
+      json_key: "fastlane_tmp/android_service_account.json",
       track: "production",
       aab: "./composeApp/build/outputs/bundle/release/composeApp-release.aab",
-      json_key_data: ENV["ANDROID_SERVICE_ACCOUNT_JSON"],
       package_name: "com.dh.ondot",
       skip_upload_apk: true,
       skip_upload_metadata: true,
