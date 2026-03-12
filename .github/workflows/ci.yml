@@ -30,10 +30,8 @@ jobs:
           echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > composeApp/google-services.json
         
       - name: Android CI
-        run: ./gradlew \
-          :feature:main:testDebugUnitTest \
-          :composeApp:bundleRelease \
-          --stacktrace
+        run: |
+          ./gradlew :feature:main:testDebugUnitTest :composeApp:bundleRelease --stacktrace
 
   ios-ci:
     runs-on: macos-latest
