@@ -91,8 +91,8 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
-          "com.dh.ondot.iosApp" => "OnDot_AppStore",
-          "com.dh.ondot.iosApp.OnDotAlarmWidget" => "OnDotAlarmWidget_AppStore"
+          "com.dh.ondot.iosApp" => "match AppStore com.dh.ondot.iosApp",
+          "com.dh.ondot.iosApp.OnDotAlarmWidget" => "match AppStore com.dh.ondot.iosApp.OnDotAlarmWidget"
         }
       }
     )
