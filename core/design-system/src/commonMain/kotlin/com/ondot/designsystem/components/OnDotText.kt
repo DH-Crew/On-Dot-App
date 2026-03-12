@@ -10,6 +10,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
@@ -26,6 +27,7 @@ fun OnDotText(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    textDecoration: TextDecoration? = null,
 ) {
     val textStyle = style.toTextStyle()
 
@@ -38,6 +40,7 @@ fun OnDotText(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = overflow,
+            textDecoration = textDecoration,
         )
     }
 }
@@ -51,6 +54,7 @@ fun OnDotText(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    textDecoration: TextDecoration? = null,
 ) {
     val textStyle = style.toTextStyle()
 
@@ -63,6 +67,7 @@ fun OnDotText(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = overflow,
+            textDecoration = textDecoration,
         )
     }
 }
@@ -78,6 +83,7 @@ fun OnDotHighlightText(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    textDecoration: TextDecoration? = null,
 ) {
     val textStyle = style.toTextStyle()
 
@@ -113,6 +119,7 @@ fun OnDotHighlightText(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = overflow,
+            textDecoration = textDecoration,
         )
     }
 }

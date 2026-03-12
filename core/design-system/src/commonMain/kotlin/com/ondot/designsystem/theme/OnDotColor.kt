@@ -34,7 +34,6 @@ object OnDotColor {
     // Red
     val Red = Color(0xFFFF196D)
     val HighlightRed = Color(0xFFF91F15)
-    val ErrorStroke = Color(0xFF8F0034) // 토스트에 사용 중
 
     // Kakao
     val Kakao = Color(0xFFFAE100)

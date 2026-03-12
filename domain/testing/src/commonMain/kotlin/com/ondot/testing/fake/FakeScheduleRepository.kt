@@ -1,15 +1,18 @@
 package com.ondot.testing.fake
 
 import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.command.CreateEverytimeScheduleCommand
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.schedule.EverytimeValidateTimetable
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleAlarm
 import com.ondot.domain.model.schedule.ScheduleDetail
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.model.schedule.SchedulePreparation
 import com.ondot.domain.repository.ScheduleRepository
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -140,6 +143,14 @@ class FakeScheduleRepository : ScheduleRepository {
         flow {
             emit(Result.success(SchedulePreparation(preparationNote = "준비물")))
         }
+
+    override suspend fun validateEverytimeTimetable(url: String): AppResult<EverytimeValidateTimetable> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun createEverytimeSchedule(command: CreateEverytimeScheduleCommand): AppResult<Unit> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?> =
         flow {

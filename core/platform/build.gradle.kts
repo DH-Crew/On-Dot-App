@@ -23,7 +23,10 @@ buildkonfig {
             val file = rootProject.file("local.properties")
             if (file.exists()) file.inputStream().use { load(it) }
         }
-    val baseUrl = props.getProperty("BASE_URL")
+    val baseUrl =
+        props.getProperty("BASE_URL")
+            ?: System.getenv("BASE_URL")
+            ?: error("BASE_URL이 존재하지 않습니다.")
 
     defaultConfigs {
         buildConfigField(

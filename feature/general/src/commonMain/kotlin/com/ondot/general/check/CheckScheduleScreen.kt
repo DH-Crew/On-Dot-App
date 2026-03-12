@@ -141,9 +141,13 @@ fun CheckScheduleContent(
                     onValueChanged = onValueChanged,
                 )
 
-                if (uiState.selectedDate != null && uiState.selectedTime != null) {
+                if (uiState.selectedTime != null) {
                     Spacer(modifier = Modifier.height(24.dp))
-                    DateTimeInfoBar(date = uiState.selectedDate, time = uiState.selectedTime)
+                    DateTimeInfoBar(
+                        repeatDays = uiState.activeWeekDays.toList(),
+                        date = uiState.selectedDate,
+                        time = uiState.selectedTime,
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,13 +27,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.ErrorStroke
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green900
+import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.WORD_RESTORE_ACTION
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
@@ -133,7 +131,7 @@ private fun ToastItem(
     val strokeColor =
         when (data.type) {
             ToastType.INFO -> Green900
-            else -> ErrorStroke
+            else -> Red
         }
     val cornerRadius = RoundedCornerShape(99.dp)
 
@@ -147,7 +145,6 @@ private fun ToastItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier =
                 Modifier
-                    .fillMaxWidth()
                     .background(bg, cornerRadius)
                     .border(1.dp, strokeColor, cornerRadius)
                     .padding(horizontal = 20.dp, vertical = 14.dp),
@@ -164,10 +161,12 @@ private fun ToastItem(
                 text = data.message,
                 color = textColor,
                 style = OnDotTextStyle.BodyLargeSB,
-                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Start,
             )
 
             if (data.type == ToastType.DELETE) {
+                Spacer(Modifier.width(20.dp))
+
                 OnDotText(
                     text = WORD_RESTORE_ACTION,
                     style = OnDotTextStyle.BodyMediumR,

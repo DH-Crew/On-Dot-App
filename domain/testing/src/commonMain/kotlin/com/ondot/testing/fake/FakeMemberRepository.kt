@@ -10,6 +10,8 @@ import com.ondot.domain.model.request.OnboardingRequest
 import com.ondot.domain.model.request.settings.homeAddress.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparationTime.PreparationTimeRequest
 import com.ondot.domain.repository.MemberRepository
+import com.ondot.result.AppError
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -143,6 +145,20 @@ class FakeMemberRepository : MemberRepository {
     override fun getLocalMapProvider(): Flow<MapProvider> = mapProviderFlow
 
     override fun needsChooseProvider(): Flow<Boolean> = needsChooseProviderFlow
+
+    override suspend fun fetchHomeAddress(): AppResult<HomeAddressInfo> =
+        if (shouldFailHomeAddress) {
+            AppResult.Error(AppError.Unknown(Throwable("home address 실패")))
+        } else {
+            val value =
+                homeAddress ?: HomeAddressInfo(
+                    roadAddress = "기본 주소",
+                    latitude = 37.0,
+                    longitude = 127.0,
+                ).also { homeAddress = it }
+
+            AppResult.Success(value)
+        }
 
     /** ------------ 테스트 편의용 헬퍼 ------------- */
 
