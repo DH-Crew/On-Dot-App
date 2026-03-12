@@ -12,7 +12,6 @@ jobs:
       KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
       BASE_URL: ${{ secrets.BASE_URL }}
       AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
-      ANDROID_SERVICE_ACCOUNT_JSON: ${{ secrets.ANDROID_SERVICE_ACCOUNT_JSON }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
@@ -40,6 +39,15 @@ jobs:
           bundle -v
           bundle env
           bundle exec fastlane --version
+
+      - name: Create temp directory
+        run: mkdir -p fastlane_tmp
+      
+      - name: Restore Android service account
+        env:
+          ANDROID_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.ANDROID_SERVICE_ACCOUNT_JSON_BASE64 }}
+        run: |
+          echo "$ANDROID_SERVICE_ACCOUNT_JSON_BASE64" | base64 --decode > fastlane_tmp/android_service_account.json
 
       - name: Restore google-services.json
         env:
@@ -121,3 +129,9 @@ jobs:
 
       - name: Deploy iOS TestFlight
         run: bundle exec fastlane ios deploy_testflight --verbose
+
+      - name: Print gym log on failure
+        if: failure()
+        run: |
+          echo "===== gym log ====="
+          cat /Users/runner/Library/Logs/gym/OnDot-iosApp.log || true
