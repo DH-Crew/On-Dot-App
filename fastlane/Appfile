@@ -1,2 +1,2 @@
-app_identifier("com.dh.ondot")
+app_identifier("com.dh.ondot.iosApp")
 package_name("com.dh.ondot")
