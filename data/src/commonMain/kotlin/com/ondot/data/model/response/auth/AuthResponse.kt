@@ -7,5 +7,5 @@ data class AuthResponse(
     val memberId: Long = -1,
     val accessToken: String = "",
     val refreshToken: String = "",
-    val isNewMember: Boolean = false
+    val isNewMember: Boolean = false,
 )

@@ -11,33 +11,40 @@ import com.ondot.domain.model.enums.AlarmMode
 import com.ondot.domain.service.SoundPlayer
 
 class AndroidSoundPlayer(
-    private val context: Context
+    private val context: Context,
 ) : SoundPlayer {
     private val logger = Logger.withTag("AndroidSoundPlayer")
     private var player: MediaPlayer? = null
     private var currentVolume: Float = 0.8f
     private lateinit var audioFocusRequest: AudioFocusRequest
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private var _onComplete: () -> Unit = {}
+    private var completeCallback: () -> Unit = {}
 
     @SuppressLint("DiscouragedApi")
-    override fun playSound(soundResId: String, alarmMode: AlarmMode, onComplete: () -> Unit) {
-
-        _onComplete = onComplete
+    override fun playSound(
+        soundResId: String,
+        alarmMode: AlarmMode,
+        onComplete: () -> Unit,
+    ) {
+        completeCallback = onComplete
 
         if (alarmMode != AlarmMode.SOUND) return
 
         // AudioAttributes 생성 (알람용)
-        val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ALARM)
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .build()
+        val audioAttributes =
+            AudioAttributes
+                .Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
 
         // AudioFocusRequest 생성
-        audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-            .setAudioAttributes(audioAttributes)
-            .setOnAudioFocusChangeListener { /* 필요시 포커스 변화 처리 */ }
-            .build()
+        audioFocusRequest =
+            AudioFocusRequest
+                .Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+                .setAudioAttributes(audioAttributes)
+                .setOnAudioFocusChangeListener { /* 필요시 포커스 변화 처리 */ }
+                .build()
 
         // 오디오 포커스 요청
         val focusResult = audioManager.requestAudioFocus(audioFocusRequest)
@@ -46,9 +53,12 @@ class AndroidSoundPlayer(
         }
 
         // raw 리소스 ID 조회
-        val resId = context.resources.getIdentifier(
-            soundResId, "raw", context.packageName
-        )
+        val resId =
+            context.resources.getIdentifier(
+                soundResId,
+                "raw",
+                context.packageName,
+            )
         if (resId == 0) {
             logger.e { "raw 리소스 '$soundResId' 를 찾을 수 없습니다." }
             return
@@ -56,35 +66,36 @@ class AndroidSoundPlayer(
 
         // MediaPlayer 직접 구성 및 재생
         try {
-            player = MediaPlayer().apply {
-                setAudioAttributes(audioAttributes)
+            player =
+                MediaPlayer().apply {
+                    setAudioAttributes(audioAttributes)
 
-                // 정확한 offset/length 사용
-                val afd = context.resources.openRawResourceFd(resId)
-                setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
-                afd.close()
+                    // 정확한 offset/length 사용
+                    val afd = context.resources.openRawResourceFd(resId)
+                    setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                    afd.close()
 
-                isLooping = true  // 알람은 반복 재생
-                setOnCompletionListener {
-                    // 재생 완료 시 포커스 반환 후 정리
-                    audioManager.abandonAudioFocusRequest(audioFocusRequest)
-                    stopSound()
-                    onComplete()
-                }
+                    isLooping = true // 알람은 반복 재생
+                    setOnCompletionListener {
+                        // 재생 완료 시 포커스 반환 후 정리
+                        audioManager.abandonAudioFocusRequest(audioFocusRequest)
+                        stopSound()
+                        onComplete()
+                    }
 
-                // 볼륨 설정
-                setVolume(currentVolume, currentVolume)
+                    // 볼륨 설정
+                    setVolume(currentVolume, currentVolume)
 
-                // 시스템 알람 볼륨 최대화
+                    // 시스템 알람 볼륨 최대화
 //                audioManager.setStreamVolume(
 //                    AudioManager.STREAM_ALARM,
 //                    audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
 //                    0
 //                )
 
-                prepare()
-                start()
-            }
+                    prepare()
+                    start()
+                }
         } catch (e: Exception) {
             logger.e { "사운드 재생 중 오류: ${e.message}" }
         }
@@ -101,7 +112,7 @@ class AndroidSoundPlayer(
             it.release()
         }
         player = null
-        _onComplete()
+        completeCallback()
     }
 
     override fun setVolume(volume: Float) {

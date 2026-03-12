@@ -9,5 +9,5 @@ data class RingingState(
     val scheduleId: Long = -1,
     val alarmId: Long = -1,
     val type: AlarmType = AlarmType.Departure,
-    val instanceId: Long
+    val instanceId: Long,
 )

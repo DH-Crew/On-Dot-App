@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ScheduleAlarmResponse(
     val preparationAlarm: AlarmResponse = AlarmResponse(),
-    val departureAlarm: AlarmResponse = AlarmResponse()
+    val departureAlarm: AlarmResponse = AlarmResponse(),
 )

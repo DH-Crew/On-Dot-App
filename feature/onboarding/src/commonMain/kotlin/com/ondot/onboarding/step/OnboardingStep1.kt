@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -24,11 +23,10 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_HOUR
 import com.dh.ondot.presentation.ui.theme.WORD_MINUTE
-import com.ondot.design_system.components.OnDotHighlightText
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.RoundedTextField
+import com.ondot.designsystem.components.OnDotHighlightText
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.RoundedTextField
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.util.AnalyticsLogger
 
 @Composable
 fun OnboardingStep1(
@@ -45,16 +43,17 @@ fun OnboardingStep1(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 22.dp),
-        horizontalAlignment = Alignment.Start
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 22.dp),
+        horizontalAlignment = Alignment.Start,
     ) {
         OnDotHighlightText(
             text = ONBOARDING1_TITLE,
             highlight = ONBOARDING1_TITLE_HIGHLIGHT,
             style = OnDotTextStyle.TitleMediumM,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +61,7 @@ fun OnboardingStep1(
         OnDotText(
             text = ONBOARDING1_SUB_TITLE,
             style = OnDotTextStyle.BodyMediumR,
-            color = OnDotColor.Green300
+            color = OnDotColor.Green300,
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -71,7 +70,7 @@ fun OnboardingStep1(
             hourInput = hourInput,
             minuteInput = minuteInput,
             onHourInputChanged = onHourInputChanged,
-            onMinuteInputChanged = onMinuteInputChanged
+            onMinuteInputChanged = onMinuteInputChanged,
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -80,7 +79,7 @@ fun OnboardingStep1(
             OnDotText(
                 text = ERROR_INVALID_MINUTE_INPUT,
                 style = OnDotTextStyle.BodySmallR1,
-                color = OnDotColor.Red
+                color = OnDotColor.Red,
             )
         }
     }
@@ -91,25 +90,26 @@ fun HourMinuteTextField(
     hourInput: String,
     minuteInput: String,
     onHourInputChanged: (String) -> Unit,
-    onMinuteInputChanged: (String) -> Unit
+    onMinuteInputChanged: (String) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         RoundedTextField(
             value = hourInput,
             onValueChange = onHourInputChanged,
             placeholder = ONBOARDING1_HOUR_PLACEHOLDER,
             maxLength = 1,
-            modifier = Modifier.weight(1f).padding(end = 8.dp)
+            modifier = Modifier.weight(1f).padding(end = 8.dp),
         )
 
         OnDotText(
             text = WORD_HOUR,
             style = OnDotTextStyle.BodyLargeR1,
-            color = OnDotColor.Gray200
+            color = OnDotColor.Gray200,
         )
 
         RoundedTextField(
@@ -117,13 +117,13 @@ fun HourMinuteTextField(
             onValueChange = onMinuteInputChanged,
             placeholder = ONBOARDING1_MINUTE_PLACEHOLDER,
             maxLength = 2,
-            modifier = Modifier.weight(1f).padding(start = 11.dp, end = 8.dp)
+            modifier = Modifier.weight(1f).padding(start = 11.dp, end = 8.dp),
         )
 
         OnDotText(
             text = WORD_MINUTE,
             style = OnDotTextStyle.BodyLargeR1,
-            color = OnDotColor.Gray200
+            color = OnDotColor.Gray200,
         )
     }
 }

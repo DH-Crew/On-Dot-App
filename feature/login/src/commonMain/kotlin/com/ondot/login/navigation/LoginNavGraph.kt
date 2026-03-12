@@ -8,7 +8,7 @@ import com.ondot.login.LoginScreen
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 
-object LoginNavGraph: NavGraphContributor {
+object LoginNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.LoginGraph
     override val startDestination: String
@@ -17,7 +17,7 @@ object LoginNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(NavRoutes.Login.route) {
                 LoginScreen(
@@ -32,7 +32,7 @@ object LoginNavGraph: NavGraphContributor {
                             popUpTo(NavRoutes.Login.route) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

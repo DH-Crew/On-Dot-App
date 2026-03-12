@@ -16,13 +16,15 @@ fun App() {
 
     LaunchedEffect(Unit) {
         AlarmNotifier.flow().collect { event ->
-            when(event.type) {
-                AlarmType.Departure -> navController.navigate(NavRoutes.DepartureAlarm.createRoute(event.scheduleId, event.alarmId)) {
-                    launchSingleTop = true
-                }
-                AlarmType.Preparation -> navController.navigate(NavRoutes.PreparationAlarm.createRoute(event.scheduleId, event.alarmId)) {
-                    launchSingleTop = true
-                }
+            when (event.type) {
+                AlarmType.Departure ->
+                    navController.navigate(NavRoutes.DepartureAlarm.createRoute(event.scheduleId, event.alarmId)) {
+                        launchSingleTop = true
+                    }
+                AlarmType.Preparation ->
+                    navController.navigate(NavRoutes.PreparationAlarm.createRoute(event.scheduleId, event.alarmId)) {
+                        launchSingleTop = true
+                    }
             }
         }
     }

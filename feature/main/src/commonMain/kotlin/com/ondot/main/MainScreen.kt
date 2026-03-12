@@ -24,12 +24,11 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.BottomNavType
 import com.ondot.main.home.HomeScreen
 import com.ondot.main.setting.SettingScreen
@@ -54,35 +53,40 @@ fun MainScreen(
     navigateToHomeAddressSetting: () -> Unit,
     navigateToNavMapSetting: () -> Unit,
     navigateToPreparationTimeEdit: () -> Unit,
-    navigateToNotification: () -> Unit
+    navigateToNotification: () -> Unit,
+    navigateToEverytime: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = OnDotColor.Gray900),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = OnDotColor.Gray900),
         bottomBar = {
             BottomNavBar(
                 type = uiState.bottomNavType,
                 interactionSource = interactionSource,
-                onClick = { viewModel.setBottomNavType(it) }
+                onClick = { viewModel.setBottomNavType(it) },
             )
-        }
+        },
     ) { padding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = OnDotColor.Gray900)
-                .padding(padding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = OnDotColor.Gray900)
+                    .padding(padding),
         ) {
-            when(uiState.bottomNavType) {
-                BottomNavType.HOME -> HomeScreen(
-                    navigateToGeneralSchedule = navigateToGeneralSchedule,
-                    navigateToEditSchedule = navigateToEditSchedule,
-                    navigateToNotificationScreen = navigateToNotification
-                )
+            when (uiState.bottomNavType) {
+                BottomNavType.HOME ->
+                    HomeScreen(
+                        navigateToGeneralSchedule = navigateToGeneralSchedule,
+                        navigateToEditSchedule = navigateToEditSchedule,
+                        navigateToNotificationScreen = navigateToNotification,
+                        navigateToEverytimeScreen = navigateToEverytime,
+                    )
                 BottomNavType.SETTING -> {
                     SettingScreen(
                         navigateToDeleteAccountScreen = navigateToDeleteAccount,
@@ -90,7 +94,7 @@ fun MainScreen(
                         navigateToServiceTermsScreen = navigateToServiceTerms,
                         navigateToHomeAddressSettingScreen = navigateToHomeAddressSetting,
                         navigateToNavMapSettingScreen = navigateToNavMapSetting,
-                        navigateToPreparationTimeEditScreen = navigateToPreparationTimeEdit
+                        navigateToPreparationTimeEditScreen = navigateToPreparationTimeEdit,
                     )
                 }
                 BottomNavType.DEFAULT -> {}
@@ -110,25 +114,26 @@ fun BottomNavBar(
         HorizontalDivider(color = Gray500, thickness = 1.dp)
 
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(if (getPlatform() == ANDROID) 72.dp else 93.dp)
-                .background(Gray800.copy(alpha = 0.8f)),
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .height(if (getPlatform() == ANDROID) 72.dp else 93.dp)
+                    .background(Gray800.copy(alpha = 0.8f)),
             horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) {
             BottomNavItem(
                 resourceId = if (type == BottomNavType.HOME) Res.drawable.ic_home_selected else Res.drawable.ic_home_unselected,
                 type = BottomNavType.HOME,
                 interactionSource = interactionSource,
-                onClick = onClick
+                onClick = onClick,
             )
 
             BottomNavItem(
                 resourceId = if (type == BottomNavType.SETTING) Res.drawable.ic_settings_selected else Res.drawable.ic_settings_unselected,
                 type = BottomNavType.SETTING,
                 interactionSource = interactionSource,
-                onClick = onClick
+                onClick = onClick,
             )
         }
     }
@@ -144,30 +149,31 @@ fun BottomNavItem(
     val haptic = LocalHapticFeedback.current
 
     Column(
-        modifier = Modifier
-            .size(width = 40.dp, height = 52.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    when (type) {
-                        BottomNavType.HOME -> {
-                            onClick(NavRoutes.Home.route)
+        modifier =
+            Modifier
+                .size(width = 40.dp, height = 52.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        when (type) {
+                            BottomNavType.HOME -> {
+                                onClick(NavRoutes.Home.route)
+                            }
+                            BottomNavType.SETTING -> {
+                                onClick(NavRoutes.Setting.route)
+                            }
+                            BottomNavType.DEFAULT -> return@clickable
                         }
-                        BottomNavType.SETTING -> {
-                            onClick(NavRoutes.Setting.route)
-                        }
-                        BottomNavType.DEFAULT -> return@clickable
-                    }
-                }
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+                    },
+                ),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             painter = painterResource(resourceId),
             contentDescription = null,
-            modifier = Modifier.size(width = 40.dp, height = 52.dp)
+            modifier = Modifier.size(width = 40.dp, height = 52.dp),
         )
     }
 }

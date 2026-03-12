@@ -11,33 +11,39 @@ import platform.Foundation.NSBundle
 import platform.Foundation.NSURL
 
 @OptIn(ExperimentalForeignApi::class)
-class IosSoundPlayer: SoundPlayer {
+class IosSoundPlayer : SoundPlayer {
     private var player: AVAudioPlayer? = null
 
     init {
         AVAudioSession.sharedInstance().setCategory(
             category = AVAudioSessionCategoryPlayback,
-            error = null
+            error = null,
         )
         AVAudioSession.sharedInstance().setActive(true, error = null)
     }
 
-    override fun playSound(soundResId: String, alarmMode: AlarmMode, onComplete: () -> Unit) {
+    override fun playSound(
+        soundResId: String,
+        alarmMode: AlarmMode,
+        onComplete: () -> Unit,
+    ) {
         stopSound()
 
-        val url: NSURL = NSBundle.mainBundle.URLForResource(
-            name = soundResId,
-            withExtension = "mp3"
-        ) ?: run {
-            println("resource를 찾을 수 없습니다.")
-            return
-        }
+        val url: NSURL =
+            NSBundle.mainBundle.URLForResource(
+                name = soundResId,
+                withExtension = "mp3",
+            ) ?: run {
+                println("resource를 찾을 수 없습니다.")
+                return
+            }
 
-        player = AVAudioPlayer(contentsOfURL = url, error = null).also {
-            it.numberOfLoops = 0
-            it.prepareToPlay()
-            it.play()
-        }
+        player =
+            AVAudioPlayer(contentsOfURL = url, error = null).also {
+                it.numberOfLoops = 0
+                it.prepareToPlay()
+                it.play()
+            }
     }
 
     override fun stopSound(onComplete: () -> Unit) {

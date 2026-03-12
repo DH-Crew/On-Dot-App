@@ -17,24 +17,23 @@ object TriggeredAlarmManager {
     fun recordTriggeredAlarm(
         scheduleId: Long,
         alarmId: Long,
-        action: AlarmAction
+        action: AlarmAction,
     ) {
         CoroutineScope(Dispatchers.Default).launch {
-            repo.recordTriggeredAlarm(
-                TriggeredAlarmRequest(
-                    scheduleId = scheduleId,
-                    alarmId = alarmId,
-                    action = action
-                )
-            )
-            .catch { e ->
-                logger.e(e) { "알림 기록 실패" }
-            }
-            .collect { result ->
-                result.onFailure { e ->
-                    logger.e(e) { "알람 기록 실패" }
+            repo
+                .recordTriggeredAlarm(
+                    TriggeredAlarmRequest(
+                        scheduleId = scheduleId,
+                        alarmId = alarmId,
+                        action = action,
+                    ),
+                ).catch { e ->
+                    logger.e(e) { "알림 기록 실패" }
+                }.collect { result ->
+                    result.onFailure { e ->
+                        logger.e(e) { "알람 기록 실패" }
+                    }
                 }
-            }
         }
     }
 }

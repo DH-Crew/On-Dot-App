@@ -8,16 +8,24 @@ object AnalyticsLogger {
         KoinPlatform.getKoin().get<AnalyticsManager>()
     }
 
-    fun logScreenView(screenName: String, params: Map<String, Any?> = emptyMap()) {
+    fun logScreenView(
+        screenName: String,
+        params: Map<String, Any?> = emptyMap(),
+    ) {
         manager.logEvent(
             name = "screen_view",
-            params = params + mapOf(
-                "screen_name" to screenName
-            )
+            params =
+                params +
+                    mapOf(
+                        "screen_name" to screenName,
+                    ),
         )
     }
 
-    fun logEvent(event: String, params: Map<String, Any?> = mapOf()) {
+    fun logEvent(
+        event: String,
+        params: Map<String, Any?> = mapOf(),
+    ) {
         manager.logEvent(event, params)
     }
 }

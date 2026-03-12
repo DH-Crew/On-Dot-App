@@ -10,6 +10,6 @@ interface DirectionsOpener {
         endLng: Double,
         provider: MapProvider,
         startName: String,
-        endName: String
+        endName: String,
     )
 }

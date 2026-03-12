@@ -34,3 +34,17 @@ iosApp/GoogleService-Info.plist
 iosApp/iosApp/GoogleService-Info.plist
 iosApp/ComposeApp.xcframework
 iosApp/iosApp/Config.xcconfig
+
+.editorconfig
+
+# iOS local signing / build artifacts
+fastlane_tmp/
+
+# fastlane generated artifacts
+fastlane/report.xml
+fastlane/README.md
+fastlane/test_output
+
+# local build outputs
+*.ipa
+*.dSYM.zip

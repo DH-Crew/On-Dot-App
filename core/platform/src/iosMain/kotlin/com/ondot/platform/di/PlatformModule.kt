@@ -2,7 +2,9 @@ package com.ondot.platform.di
 
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.ClipboardReader
 import com.ondot.domain.service.DirectionsOpener
+import com.ondot.domain.service.ExternalAppLauncher
 import com.ondot.domain.service.KaKaoSignInProvider
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.domain.service.MapProviderStorage
@@ -14,7 +16,9 @@ import com.ondot.platform.network.IosTokenProvider
 import com.ondot.platform.network.httpClient
 import com.ondot.platform.util.IosAlarmScheduler
 import com.ondot.platform.util.IosAnalyticsManager
+import com.ondot.platform.util.IosClipboardReader
 import com.ondot.platform.util.IosDirectionsOpener
+import com.ondot.platform.util.IosExternalAppLauncher
 import com.ondot.platform.util.IosLocalNotificationScheduler
 import com.ondot.platform.util.IosMapProviderStorage
 import com.ondot.platform.util.IosSoundPlayer
@@ -23,8 +27,8 @@ import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun providePlatformModules(): List<Module> {
-    return listOf(
+actual fun providePlatformModules(): List<Module> =
+    listOf(
         module {
             single<HttpClient> { httpClient() }
             single<TokenProvider> { IosTokenProvider() }
@@ -36,6 +40,7 @@ actual fun providePlatformModules(): List<Module> {
             single<SoundPlayer> { IosSoundPlayer() }
             single<KaKaoSignInProvider> { IosKaKaoSignInProvider() }
             single<LocalNotificationScheduler> { IosLocalNotificationScheduler() }
-        }
+            single<ExternalAppLauncher> { IosExternalAppLauncher() }
+            single<ClipboardReader> { IosClipboardReader() }
+        },
     )
-}

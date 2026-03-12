@@ -10,7 +10,8 @@ struct iOSApp: App {
     @Environment(\.scenePhase) var scenePhase
     
     init() {
-        KakaoSDK.initSDK(appKey: KAKAO_APP_KEY)
+        let kakaoAppKey = Bundle.main.object(forInfoDictionaryKey:"KAKAO_APP_KEY") as? String ?? ""
+        KakaoSDK.initSDK(appKey: kakaoAppKey)
         
         composeApp.SharedInitKt.doInitKoin(extraModules: [])
     }

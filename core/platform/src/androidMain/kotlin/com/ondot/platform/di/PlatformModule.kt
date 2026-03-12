@@ -4,7 +4,9 @@ import android.content.Context
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.AlarmStorage
 import com.ondot.domain.service.AnalyticsManager
+import com.ondot.domain.service.ClipboardReader
 import com.ondot.domain.service.DirectionsOpener
+import com.ondot.domain.service.ExternalAppLauncher
 import com.ondot.domain.service.KaKaoSignInProvider
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.domain.service.MapProviderStorage
@@ -20,7 +22,9 @@ import com.ondot.platform.util.AlarmService
 import com.ondot.platform.util.AndroidAlarmScheduler
 import com.ondot.platform.util.AndroidAlarmStorage
 import com.ondot.platform.util.AndroidAnalyticsManager
+import com.ondot.platform.util.AndroidClipboardReader
 import com.ondot.platform.util.AndroidDirectionsOpener
+import com.ondot.platform.util.AndroidExternalAppLauncher
 import com.ondot.platform.util.AndroidLocalNotificationScheduler
 import com.ondot.platform.util.AndroidMapProviderStorage
 import com.ondot.platform.util.AndroidSoundPlayer
@@ -29,8 +33,8 @@ import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun providePlatformModules(): List<Module> {
-    return listOf(
+actual fun providePlatformModules(): List<Module> =
+    listOf(
         module {
             single<HttpClient> { httpClient() }
             single<OnDotDataStore> { OnDotDataStore(get()) }
@@ -46,6 +50,7 @@ actual fun providePlatformModules(): List<Module> {
             single<UrlOpener> { AndroidUrlOpener(get<Context>()) }
             single<KaKaoSignInProvider> { AndroidKaKaoSignInProvider(get<Context>()) }
             single<LocalNotificationScheduler> { AndroidLocalNotificationScheduler(get<Context>()) }
-        }
+            single<ExternalAppLauncher> { AndroidExternalAppLauncher(get<Context>()) }
+            single<ClipboardReader> { AndroidClipboardReader(get<Context>()) }
+        },
     )
-}

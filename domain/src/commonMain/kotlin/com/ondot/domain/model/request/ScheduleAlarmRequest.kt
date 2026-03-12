@@ -7,5 +7,5 @@ data class ScheduleAlarmRequest(
     val startLongitude: Double,
     val startLatitude: Double,
     val endLongitude: Double,
-    val endLatitude: Double
+    val endLatitude: Double,
 )

@@ -17,13 +17,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
-import com.ondot.design_system.components.Calendar
-import com.ondot.design_system.components.DateSectionHeader
-import com.ondot.design_system.components.OnDotBottomSheet
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.RepeatSettingSection
+import com.ondot.designsystem.components.Calendar
+import com.ondot.designsystem.components.DateSectionHeader
+import com.ondot.designsystem.components.OnDotBottomSheet
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.RepeatSettingSection
 import com.ondot.domain.model.enums.ButtonType
-import com.ondot.util.AnalyticsLogger
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -32,7 +31,7 @@ fun EditDateBottomSheet(
     repeatDays: Set<Int>,
     currentDate: LocalDate,
     onEditDate: (Boolean, Set<Int>, LocalDate?) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val viewModel: EditBottomSheetViewModel = viewModel { EditBottomSheetViewModel() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -53,8 +52,9 @@ fun EditDateBottomSheet(
         sheetMaxHeightFraction = 0.8f,
         content = {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
             ) {
                 RepeatSettingSection(
                     isRepeat = uiState.isRepeat,
@@ -62,7 +62,7 @@ fun EditDateBottomSheet(
                     activeWeekDays = uiState.repeatDays,
                     onClickSwitch = viewModel::onClickSwitch,
                     onClickTextChip = viewModel::onClickTextChip,
-                    onClickCheckTextChip = viewModel::onClickCheckTextChip
+                    onClickCheckTextChip = viewModel::onClickCheckTextChip,
                 )
 
                 HorizontalDivider(thickness = (0.5).dp, color = Gray600, modifier = Modifier.fillMaxWidth())
@@ -75,7 +75,7 @@ fun EditDateBottomSheet(
                     isActiveCalendar = true,
                     isRepeat = uiState.isRepeat,
                     activeWeekDays = uiState.repeatDays,
-                    onToggleCalendar = {  }
+                    onToggleCalendar = { },
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -89,7 +89,7 @@ fun EditDateBottomSheet(
                     activeWeekDays = uiState.repeatDays,
                     onPrevMonth = viewModel::onPrevMonth,
                     onNextMonth = viewModel::onNextMonth,
-                    onDateSelected = viewModel::onDateSelected
+                    onDateSelected = viewModel::onDateSelected,
                 )
 
                 Spacer(modifier = Modifier.height(26.dp))
@@ -102,9 +102,9 @@ fun EditDateBottomSheet(
                     onClick = {
                         onEditDate(uiState.isRepeat, uiState.repeatDays, uiState.currentDate)
                         onDismiss()
-                    }
+                    },
                 )
             }
-        }
+        },
     )
 }

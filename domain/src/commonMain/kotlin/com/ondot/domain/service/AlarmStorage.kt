@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface AlarmStorage {
     suspend fun saveAlarms(alarms: List<AlarmRingInfo>)
+
     suspend fun addAlarm(alarm: AlarmRingInfo)
+
     val alarmsFlow: Flow<List<AlarmRingInfo>>
 }

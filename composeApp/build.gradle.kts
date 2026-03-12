@@ -1,40 +1,10 @@
 
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import java.util.Properties
-import kotlin.apply
 
 plugins {
     id("ondot.compose.app")
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.buildKonfig)
-}
-
-buildkonfig {
-    packageName = "com.dh.ondot.composeApp"
-
-    exposeObjectWithName = "BuildKonfig"
-
-    val props = Properties().apply {
-        val file = rootProject.file("local.properties")
-        if (file.exists()) file.inputStream().use { load(it) }
-    }
-    val baseUrl = props.getProperty("BASE_URL")
-    val amplitudeKey = props.getProperty("AMPLITUDE_KEY")
-
-    defaultConfigs {
-        buildConfigField(
-            Type.STRING,
-            "BASE_URL",
-            baseUrl
-        )
-        buildConfigField(
-            Type.STRING,
-            "AMPLITUDE_KEY",
-            amplitudeKey
-        )
-    }
 }
 
 kotlin {
@@ -55,6 +25,7 @@ kotlin {
             implementation(projects.feature.main)
             implementation(projects.feature.onboarding)
             implementation(projects.feature.splash)
+            implementation(projects.feature.everytime)
         }
 
         androidMain.dependencies {
@@ -73,7 +44,6 @@ kotlin {
 
             implementation(libs.amplitude.analytics)
             implementation(libs.amplitude.session.replay)
-
         }
 
         iosMain.dependencies {

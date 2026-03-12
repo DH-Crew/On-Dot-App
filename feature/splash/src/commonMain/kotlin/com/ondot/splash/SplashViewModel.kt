@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val tokenProvider: TokenProvider,
-    private val authRepository: AuthRepository
-): BaseViewModel<SplashUiState>(SplashUiState()) {
+    private val authRepository: AuthRepository,
+) : BaseViewModel<SplashUiState>(SplashUiState()) {
     private val logger = Logger.withTag("SplashViewModel")
 
     init {

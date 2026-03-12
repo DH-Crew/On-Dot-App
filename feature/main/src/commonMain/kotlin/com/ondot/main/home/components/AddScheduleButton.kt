@@ -35,7 +35,7 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.QUICK_ADD
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.ScheduleMenuType
 import ondot.core.design_system.generated.resources.Res
@@ -50,35 +50,38 @@ fun AddScheduleButton(
     interactionSource: MutableInteractionSource,
     onToggle: () -> Unit,
     onQuickAdd: () -> Unit,
-    onGeneralAdd: () -> Unit
+    onGeneralAdd: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         if (isExpanded) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Gray900.copy(alpha = 0.8f))
-                    .clickable(
-                        indication = null,
-                        interactionSource = interactionSource,
-                        onClick = { onToggle() }
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(Gray900.copy(alpha = 0.8f))
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = { onToggle() },
+                        ),
             )
         }
 
         Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 20.dp, end = 22.dp),
-            horizontalAlignment = Alignment.End
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 20.dp, end = 22.dp),
+            horizontalAlignment = Alignment.End,
         ) {
             AnimatedVisibility(
                 visible = isExpanded,
                 enter = fadeIn(),
-                exit = fadeOut()
+                exit = fadeOut(),
             ) {
                 AddScheduleMenu(
                     onQuickAdd = {
@@ -88,7 +91,7 @@ fun AddScheduleButton(
                     onGeneralAdd = {
                         onToggle()
                         onGeneralAdd()
-                    }
+                    },
                 )
             }
 
@@ -96,7 +99,7 @@ fun AddScheduleButton(
 
             AddScheduleFloatingButton(
                 isExpanded = isExpanded,
-                onToggle = onToggle
+                onToggle = onToggle,
             )
         }
     }
@@ -105,14 +108,15 @@ fun AddScheduleButton(
 @Composable
 private fun AddScheduleMenu(
     onQuickAdd: () -> Unit,
-    onGeneralAdd: () -> Unit
+    onGeneralAdd: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .background(Gray600, RoundedCornerShape(8.dp))
-            .padding(8.dp),
+        modifier =
+            Modifier
+                .background(Gray600, RoundedCornerShape(8.dp))
+                .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
 //        AddScheduleMenuItem(type = ScheduleMenuType.Quick, onClick = onQuickAdd)
         AddScheduleMenuItem(type = ScheduleMenuType.General, onClick = onGeneralAdd)
@@ -122,35 +126,38 @@ private fun AddScheduleMenu(
 @Composable
 private fun AddScheduleMenuItem(
     type: ScheduleMenuType,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    val resourceId = when(type) {
-        ScheduleMenuType.Quick -> Res.drawable.ic_quick
-        ScheduleMenuType.General -> Res.drawable.ic_clock_white
-    }
+    val resourceId =
+        when (type) {
+            ScheduleMenuType.Quick -> Res.drawable.ic_quick
+            ScheduleMenuType.General -> Res.drawable.ic_clock_white
+        }
 
     Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
-            .padding(start = 8.dp, end = 19.dp, top = 7.dp, bottom = 7.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onClick() }
+                .padding(start = 8.dp, end = 19.dp, top = 7.dp, bottom = 7.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(resourceId),
             contentDescription = null,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
 
         Spacer(modifier = Modifier.width(4.dp))
 
         OnDotText(
-            text = when(type) {
-                ScheduleMenuType.Quick -> QUICK_ADD
-                ScheduleMenuType.General -> GENERAL_ADD
-            },
+            text =
+                when (type) {
+                    ScheduleMenuType.Quick -> QUICK_ADD
+                    ScheduleMenuType.General -> GENERAL_ADD
+                },
             style = OnDotTextStyle.BodyLargeR1,
-            color = Gray0
+            color = Gray0,
         )
     }
 }
@@ -158,33 +165,34 @@ private fun AddScheduleMenuItem(
 @Composable
 fun AddScheduleFloatingButton(
     isExpanded: Boolean,
-    onToggle: () -> Unit
+    onToggle: () -> Unit,
 ) {
     val transition = updateTransition(isExpanded, label = "fabTransition")
     val width by transition.animateDp(
         transitionSpec = { tween(150) },
-        label = "fabWidth"
+        label = "fabWidth",
     ) { expanded ->
         if (expanded) 40.dp else 106.dp
     }
 
     Box(
-        modifier = Modifier
-            .width(width)
-            .height(40.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Green500)
-            .clickable { onToggle() },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .width(width)
+                .height(40.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(Green500)
+                .clickable { onToggle() },
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_plus),
                 contentDescription = null,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(20.dp),
             )
 
             if (!isExpanded) {
@@ -192,7 +200,7 @@ fun AddScheduleFloatingButton(
                 OnDotText(
                     text = ADD_SCHEDULE,
                     style = OnDotTextStyle.BodyLargeSB,
-                    color = Gray800
+                    color = Gray800,
                 )
             }
         }

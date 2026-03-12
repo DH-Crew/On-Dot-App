@@ -5,14 +5,13 @@ import com.ondot.domain.model.auth.AuthResult
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.network.base.Mapper
 
-object AuthResponseMapper: Mapper<AuthResponse, AuthResult> {
-    override fun responseToModel(response: AuthResponse?): AuthResult {
-        return response?.let {
+object AuthResponseMapper : Mapper<AuthResponse, AuthResult> {
+    override fun responseToModel(response: AuthResponse?): AuthResult =
+        response?.let {
             AuthResult(
                 memberId = it.memberId,
                 tokens = AuthTokens(it.accessToken, it.refreshToken),
-                isNewMember = it.isNewMember
+                isNewMember = it.isNewMember,
             )
         } ?: AuthResult()
-    }
 }

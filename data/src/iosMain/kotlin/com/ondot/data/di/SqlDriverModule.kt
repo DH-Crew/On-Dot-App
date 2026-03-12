@@ -6,10 +6,9 @@ import com.dh.ondot.data.local.db.OndotDatabase
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun provideDriverModule(): Module {
-    return module {
+actual fun provideDriverModule(): Module =
+    module {
         single<SqlDriver> {
             NativeSqliteDriver(OndotDatabase.Schema, "ondot.db")
         }
     }
-}

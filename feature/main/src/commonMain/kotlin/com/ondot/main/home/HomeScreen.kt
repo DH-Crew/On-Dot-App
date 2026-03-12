@@ -31,16 +31,14 @@ import com.dh.ondot.presentation.ui.theme.MAP_PROVIDER_TITLE
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.ondot.design_system.components.MapProviderItem
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.MapProviderItem
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.main.home.components.AddScheduleButton
 import com.ondot.main.home.components.EmptyScheduleContent
 import com.ondot.main.home.components.RemainingTimeText
 import com.ondot.main.home.components.ScheduleList
-import com.ondot.main.home.components.UserBadgeBanner
-import com.ondot.util.AnalyticsLogger
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_notification_banner
 import org.jetbrains.compose.resources.painterResource
@@ -51,7 +49,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     navigateToGeneralSchedule: () -> Unit,
     navigateToEditSchedule: (Long) -> Unit,
-    navigateToNotificationScreen: () -> Unit
+    navigateToNotificationScreen: () -> Unit,
+    navigateToEverytimeScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
@@ -69,10 +68,10 @@ fun HomeScreen(
             viewModel.setMapProvider(it)
         },
         onLongClick = viewModel::openDirections,
-        onBannerClick = navigateToNotificationScreen,
+        onBannerClick = navigateToEverytimeScreen,
         onDelete = { viewModel.deleteSchedule(it) },
         navigateToGeneralSchedule = navigateToGeneralSchedule,
-        navigateToEditSchedule = navigateToEditSchedule
+        navigateToEditSchedule = navigateToEditSchedule,
     )
 }
 
@@ -87,17 +86,19 @@ fun HomeContent(
     onBannerClick: () -> Unit,
     onDelete: (Long) -> Unit,
     navigateToGeneralSchedule: () -> Unit,
-    navigateToEditSchedule: (Long) -> Unit
+    navigateToEditSchedule: (Long) -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray900)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Gray900),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 22.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 22.dp),
         ) {
             Spacer(modifier = Modifier.height(23.dp))
 
@@ -105,7 +106,7 @@ fun HomeContent(
                 RemainingTimeText(
                     day = uiState.remainingTime.first,
                     hour = uiState.remainingTime.second,
-                    minute = uiState.remainingTime.third
+                    minute = uiState.remainingTime.third,
                 )
             } else {
                 OnDotText(text = CREATE_SCHEDULE_GUIDE, style = OnDotTextStyle.TitleMediumSB, color = Gray0)
@@ -117,21 +118,23 @@ fun HomeContent(
                 Image(
                     painter = painterResource(Res.drawable.ic_notification_banner),
                     contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(349f/100f)
-                        .clickable(
-                            indication = null,
-                            interactionSource = interactionSource,
-                            onClick = onBannerClick
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(349f / 100f)
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource,
+                                onClick = onBannerClick,
+                            ),
                 )
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    contentAlignment = Alignment.Center,
                 ) {
                     EmptyScheduleContent()
                 }
@@ -144,7 +147,7 @@ fun HomeContent(
                     onClickSchedule = navigateToEditSchedule,
                     onBannerClick = onBannerClick,
                     onLongClick = onLongClick,
-                    onDelete = onDelete
+                    onDelete = onDelete,
                 )
             }
         }
@@ -154,14 +157,14 @@ fun HomeContent(
             interactionSource = interactionSource,
             onToggle = onToggle,
             onQuickAdd = { /*TODO*/ },
-            onGeneralAdd = navigateToGeneralSchedule
+            onGeneralAdd = navigateToGeneralSchedule,
         )
 
         if (uiState.needsChooseProvider) {
             MapProviderDialog(
                 mapProviders = uiState.mapProviders,
                 interactionSource = interactionSource,
-                onConfirmProvider = onConfirmProvider
+                onConfirmProvider = onConfirmProvider,
             )
         }
     }
@@ -171,29 +174,31 @@ fun HomeContent(
 private fun MapProviderDialog(
     mapProviders: List<MapProvider>,
     interactionSource: MutableInteractionSource,
-    onConfirmProvider: (MapProvider) -> Unit
+    onConfirmProvider: (MapProvider) -> Unit,
 ) {
     val selectedIndex by remember { mutableStateOf<Int?>(null) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray900.copy(alpha = 0.8f))
-            .padding(horizontal = 52.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Gray900.copy(alpha = 0.8f))
+                .padding(horizontal = 52.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Gray600, RoundedCornerShape(12.dp))
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(Gray600, RoundedCornerShape(12.dp))
+                    .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             OnDotText(
                 text = MAP_PROVIDER_TITLE,
                 style = OnDotTextStyle.TitleSmallM,
                 color = Gray0,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -201,7 +206,7 @@ private fun MapProviderDialog(
             OnDotText(
                 text = MAP_PROVIDER_CONTENT,
                 style = OnDotTextStyle.BodyMediumR,
-                color = Gray0
+                color = Gray0,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -209,7 +214,7 @@ private fun MapProviderDialog(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 mapProviders.forEachIndexed { index, provider ->
                     MapProviderItem(
@@ -219,11 +224,10 @@ private fun MapProviderDialog(
                         interactionSource = interactionSource,
                         onClick = {
                             onConfirmProvider(provider)
-                        }
+                        },
                     )
                 }
             }
         }
     }
 }
-

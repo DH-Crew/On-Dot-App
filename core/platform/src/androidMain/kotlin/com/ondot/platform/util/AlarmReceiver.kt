@@ -10,7 +10,10 @@ import com.ondot.domain.model.enums.AlarmType
 class AlarmReceiver : BroadcastReceiver() {
     private val logger = Logger.withTag("AlarmReceiver")
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(
+        context: Context?,
+        intent: Intent?,
+    ) {
         // context, intent 가 null 인 경우 예외 처리
         if (context == null || intent == null) {
             logger.e { "AlarmReceiver onReceive: context 또는 intent 가 null 입니다." }
@@ -19,8 +22,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // Intent 에서 알람 정보 파싱
         val scheduleId = intent.getLongExtra("scheduleId", -1L)
-        val alarmId  = intent.getLongExtra("alarmId", -1L)
-        val type     = intent.getStringExtra("type") ?: AlarmType.Departure.name
+        val alarmId = intent.getLongExtra("alarmId", -1L)
+        val type = intent.getStringExtra("type") ?: AlarmType.Departure.name
 
         // 알람 정보가 없는 경우 예외 처리
         if (alarmId == -1L) {
@@ -29,12 +32,13 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         // AlarmService 실행해서 사운드 재생 + 화면 전환
-        val svcIntent = Intent(context, AlarmService::class.java).apply {
-            action = AlarmService.ACTION_START
-            putExtra("scheduleId", scheduleId)
-            putExtra("alarmId", alarmId)
-            putExtra("type", type)
-        }
+        val svcIntent =
+            Intent(context, AlarmService::class.java).apply {
+                action = AlarmService.ACTION_START
+                putExtra("scheduleId", scheduleId)
+                putExtra("alarmId", alarmId)
+                putExtra("type", type)
+            }
 
         logger.d { "AlarmReceiver onReceive: $alarmId, $type" }
 

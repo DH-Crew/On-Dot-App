@@ -3,6 +3,7 @@ package com.ondot.build_logic.convention
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -15,6 +16,7 @@ class KmpDomainConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
         pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
+        apply<KtlintConventionPlugin>()
 
         val libs = project.extensions
             .getByType<VersionCatalogsExtension>()
@@ -31,8 +33,11 @@ class KmpDomainConventionPlugin: Plugin<Project> {
             sourceSets.apply {
                 commonMain {
                     dependencies {
+                        implementation(project(":core:result"))
+
                         implementation(libs.findLibrary("kotlinx-serialization-core").get())
                         implementation(libs.findLibrary("kotlinx-coroutines-core").get())
+                        implementation(libs.findLibrary("kotlinx-datetime").get())
                     }
                 }
             }

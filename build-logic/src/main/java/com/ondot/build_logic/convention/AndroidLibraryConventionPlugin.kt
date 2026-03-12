@@ -5,11 +5,13 @@ import com.ondot.build_logic.convention.internal.computeNamespace
 import com.ondot.build_logic.convention.internal.configureAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.apply("com.android.library")
+        apply<KtlintConventionPlugin>()
 
         extensions.getByType<LibraryExtension>().apply {
             namespace = computeNamespace()

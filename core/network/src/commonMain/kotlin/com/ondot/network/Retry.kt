@@ -2,13 +2,12 @@ package com.ondot.network
 
 import kotlinx.coroutines.delay
 
-
 suspend fun <T> retryResult(
     retries: Int = 0,
     initialDelayMs: Long = 300,
     maxDelayMs: Long = 5_000,
     factor: Double = 2.0,
-    block: suspend () -> Result<T>
+    block: suspend () -> Result<T>,
 ): Result<T> {
     var attempt = 0
     var delayMs = initialDelayMs

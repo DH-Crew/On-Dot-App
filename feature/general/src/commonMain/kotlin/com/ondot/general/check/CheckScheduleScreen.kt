@@ -52,16 +52,16 @@ import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.WORD_CONFIRM
 import com.dh.ondot.presentation.ui.theme.WORD_FINE
-import com.ondot.design_system.components.AlarmInfoItem
-import com.ondot.design_system.components.DateTimeInfoBar
-import com.ondot.design_system.components.OnDotBottomSheet
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.OnDotCheckBox
-import com.ondot.design_system.components.OnDotText
-import com.ondot.design_system.components.RoundedTextField
-import com.ondot.design_system.components.RouteInputSection
-import com.ondot.design_system.components.TopBar
-import com.ondot.design_system.getPlatform
+import com.ondot.designsystem.components.AlarmInfoItem
+import com.ondot.designsystem.components.DateTimeInfoBar
+import com.ondot.designsystem.components.OnDotBottomSheet
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.OnDotCheckBox
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.RoundedTextField
+import com.ondot.designsystem.components.RouteInputSection
+import com.ondot.designsystem.components.TopBar
+import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
@@ -69,7 +69,6 @@ import com.ondot.domain.model.enums.TopBarType
 import com.ondot.general.GeneralScheduleEvent
 import com.ondot.general.GeneralScheduleUiState
 import com.ondot.general.GeneralScheduleViewModel
-import com.ondot.util.AnalyticsLogger
 import com.ondot.util.DateTimeFormatter.toIsoDateString
 import com.ondot.util.platform
 import ondot.core.design_system.generated.resources.Res
@@ -80,7 +79,7 @@ import org.jetbrains.compose.resources.painterResource
 fun CheckScheduleScreen(
     viewModel: GeneralScheduleViewModel,
     popScreen: () -> Unit,
-    navigateToMain: () -> Unit
+    navigateToMain: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequest = remember { FocusRequester() }
@@ -95,19 +94,23 @@ fun CheckScheduleScreen(
 
     CheckScheduleContent(
         uiState = uiState,
+        departurePlaceInput = uiState.placePickerState.departurePlaceInput,
+        arrivalPlaceInput = uiState.placePickerState.arrivalPlaceInput,
         focusRequester = focusRequest,
         onClickBack = popScreen,
         onCreateSchedule = viewModel::createSchedule,
         onValueChanged = viewModel::updateScheduleTitle,
         onToggleSwitch = viewModel::updatePreparationAlarmEnabled,
         onShowBottomSheet = { viewModel.updateBottomSheetVisible(true) },
-        onDismiss = { viewModel.updateBottomSheetVisible(false) }
+        onDismiss = { viewModel.updateBottomSheetVisible(false) },
     )
 }
 
 @Composable
 fun CheckScheduleContent(
     uiState: GeneralScheduleUiState,
+    departurePlaceInput: String,
+    arrivalPlaceInput: String,
     focusRequester: FocusRequester,
     onClickBack: () -> Unit,
     onCreateSchedule: (Boolean, String) -> Unit,
@@ -118,35 +121,41 @@ fun CheckScheduleContent(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Gray900)
-                .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Gray900)
+                    .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(GradientGreenTop)
-                    .padding(horizontal = 22.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(GradientGreenTop)
+                        .padding(horizontal = 22.dp),
             ) {
                 TopBarSection(
                     scheduleTitle = uiState.scheduleTitle,
                     focusRequester = focusRequester,
                     onClickBack = onClickBack,
-                    onValueChanged = onValueChanged
+                    onValueChanged = onValueChanged,
                 )
 
-                if (uiState.selectedDate != null && uiState.selectedTime != null) {
+                if (uiState.selectedTime != null) {
                     Spacer(modifier = Modifier.height(24.dp))
-                    DateTimeInfoBar(date = uiState.selectedDate, time = uiState.selectedTime)
+                    DateTimeInfoBar(
+                        repeatDays = uiState.activeWeekDays.toList(),
+                        date = uiState.selectedDate,
+                        time = uiState.selectedTime,
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 RouteInputSection(
-                    departurePlaceInput = uiState.departurePlaceInput,
-                    arrivalPlaceInput = uiState.arrivalPlaceInput,
-                    readOnly = true
+                    departurePlaceInput = departurePlaceInput,
+                    arrivalPlaceInput = arrivalPlaceInput,
+                    readOnly = true,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -155,15 +164,16 @@ fun CheckScheduleContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 22.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 22.dp),
             ) {
                 AlarmInfoItem(
                     info = uiState.preparationAlarm,
                     type = AlarmType.Preparation,
                     scheduleDate = uiState.selectedDate?.toIsoDateString() ?: "",
-                    onToggleSwitch = onToggleSwitch
+                    onToggleSwitch = onToggleSwitch,
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -171,7 +181,7 @@ fun CheckScheduleContent(
                 AlarmInfoItem(
                     info = uiState.departureAlarm,
                     type = AlarmType.Departure,
-                    scheduleDate = uiState.selectedDate?.toIsoDateString() ?: ""
+                    scheduleDate = uiState.selectedDate?.toIsoDateString() ?: "",
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -179,7 +189,7 @@ fun CheckScheduleContent(
                 OnDotButton(
                     buttonText = CREATE_SCHEDULE,
                     buttonType = ButtonType.Gradient,
-                    onClick = onShowBottomSheet
+                    onClick = onShowBottomSheet,
                 )
             }
         }
@@ -189,12 +199,12 @@ fun CheckScheduleContent(
                 visible = uiState.showBottomSheet,
                 modifier = Modifier.fillMaxSize(),
                 enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
-                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut()
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut(),
             ) {
                 OnDotBottomSheet(
                     onDismiss = onDismiss,
                     content = { BottomSheetContent(onCreateSchedule = onCreateSchedule) },
-                    scrollable = platform() != ANDROID
+                    scrollable = platform() != ANDROID,
                 )
             }
         }
@@ -202,32 +212,31 @@ fun CheckScheduleContent(
 }
 
 @Composable
-private fun BottomSheetContent(
-    onCreateSchedule: (Boolean, String) -> Unit
-) {
+private fun BottomSheetContent(onCreateSchedule: (Boolean, String) -> Unit) {
     var input by remember { mutableStateOf("") }
     var isMedicineChecked by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.Start
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        horizontalAlignment = Alignment.Start,
     ) {
         OnDotText(
             text = GENERAL_SCHEDULE_BOTTOM_SHEET_TITLE,
             style = OnDotTextStyle.TitleSmallSB,
-            color = Gray0
+            color = Gray0,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             OnDotCheckBox(
                 isChecked = isMedicineChecked,
-                onCheckedChange = { isMedicineChecked = !isMedicineChecked }
+                onCheckedChange = { isMedicineChecked = !isMedicineChecked },
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -236,7 +245,7 @@ private fun BottomSheetContent(
                 text = GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE,
                 style = OnDotTextStyle.BodyLargeR1,
                 color = Gray200,
-                modifier = Modifier.clickable { isMedicineChecked = !isMedicineChecked }
+                modifier = Modifier.clickable { isMedicineChecked = !isMedicineChecked },
             )
         }
 
@@ -250,27 +259,29 @@ private fun BottomSheetContent(
             maxLines = 10,
             singleLine = false,
             backgroundColor = Gray600,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
-            contentAlignment = Alignment.TopStart
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+            keyboardOptions =
+                KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done,
+                ),
+            contentAlignment = Alignment.TopStart,
         )
 
         Spacer(modifier = Modifier.height(26.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             OnDotButton(
                 buttonText = WORD_FINE,
                 buttonType = ButtonType.Gray400,
                 buttonHeight = 48.dp,
                 modifier = Modifier.weight(1f),
-                onClick = { onCreateSchedule(false, "") }
+                onClick = { onCreateSchedule(false, "") },
             )
 
             Spacer(modifier = Modifier.width(11.dp))
@@ -280,7 +291,7 @@ private fun BottomSheetContent(
                 buttonType = ButtonType.Green500,
                 buttonHeight = 48.dp,
                 modifier = Modifier.weight(1f),
-                onClick = { onCreateSchedule(isMedicineChecked, input) }
+                onClick = { onCreateSchedule(isMedicineChecked, input) },
             )
         }
     }
@@ -291,7 +302,7 @@ private fun TopBarSection(
     scheduleTitle: String,
     focusRequester: FocusRequester,
     onClickBack: () -> Unit,
-    onValueChanged: (String) -> Unit
+    onValueChanged: (String) -> Unit,
 ) {
     var input by remember { mutableStateOf(scheduleTitle) }
 
@@ -302,7 +313,7 @@ private fun TopBarSection(
         content = {
             Row(
                 modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 BasicTextField(
                     value = input,
@@ -312,33 +323,37 @@ private fun TopBarSection(
                     singleLine = true,
                     textStyle = OnDotTypo().titleSmallM.copy(color = Gray800),
                     cursorBrush = SolidColor(Gray0),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onValueChanged(input)
-                            focusRequester.freeFocus()
-                        }
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged {
-                            if (!it.isFocused) onValueChanged(input)
-                        }
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done,
+                        ),
+                    keyboardActions =
+                        KeyboardActions(
+                            onDone = {
+                                onValueChanged(input)
+                                focusRequester.freeFocus()
+                            },
+                        ),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .focusRequester(focusRequester)
+                            .onFocusChanged {
+                                if (!it.isFocused) onValueChanged(input)
+                            },
                 )
 
                 Image(
                     painter = painterResource(Res.drawable.ic_pencil_white),
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { focusRequester.requestFocus() },
-                    colorFilter = ColorFilter.tint(Gray800)
+                    modifier =
+                        Modifier
+                            .size(20.dp)
+                            .clickable { focusRequester.requestFocus() },
+                    colorFilter = ColorFilter.tint(Gray800),
                 )
             }
-        }
+        },
     )
 }

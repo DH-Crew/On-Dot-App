@@ -13,13 +13,15 @@ import com.ondot.domain.service.AlarmScheduler
 import com.ondot.util.DateTimeFormatter
 
 class AndroidAlarmScheduler(
-    private val context: Context
+    private val context: Context,
 ) : AlarmScheduler {
-
     private val logger = Logger.withTag("AndroidAlarmScheduler")
 
     @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
-    override fun scheduleAlarm(info: AlarmRingInfo, mapProvider: MapProvider) {
+    override fun scheduleAlarm(
+        info: AlarmRingInfo,
+        mapProvider: MapProvider,
+    ) {
         val alarm = info.alarm
 
         // 사용자가 알람을 꺼두었다면 리턴
@@ -41,22 +43,24 @@ class AndroidAlarmScheduler(
 
         // AlarmReceiver(BroadcastReceiver)를 깨우기 위한 Intent
         // putExtra 를 통해 alarmId와 type을 전달
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("scheduleId", info.scheduleId)
-            putExtra("alarmId", alarm.alarmId)
-            putExtra("type", info.alarmType.name)
-        }
+        val intent =
+            Intent(context, AlarmReceiver::class.java).apply {
+                putExtra("scheduleId", info.scheduleId)
+                putExtra("alarmId", alarm.alarmId)
+                putExtra("type", info.alarmType.name)
+            }
 
         // PendingIntent 를 생성
         // 고유한 requestCode 를 사용하면, 여러 알람이 충돌 없이 개별적으로 동작할 수 있음
         // flags: FLAG_UPDATE_CURRENT -> 기존 PendingIntent 가 있으면 새로운 Intent 로 업데이트
         // flags: FLAG_IMMUTABLE -> PendingIntent 를 수정할 수 없도록 설정
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            alarm.alarmId.toInt(), // alarmId를 PendingIntent 의 request code 로 사용
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE // flags
-        )
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                alarm.alarmId.toInt(), // alarmId를 PendingIntent 의 request code 로 사용
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE, // flags
+            )
 
         // AlarmManager 에 알람 예약
         // setExtraAndAllowWhileIdle: Doze 모드에서도 알람이 예약되도록 설정
@@ -66,10 +70,10 @@ class AndroidAlarmScheduler(
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             triggerAtMillis,
-            pendingIntent
+            pendingIntent,
         )
 
-        logger.d { "Alarm scheduled at ${triggerAtMillis}, detail: $alarm" }
+        logger.d { "Alarm scheduled at $triggerAtMillis, detail: $alarm" }
     }
 
     override fun cancelAlarm(alarmId: Long) {
@@ -77,12 +81,13 @@ class AndroidAlarmScheduler(
         // 알람을 취소할 때는 등록할 때와 동일한 Intent 정보와 requestCode(alarmId.toInt())를 전달해서 취소 가능
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            alarmId.toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                alarmId.toInt(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
         alarmManager.cancel(pendingIntent)
     }
 

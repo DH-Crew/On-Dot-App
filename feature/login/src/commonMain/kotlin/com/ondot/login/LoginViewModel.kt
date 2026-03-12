@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val kaKaoSignInProvider: KaKaoSignInProvider,
-    private val analyticsManager: AnalyticsManager
-): BaseViewModel<UiState.Default>(UiState.Default) {
+    private val analyticsManager: AnalyticsManager,
+) : BaseViewModel<UiState.Default>(UiState.Default) {
     private val logger = Logger.withTag("LoginViewModel")
 
     fun performKakaoLogin() {
@@ -36,10 +36,11 @@ class LoginViewModel(
 
     private fun onSuccessKakaoLogin(result: AuthResult) {
         viewModelScope.launch {
-            val tokens = AuthTokens(
-                accessToken = result.tokens.accessToken,
-                refreshToken = result.tokens.refreshToken
-            )
+            val tokens =
+                AuthTokens(
+                    accessToken = result.tokens.accessToken,
+                    refreshToken = result.tokens.refreshToken,
+                )
 
             saveToken(tokens)
 
@@ -76,16 +77,17 @@ class LoginViewModel(
             onFailure = {
                 viewModelScope.launch { ToastManager.show(message = ERROR_LOGIN, type = ToastType.ERROR) }
                 logger.e { "throwable: ${it.message}" }
-            }
+            },
         )
     }
 
     private fun onSuccessAppleLogin(result: AuthResult) {
         viewModelScope.launch {
-            val tokens = AuthTokens(
-                accessToken = result.tokens.accessToken,
-                refreshToken = result.tokens.refreshToken
-            )
+            val tokens =
+                AuthTokens(
+                    accessToken = result.tokens.accessToken,
+                    refreshToken = result.tokens.refreshToken,
+                )
 
             saveToken(tokens)
 

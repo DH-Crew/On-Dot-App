@@ -30,15 +30,14 @@ import platform.Foundation.localeWithLocaleIdentifier
 import platform.Foundation.numberWithDouble
 import platform.Foundation.timeZoneWithName
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @OptIn(ExperimentalForeignApi::class)
-class IosAlarmScheduler(): AlarmScheduler {
+class IosAlarmScheduler : AlarmScheduler {
     private val logger = Logger.withTag("IOSAlarmScheduler")
     private var isAuthorized: Boolean? = null
     private val authMutex = Mutex()
     private val schedulingScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private val schedulingMutex = Mutex()  // 동시 접근 방지
+    private val schedulingMutex = Mutex() // 동시 접근 방지
 
     private suspend fun ensureAuthorization(): Boolean =
         authMutex.withLock {
@@ -52,7 +51,10 @@ class IosAlarmScheduler(): AlarmScheduler {
             }
         }
 
-    override fun scheduleAlarm(info: AlarmRingInfo, mapProvider: MapProvider) {
+    override fun scheduleAlarm(
+        info: AlarmRingInfo,
+        mapProvider: MapProvider,
+    ) {
         schedulingScope.launch {
             if (!ensureAuthorization()) {
                 logger.e("AlarmKit: authorization denied")
@@ -69,10 +71,11 @@ class IosAlarmScheduler(): AlarmScheduler {
                     return@withLock
                 }
 
-                val title = when (info.alarmType) {
-                    AlarmType.Preparation -> "준비 알람"
-                    AlarmType.Departure -> "출발 알람"
-                }
+                val title =
+                    when (info.alarmType) {
+                        AlarmType.Preparation -> "준비 알람"
+                        AlarmType.Departure -> "출발 알람"
+                    }
 
                 ONDAlarmKit.scheduleCalendarWithId(
                     alarmUUID = alarm.alarmId.toString(),
@@ -88,10 +91,13 @@ class IosAlarmScheduler(): AlarmScheduler {
                     startLng = info.startLng.toNSNumber(),
                     endLat = info.endLat.toNSNumber(),
                     endLng = info.endLng.toNSNumber(),
-                    mapProvider = mapProvider.name.lowercase()
+                    mapProvider = mapProvider.name.lowercase(),
                 ) { uuid, err ->
-                    if (err != null) logger.e("AlarmKit schedule FAIL: $err")
-                    else logger.d("AlarmKit scheduled: $uuid")
+                    if (err != null) {
+                        logger.e("AlarmKit schedule FAIL: $err")
+                    } else {
+                        logger.d("AlarmKit scheduled: $uuid")
+                    }
                 }
             }
         }
@@ -108,21 +114,23 @@ class IosAlarmScheduler(): AlarmScheduler {
 
     private fun isoStringToDateComponents(iso: String): NSDateComponents? {
         val kst = NSTimeZone.timeZoneWithName("Asia/Seoul") ?: NSTimeZone.localTimeZone
-        val fmt = NSDateFormatter().apply {
-            locale = NSLocale.localeWithLocaleIdentifier("en_US_POSIX")
-            timeZone = kst
-            dateFormat = if (iso.contains("Z") || iso.contains("+")) {
-                "yyyy-MM-dd'T'HH:mm:ssZ"
-            } else {
-                "yyyy-MM-dd'T'HH:mm:ss"
+        val fmt =
+            NSDateFormatter().apply {
+                locale = NSLocale.localeWithLocaleIdentifier("en_US_POSIX")
+                timeZone = kst
+                dateFormat =
+                    if (iso.contains("Z") || iso.contains("+")) {
+                        "yyyy-MM-dd'T'HH:mm:ssZ"
+                    } else {
+                        "yyyy-MM-dd'T'HH:mm:ss"
+                    }
             }
-        }
         val date = fmt.dateFromString(iso) ?: return null
         val cal = NSCalendar.currentCalendar
         return cal.components(
             NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay or
-                    NSCalendarUnitHour or NSCalendarUnitMinute,
-            fromDate = date
+                NSCalendarUnitHour or NSCalendarUnitMinute,
+            fromDate = date,
         )
     }
 

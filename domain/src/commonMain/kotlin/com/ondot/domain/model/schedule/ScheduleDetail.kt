@@ -13,5 +13,5 @@ data class ScheduleDetail(
     val departurePlace: AddressInfo = AddressInfo(),
     val arrivalPlace: AddressInfo = AddressInfo(),
     val preparationAlarm: Alarm = Alarm(),
-    val departureAlarm: Alarm = Alarm()
+    val departureAlarm: Alarm = Alarm(),
 )

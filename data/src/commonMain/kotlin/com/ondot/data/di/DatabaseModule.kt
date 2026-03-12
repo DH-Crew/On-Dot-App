@@ -6,15 +6,16 @@ import com.ondot.data.adapter.AlarmDetailAsJsonAdapter
 import com.ondot.data.adapter.IntListAsJsonAdapter
 import org.koin.dsl.module
 
-val databaseModule = module {
-    single<OndotDatabase> {
-        OndotDatabase(
-            get(),
-            Schedule_entity.Adapter(
-                repeatDaysAdapter = IntListAsJsonAdapter,
-                preparationAlarmAdapter = AlarmDetailAsJsonAdapter,
-                departureAlarmAdapter = AlarmDetailAsJsonAdapter,
+val databaseModule =
+    module {
+        single<OndotDatabase> {
+            OndotDatabase(
+                get(),
+                Schedule_entity.Adapter(
+                    repeatDaysAdapter = IntListAsJsonAdapter,
+                    preparationAlarmAdapter = AlarmDetailAsJsonAdapter,
+                    departureAlarmAdapter = AlarmDetailAsJsonAdapter,
+                ),
             )
-        )
+        }
     }
-}

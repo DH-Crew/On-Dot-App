@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PreparationTimeResponse(
     val preparationTime: Int,
-    val updatedAt: String
+    val updatedAt: String,
 )

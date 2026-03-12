@@ -1,5 +1,6 @@
 package com.ondot.domain.model.enums
 
-enum class ScheduleMenuType() {
-    Quick, General
+enum class ScheduleMenuType {
+    Quick,
+    General,
 }

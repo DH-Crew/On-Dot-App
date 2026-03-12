@@ -4,6 +4,7 @@ import com.ondot.build_logic.convention.internal.configureToolchains
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
@@ -22,6 +23,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         pluginManager.apply("org.jetbrains.kotlin.multiplatform")
         pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
+        apply<KtlintConventionPlugin>()
 
         configureToolchains()
 
@@ -31,6 +33,13 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
 
         extensions.configure<KotlinMultiplatformExtension> {
             applyDefaultHierarchyTemplate()
+
+            jvm {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_17)
+                }
+            }
+
             val iosX64T = iosX64()
             val iosArm64T = iosArm64()
             val iosSimArm64T = iosSimulatorArm64()

@@ -1,13 +1,16 @@
 package com.ondot.domain.repository
 
+import com.ondot.domain.model.command.CreateEverytimeScheduleCommand
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
+import com.ondot.domain.model.schedule.EverytimeValidateTimetable
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleAlarm
 import com.ondot.domain.model.schedule.ScheduleDetail
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.model.schedule.SchedulePreparation
+import com.ondot.result.AppResult
 import kotlinx.coroutines.flow.Flow
 
 interface ScheduleRepository {
@@ -15,17 +18,35 @@ interface ScheduleRepository {
      * Remote
      * */
     suspend fun getScheduleList(): Flow<Result<ScheduleList>>
+
     suspend fun getScheduleAlarms(request: ScheduleAlarmRequest): Flow<Result<ScheduleAlarm>>
+
     suspend fun createSchedule(request: CreateScheduleRequest): Flow<Result<Unit>>
+
     suspend fun getScheduleDetail(scheduleId: Long): Flow<Result<ScheduleDetail>>
+
     suspend fun deleteSchedule(scheduleId: Long): Flow<Result<Unit>>
-    suspend fun editSchedule(scheduleId: Long, request: ScheduleDetail): Flow<Result<Unit>>
-    suspend fun toggleAlarm(scheduleId: Long, request: ToggleAlarmRequest): Flow<Result<Unit>>
+
+    suspend fun editSchedule(
+        scheduleId: Long,
+        request: ScheduleDetail,
+    ): Flow<Result<Unit>>
+
+    suspend fun toggleAlarm(
+        scheduleId: Long,
+        request: ToggleAlarmRequest,
+    ): Flow<Result<Unit>>
+
     suspend fun getSchedulePreparationInfo(scheduleId: Long): Flow<Result<SchedulePreparation>>
+
+    suspend fun validateEverytimeTimetable(url: String): AppResult<EverytimeValidateTimetable>
+
+    suspend fun createEverytimeSchedule(command: CreateEverytimeScheduleCommand): AppResult<Unit>
 
     /**
      * Local
      * */
     suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?>
+
     suspend fun upsertLocalSchedule(schedule: Schedule)
 }

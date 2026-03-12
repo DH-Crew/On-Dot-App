@@ -13,37 +13,45 @@ import kotlinx.coroutines.flow.flow
 
 class AuthRepositoryImpl(
     networkClient: NetworkClient,
-    private val tokenProvider: TokenProvider
-): AuthRepository, BaseRepository(networkClient) {
-    override suspend fun login(provider: String, accessToken: String): Flow<Result<AuthResult>> = flow {
-        emit(
-            fetchMapped(
-                method = HttpMethod.POST,
-                path = "/auth/login/oauth",
-                query = mapOf(
-                    "provider" to provider,
-                    "access_token" to accessToken
+    private val tokenProvider: TokenProvider,
+) : BaseRepository(networkClient),
+    AuthRepository {
+    override suspend fun login(
+        provider: String,
+        accessToken: String,
+    ): Flow<Result<AuthResult>> =
+        flow {
+            emit(
+                fetchMapped(
+                    method = HttpMethod.POST,
+                    path = "/auth/login/oauth",
+                    query =
+                        mapOf(
+                            "provider" to provider,
+                            "access_token" to accessToken,
+                        ),
+                    mapper = AuthResponseMapper,
                 ),
-                mapper = AuthResponseMapper
             )
-        )
-    }
+        }
 
-    override suspend fun logout(): Flow<Result<Unit>> = flow {
-        emit(fetch(HttpMethod.POST, "/auth/logout"))
-    }
+    override suspend fun logout(): Flow<Result<Unit>> =
+        flow {
+            emit(fetch(HttpMethod.POST, "/auth/logout"))
+        }
 
     override suspend fun saveToken(token: AuthTokens) {
         tokenProvider.saveToken(token)
     }
 
-    override suspend fun reissueToken(): Flow<Result<AuthTokens>> = flow {
-        emit(
-            fetch(
-                method = HttpMethod.POST,
-                path = "/auth/reissue",
-                isReissue = true
+    override suspend fun reissueToken(): Flow<Result<AuthTokens>> =
+        flow {
+            emit(
+                fetch(
+                    method = HttpMethod.POST,
+                    path = "/auth/reissue",
+                    isReissue = true,
+                ),
             )
-        )
-    }
+        }
 }

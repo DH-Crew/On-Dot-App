@@ -8,7 +8,7 @@ import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
 import com.ondot.onboarding.OnboardingScreen
 
-object OnboardingNavGraph: NavGraphContributor {
+object OnboardingNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.OnboardingGraph
     override val startDestination: String
@@ -17,7 +17,7 @@ object OnboardingNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             startDestination = startDestination,
-            route = graphRoute.route
+            route = graphRoute.route,
         ) {
             composable(NavRoutes.Onboarding.route) {
                 OnboardingScreen(
@@ -26,7 +26,7 @@ object OnboardingNavGraph: NavGraphContributor {
                             popUpTo(NavRoutes.Onboarding.route) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

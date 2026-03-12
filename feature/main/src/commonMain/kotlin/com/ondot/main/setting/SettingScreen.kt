@@ -44,8 +44,8 @@ import com.dh.ondot.presentation.ui.theme.WORD_NO
 import com.dh.ondot.presentation.ui.theme.WORD_SETTING
 import com.dh.ondot.presentation.ui.theme.WORD_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.WORD_YES
-import com.ondot.design_system.components.OnDotDialog
-import com.ondot.design_system.components.OnDotText
+import com.ondot.designsystem.components.OnDotDialog
+import com.ondot.designsystem.components.OnDotText
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_arrow_right_gray400
@@ -60,14 +60,14 @@ fun SettingScreen(
     navigateToHomeAddressSettingScreen: () -> Unit,
     navigateToNavMapSettingScreen: () -> Unit,
     navigateToPreparationTimeEditScreen: () -> Unit,
-    viewModel: SettingViewModel = koinViewModel()
+    viewModel: SettingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect {
-            when(it) {
+            when (it) {
                 is SettingEvent.NavigateToLoginScreen -> navigateToLoginScreen()
             }
         }
@@ -82,8 +82,12 @@ fun SettingScreen(
         onEditPreparationTimeClick = navigateToPreparationTimeEditScreen,
         onWithdrawClick = navigateToDeleteAccountScreen,
         onServiceTermsClick = navigateToServiceTermsScreen,
-        onFeedbackClick = { viewModel.openUrl("https://docs.google.com/forms/d/1WLk_dOumaLz1HcvWjSPTbEUWsq3ZKHrzLY25DK9CSYE/edit?usp=forms_home&ouid=105325835482674991919&ths=true") },
-        onLogout = viewModel::logout
+        onFeedbackClick = {
+            viewModel.openUrl(
+                "https://docs.google.com/forms/d/1WLk_dOumaLz1HcvWjSPTbEUWsq3ZKHrzLY25DK9CSYE/edit?usp=forms_home&ouid=105325835482674991919&ths=true",
+            )
+        },
+        onLogout = viewModel::logout,
     )
 }
 
@@ -98,54 +102,58 @@ fun SettingContent(
     onWithdrawClick: () -> Unit = {},
     onServiceTermsClick: () -> Unit = {},
     onFeedbackClick: () -> Unit = {},
-    onLogout: () -> Unit = {}
+    onLogout: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .background(Gray900)
-                .padding(horizontal = 22.dp)
-                .padding(top = 24.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .background(Gray900)
+                    .padding(horizontal = 22.dp)
+                    .padding(top = 24.dp),
         ) {
             OnDotText(text = WORD_SETTING, style = OnDotTextStyle.TitleMediumSB, color = Gray0)
 
             Spacer(modifier = Modifier.height(28.dp))
 
-        SettingSection(
-            header = WORD_GENERAL,
-            sections = listOf(
-                Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
-                Pair(SETTING_NAV_MAP, onEditNavMapClick),
-                Pair(SETTING_PREPARE_TIME, onEditPreparationTimeClick)
-            ),
-            interactionSource = interactionSource
-        )
+            SettingSection(
+                header = WORD_GENERAL,
+                sections =
+                    listOf(
+                        Pair(SETTING_HOME_ADDRESS, onEditAddressClick),
+                        Pair(SETTING_NAV_MAP, onEditNavMapClick),
+                        Pair(SETTING_PREPARE_TIME, onEditPreparationTimeClick),
+                    ),
+                interactionSource = interactionSource,
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             SettingSection(
                 header = WORD_HELP,
-                sections = listOf(
-                    Pair(SETTING_FEEDBACK, onFeedbackClick),
-                    Pair(SETTING_SERVICE_POLICY, onServiceTermsClick)
-                ),
-                interactionSource = interactionSource
+                sections =
+                    listOf(
+                        Pair(SETTING_FEEDBACK, onFeedbackClick),
+                        Pair(SETTING_SERVICE_POLICY, onServiceTermsClick),
+                    ),
+                interactionSource = interactionSource,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             SettingSection(
                 header = WORD_ACCOUNT,
-                sections = listOf(
-                    Pair(WORD_WITHDRAW, onWithdrawClick),
-                    Pair(WORD_LOGOUT, onToggleLogoutDialog)
-                ),
+                sections =
+                    listOf(
+                        Pair(WORD_WITHDRAW, onWithdrawClick),
+                        Pair(WORD_LOGOUT, onToggleLogoutDialog),
+                    ),
                 interactionSource = interactionSource,
             )
         }
@@ -161,7 +169,7 @@ fun SettingContent(
                 onPositiveClick = {
                     onLogout()
                     onToggleLogoutDialog()
-                }
+                },
             )
         }
     }
@@ -174,11 +182,12 @@ fun SettingSection(
     interactionSource: MutableInteractionSource,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Gray700, RoundedCornerShape(12.dp))
-            .padding(vertical = 16.dp),
-        horizontalAlignment = Alignment.Start
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(Gray700, RoundedCornerShape(12.dp))
+                .padding(vertical = 16.dp),
+        horizontalAlignment = Alignment.Start,
     ) {
         OnDotText(text = header, style = OnDotTextStyle.BodyMediumM, color = Gray200, modifier = Modifier.padding(start = 20.dp))
 
@@ -190,14 +199,14 @@ fun SettingSection(
 
         sections.forEachIndexed { index, section ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        indication = null,
-                        interactionSource = interactionSource,
-                        onClick = { section.second.invoke() }
-                    )
-                    .padding(horizontal = 20.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource,
+                            onClick = { section.second.invoke() },
+                        ).padding(horizontal = 20.dp),
             ) {
                 OnDotText(text = section.first, style = OnDotTextStyle.BodyLargeR1, color = Gray0)
 
@@ -207,8 +216,9 @@ fun SettingSection(
                     Image(
                         painter = painterResource(Res.drawable.ic_arrow_right_gray400),
                         contentDescription = null,
-                        modifier = Modifier
-                            .size(20.dp)
+                        modifier =
+                            Modifier
+                                .size(20.dp),
                     )
                 }
             }

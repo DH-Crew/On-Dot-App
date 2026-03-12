@@ -5,20 +5,23 @@ import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.service.AlarmScheduler
 
-class FakeAlarmScheduler: AlarmScheduler {
+class FakeAlarmScheduler : AlarmScheduler {
     private val logger = Logger.withTag("FakeAlarmScheduler")
     val scheduled = mutableListOf<Pair<AlarmRingInfo, MapProvider>>()
     val cancelledIds = mutableListOf<Long>()
 
     override fun scheduleAlarm(
         info: AlarmRingInfo,
-        mapProvider: MapProvider
+        mapProvider: MapProvider,
     ) {
-        logger.e { "scheduleAlarm: $info" }
-        scheduled += info to mapProvider
+        if (!scheduled.any { it.first.alarm.alarmId == info.alarm.alarmId }) {
+            logger.e { "scheduleAlarm: $info" }
+            scheduled += info to mapProvider
+        }
     }
 
     override fun cancelAlarm(alarmId: Long) {
+        scheduled.removeAll { it.first.alarm.alarmId == alarmId }
         cancelledIds += alarmId
     }
 

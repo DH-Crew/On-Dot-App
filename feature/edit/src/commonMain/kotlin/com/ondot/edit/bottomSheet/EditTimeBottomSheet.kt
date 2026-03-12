@@ -20,14 +20,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
-import com.ondot.design_system.components.Calendar
-import com.ondot.design_system.components.DateSectionHeader
-import com.ondot.design_system.components.OnDotBottomSheet
-import com.ondot.design_system.components.OnDotButton
-import com.ondot.design_system.components.TimePicker
-import com.ondot.design_system.components.TimeSectionHeader
+import com.ondot.designsystem.components.Calendar
+import com.ondot.designsystem.components.DateSectionHeader
+import com.ondot.designsystem.components.OnDotBottomSheet
+import com.ondot.designsystem.components.OnDotButton
+import com.ondot.designsystem.components.TimePicker
+import com.ondot.designsystem.components.TimeSectionHeader
 import com.ondot.domain.model.enums.ButtonType
-import com.ondot.util.AnalyticsLogger
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -69,8 +68,9 @@ fun EditTimeBottomSheet(
             contentPaddingBottom = 16.dp,
             content = {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
                 ) {
                     if (isAlarm) {
                         DateSectionHeader(
@@ -79,7 +79,7 @@ fun EditTimeBottomSheet(
                             isRepeat = false,
                             activeWeekDays = emptySet(),
                             interactionSource = interactionSource,
-                            onToggleCalendar = viewModel::onToggleCalendar
+                            onToggleCalendar = viewModel::onToggleCalendar,
                         )
 
                         if (uiState.isActiveCalendar) {
@@ -96,7 +96,7 @@ fun EditTimeBottomSheet(
                                 activeWeekDays = uiState.repeatDays,
                                 onPrevMonth = viewModel::onPrevMonth,
                                 onNextMonth = viewModel::onNextMonth,
-                                onDateSelected = viewModel::onDateSelected
+                                onDateSelected = viewModel::onDateSelected,
                             )
                         }
 
@@ -111,7 +111,7 @@ fun EditTimeBottomSheet(
                         selectedTime = uiState.currentTime,
                         isActiveDial = true,
                         interactionSource = interactionSource,
-                        onToggleDial = {}
+                        onToggleDial = {},
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -122,7 +122,7 @@ fun EditTimeBottomSheet(
                         periodState = periodState,
                         hourState = hourState,
                         minuteState = minuteState,
-                        onTimeSelected = viewModel::onTimeSelected
+                        onTimeSelected = viewModel::onTimeSelected,
                     )
 
                     Spacer(modifier = Modifier.height(26.dp))
@@ -138,17 +138,21 @@ fun EditTimeBottomSheet(
                                         onTimeSelected(date, time)
                                     }
                                 } else {
-                                    val date = uiState.currentDate ?: scheduleDate ?: Clock.System.now().toLocalDateTime(
-                                        TimeZone.currentSystemDefault()).date
+                                    val date =
+                                        uiState.currentDate ?: scheduleDate ?: Clock.System
+                                            .now()
+                                            .toLocalDateTime(
+                                                TimeZone.currentSystemDefault(),
+                                            ).date
                                     onTimeSelected(date, time)
                                 }
                             }
-                        }
+                        },
                     )
 
                     Spacer(Modifier.height(12.dp))
                 }
-            }
+            },
         )
     }
 }
