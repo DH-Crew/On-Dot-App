@@ -37,22 +37,18 @@ class KmpAppConventionPlugin: Plugin<Project> {
         val keystorePath =
             properties.getProperty("ANDROID_KEYSTORE_PATH")
                 ?: System.getenv("ANDROID_KEYSTORE_PATH")
-                ?: error("ANDROID_KEYSTORE_PATH is missing.")
 
         val keystorePassword =
             properties.getProperty("ANDROID_KEYSTORE_PASSWORD")
                 ?: System.getenv("ANDROID_KEYSTORE_PASSWORD")
-                ?: error("ANDROID_KEYSTORE_PASSWORD is missing.")
 
         val keyAlias =
             properties.getProperty("ANDROID_KEY_ALIAS")
                 ?: System.getenv("ANDROID_KEY_ALIAS")
-                ?: error("ANDROID_KEY_ALIAS is missing.")
 
         val keyPassword =
             properties.getProperty("ANDROID_KEY_PASSWORD")
                 ?: System.getenv("ANDROID_KEY_PASSWORD")
-                ?: error("ANDROID_KEY_PASSWORD is missing.")
 
         extensions.getByType<BaseAppModuleExtension>().apply {
             namespace = "com.dh.ondot"
