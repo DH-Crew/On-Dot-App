@@ -22,7 +22,18 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     ) -> Bool {
         
         if FirebaseApp.app() == nil {
-            FirebaseApp.configure()
+            guard let filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") else {
+                fatalError("GoogleService-Info.plist not found in app bundle")
+            }
+
+            NSLog("[Firebase] plist path = \(filePath)")
+
+            guard let options = FirebaseOptions(contentsOfFile: filePath) else {
+                fatalError("Failed to create FirebaseOptions from plist")
+            }
+
+            NSLog("[Firebase] plist bundle id = \(options.bundleID)")
+            FirebaseApp.configure(options: options)
         }
         
         let apiKey = Bundle.main.object(forInfoDictionaryKey: "AMPLITUDE_API_KEY") as? String ?? ""
