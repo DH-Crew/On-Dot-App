@@ -61,7 +61,6 @@
 		B9DA97B12DC1472C00A4DA20 /* OnDot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnDot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2329ECD2E6D766C000E9479 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		E23379412E87D74C004F2E5A /* OnDotAlarmWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OnDotAlarmWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		E2BE6DAF2E8D849C005916BD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E2FAB6B72E86FBC0008B6902 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E2FAB6B92E86FBC0008B6902 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F34D56CA6EFB0EC879F717C8 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,11 +102,6 @@
 				E2BE6FEF2E8ED9AE005916BD /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
-			sourceTree = "<group>";
-		};
-		B9DA98002DC14AA900A4DA20 /* Configuration */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Configuration;
 			sourceTree = "<group>";
 		};
 		E23379442E87D74C004F2E5A /* OnDotAlarmWidget */ = {
@@ -165,8 +159,6 @@
 		B9DA97A82DC1472C00A4DA20 = {
 			isa = PBXGroup;
 			children = (
-				E2BE6DAF2E8D849C005916BD /* GoogleService-Info.plist */,
-				B9DA98002DC14AA900A4DA20 /* Configuration */,
 				B9DA97B32DC1472C00A4DA20 /* iosApp */,
 				E23379442E87D74C004F2E5A /* OnDotAlarmWidget */,
 				B9DA97B22DC1472C00A4DA20 /* Products */,
