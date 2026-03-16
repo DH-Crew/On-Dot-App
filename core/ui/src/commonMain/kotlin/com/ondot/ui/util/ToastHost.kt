@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.ui.theme.WORD_RESTORE_ACTION
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray0
@@ -48,6 +49,8 @@ import ondot.core.design_system.generated.resources.ic_circle_check_green
 import ondot.core.design_system.generated.resources.ic_circle_check_red
 import ondot.core.design_system.generated.resources.ic_circle_error_red
 import org.jetbrains.compose.resources.painterResource
+
+private val logger = Logger.withTag("ToastHost")
 
 @Composable
 fun ToastHost(modifier: Modifier = Modifier) {
@@ -173,6 +176,7 @@ private fun ToastItem(
                     color = Gray200,
                     modifier =
                         Modifier.clickable {
+                            logger.e { "되돌리기 클릭" }
                             data.callback()
                             onDismiss()
                         },
