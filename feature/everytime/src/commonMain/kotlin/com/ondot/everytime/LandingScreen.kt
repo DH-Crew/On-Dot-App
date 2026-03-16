@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.LANDING_SCREEN_TITLE
@@ -34,7 +33,6 @@ import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor.Gray0
-import com.ondot.designsystem.theme.OnDotColor.Gray300
 import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
@@ -42,7 +40,6 @@ import com.ondot.domain.model.enums.TopBarType
 import com.ondot.everytime.component.AutoAlarmSection
 import com.ondot.everytime.component.BenefitsSection
 import com.ondot.everytime.component.HeroSection
-import com.ondot.everytime.component.HowToConnectSection
 import com.ondot.everytime.component.TrackableSection
 
 @Composable
@@ -64,7 +61,7 @@ private fun LandingScreen(
     val scrollState = rememberScrollState()
     val visibleMap = remember { mutableStateMapOf<String, Boolean>() }
     val density = LocalDensity.current
-    val minVisiblePx = remember(density) { with(density) { 80.dp.roundToPx() } }
+    val minVisiblePx = remember(density) { with(density) { 40.dp.roundToPx() } }
 
     // 실제 viewport bounds를 window 기준으로 저장
     var viewportRect by remember { mutableStateOf<Rect?>(null) }
@@ -88,7 +85,7 @@ private fun LandingScreen(
                     Modifier
                         .fillMaxWidth()
                         .verticalScroll(scrollState)
-                        .padding(top = 60.dp),
+                        .padding(top = 50.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TrackableSection(
@@ -115,20 +112,6 @@ private fun LandingScreen(
                     visibleMap = visibleMap,
                 ) { BenefitsSection() }
 
-                TrackableSection(
-                    id = "how",
-                    order = 3,
-                    viewportRect = viewportRect,
-                    minVisiblePx = minVisiblePx,
-                    visibleMap = visibleMap,
-                ) {
-                    HowToConnectSection(
-                        viewportRect = viewportRect,
-                        minVisiblePx = minVisiblePx,
-                        visibleMap = visibleMap,
-                    )
-                }
-
                 // 마지막 버튼은 스크롤 하단 도달 시 렌더링
                 val showCta = scrollState.value > (scrollState.maxValue - with(density) { 80.dp.roundToPx() })
                 val alpha by animateFloatAsState(if (showCta) 1f else 0f, tween(500))
@@ -140,6 +123,7 @@ private fun LandingScreen(
                     modifier =
                         Modifier
                             .padding(horizontal = 22.dp)
+                            .padding(top = 48.dp)
                             .padding(bottom = if (getPlatform() == ANDROID) 16.dp else 37.dp)
                             .graphicsLayer {
                                 this.alpha = alpha
@@ -179,22 +163,4 @@ private fun LandingTopBar(onBack: () -> Unit) {
             modifier = Modifier.padding(top = if (getPlatform() == ANDROID) 50.dp else 70.dp),
         )
     }
-}
-
-@Composable
-fun BodyText(
-    text: String,
-    modifier: Modifier = Modifier,
-    emphasize: Boolean = false,
-) {
-    OnDotText(
-        text = text,
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-        textAlign = TextAlign.Center,
-        color = if (emphasize) Gray0 else Gray300,
-        style = if (emphasize) OnDotTextStyle.BodyMediumM else OnDotTextStyle.BodyMediumR,
-    )
 }

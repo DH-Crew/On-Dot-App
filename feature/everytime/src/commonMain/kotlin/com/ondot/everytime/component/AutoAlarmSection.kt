@@ -18,16 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_CONTENT1
-import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_CONTENT2
-import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE1
-import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE2
-import com.ondot.designsystem.components.OnDotText
-import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE
+import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE_HIGHLIGHT
+import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
-import com.ondot.everytime.BodyText
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_schedule_preview_card
 import org.jetbrains.compose.resources.painterResource
@@ -41,36 +38,17 @@ fun AutoAlarmSection() {
                 .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        OnDotText(
-            text = AUTO_ALARM_SECTION_TITLE1,
-            color = Green500,
-            style = OnDotTextStyle.TitleMediumSB,
-        )
-
-        Spacer(Modifier.height(4.dp))
-
-        OnDotText(
-            text = AUTO_ALARM_SECTION_TITLE2,
-            color = Gray0,
-            style = OnDotTextStyle.TitleMediumSB,
-        )
-
-        Spacer(Modifier.height(16.dp))
-
-        BodyText(
-            text = AUTO_ALARM_SECTION_CONTENT1,
-        )
-
-        Spacer(Modifier.height(16.dp))
-
-        BodyText(
-            text = AUTO_ALARM_SECTION_CONTENT2,
-            emphasize = true,
-        )
-
-        Spacer(Modifier.height(40.dp))
-
         SchedulePreviewCard()
+
+        Spacer(Modifier.height(28.dp))
+
+        OnDotHighlightText(
+            text = AUTO_ALARM_SECTION_TITLE,
+            textAlign = TextAlign.Center,
+            highlight = AUTO_ALARM_SECTION_TITLE_HIGHLIGHT,
+            highlightColor = Green500,
+            style = OnDotTextStyle.TitleMediumSB,
+        )
     }
 }
 
@@ -78,8 +56,8 @@ fun AutoAlarmSection() {
 private fun SchedulePreviewCard() {
     val infiniteTransition = rememberInfiniteTransition()
     val scale by infiniteTransition.animateFloat(
-        initialValue = 0.96f,
-        targetValue = 1.04f,
+        initialValue = 0.98f,
+        targetValue = 1.02f,
         animationSpec =
             infiniteRepeatable(
                 tween(2200, easing = EaseInOut),
