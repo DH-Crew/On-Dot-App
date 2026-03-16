@@ -21,7 +21,6 @@ import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.domain.service.AlarmScheduler
-import com.ondot.domain.service.AnalyticsManager
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.ui.base.BaseViewModel
@@ -36,11 +35,10 @@ class HomeViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val memberRepository: MemberRepository,
     private val alarmScheduler: AlarmScheduler,
-    private val analyticsManager: AnalyticsManager,
     private val notificationScheduler: LocalNotificationScheduler,
     private val directionsOpener: DirectionsOpener,
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
-    private val logger = Logger.withTag("HomeViewModel")
+    private val logger = Logger.withTag("HomeVMl")
     private var mapProvider = MapProvider.KAKAO
     private var lastScheduledAlarms: Set<Long> = emptySet()
 
@@ -253,11 +251,13 @@ class HomeViewModel(
     /**----------------------------------------------일정 삭제---------------------------------------------*/
 
     fun deleteSchedule(scheduleId: Long) {
+        logger.e { "삭제 요청 들어옴" }
         val curList = uiState.value.scheduleList
         val newList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }
         val job =
             viewModelScope.launch {
                 delay(2000)
+                logger.e { "삭제 요청 전송" }
                 scheduleRepository.deleteSchedule(scheduleId).collect {
                     resultResponse(it, { onSuccessDeleteSchedule(scheduleId) }, ::onFailDeleteSchedule)
                 }
@@ -271,6 +271,7 @@ class HomeViewModel(
                 message = SUCCESS_DELETE_SCHEDULE,
                 type = ToastType.DELETE,
                 callback = {
+                    logger.e { "삭제 취소 실행" }
                     job.cancel()
                     updateState(uiState.value.copy(scheduleList = curList))
                 },
