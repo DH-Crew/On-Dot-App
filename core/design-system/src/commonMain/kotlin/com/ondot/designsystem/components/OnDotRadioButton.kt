@@ -9,9 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green800
+import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Green500
+import com.ondot.designsystem.theme.OnDotColor.Green800
 
 @Composable
 fun OnDotRadioButton(selected: Boolean) {

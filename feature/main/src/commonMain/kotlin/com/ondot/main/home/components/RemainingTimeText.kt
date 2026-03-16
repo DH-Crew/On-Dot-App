@@ -2,8 +2,8 @@ package com.ondot.main.home.components
 
 import androidx.compose.runtime.Composable
 import com.dh.ondot.presentation.ui.theme.ALARM_IMMINENT
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable

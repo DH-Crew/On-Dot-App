@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
+import com.ondot.designsystem.theme.OnDotColor.Gray300
+import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Gray50
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.member.PlaceHistory
 import ondot.core.design_system.generated.resources.Res

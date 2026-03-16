@@ -37,12 +37,6 @@ import com.dh.ondot.presentation.ui.theme.DELETE_ACCOUNT_GUIDE3
 import com.dh.ondot.presentation.ui.theme.DELETE_ACCOUNT_GUIDE_BOLD1
 import com.dh.ondot.presentation.ui.theme.DELETE_ACCOUNT_GUIDE_BOLD2
 import com.dh.ondot.presentation.ui.theme.DELETE_ACCOUNT_GUIDE_BOLD3
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Red
 import com.dh.ondot.presentation.ui.theme.WORD_CANCEL
 import com.dh.ondot.presentation.ui.theme.WORD_CONFIRM
 import com.dh.ondot.presentation.ui.theme.WORD_DELETE_ACCOUNT_ACTION
@@ -52,6 +46,12 @@ import com.ondot.designsystem.components.OnDotDialog
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray600
+import com.ondot.designsystem.theme.OnDotColor.Gray700
+import com.ondot.designsystem.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Green600
+import com.ondot.designsystem.theme.OnDotColor.Red
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType

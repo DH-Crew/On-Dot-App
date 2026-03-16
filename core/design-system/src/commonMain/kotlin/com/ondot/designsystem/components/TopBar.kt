@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.domain.model.enums.TopBarType
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_back

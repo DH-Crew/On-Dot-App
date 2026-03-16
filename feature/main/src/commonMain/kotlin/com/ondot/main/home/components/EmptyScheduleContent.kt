@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.EMPTY_SCHEDULE
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray500
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_guide_arrow

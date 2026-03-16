@@ -26,11 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.LOGOUT_DIALOG_CONTENT
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.SETTING_FEEDBACK
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
@@ -46,6 +41,11 @@ import com.dh.ondot.presentation.ui.theme.WORD_WITHDRAW
 import com.dh.ondot.presentation.ui.theme.WORD_YES
 import com.ondot.designsystem.components.OnDotDialog
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray200
+import com.ondot.designsystem.theme.OnDotColor.Gray600
+import com.ondot.designsystem.theme.OnDotColor.Gray700
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_arrow_right_gray400

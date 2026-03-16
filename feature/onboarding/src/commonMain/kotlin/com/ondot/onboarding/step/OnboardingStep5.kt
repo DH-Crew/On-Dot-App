@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING5_TITLE_HIGHLIGHT
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.OnboardingAnswerList
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.ui.UserAnswer
 

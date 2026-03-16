@@ -21,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Gray700
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 
 @Composable
 fun OnDotBottomSheet(

@@ -20,12 +20,12 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING1_MINUTE_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE_HIGHLIGHT
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_HOUR
 import com.dh.ondot.presentation.ui.theme.WORD_MINUTE
 import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.RoundedTextField
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable

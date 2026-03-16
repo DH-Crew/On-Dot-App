@@ -33,8 +33,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.dh.ondot.presentation.ui.theme.WORD_DELETE
+import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.domain.model.enums.OnDotTextStyle
 import kotlinx.coroutines.launch
 import ondot.core.design_system.generated.resources.Res

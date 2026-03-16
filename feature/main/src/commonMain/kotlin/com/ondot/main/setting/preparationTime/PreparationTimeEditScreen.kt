@@ -22,10 +22,6 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.ERROR_INVALID_MINUTE_INPUT
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_TITLE
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green300
 import com.dh.ondot.presentation.ui.theme.SETTING_PREPARE_TIME
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
 import com.ondot.designsystem.components.HourMinuteTextField
@@ -33,6 +29,10 @@ import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Green300
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType
