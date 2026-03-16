@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
+import com.ondot.designsystem.theme.OnDotColor.Gray500
+import com.ondot.designsystem.theme.OnDotColor.Green600
 import com.ondot.domain.model.enums.OnDotTextStyle
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource

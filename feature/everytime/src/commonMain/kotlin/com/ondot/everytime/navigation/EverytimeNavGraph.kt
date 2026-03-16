@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dh.ondot.presentation.ui.theme.EVERYTIME_ROUTE_LOADING_LABEL
 import com.dh.ondot.presentation.ui.theme.SUCCESS_CREATE_EVERYTIME_SCHEDULE
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.everytime.LandingRoute
@@ -96,6 +97,7 @@ object EverytimeNavGraph : NavGraphContributor {
 
             composable(NavRoutes.EverytimeRouteLoading.route) {
                 RouteLoadingScreen(
+                    label = EVERYTIME_ROUTE_LOADING_LABEL,
                     navigateToNext = {
                         ToastManager.tryShow(SUCCESS_CREATE_EVERYTIME_SCHEDULE, ToastType.INFO)
                         navController.navigate(NavRoutes.MainGraph.route) {

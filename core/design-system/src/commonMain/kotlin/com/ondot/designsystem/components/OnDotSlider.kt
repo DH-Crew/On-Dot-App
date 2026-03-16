@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor
 
 @Composable
 fun OnDotSlider(

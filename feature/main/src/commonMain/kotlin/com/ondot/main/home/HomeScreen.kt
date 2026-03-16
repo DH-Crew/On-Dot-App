@@ -28,11 +28,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE_GUIDE
 import com.dh.ondot.presentation.ui.theme.MAP_PROVIDER_CONTENT
 import com.dh.ondot.presentation.ui.theme.MAP_PROVIDER_TITLE
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.ondot.designsystem.components.MapProviderItem
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray600
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.main.home.components.AddScheduleButton

@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.StepProgressIndicator
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.onboarding.step.OnboardingStep1

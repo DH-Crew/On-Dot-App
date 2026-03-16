@@ -28,14 +28,14 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ONBOARDING3_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING3_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING3_TITLE_HIGHLIGHT
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.WORD_MUTE
 import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotRadioButton
 import com.ondot.designsystem.components.OnDotSlider
 import com.ondot.designsystem.components.OnDotSwitch
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.ui.AlarmSound
 import ondot.core.design_system.generated.resources.Res

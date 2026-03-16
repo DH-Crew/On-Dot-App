@@ -75,7 +75,6 @@ class HomeViewModelTest {
                 directionsOpener = directionsOpener,
                 alarmScheduler = alarmScheduler,
                 notificationScheduler = notificationScheduler,
-                analyticsManager = analyticsManager,
             )
     }
 
