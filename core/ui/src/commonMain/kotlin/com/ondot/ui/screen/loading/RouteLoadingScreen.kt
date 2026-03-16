@@ -27,7 +27,10 @@ import kotlinx.coroutines.delay
 import ondot.core.design_system.generated.resources.Res
 
 @Composable
-fun RouteLoadingScreen(navigateToNext: () -> Unit) {
+fun RouteLoadingScreen(
+    label: String = ROUTE_CALCULATE_LABEL,
+    navigateToNext: () -> Unit,
+) {
     val composition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(Res.readBytes("files/lotties/time_calculate.json").decodeToString())
     }
@@ -62,7 +65,7 @@ fun RouteLoadingScreen(navigateToNext: () -> Unit) {
         )
 
         OnDotText(
-            text = ROUTE_CALCULATE_LABEL,
+            text = label,
             style = OnDotTextStyle.BodyLargeSB,
             color = Gray0,
             textAlign = TextAlign.Center,
