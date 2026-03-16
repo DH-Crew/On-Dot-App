@@ -2,16 +2,16 @@ package com.ondot.everytime.urlInput
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,13 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.LANDING_SCREEN_TITLE
-import com.dh.ondot.presentation.ui.theme.PASTE_URL
+import com.dh.ondot.presentation.ui.theme.OPEN_EVERYTIME
 import com.dh.ondot.presentation.ui.theme.URL_INPUT_GUIDE
 import com.dh.ondot.presentation.ui.theme.URL_INPUT_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.URL_INPUT_TITLE
@@ -36,13 +36,14 @@ import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.RoundedTextField
 import com.ondot.designsystem.components.topbar.CommonTopBar
 import com.ondot.designsystem.components.topbar.model.TopBarStyle
-import com.ondot.designsystem.theme.OnDotColor.Gray300
 import com.ondot.designsystem.theme.OnDotColor.Gray400
 import com.ondot.designsystem.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Green700
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.service.ClipboardReader
 import com.ondot.domain.service.ExternalAppLauncher
+import com.ondot.everytime.component.EverytimeGuidePager
 import com.ondot.everytime.contract.EverytimeIntent
 import com.ondot.everytime.contract.EverytimeSideEffect
 import com.ondot.everytime.contract.EverytimeViewModel
@@ -52,6 +53,7 @@ import com.ondot.ui.util.noRippleClickable
 import kotlinx.coroutines.launch
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_close
+import ondot.core.design_system.generated.resources.ic_open_url
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -116,15 +118,17 @@ private fun EverytimeUrlInputScreen(
             style = OnDotTextStyle.TitleMediumM,
         )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(28.dp))
 
-        OnDotText(
-            text = URL_INPUT_GUIDE,
-            style = OnDotTextStyle.BodyMediumR,
-            color = Gray300,
+        EverytimeGuidePager(
+            modifier = Modifier.weight(1f),
         )
 
-        Spacer(Modifier.height(40.dp))
+        Spacer(Modifier.height(36.dp))
+
+        EverytimeOpenTextButton(onClick = onOpenEverytime)
+
+        Spacer(Modifier.height(12.dp))
 
         UrlInputTextField(
             input = input,
@@ -141,9 +145,7 @@ private fun EverytimeUrlInputScreen(
             },
         )
 
-        EverytimeOpenTextButton(onClick = onOpenEverytime)
-
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.height(44.dp))
 
         OnDotButton(
             buttonType = if (input.isBlank()) ButtonType.Gray300 else ButtonType.Green500,
@@ -151,7 +153,8 @@ private fun EverytimeUrlInputScreen(
             onClick = { onNext(input) },
             modifier =
                 Modifier
-                    .buttonPadding(),
+                    .buttonPadding()
+                    .imePadding(),
         )
     }
 }
@@ -165,7 +168,7 @@ private fun UrlInputTextField(
     RoundedTextField(
         value = input,
         onValueChange = onValueChange,
-        placeholder = PASTE_URL,
+        placeholder = URL_INPUT_GUIDE,
         maxLength = 100,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
         trailingIcon = {
@@ -187,16 +190,25 @@ private fun UrlInputTextField(
 
 @Composable
 private fun EverytimeOpenTextButton(onClick: () -> Unit) {
-    TextButton(
-        onClick = onClick,
-        contentPadding = PaddingValues(start = 4.dp),
-        modifier = Modifier.wrapContentWidth(),
+    Row(
+        modifier =
+            Modifier
+                .noRippleClickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         OnDotText(
-            text = "에브리타임 열기",
-            style = OnDotTextStyle.BodyMediumM,
-            color = Gray400,
-            textDecoration = TextDecoration.Underline,
+            text = OPEN_EVERYTIME,
+            style = OnDotTextStyle.BodyMediumR,
+            color = Green700,
+        )
+
+        Image(
+            painter = painterResource(Res.drawable.ic_open_url),
+            contentDescription = null,
+            modifier =
+                Modifier
+                    .size(20.dp),
         )
     }
 }

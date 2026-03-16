@@ -58,9 +58,7 @@ internal val everytimeGuideSteps =
     )
 
 @Composable
-fun EverytimeGuidePager(
-    modifier: Modifier = Modifier,
-) {
+fun EverytimeGuidePager(modifier: Modifier = Modifier) {
     val steps = remember { everytimeGuideSteps }
     val pagerState =
         rememberPagerState(
@@ -107,10 +105,10 @@ fun EverytimeGuidePager(
     }
 }
 
-//@Composable
-//fun EverytimeGuidePager(
+// @Composable
+// fun EverytimeGuidePager(
 //    modifier: Modifier = Modifier,
-//) {
+// ) {
 //    val steps = remember { everytimeGuideSteps }
 //    val pagerState =
 //        rememberPagerState(
@@ -146,7 +144,7 @@ fun EverytimeGuidePager(
 //            currentPage = pagerState.currentPage,
 //        )
 //    }
-//}
+// }
 
 @Composable
 private fun PagerIndicator(
