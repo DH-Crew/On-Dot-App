@@ -124,7 +124,7 @@ fun HowToConnectSection(
 }
 
 @Composable
-private fun StepItem(
+fun StepItem(
     number: Int,
     title: String,
     image: DrawableResource,
