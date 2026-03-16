@@ -17,9 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Green600
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res

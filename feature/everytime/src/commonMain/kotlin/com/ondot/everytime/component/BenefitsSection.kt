@@ -25,12 +25,12 @@ import com.dh.ondot.presentation.ui.theme.BENEFITS_SECTION_DESCRIPTION3
 import com.dh.ondot.presentation.ui.theme.BENEFITS_SECTION_DESCRIPTION4
 import com.dh.ondot.presentation.ui.theme.BENEFITS_SECTION_TITLE1
 import com.dh.ondot.presentation.ui.theme.BENEFITS_SECTION_TITLE1_HIGHLIGHT
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray200
+import com.ondot.designsystem.theme.OnDotColor.Gray700
+import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_landing_alarm

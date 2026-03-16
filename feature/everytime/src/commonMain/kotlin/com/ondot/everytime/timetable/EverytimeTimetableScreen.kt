@@ -12,8 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.TIMETABLE_SELECT_GUIDE
 import com.dh.ondot.presentation.ui.theme.TIMETABLE_SELECT_HIGHLIGHT
 import com.dh.ondot.presentation.ui.theme.TIMETABLE_SELECT_SCREEN_TITLE
@@ -24,6 +22,8 @@ import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.topbar.CommonTopBar
 import com.ondot.designsystem.components.topbar.model.TopBarStyle
+import com.ondot.designsystem.theme.OnDotColor.Gray300
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.everytime.component.timetable.TimetableGrid

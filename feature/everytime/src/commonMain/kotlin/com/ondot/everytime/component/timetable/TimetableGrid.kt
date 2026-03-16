@@ -23,12 +23,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.dh.ondot.presentation.ui.theme.OnDotColor.GradientTimetable
-import com.dh.ondot.presentation.ui.theme.OnDotColor.GradientTimetableUnselected
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.GradientTimetable
+import com.ondot.designsystem.theme.OnDotColor.GradientTimetableUnselected
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray200
+import com.ondot.designsystem.theme.OnDotColor.Gray800
 import com.ondot.domain.model.enums.DayOfWeekKey
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.everytime.contract.TimetableClassUiModel

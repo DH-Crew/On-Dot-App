@@ -19,10 +19,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.topbar.model.TopBarStyle
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.domain.model.enums.OnDotTextStyle
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_back

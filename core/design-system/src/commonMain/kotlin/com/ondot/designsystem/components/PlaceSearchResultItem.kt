@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.member.AddressInfo
 import ondot.core.design_system.generated.resources.Res

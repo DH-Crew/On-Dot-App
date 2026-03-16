@@ -37,11 +37,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS_EDIT_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
@@ -50,6 +45,11 @@ import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.PlaceSearchResultItem
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray700
+import com.ondot.designsystem.theme.OnDotColor.Gray800
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TopBarType

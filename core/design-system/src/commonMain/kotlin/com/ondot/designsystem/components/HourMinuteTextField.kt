@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_HOUR_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.ONBOARDING1_MINUTE_PLACEHOLDER
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.dh.ondot.presentation.ui.theme.WORD_HOUR
 import com.dh.ondot.presentation.ui.theme.WORD_MINUTE
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable

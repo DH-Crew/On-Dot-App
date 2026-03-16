@@ -1,8 +1,8 @@
 package com.ondot.designsystem.extensions
 
 import androidx.compose.runtime.Composable
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.designsystem.model.ButtonStyle
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.ButtonType
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_apple

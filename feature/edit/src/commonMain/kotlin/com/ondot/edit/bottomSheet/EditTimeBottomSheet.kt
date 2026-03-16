@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import co.touchlab.kermit.Logger
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
 import com.ondot.designsystem.components.Calendar
 import com.ondot.designsystem.components.DateSectionHeader
@@ -26,6 +25,7 @@ import com.ondot.designsystem.components.OnDotBottomSheet
 import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.TimePicker
 import com.ondot.designsystem.components.TimeSectionHeader
+import com.ondot.designsystem.theme.OnDotColor.Gray600
 import com.ondot.domain.model.enums.ButtonType
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime

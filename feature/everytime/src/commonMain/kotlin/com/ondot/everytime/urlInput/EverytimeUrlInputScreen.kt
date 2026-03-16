@@ -25,10 +25,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.LANDING_SCREEN_TITLE
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray300
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.dh.ondot.presentation.ui.theme.PASTE_URL
 import com.dh.ondot.presentation.ui.theme.URL_INPUT_GUIDE
 import com.dh.ondot.presentation.ui.theme.URL_INPUT_HIGHLIGHT
@@ -40,6 +36,9 @@ import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.RoundedTextField
 import com.ondot.designsystem.components.topbar.CommonTopBar
 import com.ondot.designsystem.components.topbar.model.TopBarStyle
+import com.ondot.designsystem.theme.OnDotColor.Gray300
+import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.service.ClipboardReader

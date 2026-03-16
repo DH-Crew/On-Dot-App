@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor.Gray0
 import kotlin.math.roundToInt
 
 @Composable

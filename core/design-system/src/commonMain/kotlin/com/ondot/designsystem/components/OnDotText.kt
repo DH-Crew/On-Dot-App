@@ -14,8 +14,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.designsystem.extensions.toTextStyle
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable

@@ -26,11 +26,11 @@ import com.dh.ondot.presentation.ui.theme.ONBOARDING2_PLACEHOLDER
 import com.dh.ondot.presentation.ui.theme.ONBOARDING2_SUB_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE
 import com.dh.ondot.presentation.ui.theme.ONBOARDING2_TITLE_HIGHLIGHT
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.PlaceSearchResultItem
 import com.ondot.designsystem.components.RoundedTextField
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.member.AddressInfo
 import ondot.core.design_system.generated.resources.Res

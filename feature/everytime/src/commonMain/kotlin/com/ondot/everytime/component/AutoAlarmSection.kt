@@ -23,9 +23,9 @@ import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_CONTENT1
 import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_CONTENT2
 import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE1
 import com.dh.ondot.presentation.ui.theme.AUTO_ALARM_SECTION_TITLE2
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green500
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.everytime.BodyText
 import ondot.core.design_system.generated.resources.Res

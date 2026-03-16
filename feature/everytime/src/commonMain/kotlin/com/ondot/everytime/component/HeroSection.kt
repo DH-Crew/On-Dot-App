@@ -27,11 +27,11 @@ import com.dh.ondot.presentation.ui.theme.HERO_SECTION_CONTENT2
 import com.dh.ondot.presentation.ui.theme.HERO_SECTION_CONTENT3
 import com.dh.ondot.presentation.ui.theme.HERO_SECTION_TITLE1
 import com.dh.ondot.presentation.ui.theme.HERO_SECTION_TITLE2
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.HighlightRed
 import com.dh.ondot.presentation.ui.theme.WORD_EVERYTIME
 import com.ondot.designsystem.components.OnDotHighlightText
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.HighlightRed
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.everytime.BodyText
 import ondot.core.design_system.generated.resources.Res

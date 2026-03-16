@@ -3,6 +3,7 @@ package com.dh.ondot.presentation.ui.theme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.ondot.designsystem.theme.OnDotColor
 
 val LocalOnDotTypography =
     staticCompositionLocalOf<OnDotTypography> {

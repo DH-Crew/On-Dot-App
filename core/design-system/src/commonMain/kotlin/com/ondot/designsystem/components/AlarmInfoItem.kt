@@ -17,12 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.DEPARTURE_ALARM_LABEL
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray50
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray700
 import com.dh.ondot.presentation.ui.theme.PREPARATION_ALARM_LABEL
 import com.dh.ondot.presentation.ui.theme.YESTERDAY_LABEL
+import com.ondot.designsystem.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray50
+import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ChipStyle

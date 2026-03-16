@@ -43,12 +43,6 @@ import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.GENERAL_SCHEDULE_BOTTOM_SHEET_MATERIAL
 import com.dh.ondot.presentation.ui.theme.GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE
 import com.dh.ondot.presentation.ui.theme.GENERAL_SCHEDULE_BOTTOM_SHEET_TITLE
-import com.dh.ondot.presentation.ui.theme.OnDotColor.GradientGreenTop
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray200
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray600
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.WORD_CONFIRM
 import com.dh.ondot.presentation.ui.theme.WORD_FINE
@@ -62,6 +56,12 @@ import com.ondot.designsystem.components.RoundedTextField
 import com.ondot.designsystem.components.RouteInputSection
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor.GradientGreenTop
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray200
+import com.ondot.designsystem.theme.OnDotColor.Gray600
+import com.ondot.designsystem.theme.OnDotColor.Gray800
+import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle

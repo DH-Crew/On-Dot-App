@@ -25,10 +25,10 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.dh.ondot.presentation.ui.theme.OnDotColor
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray500
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray800
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor
+import com.ondot.designsystem.theme.OnDotColor.Gray500
+import com.ondot.designsystem.theme.OnDotColor.Gray800
 import com.ondot.domain.model.enums.BottomNavType
 import com.ondot.main.home.HomeScreen
 import com.ondot.main.setting.SettingScreen

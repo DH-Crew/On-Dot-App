@@ -27,11 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray0
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray400
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Gray900
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green300
-import com.dh.ondot.presentation.ui.theme.OnDotColor.Green600
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP_PROVIDER_GUIDE
 import com.dh.ondot.presentation.ui.theme.SETTING_NAV_MAP_PROVIDER_TITLE
@@ -40,6 +35,11 @@ import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor.Gray0
+import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Green300
+import com.ondot.designsystem.theme.OnDotColor.Green600
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.OnDotTextStyle

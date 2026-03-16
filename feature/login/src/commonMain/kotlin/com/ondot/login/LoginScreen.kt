@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.APPLE_LOGIN_BUTTON_TEXT
 import com.dh.ondot.presentation.ui.theme.IOS
 import com.dh.ondot.presentation.ui.theme.KAKAO_LOGIN_BUTTON_TEXT
-import com.dh.ondot.presentation.ui.theme.OnDotColor
 import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.getPlatform
+import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.ButtonType
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_login
