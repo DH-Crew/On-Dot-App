@@ -129,8 +129,6 @@ fun CalendarBottomSheet(
                     Spacer(Modifier.height(8.dp))
                 }
             }
-
-            Box(modifier = Modifier.weight(1f))
         }
     }
 }
