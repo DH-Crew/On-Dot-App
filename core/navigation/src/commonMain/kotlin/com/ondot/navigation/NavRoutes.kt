@@ -140,4 +140,9 @@ sealed class NavRoutes(
     data object EverytimePlacePicker : NavRoutes("everytimePlacePicker")
 
     data object EverytimeRouteLoading : NavRoutes("everytimeRouteLoading")
+
+    // Calendar
+    data object CalendarGraph : NavRoutes("calendarGraph")
+
+    data object Calendar : NavRoutes("calendar")
 }

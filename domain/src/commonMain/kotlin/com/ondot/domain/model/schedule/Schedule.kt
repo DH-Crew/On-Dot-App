@@ -1,9 +1,11 @@
 package com.ondot.domain.model.schedule
 
 import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.enums.ScheduleType
 
 data class Schedule(
     val scheduleId: Long = -1L,
+    val type: ScheduleType = ScheduleType.UNKNOWN,
     val startLongitude: Double = 0.0,
     val startLatitude: Double = 0.0,
     val endLongitude: Double = 0.0,

@@ -248,3 +248,6 @@ const val EVERYTIME_PLACE_PICKER_TITLE = "학교 위치가 어디인가요?"
 
 // EverytimeRouteLoading
 const val EVERYTIME_ROUTE_LOADING_LABEL = "수업 일정에 맞춰\n알람을 빠짐없이 만들고 있어요"
+
+// Calendar
+const val CALENDAR_EMPTY_SCHEDULES_GUIDE = "등록된 알람이 없습니다."

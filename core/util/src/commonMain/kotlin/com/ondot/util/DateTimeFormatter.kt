@@ -141,6 +141,21 @@ object DateTimeFormatter {
         return dayOfWeek
     }
 
+    /** LocalDate의 요일 정보를 추출 */
+    fun LocalDate.extractDayOfWeek(): String =
+        when (this.dayOfWeek) {
+            DayOfWeek.MONDAY -> "월요일"
+            DayOfWeek.TUESDAY -> "화요일"
+            DayOfWeek.WEDNESDAY -> "수요일"
+            DayOfWeek.THURSDAY -> "목요일"
+            DayOfWeek.FRIDAY -> "금요일"
+            DayOfWeek.SATURDAY -> "토요일"
+            DayOfWeek.SUNDAY -> "일요일"
+        }
+
+    /** LocalDate 06월 13일 화요일 형태로 포맷 */
+    fun LocalDate.formatKoreanMonthDay(): String = "${month.number.pad2()}월 ${day.pad2()}일 ${this.extractDayOfWeek()}"
+
     /** iso 문자열을 days 만큼 뒤로 미룸 */
     fun plusDays(
         iso: String,

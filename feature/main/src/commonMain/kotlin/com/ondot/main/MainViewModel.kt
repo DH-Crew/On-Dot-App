@@ -12,12 +12,14 @@ class MainViewModel(
         val type =
             when (route) {
                 NavRoutes.Home.route -> BottomNavType.HOME
+                NavRoutes.Calendar.route -> BottomNavType.CALENDAR
                 NavRoutes.Setting.route -> BottomNavType.SETTING
                 else -> BottomNavType.HOME
             }
 
         when (route) {
             NavRoutes.Home.route -> analyticsManager.logEvent("screen_view_home")
+            NavRoutes.Calendar.route -> analyticsManager.logEvent("screen_view_calendar")
             NavRoutes.Setting.route -> analyticsManager.logEvent("screen_view_setting")
         }
 
