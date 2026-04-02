@@ -1,6 +1,7 @@
 package com.dh.ondot.core
 
 import com.ondot.alarm.di.alarmModule
+import com.ondot.calendar.di.calendarModule
 import com.ondot.data.di.dataSourceModule
 import com.ondot.data.di.databaseModule
 import com.ondot.data.di.provideDriverModule
@@ -35,6 +36,7 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
                     mainModule,
                     onboardingModule,
                     everytimeModule,
+                    calendarModule,
                     provideDriverModule(),
                 ),
         )
