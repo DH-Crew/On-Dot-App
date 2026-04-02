@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.ondot.calendar.ui.CalendarRoute
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.designsystem.theme.OnDotColor.Gray500
@@ -34,6 +35,8 @@ import com.ondot.main.home.HomeScreen
 import com.ondot.main.setting.SettingScreen
 import com.ondot.navigation.NavRoutes
 import ondot.core.design_system.generated.resources.Res
+import ondot.core.design_system.generated.resources.ic_calendar_selected
+import ondot.core.design_system.generated.resources.ic_calendar_unselected
 import ondot.core.design_system.generated.resources.ic_home_selected
 import ondot.core.design_system.generated.resources.ic_home_unselected
 import ondot.core.design_system.generated.resources.ic_settings_selected
@@ -87,6 +90,7 @@ fun MainScreen(
                         navigateToNotificationScreen = navigateToNotification,
                         navigateToEverytimeScreen = navigateToEverytime,
                     )
+                BottomNavType.CALENDAR -> CalendarRoute()
                 BottomNavType.SETTING -> {
                     SettingScreen(
                         navigateToDeleteAccountScreen = navigateToDeleteAccount,
@@ -130,6 +134,20 @@ fun BottomNavBar(
             )
 
             BottomNavItem(
+                resourceId =
+                    if (type ==
+                        BottomNavType.CALENDAR
+                    ) {
+                        Res.drawable.ic_calendar_selected
+                    } else {
+                        Res.drawable.ic_calendar_unselected
+                    },
+                type = BottomNavType.CALENDAR,
+                interactionSource = interactionSource,
+                onClick = onClick,
+            )
+
+            BottomNavItem(
                 resourceId = if (type == BottomNavType.SETTING) Res.drawable.ic_settings_selected else Res.drawable.ic_settings_unselected,
                 type = BottomNavType.SETTING,
                 interactionSource = interactionSource,
@@ -160,6 +178,9 @@ fun BottomNavItem(
                         when (type) {
                             BottomNavType.HOME -> {
                                 onClick(NavRoutes.Home.route)
+                            }
+                            BottomNavType.CALENDAR -> {
+                                onClick(NavRoutes.Calendar.route)
                             }
                             BottomNavType.SETTING -> {
                                 onClick(NavRoutes.Setting.route)
