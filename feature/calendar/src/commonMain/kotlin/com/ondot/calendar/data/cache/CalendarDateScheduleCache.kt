@@ -3,6 +3,10 @@ package com.ondot.calendar.data.cache
 class CalendarDateScheduleCache<K, V>(
     private val maxSize: Int = 31,
 ) {
+    init {
+        require(maxSize > 0) { "maxSize must be greater than 0" }
+    }
+
     private val map = LinkedHashMap<K, V>()
 
     operator fun get(key: K): V? {
