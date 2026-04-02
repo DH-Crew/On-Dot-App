@@ -12,10 +12,17 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
+private fun defaultDate(): LocalDate =
+    Clock.System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
+
 @Immutable
 data class CalendarUiState(
-    val currentMonth: CalendarMonth = CalendarMonth(year = 2026, month = 4),
-    val selectedDate: LocalDate = LocalDate(2026, 4, 1),
+    val currentMonth: CalendarMonth = defaultDate().let { CalendarMonth(it.year, it.monthNumber) },
+    val selectedDate: LocalDate = defaultDate(),
     // 월 셀 점/칩용 상태 변수
     val schedulesByDate: Map<LocalDate, List<CalendarScheduleMarker>> = emptyMap(),
     // 바텀시트 상세용 상태 변수
