@@ -12,6 +12,7 @@ import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.ui.base.mvi.BaseViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -26,6 +27,11 @@ class CalendarViewModel(
 ) : BaseViewModel<CalendarUiState, CalendarIntent, CalendarSideEffect>(CalendarUiState()) {
     private var mapProvider = MapProvider.KAKAO
     private val togglingScheduleIds = mutableSetOf<Long>()
+
+    private var markersJob: Job? = null
+    private var schedulesJob: Job? = null
+    private var markersRequestId: Long = 0L
+    private var schedulesRequestId: Long = 0L
 
     private fun observeMapProvider() =
         viewModelScope.launch {
@@ -98,6 +104,10 @@ class CalendarViewModel(
     }
 
     private fun getScheduleMarkersInRange(currentDate: LocalDate) {
+        // 동시에 여러 요청이 발생했을 때 뒤늦은 응답이 상태를 잘못 덮어쓰지 않도록 방어
+        val requestedMonth = CalendarMonth(currentDate.year, currentDate.month.number)
+        val requestId = ++markersRequestId
+
         val firstDateOfMonth = LocalDate(currentDate.year, currentDate.month.number, 1)
         val lastDateOfMonth =
             LocalDate(
@@ -108,14 +118,18 @@ class CalendarViewModel(
         val startDate = firstDateOfMonth.plus(DatePeriod(days = -7))
         val endDate = lastDateOfMonth.plus(DatePeriod(days = 7))
 
-        launchResult(
+        markersJob?.cancel()
+        markersJob = launchResult(
             block = {
                 calendarRepository.getScheduleMarkersInRange(
                     startDate = startDate.toApiDateString(),
                     endDate = endDate.toApiDateString(),
                 )
             },
-            onSuccess = { summaries ->
+            onSuccess = onSuccess@{ summaries ->
+                if (requestId != markersRequestId) return@onSuccess
+                if (currentState.currentMonth != requestedMonth) return@onSuccess
+
                 val schedulesByDate =
                     summaries.associate { summary ->
                         summary.date to
@@ -130,7 +144,10 @@ class CalendarViewModel(
                     )
                 }
             },
-            onError = {
+            onError = onError@{
+                if (requestId != markersRequestId) return@onError
+                if (currentState.currentMonth != requestedMonth) return@onError
+
                 reduce {
                     copy(
                         schedulesByDate = emptyMap(),
@@ -142,13 +159,19 @@ class CalendarViewModel(
     }
 
     private fun loadSchedulesFor(date: LocalDate) {
+        val requestedDate = date
         val key = date.toApiDateString()
+        val requestId = ++schedulesRequestId
 
-        launchResult(
+        schedulesJob?.cancel()
+        schedulesJob = launchResult(
             block = {
                 calendarRepository.getSchedulesFor(key)
             },
-            onSuccess = { schedules ->
+            onSuccess = onSuccess@{ schedules ->
+                if (requestId != schedulesRequestId) return@onSuccess
+                if (currentState.selectedDate != requestedDate) return@onSuccess
+
                 reduce {
                     copy(
                         selectedDateSchedules = schedules,
@@ -156,7 +179,10 @@ class CalendarViewModel(
                     )
                 }
             },
-            onError = {
+            onError = onError@{
+                if (requestId != schedulesRequestId) return@onError
+                if (currentState.selectedDate != requestedDate) return@onError
+
                 reduce {
                     copy(
                         selectedDateSchedules = emptyList(),
@@ -188,6 +214,11 @@ class CalendarViewModel(
             originalSchedules.firstOrNull { it.scheduleId == scheduleId }
                 ?: run {
                     togglingScheduleIds.remove(scheduleId)
+                    reduce {
+                        copy(
+                            togglingScheduleIds = togglingScheduleIds.toSet(),
+                        )
+                    }
                     return
                 }
 
@@ -225,6 +256,7 @@ class CalendarViewModel(
                 )
             },
             onError = {
+                scheduleRepository.upsertLocalSchedule(originalSchedule)
                 applySchedules(
                     date = targetDate,
                     schedules = originalSchedules,
@@ -251,6 +283,8 @@ class CalendarViewModel(
         date: LocalDate,
         schedules: List<Schedule>,
     ) {
+        if (currentState.selectedDate != date) return
+
         reduce {
             copy(
                 selectedDateSchedules = schedules,
