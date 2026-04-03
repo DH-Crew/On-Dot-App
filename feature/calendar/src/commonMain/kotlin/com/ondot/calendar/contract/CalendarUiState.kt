@@ -21,12 +21,15 @@ private fun defaultDate(): LocalDate =
 
 @Immutable
 data class CalendarUiState(
-    val currentMonth: CalendarMonth = defaultDate().let { CalendarMonth(it.year, it.monthNumber) },
+    val currentMonth: CalendarMonth = defaultDate().let { CalendarMonth(it.year, it.month.number) },
     val selectedDate: LocalDate = defaultDate(),
     // 월 셀 점/칩용 상태 변수
     val schedulesByDate: Map<LocalDate, List<CalendarScheduleMarker>> = emptyMap(),
     // 바텀시트 상세용 상태 변수
     val selectedDateScheduleItems: List<CalendarScheduleItemUiModel> = emptyList(),
+    // 알람 스케줄링, 취소를 위해서 바텀시트 일정 데이터 원본을 가지고 있어야 함
+    val selectedDateSchedules: List<Schedule> = emptyList(),
+    val togglingScheduleIds: Set<Long> = emptySet(),
 ) : UiState
 
 @Immutable
