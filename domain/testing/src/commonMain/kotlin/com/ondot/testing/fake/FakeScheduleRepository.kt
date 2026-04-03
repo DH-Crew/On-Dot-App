@@ -152,6 +152,13 @@ class FakeScheduleRepository : ScheduleRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun toggleAlarm(
+        scheduleId: Long,
+        isEnabled: Boolean
+    ): AppResult<Unit> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?> =
         flow {
             emit(scheduleMap[scheduleId])
