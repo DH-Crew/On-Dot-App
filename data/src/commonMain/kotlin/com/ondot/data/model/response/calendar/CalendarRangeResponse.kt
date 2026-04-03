@@ -21,7 +21,7 @@ data class CalendarDayResponse(
 data class CalendarScheduleSummaryResponse(
     @SerialName("scheduleId")
     val scheduleId: Long,
-    @SerialName("title")
+    @SerialName("scheduleTitle")
     val title: String,
     @SerialName("type")
     val type: String,
