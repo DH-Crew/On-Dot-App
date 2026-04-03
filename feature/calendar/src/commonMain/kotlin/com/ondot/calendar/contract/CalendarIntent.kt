@@ -16,4 +16,6 @@ sealed interface CalendarIntent : Intent {
         val scheduleId: Long,
         val enabled: Boolean,
     ) : CalendarIntent
+
+    object Init : CalendarIntent
 }
