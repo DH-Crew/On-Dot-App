@@ -31,7 +31,7 @@ fun TimetableEntryResponse.toDomain(): TimetableEntry =
 fun ScheduleResponse.toDomain(): Schedule =
     Schedule(
         scheduleId = scheduleId,
-        type = if (type != null) ScheduleType.valueOf(type) else ScheduleType.UNKNOWN,
+        type = if (type != null) ScheduleType.fromApi(type) else ScheduleType.UNKNOWN,
         scheduleTitle = scheduleTitle,
         isRepeat = isRepeat,
         repeatDays = repeatDays,
