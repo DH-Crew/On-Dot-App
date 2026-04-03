@@ -7,18 +7,25 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -33,6 +40,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dh.ondot.presentation.ui.theme.ADD_SCHEDULE
 import com.ondot.calendar.contract.CalendarIntent
 import com.ondot.calendar.contract.CalendarInteractionState
 import com.ondot.calendar.contract.CalendarSheetAnchor
@@ -47,20 +55,36 @@ import com.ondot.calendar.ui.component.CalendarBottomSheet
 import com.ondot.calendar.ui.component.CalendarMonthGrid
 import com.ondot.calendar.ui.component.CalendarTopBar
 import com.ondot.calendar.ui.component.CalendarWeekHeader
+import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.theme.OnDotColor.Gray800
 import com.ondot.designsystem.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Green500
+import com.ondot.domain.model.enums.OnDotTextStyle
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import ondot.core.design_system.generated.resources.Res
+import ondot.core.design_system.generated.resources.ic_plus
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CalendarRoute(viewModel: CalendarViewModel = koinViewModel()) {
+fun CalendarRoute(
+    viewModel: CalendarViewModel = koinViewModel(),
+    navigateToCreateGeneralSchedule: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.dispatch(CalendarIntent.Init)
+    }
 
     CalendarScreen(
         uiState = uiState,
         onSelectDate = { viewModel.dispatch(CalendarIntent.SelectDate(it)) },
         onMoveToPreviousMonth = { viewModel.dispatch(CalendarIntent.MoveToPreviousMonth) },
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
+        onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
+        onAddSchedule = navigateToCreateGeneralSchedule,
     )
 }
 
@@ -70,6 +94,8 @@ private fun CalendarScreen(
     onSelectDate: (LocalDate) -> Unit,
     onMoveToPreviousMonth: () -> Unit,
     onMoveToNextMonth: () -> Unit,
+    onToggleAlarm: (Long, Boolean) -> Unit,
+    onAddSchedule: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberCalendarSheetState()
@@ -322,12 +348,14 @@ private fun CalendarScreen(
                          * calendar 하단에 sheet 상단이 붙어 있는 상태
                          */
                         CalendarBottomSheet(
-                            selectedDate = uiState.selectedDate,
-                            schedules = uiState.selectedDateScheduleItems,
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
                                     .height(baseSheetHeight),
+                            selectedDate = uiState.selectedDate,
+                            schedules = uiState.selectedDateScheduleItems,
+                            togglingScheduleIds = uiState.togglingScheduleIds,
+                            onToggleAlarm = onToggleAlarm,
                         )
                     }
                 }
@@ -349,15 +377,61 @@ private fun CalendarScreen(
                 }
 
                 CalendarBottomSheet(
-                    selectedDate = uiState.selectedDate,
-                    schedules = uiState.selectedDateScheduleItems,
                     modifier =
                         Modifier
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
                             .height(overlaySheetHeight),
+                    selectedDate = uiState.selectedDate,
+                    schedules = uiState.selectedDateScheduleItems,
+                    togglingScheduleIds = uiState.togglingScheduleIds,
+                    onToggleAlarm = onToggleAlarm,
                 )
             }
+
+            AddScheduleFAB(
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 20.dp, end = 22.dp),
+                onClick = onAddSchedule,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddScheduleFAB(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier =
+            modifier
+                .width(106.dp)
+                .height(40.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(Green500)
+                .clickable { onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_plus),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+            )
+
+            Spacer(Modifier.width(6.dp))
+
+            OnDotText(
+                text = ADD_SCHEDULE,
+                style = OnDotTextStyle.BodyLargeSB,
+                color = Gray800,
+            )
         }
     }
 }

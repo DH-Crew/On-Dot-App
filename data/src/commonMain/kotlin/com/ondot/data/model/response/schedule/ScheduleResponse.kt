@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ScheduleResponse(
     val scheduleId: Long = -1L,
+    val type: String? = null,
     val startLongitude: Double = 0.0,
     val startLatitude: Double = 0.0,
     val endLongitude: Double = 0.0,

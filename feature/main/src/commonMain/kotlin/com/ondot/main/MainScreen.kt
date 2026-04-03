@@ -90,7 +90,13 @@ fun MainScreen(
                         navigateToNotificationScreen = navigateToNotification,
                         navigateToEverytimeScreen = navigateToEverytime,
                     )
-                BottomNavType.CALENDAR -> CalendarRoute()
+                BottomNavType.CALENDAR ->
+                    CalendarRoute(
+                        navigateToCreateGeneralSchedule = {
+                            navigateToGeneralSchedule()
+                            viewModel.setBottomNavType(NavRoutes.Home.route)
+                        },
+                    )
                 BottomNavType.SETTING -> {
                     SettingScreen(
                         navigateToDeleteAccountScreen = navigateToDeleteAccount,

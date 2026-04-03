@@ -48,6 +48,7 @@ fun CalendarBottomSheet(
     modifier: Modifier = Modifier,
     selectedDate: LocalDate,
     schedules: List<CalendarScheduleItemUiModel>,
+    togglingScheduleIds: Set<Long> = emptySet(),
     onToggleAlarm: (Long, Boolean) -> Unit = { _, _ -> },
 ) {
     Surface(
@@ -120,6 +121,7 @@ fun CalendarBottomSheet(
                     schedules.forEach { item ->
                         CalendarScheduleListItem(
                             item = item,
+                            isToggling = item.scheduleId in togglingScheduleIds,
                             onToggleAlarm = { enabled ->
                                 onToggleAlarm(item.scheduleId, enabled)
                             },
@@ -136,6 +138,7 @@ fun CalendarBottomSheet(
 @Composable
 private fun CalendarScheduleListItem(
     item: CalendarScheduleItemUiModel,
+    isToggling: Boolean,
     onToggleAlarm: (Boolean) -> Unit,
 ) {
     val leadingBarColor = if (item.isPast) Gray400 else Green500
@@ -217,7 +220,9 @@ private fun CalendarScheduleListItem(
                             .padding(vertical = 4.dp),
                     checked = item.isAlarmEnabled,
                     onClick = {
-                        if (!item.isPast) onToggleAlarm(it)
+                        if (!item.isPast && !isToggling) {
+                            onToggleAlarm(it)
+                        }
                     },
                 )
             }
