@@ -15,5 +15,4 @@ fun CalendarRangeResponse.toDomain(): List<CalendarDateScheduleSummary> =
         )
     }
 
-fun CalendarDateSchedulesResponse.toDomain(): List<Schedule> =
-    schedules.map { it.toDomain() }
+fun CalendarDateSchedulesResponse.toDomain(): List<Schedule> = schedules.map { it.toDomain() }

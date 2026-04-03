@@ -99,11 +99,12 @@ class CalendarViewModel(
 
     private fun getScheduleMarkersInRange(currentDate: LocalDate) {
         val firstDateOfMonth = LocalDate(currentDate.year, currentDate.month.number, 1)
-        val lastDateOfMonth = LocalDate(
-            currentDate.year,
-            currentDate.month.number,
-            daysInMonth(currentDate.year, currentDate.month.number),
-        )
+        val lastDateOfMonth =
+            LocalDate(
+                currentDate.year,
+                currentDate.month.number,
+                daysInMonth(currentDate.year, currentDate.month.number),
+            )
         val startDate = firstDateOfMonth.plus(DatePeriod(days = -7))
         val endDate = lastDateOfMonth.plus(DatePeriod(days = 7))
 
@@ -117,9 +118,10 @@ class CalendarViewModel(
             onSuccess = { summaries ->
                 val schedulesByDate =
                     summaries.associate { summary ->
-                        summary.date to summary.titles.map { title ->
-                            CalendarScheduleMarker(title = title)
-                        }
+                        summary.date to
+                            summary.titles.map { title ->
+                                CalendarScheduleMarker(title = title)
+                            }
                     }
 
                 reduce {
@@ -166,7 +168,7 @@ class CalendarViewModel(
         )
     }
 
-    /*--------------------------------------------알람 스케줄링, 취소------------------------------------------------*/
+    // --------------------------------------------알람 스케줄링, 취소------------------------------------------------
 
     private fun toggleAlarm(
         scheduleId: Long,

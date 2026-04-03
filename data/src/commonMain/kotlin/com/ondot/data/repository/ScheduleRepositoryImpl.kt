@@ -107,12 +107,15 @@ class ScheduleRepositoryImpl(
             )
         }
 
-    override suspend fun toggleAlarm(scheduleId: Long, isEnabled: Boolean): AppResult<Unit> =
+    override suspend fun toggleAlarm(
+        scheduleId: Long,
+        isEnabled: Boolean,
+    ): AppResult<Unit> =
         safeApiCall {
             networkClient.requestOrThrow<Unit>(
                 method = HttpMethod.PATCH,
                 path = "/schedules/$scheduleId/alarm",
-                body = ToggleAlarmRequest(isEnabled)
+                body = ToggleAlarmRequest(isEnabled),
             )
         }
 
