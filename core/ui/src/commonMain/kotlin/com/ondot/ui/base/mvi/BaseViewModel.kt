@@ -18,7 +18,11 @@ abstract class BaseViewModel<S : UiState, I : Intent, SE : SideEffect>(
     initialState: S,
 ) : ViewModel() {
     protected open val logger: Logger =
-        Logger.withTag(this::class.simpleName ?: "BaseViewModel")
+        Logger.withTag(
+            (this::class.simpleName ?: "BaseVM")
+                .removeSuffix("ViewModel")
+                .plus("VM"),
+        )
 
     // State
     private val stateHolder = StateStore(initialState)

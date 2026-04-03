@@ -26,6 +26,7 @@ kotlin {
             implementation(projects.feature.onboarding)
             implementation(projects.feature.splash)
             implementation(projects.feature.everytime)
+            implementation(projects.feature.calendar)
         }
 
         androidMain.dependencies {

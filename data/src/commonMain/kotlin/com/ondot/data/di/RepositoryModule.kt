@@ -2,11 +2,13 @@ package com.ondot.data.di
 
 import com.ondot.data.repository.AlarmRepositoryImpl
 import com.ondot.data.repository.AuthRepositoryImpl
+import com.ondot.data.repository.CalendarRepositoryImpl
 import com.ondot.data.repository.MemberRepositoryImpl
 import com.ondot.data.repository.PlaceRepositoryImpl
 import com.ondot.data.repository.ScheduleRepositoryImpl
 import com.ondot.domain.repository.AlarmRepository
 import com.ondot.domain.repository.AuthRepository
+import com.ondot.domain.repository.CalendarRepository
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.domain.repository.ScheduleRepository
@@ -19,4 +21,5 @@ val repositoryModule =
         single<MemberRepository> { MemberRepositoryImpl(get(), get(), get()) }
         single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
         single<AlarmRepository> { AlarmRepositoryImpl(get()) }
+        single<CalendarRepository> { CalendarRepositoryImpl(get()) }
     }
