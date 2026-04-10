@@ -40,6 +40,7 @@ data class CalendarMonth(
 
 @Immutable
 data class CalendarScheduleMarker(
+    val scheduleId: Long,
     val title: String,
 )
 

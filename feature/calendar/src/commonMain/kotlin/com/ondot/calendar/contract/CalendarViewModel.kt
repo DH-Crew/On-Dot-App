@@ -100,6 +100,8 @@ class CalendarViewModel(
                 loadSchedulesFor(currentState.selectedDate)
                 observeMapProvider()
             }
+
+            is CalendarIntent.DeleteHistory -> deleteHistory(intent.scheduleId)
         }
     }
 
@@ -133,8 +135,8 @@ class CalendarViewModel(
                 val schedulesByDate =
                     summaries.associate { summary ->
                         summary.date to
-                            summary.titles.map { title ->
-                                CalendarScheduleMarker(title = title)
+                            summary.schedules.map { schedule ->
+                                CalendarScheduleMarker(scheduleId = schedule.scheduleId, title = schedule.title)
                             }
                     }
 
@@ -322,6 +324,51 @@ class CalendarViewModel(
     private fun cancelScheduleAlarms(schedule: Schedule) {
         alarmScheduler.cancelAlarm(schedule.preparationAlarm.alarmId)
         alarmScheduler.cancelAlarm(schedule.departureAlarm.alarmId)
+    }
+
+    // --------------------------------------------과거 기록 삭제------------------------------------------------
+
+    private fun deleteHistory(scheduleId: Long) {
+        val selectedDate = currentState.selectedDate
+        val date = selectedDate.toApiDateString()
+
+        val previousItems = currentState.selectedDateScheduleItems
+        val previousSchedulesByDate = currentState.schedulesByDate
+
+        val updatedItems = previousItems.filter { it.scheduleId != scheduleId }
+        if (previousItems.size == updatedItems.size) return
+
+        val previousMarkers = previousSchedulesByDate[selectedDate].orEmpty()
+        val updatedMarkers = previousMarkers.filter { it.scheduleId != scheduleId }
+
+        val updatedSchedulesByDate =
+            previousSchedulesByDate.toMutableMap().apply {
+                if (updatedMarkers.isEmpty()) {
+                    remove(selectedDate)
+                } else {
+                    this[selectedDate] = updatedMarkers
+                }
+            }
+
+        reduce {
+            copy(
+                selectedDateScheduleItems = updatedItems,
+                schedulesByDate = updatedSchedulesByDate,
+            )
+        }
+
+        launchResult(
+            block = { calendarRepository.deleteHistory(scheduleId, date) },
+            onSuccess = {},
+            onError = {
+                reduce {
+                    copy(
+                        selectedDateScheduleItems = previousItems,
+                        schedulesByDate = previousSchedulesByDate,
+                    )
+                }
+            },
+        )
     }
 
     /**--------------------------------------------기타 유틸-----------------------------------------------*/
