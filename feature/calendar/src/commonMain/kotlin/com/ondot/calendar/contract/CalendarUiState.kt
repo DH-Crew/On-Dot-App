@@ -48,10 +48,18 @@ data class CalendarDayCell(
     val date: LocalDate,
     val inCurrentMonth: Boolean,
     val isSelected: Boolean,
+    val isToday: Boolean,
     val markers: List<CalendarScheduleMarker>,
 )
 
+@OptIn(ExperimentalTime::class)
 fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
+    val today =
+        Clock.System
+            .now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .date
+
     val firstDateOfMonth = LocalDate(currentMonth.year, currentMonth.month, 1)
     val firstDayOffset = firstDateOfMonth.dayOfWeek.sundayStartIndex()
 
@@ -70,6 +78,7 @@ fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
                     date = date,
                     inCurrentMonth = false,
                     isSelected = false,
+                    isToday = date == today,
                     markers = schedulesByDate[date].orEmpty(),
                 ),
             )
@@ -83,6 +92,7 @@ fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
                     date = date,
                     inCurrentMonth = true,
                     isSelected = date == selectedDate,
+                    isToday = date == today,
                     markers = schedulesByDate[date].orEmpty(),
                 ),
             )
@@ -96,6 +106,7 @@ fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
                     date = date,
                     inCurrentMonth = false,
                     isSelected = false,
+                    isToday = date == today,
                     markers = schedulesByDate[date].orEmpty(),
                 ),
             )
