@@ -22,7 +22,6 @@ import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray100
 import com.ondot.designsystem.theme.OnDotColor.Gray400
 import com.ondot.designsystem.theme.OnDotColor.Gray600
-import com.ondot.designsystem.theme.OnDotColor.Green400
 import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.designsystem.theme.OnDotColor.Green700
 import com.ondot.designsystem.theme.OnDotColor.Green900

@@ -12,12 +12,13 @@ fun CalendarRangeResponse.toDomain(): List<CalendarDateScheduleSummary> =
     days.map { day ->
         CalendarDateScheduleSummary(
             date = LocalDate.parse(day.date),
-            schedules = day.schedules.map {
-                CalendarDateScheduleSummaryItem(
-                    scheduleId = it.scheduleId,
-                    title = it.title,
-                )
-            },
+            schedules =
+                day.schedules.map {
+                    CalendarDateScheduleSummaryItem(
+                        scheduleId = it.scheduleId,
+                        title = it.title,
+                    )
+                },
         )
     }
 

@@ -37,17 +37,18 @@ class CalendarRepositoryImpl(
 
     override suspend fun deleteHistory(
         scheduleId: Long,
-        date: String
+        date: String,
     ): AppResult<Unit> =
         safeApiCall {
             networkClient
                 .requestOrThrow<Unit>(
                     method = HttpMethod.DELETE,
                     path = "/calendar/records",
-                    queryParams = mapOf(
-                        "scheduleId" to "$scheduleId",
-                        "date" to date,
-                    )
+                    queryParams =
+                        mapOf(
+                            "scheduleId" to "$scheduleId",
+                            "date" to date,
+                        ),
                 )
         }
 }

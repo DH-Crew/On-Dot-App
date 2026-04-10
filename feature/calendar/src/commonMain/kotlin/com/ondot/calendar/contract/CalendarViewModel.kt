@@ -121,43 +121,44 @@ class CalendarViewModel(
         val endDate = lastDateOfMonth.plus(DatePeriod(days = 7))
 
         markersJob?.cancel()
-        markersJob = launchResult(
-            block = {
-                calendarRepository.getScheduleMarkersInRange(
-                    startDate = startDate.toApiDateString(),
-                    endDate = endDate.toApiDateString(),
-                )
-            },
-            onSuccess = onSuccess@{ summaries ->
-                if (requestId != markersRequestId) return@onSuccess
-                if (currentState.currentMonth != requestedMonth) return@onSuccess
+        markersJob =
+            launchResult(
+                block = {
+                    calendarRepository.getScheduleMarkersInRange(
+                        startDate = startDate.toApiDateString(),
+                        endDate = endDate.toApiDateString(),
+                    )
+                },
+                onSuccess = onSuccess@{ summaries ->
+                    if (requestId != markersRequestId) return@onSuccess
+                    if (currentState.currentMonth != requestedMonth) return@onSuccess
 
-                val schedulesByDate =
-                    summaries.associate { summary ->
-                        summary.date to
-                            summary.schedules.map { schedule ->
-                                CalendarScheduleMarker(scheduleId = schedule.scheduleId, title = schedule.title)
-                            }
+                    val schedulesByDate =
+                        summaries.associate { summary ->
+                            summary.date to
+                                summary.schedules.map { schedule ->
+                                    CalendarScheduleMarker(scheduleId = schedule.scheduleId, title = schedule.title)
+                                }
+                        }
+
+                    reduce {
+                        copy(
+                            schedulesByDate = schedulesByDate,
+                        )
                     }
+                },
+                onError = onError@{
+                    if (requestId != markersRequestId) return@onError
+                    if (currentState.currentMonth != requestedMonth) return@onError
 
-                reduce {
-                    copy(
-                        schedulesByDate = schedulesByDate,
-                    )
-                }
-            },
-            onError = onError@{
-                if (requestId != markersRequestId) return@onError
-                if (currentState.currentMonth != requestedMonth) return@onError
-
-                reduce {
-                    copy(
-                        schedulesByDate = emptyMap(),
-                    )
-                }
-                emitEffect(CalendarSideEffect.ShowToast(ERROR_GET_SCHEDULE_LIST, ToastType.ERROR))
-            },
-        )
+                    reduce {
+                        copy(
+                            schedulesByDate = emptyMap(),
+                        )
+                    }
+                    emitEffect(CalendarSideEffect.ShowToast(ERROR_GET_SCHEDULE_LIST, ToastType.ERROR))
+                },
+            )
     }
 
     private fun loadSchedulesFor(date: LocalDate) {
@@ -166,34 +167,35 @@ class CalendarViewModel(
         val requestId = ++schedulesRequestId
 
         schedulesJob?.cancel()
-        schedulesJob = launchResult(
-            block = {
-                calendarRepository.getSchedulesFor(key)
-            },
-            onSuccess = onSuccess@{ schedules ->
-                if (requestId != schedulesRequestId) return@onSuccess
-                if (currentState.selectedDate != requestedDate) return@onSuccess
+        schedulesJob =
+            launchResult(
+                block = {
+                    calendarRepository.getSchedulesFor(key)
+                },
+                onSuccess = onSuccess@{ schedules ->
+                    if (requestId != schedulesRequestId) return@onSuccess
+                    if (currentState.selectedDate != requestedDate) return@onSuccess
 
-                reduce {
-                    copy(
-                        selectedDateSchedules = schedules,
-                        selectedDateScheduleItems = schedules.map { it.toCalendarScheduleItemUiModel(date) },
-                    )
-                }
-            },
-            onError = onError@{
-                if (requestId != schedulesRequestId) return@onError
-                if (currentState.selectedDate != requestedDate) return@onError
+                    reduce {
+                        copy(
+                            selectedDateSchedules = schedules,
+                            selectedDateScheduleItems = schedules.map { it.toCalendarScheduleItemUiModel(date) },
+                        )
+                    }
+                },
+                onError = onError@{
+                    if (requestId != schedulesRequestId) return@onError
+                    if (currentState.selectedDate != requestedDate) return@onError
 
-                reduce {
-                    copy(
-                        selectedDateSchedules = emptyList(),
-                        selectedDateScheduleItems = emptyList(),
-                    )
-                }
-                emitEffect(CalendarSideEffect.ShowToast(ERROR_GET_SCHEDULE_LIST, ToastType.ERROR))
-            },
-        )
+                    reduce {
+                        copy(
+                            selectedDateSchedules = emptyList(),
+                            selectedDateScheduleItems = emptyList(),
+                        )
+                    }
+                    emitEffect(CalendarSideEffect.ShowToast(ERROR_GET_SCHEDULE_LIST, ToastType.ERROR))
+                },
+            )
     }
 
     // --------------------------------------------알람 스케줄링, 취소------------------------------------------------

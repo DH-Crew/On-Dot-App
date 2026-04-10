@@ -85,7 +85,7 @@ fun CalendarRoute(
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
         onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
         onAddSchedule = navigateToCreateGeneralSchedule,
-        onDelete = { viewModel.dispatch(CalendarIntent.DeleteHistory(it)) }
+        onDelete = { viewModel.dispatch(CalendarIntent.DeleteHistory(it)) },
     )
 }
 
