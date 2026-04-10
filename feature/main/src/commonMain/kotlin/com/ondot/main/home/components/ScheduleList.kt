@@ -42,7 +42,7 @@ import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION
 import com.dh.ondot.presentation.ui.theme.appointmentTime
 import com.ondot.designsystem.components.OnDotSwitch
 import com.ondot.designsystem.components.OnDotText
-import com.ondot.designsystem.components.SwipableDeleteItem
+import com.ondot.designsystem.components.SwipeableDeleteItem
 import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.designsystem.theme.OnDotColor.Gray200
 import com.ondot.designsystem.theme.OnDotColor.Gray400
@@ -96,7 +96,7 @@ fun ScheduleList(
         }
 
         itemsIndexed(scheduleList, key = { index, it -> it.scheduleId }) { index, item ->
-            SwipableDeleteItem(
+            SwipeableDeleteItem(
                 onDelete = { onDelete(item.scheduleId) },
             ) {
                 ScheduleListItem(

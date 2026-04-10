@@ -29,6 +29,7 @@ import com.dh.ondot.presentation.ui.theme.CALENDAR_EMPTY_SCHEDULES_GUIDE
 import com.ondot.calendar.contract.CalendarScheduleItemUiModel
 import com.ondot.designsystem.components.OnDotSwitch
 import com.ondot.designsystem.components.OnDotText
+import com.ondot.designsystem.components.SwipeableDeleteItem
 import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.designsystem.theme.OnDotColor.Gray200
 import com.ondot.designsystem.theme.OnDotColor.Gray300
@@ -50,6 +51,7 @@ fun CalendarBottomSheet(
     schedules: List<CalendarScheduleItemUiModel>,
     togglingScheduleIds: Set<Long> = emptySet(),
     onToggleAlarm: (Long, Boolean) -> Unit = { _, _ -> },
+    onDelete: (Long) -> Unit = {},
 ) {
     Surface(
         modifier = modifier,
@@ -119,13 +121,18 @@ fun CalendarBottomSheet(
                 ) {
                     Spacer(Modifier.height(20.dp))
                     schedules.forEach { item ->
-                        CalendarScheduleListItem(
-                            item = item,
-                            isToggling = item.scheduleId in togglingScheduleIds,
-                            onToggleAlarm = { enabled ->
-                                onToggleAlarm(item.scheduleId, enabled)
-                            },
-                        )
+                        SwipeableDeleteItem(
+                            enabled = item.isPast,
+                            onDelete = { onDelete(item.scheduleId) },
+                        ) {
+                            CalendarScheduleListItem(
+                                item = item,
+                                isToggling = item.scheduleId in togglingScheduleIds,
+                                onToggleAlarm = { enabled ->
+                                    onToggleAlarm(item.scheduleId, enabled)
+                                },
+                            )
+                        }
                     }
 
                     Spacer(Modifier.height(8.dp))
@@ -146,13 +153,15 @@ private fun CalendarScheduleListItem(
     Column(
         modifier =
             Modifier
+                .background(Gray700)
                 .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.Start,
     ) {
-        if (item.repeatText != null && !item.isPast) {
+        if (!item.isPast && item.isRepeat) {
+            val dayLabels = listOf("일", "월", "화", "수", "목", "금", "토")
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Image(
                     painter = painterResource(Res.drawable.ic_repeat),
@@ -161,11 +170,18 @@ private fun CalendarScheduleListItem(
                         Modifier
                             .size(16.dp),
                 )
-                OnDotText(
-                    text = item.repeatText,
-                    style = OnDotTextStyle.BodySmallR2,
-                    color = Green500,
-                )
+
+                Spacer(Modifier.width(2.dp))
+
+                dayLabels.forEachIndexed { index, label ->
+                    val isActive = item.repeatDays.contains(index + 1)
+                    OnDotText(
+                        text = label,
+                        style = OnDotTextStyle.BodySmallR1,
+                        color = if (isActive) Green500 else Gray400,
+                        modifier = Modifier.padding(horizontal = 3.dp, vertical = (1.5).dp),
+                    )
+                }
             }
             Spacer(Modifier.height(4.dp))
         }

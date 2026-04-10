@@ -18,4 +18,8 @@ sealed interface CalendarIntent : Intent {
     ) : CalendarIntent
 
     object Init : CalendarIntent
+
+    data class DeleteHistory(
+        val scheduleId: Long,
+    ) : CalendarIntent
 }

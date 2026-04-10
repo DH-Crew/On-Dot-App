@@ -85,6 +85,7 @@ fun CalendarRoute(
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
         onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
         onAddSchedule = navigateToCreateGeneralSchedule,
+        onDelete = { viewModel.dispatch(CalendarIntent.DeleteHistory(it)) },
     )
 }
 
@@ -96,6 +97,7 @@ private fun CalendarScreen(
     onMoveToNextMonth: () -> Unit,
     onToggleAlarm: (Long, Boolean) -> Unit,
     onAddSchedule: () -> Unit,
+    onDelete: (Long) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberCalendarSheetState()
@@ -356,6 +358,7 @@ private fun CalendarScreen(
                             schedules = uiState.selectedDateScheduleItems,
                             togglingScheduleIds = uiState.togglingScheduleIds,
                             onToggleAlarm = onToggleAlarm,
+                            onDelete = onDelete,
                         )
                     }
                 }
@@ -386,6 +389,7 @@ private fun CalendarScreen(
                     schedules = uiState.selectedDateScheduleItems,
                     togglingScheduleIds = uiState.togglingScheduleIds,
                     onToggleAlarm = onToggleAlarm,
+                    onDelete = onDelete,
                 )
             }
 

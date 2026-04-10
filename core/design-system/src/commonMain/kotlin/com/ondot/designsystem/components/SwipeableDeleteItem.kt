@@ -44,7 +44,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @Composable
-fun SwipableDeleteItem(
+fun SwipeableDeleteItem(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     deleteWidth: Dp = 80.dp,
