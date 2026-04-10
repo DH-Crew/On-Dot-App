@@ -149,10 +149,11 @@ private fun CalendarScheduleListItem(
                 .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.Start,
     ) {
-        if (item.repeatText != null && !item.isPast) {
+        if (!item.isPast && item.isRepeat) {
+            val dayLabels = listOf("일", "월", "화", "수", "목", "금", "토")
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Image(
                     painter = painterResource(Res.drawable.ic_repeat),
@@ -161,11 +162,18 @@ private fun CalendarScheduleListItem(
                         Modifier
                             .size(16.dp),
                 )
-                OnDotText(
-                    text = item.repeatText,
-                    style = OnDotTextStyle.BodySmallR2,
-                    color = Green500,
-                )
+
+                Spacer(Modifier.width(2.dp))
+
+                dayLabels.forEachIndexed { index, label ->
+                    val isActive = item.repeatDays.contains(index + 1)
+                    OnDotText(
+                        text = label,
+                        style = OnDotTextStyle.BodySmallR1,
+                        color = if (isActive) Green500 else Gray400,
+                        modifier = Modifier.padding(horizontal = 3.dp, vertical = (1.5).dp),
+                    )
+                }
             }
             Spacer(Modifier.height(4.dp))
         }

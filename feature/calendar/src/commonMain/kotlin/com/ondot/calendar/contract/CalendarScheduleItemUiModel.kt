@@ -8,8 +8,8 @@ data class CalendarScheduleItemUiModel(
     val title: String,
     val appointmentTimeText: String,
     val alarmInfoText: String,
-    val repeatText: String?,
     val isRepeat: Boolean,
     val isAlarmEnabled: Boolean,
     val isPast: Boolean,
+    val repeatDays: List<Int>,
 )
