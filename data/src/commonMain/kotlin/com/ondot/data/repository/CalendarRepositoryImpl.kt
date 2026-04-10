@@ -34,4 +34,21 @@ class CalendarRepositoryImpl(
                     path = "/calendar/$date",
                 ).toDomain()
         }
+
+    override suspend fun deleteHistory(
+        scheduleId: Long,
+        date: String,
+    ): AppResult<Unit> =
+        safeApiCall {
+            networkClient
+                .requestOrThrow<Unit>(
+                    method = HttpMethod.DELETE,
+                    path = "/calendar/records",
+                    queryParams =
+                        mapOf(
+                            "scheduleId" to "$scheduleId",
+                            "date" to date,
+                        ),
+                )
+        }
 }

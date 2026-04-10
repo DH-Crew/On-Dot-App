@@ -40,6 +40,7 @@ data class CalendarMonth(
 
 @Immutable
 data class CalendarScheduleMarker(
+    val scheduleId: Long,
     val title: String,
 )
 
@@ -48,10 +49,18 @@ data class CalendarDayCell(
     val date: LocalDate,
     val inCurrentMonth: Boolean,
     val isSelected: Boolean,
+    val isToday: Boolean,
     val markers: List<CalendarScheduleMarker>,
 )
 
+@OptIn(ExperimentalTime::class)
 fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
+    val today =
+        Clock.System
+            .now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .date
+
     val firstDateOfMonth = LocalDate(currentMonth.year, currentMonth.month, 1)
     val firstDayOffset = firstDateOfMonth.dayOfWeek.sundayStartIndex()
 
@@ -70,6 +79,7 @@ fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
                     date = date,
                     inCurrentMonth = false,
                     isSelected = false,
+                    isToday = date == today,
                     markers = schedulesByDate[date].orEmpty(),
                 ),
             )
@@ -83,6 +93,7 @@ fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
                     date = date,
                     inCurrentMonth = true,
                     isSelected = date == selectedDate,
+                    isToday = date == today,
                     markers = schedulesByDate[date].orEmpty(),
                 ),
             )
@@ -96,6 +107,7 @@ fun CalendarUiState.toCalendarCells(): List<CalendarDayCell> {
                     date = date,
                     inCurrentMonth = false,
                     isSelected = false,
+                    isToday = date == today,
                     markers = schedulesByDate[date].orEmpty(),
                 ),
             )
@@ -138,30 +150,9 @@ fun Schedule.toCalendarScheduleItemUiModel(
         title = scheduleTitle,
         appointmentTimeText = appointmentTime.take(5),
         alarmInfoText = "준비 $preparationTime - 출발 $departureTime",
-        repeatText = repeatDays.toRepeatTextOrNull(isRepeat),
         isRepeat = isRepeat,
         isAlarmEnabled = hasActiveAlarm,
         isPast = isPast,
+        repeatDays = repeatDays,
     )
-}
-
-private fun List<Int>.toRepeatTextOrNull(isRepeat: Boolean): String? {
-    if (!isRepeat || isEmpty()) return null
-
-    val dayLabels =
-        mapOf(
-            1 to "일요일",
-            2 to "월요일",
-            3 to "화요일",
-            4 to "수요일",
-            5 to "목요일",
-            6 to "금요일",
-            7 to "토요일",
-        )
-
-    return if (size == 1) {
-        "${dayLabels[first()].orEmpty()} 반복"
-    } else {
-        "반복 일정"
-    }
 }

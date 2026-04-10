@@ -154,7 +154,7 @@ class FakeScheduleRepository : ScheduleRepository {
 
     override suspend fun toggleAlarm(
         scheduleId: Long,
-        isEnabled: Boolean
+        isEnabled: Boolean,
     ): AppResult<Unit> {
         TODO("Not yet implemented")
     }

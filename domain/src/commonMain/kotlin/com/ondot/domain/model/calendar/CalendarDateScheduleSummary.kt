@@ -4,5 +4,10 @@ import kotlinx.datetime.LocalDate
 
 data class CalendarDateScheduleSummary(
     val date: LocalDate,
-    val titles: List<String>,
+    val schedules: List<CalendarDateScheduleSummaryItem>,
+)
+
+data class CalendarDateScheduleSummaryItem(
+    val scheduleId: Long,
+    val title: String,
 )

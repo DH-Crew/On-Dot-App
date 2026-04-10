@@ -21,7 +21,7 @@ import com.ondot.calendar.contract.CalendarDayCell
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray100
 import com.ondot.designsystem.theme.OnDotColor.Gray400
-import com.ondot.designsystem.theme.OnDotColor.Green400
+import com.ondot.designsystem.theme.OnDotColor.Gray600
 import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.designsystem.theme.OnDotColor.Green700
 import com.ondot.designsystem.theme.OnDotColor.Green900
@@ -48,6 +48,12 @@ fun CalendarDay(
             else ->
                 if (isInCurrentMonth) Gray100 else Gray400
         }
+    val backgroundColor =
+        when {
+            cell.isSelected -> Gray600
+            cell.isToday -> Green900
+            else -> Color.Transparent
+        }
 
     Column(
         modifier =
@@ -60,13 +66,13 @@ fun CalendarDay(
                 Modifier
                     .size(28.dp)
                     .clip(CircleShape)
-                    .background(if (cell.isSelected) Green900 else Color.Transparent),
+                    .background(backgroundColor),
             contentAlignment = Alignment.Center,
         ) {
             OnDotText(
                 text = cell.date.day.toString(),
                 style = OnDotTextStyle.BodyLargeR2,
-                color = if (cell.isSelected) Green400 else dateColor,
+                color = if (cell.isSelected) Gray100 else dateColor,
             )
         }
 
