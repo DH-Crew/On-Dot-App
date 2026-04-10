@@ -11,4 +11,6 @@ interface CalendarRepository {
     ): AppResult<List<CalendarDateScheduleSummary>>
 
     suspend fun getSchedulesFor(date: String): AppResult<List<Schedule>> // 특정 날짜 일정 조회
+
+    suspend fun deleteHistory(scheduleId: Long, date: String): AppResult<Unit> // 과거 기록 삭제
 }
