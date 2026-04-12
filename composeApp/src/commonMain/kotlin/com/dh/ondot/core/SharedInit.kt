@@ -15,6 +15,7 @@ import com.ondot.network.di.networkModule
 import com.ondot.onboarding.di.onboardingModule
 import com.ondot.platform.di.providePlatformModules
 import com.ondot.splash.di.splashModule
+import com.ondot.util.di.utilModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
@@ -28,6 +29,7 @@ fun initKoin(extraModules: List<Module> = emptyList()) {
                     networkModule,
                     dataSourceModule,
                     databaseModule,
+                    utilModule,
                     splashModule,
                     loginModule,
                     alarmModule,

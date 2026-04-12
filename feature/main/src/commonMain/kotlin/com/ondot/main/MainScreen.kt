@@ -96,6 +96,9 @@ fun MainScreen(
                             navigateToGeneralSchedule()
                             viewModel.setBottomNavType(NavRoutes.Home.route)
                         },
+                        navigateToEditSchedule = {
+                            navigateToEditSchedule(it)
+                        },
                     )
                 BottomNavType.SETTING -> {
                     SettingScreen(

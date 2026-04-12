@@ -37,6 +37,7 @@ import com.ondot.designsystem.theme.OnDotColor.Gray400
 import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.ui.util.noRippleClickable
 import com.ondot.util.DateTimeFormatter.formatKoreanMonthDay
 import kotlinx.datetime.LocalDate
 import ondot.core.design_system.generated.resources.Res
@@ -52,6 +53,7 @@ fun CalendarBottomSheet(
     togglingScheduleIds: Set<Long> = emptySet(),
     onToggleAlarm: (Long, Boolean) -> Unit = { _, _ -> },
     onDelete: (Long, Boolean) -> Unit = { _, _ -> },
+    onClickSchedule: (Long) -> Unit = {},
 ) {
     Surface(
         modifier = modifier,
@@ -131,6 +133,7 @@ fun CalendarBottomSheet(
                                 onToggleAlarm = { enabled ->
                                     onToggleAlarm(item.scheduleId, enabled)
                                 },
+                                onClick = { if (!item.isPast) onClickSchedule(item.scheduleId) },
                             )
                         }
                     }
@@ -147,6 +150,7 @@ private fun CalendarScheduleListItem(
     item: CalendarScheduleItemUiModel,
     isToggling: Boolean,
     onToggleAlarm: (Boolean) -> Unit,
+    onClick: () -> Unit = {},
 ) {
     val leadingBarColor = if (item.isPast) Gray400 else Green500
 
@@ -154,7 +158,8 @@ private fun CalendarScheduleListItem(
         modifier =
             Modifier
                 .background(Gray700)
-                .padding(vertical = 8.dp),
+                .padding(vertical = 8.dp)
+                .noRippleClickable(onClick = onClick),
         horizontalAlignment = Alignment.Start,
     ) {
         if (!item.isPast && item.isRepeat) {
