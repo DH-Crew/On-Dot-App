@@ -159,6 +159,10 @@ class FakeScheduleRepository : ScheduleRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun deleteScheduleAppResult(scheduleId: Long): AppResult<Unit> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getLocalScheduleById(scheduleId: Long): Flow<Schedule?> =
         flow {
             emit(scheduleMap[scheduleId])
