@@ -41,7 +41,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.GENERAL_SCHEDULE_BOTTOM_SHEET_MATERIAL
-import com.dh.ondot.presentation.ui.theme.GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE
 import com.dh.ondot.presentation.ui.theme.GENERAL_SCHEDULE_BOTTOM_SHEET_TITLE
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.WORD_CONFIRM
@@ -50,7 +49,6 @@ import com.ondot.designsystem.components.AlarmInfoItem
 import com.ondot.designsystem.components.DateTimeInfoBar
 import com.ondot.designsystem.components.OnDotBottomSheet
 import com.ondot.designsystem.components.OnDotButton
-import com.ondot.designsystem.components.OnDotCheckBox
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.RoundedTextField
 import com.ondot.designsystem.components.RouteInputSection
@@ -58,7 +56,6 @@ import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor.GradientGreenTop
 import com.ondot.designsystem.theme.OnDotColor.Gray0
-import com.ondot.designsystem.theme.OnDotColor.Gray200
 import com.ondot.designsystem.theme.OnDotColor.Gray600
 import com.ondot.designsystem.theme.OnDotColor.Gray800
 import com.ondot.designsystem.theme.OnDotColor.Gray900
@@ -229,27 +226,6 @@ private fun BottomSheetContent(onCreateSchedule: (Boolean, String) -> Unit) {
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            OnDotCheckBox(
-                isChecked = isMedicineChecked,
-                onCheckedChange = { isMedicineChecked = !isMedicineChecked },
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            OnDotText(
-                text = GENERAL_SCHEDULE_BOTTOM_SHEET_MEDICINE,
-                style = OnDotTextStyle.BodyLargeR1,
-                color = Gray200,
-                modifier = Modifier.clickable { isMedicineChecked = !isMedicineChecked },
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         RoundedTextField(
             value = input,

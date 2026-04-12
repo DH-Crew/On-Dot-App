@@ -10,6 +10,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(projects.domain)
+            implementation(projects.core.bridge)
         }
     }
 }

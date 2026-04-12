@@ -71,6 +71,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun CalendarRoute(
     viewModel: CalendarViewModel = koinViewModel(),
     navigateToCreateGeneralSchedule: () -> Unit,
+    navigateToEditSchedule: (Long) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -85,7 +86,8 @@ fun CalendarRoute(
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
         onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
         onAddSchedule = navigateToCreateGeneralSchedule,
-        onDelete = { viewModel.dispatch(CalendarIntent.DeleteHistory(it)) },
+        onDelete = { id, isPast -> viewModel.dispatch(CalendarIntent.DeleteHistory(id, isPast)) },
+        onClickSchedule = { navigateToEditSchedule(it) },
     )
 }
 
@@ -97,7 +99,8 @@ private fun CalendarScreen(
     onMoveToNextMonth: () -> Unit,
     onToggleAlarm: (Long, Boolean) -> Unit,
     onAddSchedule: () -> Unit,
-    onDelete: (Long) -> Unit,
+    onDelete: (Long, Boolean) -> Unit,
+    onClickSchedule: (Long) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberCalendarSheetState()
@@ -359,6 +362,7 @@ private fun CalendarScreen(
                             togglingScheduleIds = uiState.togglingScheduleIds,
                             onToggleAlarm = onToggleAlarm,
                             onDelete = onDelete,
+                            onClickSchedule = onClickSchedule,
                         )
                     }
                 }
@@ -390,6 +394,7 @@ private fun CalendarScreen(
                     togglingScheduleIds = uiState.togglingScheduleIds,
                     onToggleAlarm = onToggleAlarm,
                     onDelete = onDelete,
+                    onClickSchedule = onClickSchedule,
                 )
             }
 

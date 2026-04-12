@@ -7,9 +7,6 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
-import com.ondot.bridge.TriggeredAlarmManager
-import com.ondot.domain.model.enums.AlarmAction
-import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.request.MapProviderRequest
@@ -17,12 +14,11 @@ import com.ondot.domain.model.request.ToggleAlarmRequest
 import com.ondot.domain.model.request.localNotification.LocalNotificationRequest
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleList
-import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
-import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.LocalNotificationScheduler
+import com.ondot.domain.service.ScheduleAlarmManager
 import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
 import com.ondot.util.DateTimeFormatter
@@ -34,7 +30,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val scheduleRepository: ScheduleRepository,
     private val memberRepository: MemberRepository,
-    private val alarmScheduler: AlarmScheduler,
+    private val scheduleAlarmManager: ScheduleAlarmManager,
     private val notificationScheduler: LocalNotificationScheduler,
     private val directionsOpener: DirectionsOpener,
 ) : BaseViewModel<HomeUiState>(HomeUiState()) {
@@ -77,32 +73,41 @@ class HomeViewModel(
     ) {
         val schedule = uiState.value.scheduleList.find { it.scheduleId == id } ?: return
 
+        val updatedSchedule =
+            schedule.copy(
+                hasActiveAlarm = isEnabled,
+                departureAlarm = schedule.departureAlarm.copy(enabled = isEnabled),
+                preparationAlarm = schedule.preparationAlarm.copy(enabled = isEnabled),
+            )
+
         val newList =
             uiState.value.scheduleList.map {
-                if (it.scheduleId == id) {
-                    it.copy(
-                        hasActiveAlarm = isEnabled,
-                        departureAlarm = it.departureAlarm.copy(enabled = isEnabled),
-                        preparationAlarm = it.preparationAlarm.copy(enabled = isEnabled),
-                    )
-                } else {
-                    it
-                }
+                if (it.scheduleId == id) updatedSchedule else it
             }
 
         updateState(uiState.value.copy(scheduleList = newList))
 
-        if (isEnabled) {
-            processAlarmsForSchedule(
-                schedule.copy(
-                    departureAlarm = schedule.departureAlarm.copy(enabled = true),
-                    preparationAlarm = schedule.preparationAlarm.copy(enabled = true),
-                ),
+        viewModelScope.launch {
+            scheduleAlarmManager.applyToggle(
+                original = schedule,
+                enabled = isEnabled,
             )
-            lastScheduledAlarms = lastScheduledAlarms + setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
+        }
+
+        if (isEnabled) {
+            lastScheduledAlarms =
+                lastScheduledAlarms +
+                setOf(
+                    schedule.departureAlarm.alarmId,
+                    schedule.preparationAlarm.alarmId,
+                )
         } else {
-            cancelAlarms(id)
-            lastScheduledAlarms = lastScheduledAlarms - setOf(schedule.departureAlarm.alarmId, schedule.preparationAlarm.alarmId)
+            lastScheduledAlarms =
+                lastScheduledAlarms -
+                setOf(
+                    schedule.departureAlarm.alarmId,
+                    schedule.preparationAlarm.alarmId,
+                )
         }
 
         viewModelScope.launch {
@@ -143,67 +148,15 @@ class HomeViewModel(
 
         startRemainingTimeTicker()
 
-        processAlarms(result.scheduleList)
+        viewModelScope.launch {
+            lastScheduledAlarms =
+                scheduleAlarmManager.syncAll(
+                    schedules = result.scheduleList,
+                    previouslyScheduledAlarmIds = lastScheduledAlarms,
+                )
+        }
+
         scheduleNotification(result.scheduleList)
-    }
-
-    private fun processAlarms(schedules: List<Schedule>) {
-        viewModelScope.launch {
-            // 현재 스케줄 리스트를 기반으로 울려야 하는 알람 id를 추출
-            val currentAlarmIds =
-                schedules
-                    .flatMap { schedule ->
-                        buildList {
-                            if (schedule.preparationAlarm.enabled) add(schedule.preparationAlarm.alarmId)
-                            if (schedule.departureAlarm.enabled) add(schedule.departureAlarm.alarmId)
-                        }
-                    }.toSet()
-
-            // 삭제할 알람: 이전에는 있었지만 현재는 없는 것
-            val toCancel = lastScheduledAlarms - currentAlarmIds
-            toCancel.forEach { alarmId -> alarmScheduler.cancelAlarm(alarmId) }
-
-            // 추가/업데이트할 알람: 현재 있는 것만
-            val alarmRingInfos =
-                schedules.flatMap { schedule ->
-                    buildList {
-                        if (schedule.preparationAlarm.enabled) {
-                            add(prepInfo(schedule))
-                        }
-                        if (schedule.departureAlarm.enabled) {
-                            add(depInfo(schedule))
-                        }
-                    }
-                }
-
-            // 스케줄러 예약
-            alarmRingInfos.forEach { info ->
-                alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
-                TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
-            }
-
-            // 이전 스케줄 리스트를 업데이트
-            lastScheduledAlarms = currentAlarmIds
-        }
-    }
-
-    private fun processAlarmsForSchedule(schedule: Schedule) {
-        viewModelScope.launch {
-            val alarmRingInfos =
-                buildList {
-                    if (schedule.preparationAlarm.enabled) {
-                        add(prepInfo(schedule))
-                    }
-                    if (schedule.departureAlarm.enabled) {
-                        add(depInfo(schedule))
-                    }
-                }
-
-            alarmRingInfos.forEach { info ->
-                alarmScheduler.scheduleAlarm(info = info, mapProvider = mapProvider)
-                TriggeredAlarmManager.recordTriggeredAlarm(info.scheduleId, info.alarm.alarmId, AlarmAction.SCHEDULED)
-            }
-        }
     }
 
     private fun scheduleNotification(schedules: List<Schedule>) {
@@ -251,19 +204,21 @@ class HomeViewModel(
     /**----------------------------------------------일정 삭제---------------------------------------------*/
 
     fun deleteSchedule(scheduleId: Long) {
-        logger.e { "삭제 요청 들어옴" }
-        val curList = uiState.value.scheduleList
-        val newList = uiState.value.scheduleList.filter { it.scheduleId != scheduleId }
+        val currentList = uiState.value.scheduleList
+        val targetSchedule = currentList.find { it.scheduleId == scheduleId } ?: return
+        val newList = currentList.filter { it.scheduleId != scheduleId }
         val job =
             viewModelScope.launch {
                 delay(2000)
-                logger.e { "삭제 요청 전송" }
                 scheduleRepository.deleteSchedule(scheduleId).collect {
                     resultResponse(it, { onSuccessDeleteSchedule(scheduleId) }, ::onFailDeleteSchedule)
                 }
             }
 
-        cancelAlarms(scheduleId)
+        viewModelScope.launch {
+            scheduleAlarmManager.cancel(targetSchedule)
+        }
+
         updateStateSync(uiState.value.copy(scheduleList = newList))
 
         viewModelScope.launch {
@@ -271,9 +226,14 @@ class HomeViewModel(
                 message = SUCCESS_DELETE_SCHEDULE,
                 type = ToastType.DELETE,
                 callback = {
-                    logger.e { "삭제 취소 실행" }
                     job.cancel()
-                    updateState(uiState.value.copy(scheduleList = curList))
+                    updateState(uiState.value.copy(scheduleList = currentList))
+
+                    viewModelScope.launch {
+                        if (targetSchedule.hasActiveAlarm) {
+                            scheduleAlarmManager.schedule(targetSchedule)
+                        }
+                    }
                 },
             )
         }
@@ -290,17 +250,6 @@ class HomeViewModel(
         viewModelScope.launch {
             ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR)
             getScheduleList()
-        }
-    }
-
-    // --------------------------------------------알람 취소-----------------------------------------------
-
-    /**홈 화면에서 일정을 삭제할 때 스케줄링된 알람도 함께 삭제*/
-    private fun cancelAlarms(scheduleId: Long) {
-        val schedule = uiState.value.scheduleList.find { it.scheduleId == scheduleId }
-        schedule?.let {
-            alarmScheduler.cancelAlarm(it.departureAlarm.alarmId)
-            alarmScheduler.cancelAlarm(it.preparationAlarm.alarmId)
         }
     }
 
@@ -321,34 +270,6 @@ class HomeViewModel(
     }
 
     /**--------------------------------------------기타 유틸-----------------------------------------------*/
-
-    private fun prepInfo(schedule: Schedule) =
-        AlarmRingInfo(
-            alarm = schedule.preparationAlarm,
-            alarmType = AlarmType.Preparation,
-            appointmentAt = schedule.appointmentAt,
-            scheduleTitle = schedule.scheduleTitle,
-            scheduleId = schedule.scheduleId,
-            startLat = schedule.startLatitude,
-            startLng = schedule.startLongitude,
-            endLat = schedule.endLatitude,
-            endLng = schedule.endLongitude,
-            repeatDays = schedule.repeatDays,
-        )
-
-    private fun depInfo(schedule: Schedule) =
-        AlarmRingInfo(
-            alarm = schedule.departureAlarm,
-            alarmType = AlarmType.Departure,
-            appointmentAt = schedule.appointmentAt,
-            scheduleTitle = schedule.scheduleTitle,
-            scheduleId = schedule.scheduleId,
-            startLat = schedule.startLatitude,
-            startLng = schedule.startLongitude,
-            endLat = schedule.endLatitude,
-            endLng = schedule.endLongitude,
-            repeatDays = schedule.repeatDays,
-        )
 
     private fun startRemainingTimeTicker() {
         val target = earliestAlarmAt

@@ -104,7 +104,7 @@ fun EditScheduleScreen(
     LaunchedEffect(viewModel.eventFlow) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                is EditScheduleEvent.NavigateToHomeScreen -> popScreen()
+                is EditScheduleEvent.NavigateBack -> popScreen()
             }
         }
     }
