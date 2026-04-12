@@ -67,6 +67,16 @@ class DefaultScheduleAlarmManager(
     override suspend fun cancel(schedule: Schedule) {
         alarmScheduler.cancelAlarm(schedule.preparationAlarm.alarmId)
         alarmScheduler.cancelAlarm(schedule.departureAlarm.alarmId)
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            schedule.scheduleId,
+            schedule.preparationAlarm.alarmId,
+            AlarmAction.STOP,
+        )
+        TriggeredAlarmManager.recordTriggeredAlarm(
+            schedule.scheduleId,
+            schedule.departureAlarm.alarmId,
+            AlarmAction.STOP,
+        )
     }
 
     override suspend fun applyToggle(
