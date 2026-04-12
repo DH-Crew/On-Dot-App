@@ -3,6 +3,7 @@ package com.ondot.calendar.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -91,25 +92,36 @@ fun CalendarDay(
             val dotTranslateY = 6f * (1f - eventDotAlpha)
 
             if (cell.markers.isNotEmpty()) {
-                Box(
-                    modifier =
-                        Modifier
-                            .graphicsLayer {
-                                alpha = eventLabelAlpha
-                                scaleX = chipScale
-                                scaleY = chipScale
-                                translationY = chipTranslateY
-                            },
+                BoxWithConstraints(
                     contentAlignment = Alignment.TopCenter,
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(3.dp),
+                    val chipHeight = 14.dp
+                    val chipSpacing = 3.dp
+                    val maxChipCount =
+                        ((maxHeight + chipSpacing) / (chipHeight + chipSpacing))
+                            .toInt()
+                            .coerceAtLeast(1)
+
+                    Box(
+                        modifier =
+                            Modifier
+                                .graphicsLayer {
+                                    alpha = eventLabelAlpha
+                                    scaleX = chipScale
+                                    scaleY = chipScale
+                                    translationY = chipTranslateY
+                                },
+                        contentAlignment = Alignment.TopCenter,
                     ) {
-                        cell.markers.take(5).forEach { marker ->
-                            ScheduleChip(
-                                text = marker.title,
-                            )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(chipSpacing),
+                        ) {
+                            cell.markers.take(maxChipCount).forEach { marker ->
+                                ScheduleChip(
+                                    text = marker.title,
+                                )
+                            }
                         }
                     }
                 }
