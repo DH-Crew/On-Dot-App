@@ -7,9 +7,6 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
 import com.dh.ondot.presentation.ui.theme.NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
-import com.ondot.bridge.TriggeredAlarmManager
-import com.ondot.domain.model.enums.AlarmAction
-import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.request.MapProviderRequest
@@ -17,10 +14,8 @@ import com.ondot.domain.model.request.ToggleAlarmRequest
 import com.ondot.domain.model.request.localNotification.LocalNotificationRequest
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleList
-import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
-import com.ondot.domain.service.AlarmScheduler
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.domain.service.LocalNotificationScheduler
 import com.ondot.domain.service.ScheduleAlarmManager
@@ -102,17 +97,17 @@ class HomeViewModel(
         if (isEnabled) {
             lastScheduledAlarms =
                 lastScheduledAlarms +
-                        setOf(
-                            schedule.departureAlarm.alarmId,
-                            schedule.preparationAlarm.alarmId,
-                        )
+                setOf(
+                    schedule.departureAlarm.alarmId,
+                    schedule.preparationAlarm.alarmId,
+                )
         } else {
             lastScheduledAlarms =
                 lastScheduledAlarms -
-                        setOf(
-                            schedule.departureAlarm.alarmId,
-                            schedule.preparationAlarm.alarmId,
-                        )
+                setOf(
+                    schedule.departureAlarm.alarmId,
+                    schedule.preparationAlarm.alarmId,
+                )
         }
 
         viewModelScope.launch {
