@@ -271,6 +271,8 @@ class CalendarViewModel(
                     original = originalSchedule,
                     enabled = originalSchedule.hasActiveAlarm,
                 )
+
+                handleError(t)
             } finally {
                 togglingScheduleIds.remove(scheduleId)
                 reduce {
