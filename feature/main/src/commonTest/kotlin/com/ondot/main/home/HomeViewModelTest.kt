@@ -13,11 +13,15 @@ import com.ondot.testing.fake.util.FakeAlarmScheduler
 import com.ondot.testing.fake.util.FakeAnalyticsManager
 import com.ondot.testing.fake.util.FakeDirectionsOpener
 import com.ondot.testing.fake.util.FakeNotificationScheduler
+import com.ondot.util.DefaultScheduleAlarmManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
@@ -42,6 +46,7 @@ class HomeViewModelTest {
     private lateinit var alarmScheduler: FakeAlarmScheduler
     private lateinit var notificationScheduler: FakeNotificationScheduler
     private lateinit var analyticsManager: FakeAnalyticsManager
+    private lateinit var scheduleAlarmManager: DefaultScheduleAlarmManager
 
     private lateinit var viewModel: HomeViewModel
 
@@ -49,6 +54,8 @@ class HomeViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
 
+        // TriggeredAlarmManager를 호출하는 컴포넌트가 있고 TriggeredAlarmManager 내부에서는 AlarmRepository를 주입받아야 함
+        // 그래서 koin으로 필요한 곳에 AlarmRepository를 주입할 수 있도록 설정
         startKoin {
             modules(
                 module {
@@ -63,6 +70,11 @@ class HomeViewModelTest {
         alarmScheduler = FakeAlarmScheduler()
         notificationScheduler = FakeNotificationScheduler()
         analyticsManager = FakeAnalyticsManager()
+        scheduleAlarmManager =
+            DefaultScheduleAlarmManager(
+                alarmScheduler = alarmScheduler,
+                memberRepository = memberRepository,
+            )
 
         createViewModel()
     }
@@ -72,8 +84,8 @@ class HomeViewModelTest {
             HomeViewModel(
                 scheduleRepository = scheduleRepository,
                 memberRepository = memberRepository,
+                scheduleAlarmManager = scheduleAlarmManager,
                 directionsOpener = directionsOpener,
-                alarmScheduler = alarmScheduler,
                 notificationScheduler = notificationScheduler,
             )
     }
@@ -94,7 +106,7 @@ class HomeViewModelTest {
 
             // when: MapProvider 값 변경 → needsChooseProvider 플래그 변경
             viewModel.setMapProvider(MapProvider.NAVER)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: HomeViewModel의 상태가 업데이트되어야 함
             assertFalse(viewModel.uiState.value.needsChooseProvider)
@@ -115,7 +127,7 @@ class HomeViewModelTest {
 
             // when
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: uiState 업데이트 확인
             val state = viewModel.uiState.value
@@ -125,10 +137,6 @@ class HomeViewModelTest {
             assertEquals(Triple(-1, -1, -1), state.remainingTime)
 
             // then: 1번 스케줄: Preparation + Departure, 2번 스케줄: Departure 총 3개
-            logger.e { "alarmScheduler.scheduled: ${alarmScheduler.scheduled}" }
-            viewModel.uiState.value.scheduleList.forEach { schedule ->
-                logger.e { "schedule: $schedule" }
-            }
             assertEquals(3, alarmScheduler.scheduled.size)
 
             val scheduledInfos = alarmScheduler.scheduled.map { it.first }
@@ -154,7 +162,7 @@ class HomeViewModelTest {
 
             // when
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: uiState는 기본값(빈 리스트) 유지
             val state = viewModel.uiState.value
@@ -199,7 +207,7 @@ class HomeViewModelTest {
             scheduleRepository.setInitialSchedules(schedules)
 
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // 기존에 getScheduleList 에서 예약된 알람/노티는 초기화하고 시작
             alarmScheduler.clear()
@@ -209,7 +217,7 @@ class HomeViewModelTest {
 
             // when: 1번 스케줄 알람 ON
             viewModel.onClickAlarmSwitch(id = 1L, isEnabled = true)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: UI 상태 변경
             val state = viewModel.uiState.value
@@ -245,7 +253,7 @@ class HomeViewModelTest {
             scheduleRepository.setInitialSchedules(schedules)
 
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             alarmScheduler.clear()
             scheduleRepository.lastToggleAlarmCalls.clear()
@@ -253,7 +261,7 @@ class HomeViewModelTest {
 
             // when: 1번 스케줄 알람 OFF
             viewModel.onClickAlarmSwitch(id = 1L, isEnabled = false)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: UI 상태 확인
             val state = viewModel.uiState.value
@@ -283,16 +291,16 @@ class HomeViewModelTest {
             scheduleRepository.setInitialSchedules(listOf(s1, s2))
 
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             alarmScheduler.clear()
             notificationScheduler.scheduled.clear()
             notificationScheduler.cancelled.clear()
             scheduleRepository.lastDeleteCalls.clear()
-            analyticsManager.events.clear()
 
             // when: 1번 스케줄 삭제 요청
             viewModel.deleteSchedule(scheduleId = 1L)
+            runCurrent()
 
             // then: 즉시 알람 취소, UI 에서 제거
             val nowState = viewModel.uiState.value
@@ -305,8 +313,8 @@ class HomeViewModelTest {
             assertTrue(scheduleRepository.lastDeleteCalls.isEmpty())
 
             // when: 2초 흐른 뒤
-            testDispatcher.scheduler.advanceTimeBy(2000)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceTimeBy(2000)
+            advanceUntilIdle()
 
             // then: Repo 삭제 호출 확인
             assertEquals(listOf(1L), scheduleRepository.lastDeleteCalls)
@@ -326,12 +334,12 @@ class HomeViewModelTest {
         runTest {
             // given: 처음에 provider 선택이 필요하다고 가정
             memberRepository.setNeedsChooseProvider(true)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
             assertTrue(viewModel.uiState.value.needsChooseProvider)
 
             // when
             viewModel.setMapProvider(MapProvider.NAVER)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: uiState 업데이트 확인
             assertFalse(viewModel.uiState.value.needsChooseProvider)
@@ -350,7 +358,7 @@ class HomeViewModelTest {
         runTest {
             // given
             memberRepository.setNeedsChooseProvider(true)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
             memberRepository.shouldFailUpdateMapProvider = true
 
             val initialProvider = memberRepository.getLocalMapProvider().first()
@@ -358,7 +366,7 @@ class HomeViewModelTest {
 
             // when
             viewModel.setMapProvider(MapProvider.NAVER)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: 여전히 provider 선택 필요 상태
             assertTrue(viewModel.uiState.value.needsChooseProvider)
@@ -380,7 +388,7 @@ class HomeViewModelTest {
 
             // 기본 KAKAO 상태로 스케줄 리스트 로딩
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // KAKAO 로 예약됐는지 확인하고 초기화
             assertTrue(alarmScheduler.scheduled.all { it.second == MapProvider.KAKAO })
@@ -388,11 +396,11 @@ class HomeViewModelTest {
 
             // when: 중간에 mapProvider를 NAVER 로 변경
             memberRepository.setInitialMapProvider(MapProvider.NAVER)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // 다시 알람 스위치 ON → processAlarms(newList) 호출 트리거
             viewModel.onClickAlarmSwitch(id = 1L, isEnabled = true)
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // then: 새로 예약된 알람은 NAVER로 되어 있어야 함
             assertTrue(alarmScheduler.scheduled.isNotEmpty())
@@ -412,7 +420,7 @@ class HomeViewModelTest {
             memberRepository.setInitialMapProvider(MapProvider.NAVER)
 
             viewModel.getScheduleList()
-            testDispatcher.scheduler.advanceUntilIdle()
+            advanceUntilIdle()
 
             // when: 경로 안내 보기
             viewModel.openDirections(id = 1L)
