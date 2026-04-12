@@ -105,7 +105,10 @@ class CalendarViewModel(
         }
     }
 
-    private fun getScheduleMarkersInRange(currentDate: LocalDate) {
+    private fun getScheduleMarkersInRange(
+        currentDate: LocalDate,
+        clearOnError: Boolean = true,
+    ) {
         // 동시에 여러 요청이 발생했을 때 뒤늦은 응답이 상태를 잘못 덮어쓰지 않도록 방어
         val requestedMonth = CalendarMonth(currentDate.year, currentDate.month.number)
         val requestId = ++markersRequestId
@@ -151,11 +154,14 @@ class CalendarViewModel(
                     if (requestId != markersRequestId) return@onError
                     if (currentState.currentMonth != requestedMonth) return@onError
 
-                    reduce {
-                        copy(
-                            schedulesByDate = emptyMap(),
-                        )
+                    if (clearOnError) {
+                        reduce {
+                            copy(
+                                schedulesByDate = emptyMap(),
+                            )
+                        }
                     }
+
                     emitEffect(CalendarSideEffect.ShowToast(ERROR_GET_SCHEDULE_LIST, ToastType.ERROR))
                 },
             )
@@ -421,7 +427,7 @@ class CalendarViewModel(
                         )
 
                         // 마커 데이터는 UI에서 optimistic 계산이 어려워서 다시 조회
-                        getScheduleMarkersInRange(selectedDate)
+                        getScheduleMarkersInRange(selectedDate, false)
                     }
 
                     is AppResult.Error -> {
