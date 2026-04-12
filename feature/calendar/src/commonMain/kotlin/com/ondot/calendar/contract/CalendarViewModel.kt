@@ -3,15 +3,11 @@ package com.ondot.calendar.contract
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
-import com.ondot.domain.model.enums.AlarmType
-import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.schedule.Schedule
-import com.ondot.domain.model.ui.AlarmRingInfo
 import com.ondot.domain.repository.CalendarRepository
-import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.ScheduleRepository
-import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.ScheduleAlarmManager
 import com.ondot.ui.base.mvi.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -23,23 +19,14 @@ import kotlinx.datetime.plus
 class CalendarViewModel(
     private val calendarRepository: CalendarRepository,
     private val scheduleRepository: ScheduleRepository,
-    private val memberRepository: MemberRepository,
-    private val alarmScheduler: AlarmScheduler,
+    private val scheduleAlarmManager: ScheduleAlarmManager,
 ) : BaseViewModel<CalendarUiState, CalendarIntent, CalendarSideEffect>(CalendarUiState()) {
-    private var mapProvider = MapProvider.KAKAO
     private val togglingScheduleIds = mutableSetOf<Long>()
 
     private var markersJob: Job? = null
     private var schedulesJob: Job? = null
     private var markersRequestId: Long = 0L
     private var schedulesRequestId: Long = 0L
-
-    private fun observeMapProvider() =
-        viewModelScope.launch {
-            memberRepository.getLocalMapProvider().collect {
-                mapProvider = it
-            }
-        }
 
     override suspend fun handleIntent(intent: CalendarIntent) {
         when (intent) {
@@ -99,7 +86,6 @@ class CalendarViewModel(
             CalendarIntent.Init -> {
                 getScheduleMarkersInRange(currentState.selectedDate)
                 loadSchedulesFor(currentState.selectedDate)
-                observeMapProvider()
             }
 
             is CalendarIntent.DeleteHistory -> {
@@ -169,7 +155,6 @@ class CalendarViewModel(
     }
 
     private fun loadSchedulesFor(date: LocalDate) {
-        val requestedDate = date
         val key = date.toApiDateString()
         val requestId = ++schedulesRequestId
 
@@ -181,7 +166,7 @@ class CalendarViewModel(
                 },
                 onSuccess = onSuccess@{ schedules ->
                     if (requestId != schedulesRequestId) return@onSuccess
-                    if (currentState.selectedDate != requestedDate) return@onSuccess
+                    if (currentState.selectedDate != date) return@onSuccess
 
                     reduce {
                         copy(
@@ -192,7 +177,7 @@ class CalendarViewModel(
                 },
                 onError = onError@{
                     if (requestId != schedulesRequestId) return@onError
-                    if (currentState.selectedDate != requestedDate) return@onError
+                    if (currentState.selectedDate != date) return@onError
 
                     reduce {
                         copy(
@@ -254,10 +239,12 @@ class CalendarViewModel(
             scheduleRepository.upsertLocalSchedule(updatedSchedule)
         }
 
-        applyAlarmLocally(
-            schedule = updatedSchedule,
-            enabled = enabled,
-        )
+        viewModelScope.launch {
+            scheduleAlarmManager.applyToggle(
+                original = originalSchedule,
+                enabled = enabled,
+            )
+        }
 
         launchResult(
             block = {
@@ -273,10 +260,12 @@ class CalendarViewModel(
                     schedules = originalSchedules,
                 )
 
-                applyAlarmLocally(
-                    schedule = originalSchedule,
-                    enabled = originalSchedule.hasActiveAlarm,
-                )
+                viewModelScope.launch {
+                    scheduleAlarmManager.applyToggle(
+                        original = originalSchedule,
+                        enabled = originalSchedule.hasActiveAlarm,
+                    )
+                }
             },
             onSuccess = {},
             onFinally = {
@@ -304,35 +293,8 @@ class CalendarViewModel(
         }
     }
 
-    private fun applyAlarmLocally(
-        schedule: Schedule,
-        enabled: Boolean,
-    ) {
-        if (enabled) {
-            scheduleSingleScheduleAlarms(schedule)
-        } else {
-            cancelScheduleAlarms(schedule)
-        }
-    }
-
-    private fun scheduleSingleScheduleAlarms(schedule: Schedule) {
-        val infos =
-            buildList {
-                if (schedule.preparationAlarm.enabled) add(prepInfo(schedule))
-                if (schedule.departureAlarm.enabled) add(depInfo(schedule))
-            }
-
-        infos.forEach { info ->
-            alarmScheduler.scheduleAlarm(
-                info = info,
-                mapProvider = mapProvider,
-            )
-        }
-    }
-
     private fun cancelScheduleAlarms(schedule: Schedule) {
-        alarmScheduler.cancelAlarm(schedule.preparationAlarm.alarmId)
-        alarmScheduler.cancelAlarm(schedule.departureAlarm.alarmId)
+        viewModelScope.launch { scheduleAlarmManager.cancel(schedule) }
     }
 
     // --------------------------------------------과거 기록 삭제------------------------------------------------
@@ -431,58 +393,20 @@ class CalendarViewModel(
                     schedules = previousSchedules,
                 )
 
-                val rolledBackSchedulesByDate =
-                    currentState.schedulesByDate.toMutableMap().apply {
-                        if (previousMarkersForDate.isEmpty()) {
-                            remove(selectedDate)
-                        } else {
-                            this[selectedDate] = previousMarkersForDate
-                        }
-                    }
-
                 reduce {
                     copy(
-                        schedulesByDate = rolledBackSchedulesByDate,
+                        schedulesByDate = previousSchedulesByDate,
                     )
                 }
 
-                applyAlarmLocally(
-                    schedule = targetSchedule,
-                    enabled = targetSchedule.hasActiveAlarm,
-                )
+                viewModelScope.launch {
+                    if (targetSchedule.hasActiveAlarm) {
+                        scheduleAlarmManager.schedule(targetSchedule)
+                    }
+                }
             },
         )
     }
-
-    /**--------------------------------------------기타 유틸-----------------------------------------------*/
-
-    private fun prepInfo(schedule: Schedule) =
-        AlarmRingInfo(
-            alarm = schedule.preparationAlarm,
-            alarmType = AlarmType.Preparation,
-            appointmentAt = schedule.appointmentAt,
-            scheduleTitle = schedule.scheduleTitle,
-            scheduleId = schedule.scheduleId,
-            startLat = schedule.startLatitude,
-            startLng = schedule.startLongitude,
-            endLat = schedule.endLatitude,
-            endLng = schedule.endLongitude,
-            repeatDays = schedule.repeatDays,
-        )
-
-    private fun depInfo(schedule: Schedule) =
-        AlarmRingInfo(
-            alarm = schedule.departureAlarm,
-            alarmType = AlarmType.Departure,
-            appointmentAt = schedule.appointmentAt,
-            scheduleTitle = schedule.scheduleTitle,
-            scheduleId = schedule.scheduleId,
-            startLat = schedule.startLatitude,
-            startLng = schedule.startLongitude,
-            endLat = schedule.endLatitude,
-            endLng = schedule.endLongitude,
-            repeatDays = schedule.repeatDays,
-        )
 }
 
 private fun LocalDate.moveToMonth(targetMonth: CalendarMonth): LocalDate {
