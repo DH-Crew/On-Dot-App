@@ -8,9 +8,10 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
 import com.ondot.domain.model.enums.TimeBottomSheet
 import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleDetail
 import com.ondot.domain.repository.ScheduleRepository
-import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.ScheduleAlarmManager
 import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
 import com.ondot.util.DateTimeFormatter
@@ -22,11 +23,12 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class EditScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
-    private val alarmScheduler: AlarmScheduler,
+    private val scheduleAlarmManager: ScheduleAlarmManager,
 ) : BaseViewModel<EditScheduleUiState>(EditScheduleUiState()) {
     private val logger = Logger.withTag("EditScheduleViewModel")
 
@@ -47,6 +49,7 @@ class EditScheduleViewModel(
         updateState(
             uiState.value.copy(
                 schedule = result.copy(repeatDays = result.repeatDays.map { it - 1 }),
+                originalSchedule = result,
                 isInitialized = true,
                 selectedDate = date,
                 selectedTime = time,
@@ -63,38 +66,55 @@ class EditScheduleViewModel(
 
     @OptIn(ExperimentalTime::class)
     fun saveSchedule() {
+        val originalScheduleDetail =
+            uiState.value.originalSchedule
+                ?: run {
+                    logger.e { "원본 일정이 없어 저장을 진행할 수 없습니다." }
+                    return
+                }
+
+        val selectedDate =
+            uiState.value.selectedDate ?: Clock.System
+                .now()
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+                .date
+
         // 새로 설정된 약속 날짜, 시간을 조합한 Iso8601 문자열
-        val newDate =
+        val newAppointmentAt =
             DateTimeFormatter.formatIsoDateTime(
-                date =
-                    uiState.value.selectedDate ?: kotlin.time.Clock.System
-                        .now()
-                        .toLocalDateTime(TimeZone.currentSystemDefault())
-                        .date,
+                date = selectedDate,
                 time =
                     uiState.value.schedule.appointmentAt
                         .toLocalTimeFromIso(),
             )
-        val newSchedule =
+        val updatedScheduleDetail =
             uiState.value.schedule.copy(
-                appointmentAt = newDate,
+                appointmentAt = newAppointmentAt,
                 repeatDays =
                     uiState.value.schedule.repeatDays
                         .map { it + 1 },
             )
 
-        // 변경된 데이터가 있을 수 있으므로 기존 알람 취소
-        cancelAlarms()
+        val originalSchedule = originalScheduleDetail.toSchedule(uiState.value.scheduleId)
+        val updatedSchedule = updatedScheduleDetail.toSchedule(uiState.value.scheduleId)
 
         viewModelScope.launch {
-            scheduleRepository.editSchedule(uiState.value.scheduleId, newSchedule).collect {
-                resultResponse(it, ::onSuccessSaveSchedule, ::onFailSaveSchedule)
+            scheduleRepository.editSchedule(uiState.value.scheduleId, updatedScheduleDetail).collect {
+                resultResponse(
+                    it,
+                    {
+                        viewModelScope.launch {
+                            val replaceResult = scheduleAlarmManager.replace(originalSchedule, updatedSchedule)
+                            replaceResult.onFailure { error ->
+                                logger.e { "알람 재스케줄링 실패: ${error.message}" }
+                            }
+                            emitEventFlow(EditScheduleEvent.NavigateBack)
+                        }
+                    },
+                    ::onFailSaveSchedule,
+                )
             }
         }
-    }
-
-    private fun onSuccessSaveSchedule(result: Unit) {
-        emitEventFlow(EditScheduleEvent.NavigateToHomeScreen)
     }
 
     private fun onFailSaveSchedule(e: Throwable) {
@@ -115,7 +135,7 @@ class EditScheduleViewModel(
     }
 
     private fun onSuccessDeleteSchedule(result: Unit) {
-        emitEventFlow(EditScheduleEvent.NavigateToHomeScreen)
+        emitEventFlow(EditScheduleEvent.NavigateBack)
     }
 
     private fun onFailDeleteSchedule(e: Throwable) {
@@ -127,12 +147,9 @@ class EditScheduleViewModel(
 
     /**일정을 삭제할 때 스케줄링된 알람도 함께 삭제*/
     private fun cancelAlarms() {
-        cancelAlarm(uiState.value.schedule.preparationAlarm.alarmId)
-        cancelAlarm(uiState.value.schedule.departureAlarm.alarmId)
-    }
-
-    private fun cancelAlarm(alarmId: Long) {
-        alarmScheduler.cancelAlarm(alarmId)
+        viewModelScope.launch {
+            scheduleAlarmManager.cancel(uiState.value.schedule.toSchedule(uiState.value.scheduleId))
+        }
     }
 
     /**------------------------------------------상태 변수 처리-------------------------------------------------*/
@@ -288,4 +305,20 @@ class EditScheduleViewModel(
     fun hideTimeBottomSheet() {
         updateState(uiState.value.copy(activeTimeBottomSheet = null))
     }
+
+    private fun ScheduleDetail.toSchedule(scheduleId: Long): Schedule =
+        Schedule(
+            scheduleId = scheduleId,
+            scheduleTitle = title,
+            isRepeat = isRepeat,
+            repeatDays = repeatDays,
+            appointmentAt = appointmentAt,
+            departureAlarm = departureAlarm,
+            preparationAlarm = preparationAlarm,
+            startLatitude = departurePlace.latitude,
+            startLongitude = departurePlace.longitude,
+            endLatitude = arrivalPlace.latitude,
+            endLongitude = arrivalPlace.longitude,
+            hasActiveAlarm = departureAlarm.enabled || preparationAlarm.enabled,
+        )
 }

@@ -16,6 +16,8 @@ data class EditScheduleUiState
         val scheduleId: Long = -1,
         val isInitialized: Boolean = false,
         val schedule: ScheduleDetail = ScheduleDetail(),
+        // 저장 실패 시에 알람 스케줄링 복원에 활용될 원본 데이터
+        val originalSchedule: ScheduleDetail? = null,
         val selectedDate: LocalDate? = null,
         val selectedTime: LocalTime =
             kotlin.time.Clock.System
