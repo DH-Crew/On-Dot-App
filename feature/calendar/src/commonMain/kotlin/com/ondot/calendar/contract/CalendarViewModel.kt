@@ -8,13 +8,19 @@ import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.repository.CalendarRepository
 import com.ondot.domain.repository.ScheduleRepository
 import com.ondot.domain.service.ScheduleAlarmManager
+import com.ondot.result.AppResult
 import com.ondot.ui.base.mvi.BaseViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
+import kotlin.coroutines.cancellation.CancellationException
 
 class CalendarViewModel(
     private val calendarRepository: CalendarRepository,
@@ -22,6 +28,7 @@ class CalendarViewModel(
     private val scheduleAlarmManager: ScheduleAlarmManager,
 ) : BaseViewModel<CalendarUiState, CalendarIntent, CalendarSideEffect>(CalendarUiState()) {
     private val togglingScheduleIds = mutableSetOf<Long>()
+    private val alarmToggleJobs = mutableMapOf<Long, Job>()
 
     private var markersJob: Job? = null
     private var schedulesJob: Job? = null
@@ -230,53 +237,49 @@ class CalendarViewModel(
                 if (schedule.scheduleId == scheduleId) updatedSchedule else schedule
             }
 
-        applySchedules(
-            date = targetDate,
-            schedules = updatedSchedules,
-        )
-
         viewModelScope.launch {
-            scheduleRepository.upsertLocalSchedule(updatedSchedule)
-        }
+            try {
+                applySchedules(
+                    date = targetDate,
+                    schedules = updatedSchedules,
+                )
 
-        viewModelScope.launch {
-            scheduleAlarmManager.applyToggle(
-                original = originalSchedule,
-                enabled = enabled,
-            )
-        }
+                scheduleRepository.upsertLocalSchedule(updatedSchedule)
 
-        launchResult(
-            block = {
+                applyAlarmToggleSerially(
+                    scheduleId = scheduleId,
+                    original = originalSchedule,
+                    enabled = enabled,
+                )
+
                 scheduleRepository.toggleAlarm(
                     scheduleId = scheduleId,
                     isEnabled = enabled,
                 )
-            },
-            onError = {
+            } catch (e: CancellationException) {
+                throw e
+            } catch (t: Throwable) {
                 scheduleRepository.upsertLocalSchedule(originalSchedule)
+
                 applySchedules(
                     date = targetDate,
                     schedules = originalSchedules,
                 )
 
-                viewModelScope.launch {
-                    scheduleAlarmManager.applyToggle(
-                        original = originalSchedule,
-                        enabled = originalSchedule.hasActiveAlarm,
-                    )
-                }
-            },
-            onSuccess = {},
-            onFinally = {
+                applyAlarmToggleSerially(
+                    scheduleId = scheduleId,
+                    original = originalSchedule,
+                    enabled = originalSchedule.hasActiveAlarm,
+                )
+            } finally {
                 togglingScheduleIds.remove(scheduleId)
                 reduce {
                     copy(
                         togglingScheduleIds = togglingScheduleIds.toSet(),
                     )
                 }
-            },
-        )
+            }
+        }
     }
 
     private fun applySchedules(
@@ -293,8 +296,41 @@ class CalendarViewModel(
         }
     }
 
-    private fun cancelScheduleAlarms(schedule: Schedule) {
-        viewModelScope.launch { scheduleAlarmManager.cancel(schedule) }
+    private suspend fun cancelScheduleAlarms(schedule: Schedule) {
+        withContext(NonCancellable) {
+            scheduleAlarmManager.cancel(schedule)
+        }
+    }
+
+    /**
+     * 같은 scheduleId의 이전 알람 반영 작업이 있으면 먼저 끝내고 현재 작업만 실행
+     * */
+    private suspend fun applyAlarmToggleSerially(
+        scheduleId: Long,
+        original: Schedule,
+        enabled: Boolean,
+    ) = coroutineScope {
+        alarmToggleJobs[scheduleId]?.cancelAndJoin()
+
+        val job =
+            launch {
+                withContext(NonCancellable) {
+                    scheduleAlarmManager.applyToggle(
+                        original = original,
+                        enabled = enabled,
+                    )
+                }
+            }
+
+        alarmToggleJobs[scheduleId] = job
+
+        try {
+            job.join()
+        } finally {
+            if (alarmToggleJobs[scheduleId] === job) {
+                alarmToggleJobs.remove(scheduleId)
+            }
+        }
     }
 
     // --------------------------------------------과거 기록 삭제------------------------------------------------
@@ -372,40 +408,97 @@ class CalendarViewModel(
                 }
             }
 
-        cancelScheduleAlarms(targetSchedule)
+        viewModelScope.launch {
+            try {
+                reduce {
+                    copy(
+                        selectedDateSchedules = updatedSchedules,
+                        selectedDateScheduleItems = updatedItems,
+                        schedulesByDate = updatedSchedulesByDate,
+                    )
+                }
 
-        reduce {
-            copy(
-                selectedDateSchedules = updatedSchedules,
-                selectedDateScheduleItems = updatedItems,
-                schedulesByDate = updatedSchedulesByDate,
-            )
-        }
+                if (targetSchedule.hasActiveAlarm) {
+                    alarmToggleJobs[scheduleId]?.cancelAndJoin()
+                    cancelScheduleAlarms(targetSchedule)
+                }
 
-        launchResult(
-            block = { scheduleRepository.deleteScheduleAppResult(scheduleId) },
-            onSuccess = {
-                emitEffect(CalendarSideEffect.ShowToast(SUCCESS_DELETE_SCHEDULE, ToastType.INFO))
-            },
-            onError = {
+                when (val result = scheduleRepository.deleteScheduleAppResult(scheduleId)) {
+                    is AppResult.Success -> {
+                        emitEffect(
+                            CalendarSideEffect.ShowToast(
+                                SUCCESS_DELETE_SCHEDULE,
+                                ToastType.INFO,
+                            ),
+                        )
+                    }
+
+                    is AppResult.Error -> {
+                        handleError(result.error)
+
+                        applySchedules(
+                            date = selectedDate,
+                            schedules = previousSchedules,
+                        )
+
+                        val rolledBackSchedulesByDate =
+                            currentState.schedulesByDate.toMutableMap().apply {
+                                if (previousMarkersForDate.isEmpty()) {
+                                    remove(selectedDate)
+                                } else {
+                                    this[selectedDate] = previousMarkersForDate
+                                }
+                            }
+
+                        reduce {
+                            copy(
+                                schedulesByDate = rolledBackSchedulesByDate,
+                            )
+                        }
+
+                        if (targetSchedule.hasActiveAlarm) {
+                            applyAlarmToggleSerially(
+                                scheduleId = scheduleId,
+                                original = targetSchedule,
+                                enabled = true,
+                            )
+                        }
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (t: Throwable) {
+                handleError(t)
+
                 applySchedules(
                     date = selectedDate,
                     schedules = previousSchedules,
                 )
 
+                val rolledBackSchedulesByDate =
+                    currentState.schedulesByDate.toMutableMap().apply {
+                        if (previousMarkersForDate.isEmpty()) {
+                            remove(selectedDate)
+                        } else {
+                            this[selectedDate] = previousMarkersForDate
+                        }
+                    }
+
                 reduce {
                     copy(
-                        schedulesByDate = previousSchedulesByDate,
+                        schedulesByDate = rolledBackSchedulesByDate,
                     )
                 }
 
-                viewModelScope.launch {
-                    if (targetSchedule.hasActiveAlarm) {
-                        scheduleAlarmManager.schedule(targetSchedule)
-                    }
+                if (targetSchedule.hasActiveAlarm) {
+                    applyAlarmToggleSerially(
+                        scheduleId = scheduleId,
+                        original = targetSchedule,
+                        enabled = true,
+                    )
                 }
-            },
-        )
+            }
+        }
     }
 }
 
