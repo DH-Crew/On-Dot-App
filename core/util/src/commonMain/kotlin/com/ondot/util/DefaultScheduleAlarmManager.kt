@@ -89,13 +89,13 @@ class DefaultScheduleAlarmManager(
     override suspend fun replace(
         original: Schedule,
         updated: Schedule,
-    ) {
-        cancel(original)
-
-        if (updated.hasActiveAlarm) {
-            schedule(updated)
+    ): Result<Unit> =
+        runCatching {
+            cancel(original)
+            if (updated.hasActiveAlarm) {
+                schedule(updated)
+            }
         }
-    }
 
     private suspend fun currentMapProvider(): MapProvider = memberRepository.getLocalMapProvider().first()
 

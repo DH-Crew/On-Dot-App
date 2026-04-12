@@ -40,5 +40,5 @@ interface ScheduleAlarmManager {
     suspend fun replace(
         original: Schedule,
         updated: Schedule,
-    )
+    ): Result<Unit>
 }
