@@ -124,7 +124,6 @@ fun CalendarBottomSheet(
                     Spacer(Modifier.height(20.dp))
                     schedules.forEach { item ->
                         SwipeableDeleteItem(
-                            enabled = item.isPast,
                             onDelete = { onDelete(item.scheduleId, item.isPast) },
                         ) {
                             CalendarScheduleListItem(
