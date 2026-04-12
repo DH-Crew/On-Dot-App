@@ -398,15 +398,15 @@ class CalendarViewModel(
         val updatedSchedules = previousSchedules.filter { it.scheduleId != scheduleId }
         val updatedItems = previousItems.filter { it.scheduleId != scheduleId }
 
-        val previousMarkers = previousSchedulesByDate[selectedDate].orEmpty()
-        val updatedMarkers = previousMarkers.filter { it.scheduleId != scheduleId }
+        val previousMarkersForDate = previousSchedulesByDate[selectedDate].orEmpty()
+        val updatedMarkersForDate = previousMarkersForDate.filter { it.scheduleId != scheduleId }
 
         val updatedSchedulesByDate =
             previousSchedulesByDate.toMutableMap().apply {
-                if (updatedMarkers.isEmpty()) {
+                if (updatedMarkersForDate.isEmpty()) {
                     remove(selectedDate)
                 } else {
-                    this[selectedDate] = updatedMarkers
+                    this[selectedDate] = updatedMarkersForDate
                 }
             }
 
@@ -431,9 +431,18 @@ class CalendarViewModel(
                     schedules = previousSchedules,
                 )
 
+                val rolledBackSchedulesByDate =
+                    currentState.schedulesByDate.toMutableMap().apply {
+                        if (previousMarkersForDate.isEmpty()) {
+                            remove(selectedDate)
+                        } else {
+                            this[selectedDate] = previousMarkersForDate
+                        }
+                    }
+
                 reduce {
                     copy(
-                        schedulesByDate = previousSchedulesByDate,
+                        schedulesByDate = rolledBackSchedulesByDate,
                     )
                 }
 
