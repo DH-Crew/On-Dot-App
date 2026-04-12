@@ -119,6 +119,14 @@ class ScheduleRepositoryImpl(
             )
         }
 
+    override suspend fun deleteScheduleAppResult(scheduleId: Long): AppResult<Unit> =
+        safeApiCall {
+            networkClient.requestOrThrow<Unit>(
+                method = HttpMethod.DELETE,
+                path = "/schedules/$scheduleId",
+            )
+        }
+
     /**
      * Local
      * */
