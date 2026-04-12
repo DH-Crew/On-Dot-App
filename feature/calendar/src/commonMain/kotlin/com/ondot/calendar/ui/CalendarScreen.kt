@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -41,6 +42,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ADD_SCHEDULE
+import com.dh.ondot.presentation.ui.theme.DELETE_REPEAT_SCHEDULE_CONTENT
+import com.dh.ondot.presentation.ui.theme.DELETE_REPEAT_SCHEDULE_TITLE
+import com.dh.ondot.presentation.ui.theme.WORD_DELETE
 import com.ondot.calendar.contract.CalendarIntent
 import com.ondot.calendar.contract.CalendarInteractionState
 import com.ondot.calendar.contract.CalendarSheetAnchor
@@ -55,10 +59,12 @@ import com.ondot.calendar.ui.component.CalendarBottomSheet
 import com.ondot.calendar.ui.component.CalendarMonthGrid
 import com.ondot.calendar.ui.component.CalendarTopBar
 import com.ondot.calendar.ui.component.CalendarWeekHeader
+import com.ondot.designsystem.components.OnDotDialog
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray800
 import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.designsystem.theme.OnDotColor.Green500
+import com.ondot.domain.model.enums.DialogType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -86,7 +92,7 @@ fun CalendarRoute(
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
         onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
         onAddSchedule = navigateToCreateGeneralSchedule,
-        onDelete = { id, isPast -> viewModel.dispatch(CalendarIntent.DeleteHistory(id, isPast)) },
+        onDelete = { id, isPast -> viewModel.dispatch(CalendarIntent.DeleteScheduleItem(id, isPast)) },
         onClickSchedule = { navigateToEditSchedule(it) },
     )
 }
@@ -128,6 +134,8 @@ private fun CalendarScreen(
 
     val eventLabelAlpha = 1f - hiddenToPeek
     val dimAlpha = peekToExpanded * 0.08f
+
+    var scheduleIdPendingDelete by remember { mutableStateOf<Long?>(null) }
 
     BoxWithConstraints(
         modifier =
@@ -363,6 +371,7 @@ private fun CalendarScreen(
                             onToggleAlarm = onToggleAlarm,
                             onDelete = onDelete,
                             onClickSchedule = onClickSchedule,
+                            onShowScheduleDeleteDialog = { scheduleIdPendingDelete = it },
                         )
                     }
                 }
@@ -395,6 +404,7 @@ private fun CalendarScreen(
                     onToggleAlarm = onToggleAlarm,
                     onDelete = onDelete,
                     onClickSchedule = onClickSchedule,
+                    onShowScheduleDeleteDialog = { scheduleIdPendingDelete = it },
                 )
             }
 
@@ -405,6 +415,22 @@ private fun CalendarScreen(
                         .padding(bottom = 20.dp, end = 22.dp),
                 onClick = onAddSchedule,
             )
+
+            if (scheduleIdPendingDelete != null) {
+                OnDotDialog(
+                    dialogType = DialogType.TWO,
+                    dialogTitle = DELETE_REPEAT_SCHEDULE_TITLE,
+                    dialogContent = DELETE_REPEAT_SCHEDULE_CONTENT,
+                    positiveText = WORD_DELETE,
+                    onDismiss = { scheduleIdPendingDelete = null },
+                    onNegativeClick = { scheduleIdPendingDelete = null },
+                    onPositiveClick = {
+                        val id = scheduleIdPendingDelete ?: return@OnDotDialog
+                        scheduleIdPendingDelete = null
+                        onDelete(id, false)
+                    },
+                )
+            }
         }
     }
 }

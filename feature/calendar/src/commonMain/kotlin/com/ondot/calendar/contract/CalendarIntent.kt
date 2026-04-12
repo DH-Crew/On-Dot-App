@@ -19,7 +19,7 @@ sealed interface CalendarIntent : Intent {
 
     object Init : CalendarIntent
 
-    data class DeleteHistory(
+    data class DeleteScheduleItem(
         val scheduleId: Long,
         val isPast: Boolean,
     ) : CalendarIntent
