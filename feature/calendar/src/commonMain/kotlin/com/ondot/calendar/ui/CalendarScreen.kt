@@ -85,7 +85,7 @@ fun CalendarRoute(
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
         onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
         onAddSchedule = navigateToCreateGeneralSchedule,
-        onDelete = { viewModel.dispatch(CalendarIntent.DeleteHistory(it)) },
+        onDelete = { id, isPast -> viewModel.dispatch(CalendarIntent.DeleteHistory(id, isPast)) },
     )
 }
 
@@ -97,7 +97,7 @@ private fun CalendarScreen(
     onMoveToNextMonth: () -> Unit,
     onToggleAlarm: (Long, Boolean) -> Unit,
     onAddSchedule: () -> Unit,
-    onDelete: (Long) -> Unit,
+    onDelete: (Long, Boolean) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberCalendarSheetState()

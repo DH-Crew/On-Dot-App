@@ -48,6 +48,8 @@ interface ScheduleRepository {
         isEnabled: Boolean,
     ): AppResult<Unit>
 
+    suspend fun deleteScheduleAppResult(scheduleId: Long): AppResult<Unit>
+
     /**
      * Local
      * */

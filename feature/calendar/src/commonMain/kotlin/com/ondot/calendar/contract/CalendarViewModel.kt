@@ -2,6 +2,7 @@ package com.ondot.calendar.contract
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
+import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.enums.ToastType
@@ -101,7 +102,13 @@ class CalendarViewModel(
                 observeMapProvider()
             }
 
-            is CalendarIntent.DeleteHistory -> deleteHistory(intent.scheduleId)
+            is CalendarIntent.DeleteHistory -> {
+                if (intent.isPast) {
+                    deleteHistory(intent.scheduleId)
+                } else {
+                    deleteSchedule(intent.scheduleId)
+                }
+            }
         }
     }
 
@@ -369,6 +376,80 @@ class CalendarViewModel(
                         schedulesByDate = previousSchedulesByDate,
                     )
                 }
+            },
+        )
+    }
+
+    // --------------------------------------------일정 삭제------------------------------------------------
+
+    private fun deleteSchedule(scheduleId: Long) {
+        val selectedDate = currentState.selectedDate
+        val previousSchedules = currentState.selectedDateSchedules
+        val previousItems = currentState.selectedDateScheduleItems
+        val previousSchedulesByDate = currentState.schedulesByDate
+
+        val targetSchedule =
+            previousSchedules.firstOrNull { it.scheduleId == scheduleId }
+                ?: run {
+                    logger.e { "일정을 찾을 수 없습니다. $scheduleId" }
+                    return
+                }
+
+        val updatedSchedules = previousSchedules.filter { it.scheduleId != scheduleId }
+        val updatedItems = previousItems.filter { it.scheduleId != scheduleId }
+
+        val previousMarkersForDate = previousSchedulesByDate[selectedDate].orEmpty()
+        val updatedMarkersForDate = previousMarkersForDate.filter { it.scheduleId != scheduleId }
+
+        val updatedSchedulesByDate =
+            previousSchedulesByDate.toMutableMap().apply {
+                if (updatedMarkersForDate.isEmpty()) {
+                    remove(selectedDate)
+                } else {
+                    this[selectedDate] = updatedMarkersForDate
+                }
+            }
+
+        cancelScheduleAlarms(targetSchedule)
+
+        reduce {
+            copy(
+                selectedDateSchedules = updatedSchedules,
+                selectedDateScheduleItems = updatedItems,
+                schedulesByDate = updatedSchedulesByDate,
+            )
+        }
+
+        launchResult(
+            block = { scheduleRepository.deleteScheduleAppResult(scheduleId) },
+            onSuccess = {
+                emitEffect(CalendarSideEffect.ShowToast(SUCCESS_DELETE_SCHEDULE, ToastType.INFO))
+            },
+            onError = {
+                applySchedules(
+                    date = selectedDate,
+                    schedules = previousSchedules,
+                )
+
+                val rolledBackSchedulesByDate =
+                    currentState.schedulesByDate.toMutableMap().apply {
+                        if (previousMarkersForDate.isEmpty()) {
+                            remove(selectedDate)
+                        } else {
+                            this[selectedDate] = previousMarkersForDate
+                        }
+                    }
+
+                reduce {
+                    copy(
+                        schedulesByDate = rolledBackSchedulesByDate,
+                    )
+                }
+
+                applyAlarmLocally(
+                    schedule = targetSchedule,
+                    enabled = targetSchedule.hasActiveAlarm,
+                )
             },
         )
     }

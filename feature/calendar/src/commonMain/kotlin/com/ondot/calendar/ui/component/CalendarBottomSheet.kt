@@ -51,7 +51,7 @@ fun CalendarBottomSheet(
     schedules: List<CalendarScheduleItemUiModel>,
     togglingScheduleIds: Set<Long> = emptySet(),
     onToggleAlarm: (Long, Boolean) -> Unit = { _, _ -> },
-    onDelete: (Long) -> Unit = {},
+    onDelete: (Long, Boolean) -> Unit = { _, _ -> },
 ) {
     Surface(
         modifier = modifier,
@@ -123,7 +123,7 @@ fun CalendarBottomSheet(
                     schedules.forEach { item ->
                         SwipeableDeleteItem(
                             enabled = item.isPast,
-                            onDelete = { onDelete(item.scheduleId) },
+                            onDelete = { onDelete(item.scheduleId, item.isPast) },
                         ) {
                             CalendarScheduleListItem(
                                 item = item,

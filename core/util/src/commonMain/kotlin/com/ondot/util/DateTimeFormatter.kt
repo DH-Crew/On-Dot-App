@@ -325,6 +325,11 @@ object DateTimeFormatter {
 
     fun LocalTime.toIsoTimeString(): String = "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
 
+    /**
+     * `@param` date 선택된 날짜
+     * `@param` time 선택된 시간
+     * `@return` LocalDate, LocalTime을 조합한 ISO8601 문자열
+     * */
     fun formatIsoDateTime(
         date: LocalDate,
         time: LocalTime,
