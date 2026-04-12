@@ -102,8 +102,16 @@ class DefaultScheduleAlarmManager(
     ): Result<Unit> =
         runCatching {
             cancel(original)
-            if (updated.hasActiveAlarm) {
-                schedule(updated)
+
+            try {
+                if (updated.hasActiveAlarm) {
+                    schedule(updated)
+                }
+            } catch (t: Throwable) {
+                if (enabledAlarmIds(original).isNotEmpty()) {
+                    runCatching { schedule(original) }
+                }
+                throw t
             }
         }
 
