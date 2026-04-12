@@ -52,8 +52,9 @@ fun CalendarBottomSheet(
     schedules: List<CalendarScheduleItemUiModel>,
     togglingScheduleIds: Set<Long> = emptySet(),
     onToggleAlarm: (Long, Boolean) -> Unit = { _, _ -> },
-    onDelete: (Long, Boolean) -> Unit = { _, _ -> },
+    onDelete: (Long, Boolean) -> Unit = { _, _ -> }, // 반복 일정이 아닌 경우 그냥 삭제
     onClickSchedule: (Long) -> Unit = {},
+    onShowScheduleDeleteDialog: (Long) -> Unit = {}, // 반복 일정인 경우 삭제 다이얼로그 띄우기
 ) {
     Surface(
         modifier = modifier,
@@ -124,8 +125,13 @@ fun CalendarBottomSheet(
                     Spacer(Modifier.height(20.dp))
                     schedules.forEach { item ->
                         SwipeableDeleteItem(
-                            enabled = item.isPast,
-                            onDelete = { onDelete(item.scheduleId, item.isPast) },
+                            onDelete = {
+                                if (!item.isPast && item.isRepeat) {
+                                    onShowScheduleDeleteDialog(item.scheduleId)
+                                } else {
+                                    onDelete(item.scheduleId, item.isPast)
+                                }
+                            },
                         ) {
                             CalendarScheduleListItem(
                                 item = item,

@@ -95,7 +95,7 @@ class CalendarViewModel(
                 loadSchedulesFor(currentState.selectedDate)
             }
 
-            is CalendarIntent.DeleteHistory -> {
+            is CalendarIntent.DeleteScheduleItem -> {
                 if (intent.isPast) {
                     deleteHistory(intent.scheduleId)
                 } else {
@@ -105,7 +105,10 @@ class CalendarViewModel(
         }
     }
 
-    private fun getScheduleMarkersInRange(currentDate: LocalDate) {
+    private fun getScheduleMarkersInRange(
+        currentDate: LocalDate,
+        clearOnError: Boolean = true,
+    ) {
         // 동시에 여러 요청이 발생했을 때 뒤늦은 응답이 상태를 잘못 덮어쓰지 않도록 방어
         val requestedMonth = CalendarMonth(currentDate.year, currentDate.month.number)
         val requestId = ++markersRequestId
@@ -151,11 +154,14 @@ class CalendarViewModel(
                     if (requestId != markersRequestId) return@onError
                     if (currentState.currentMonth != requestedMonth) return@onError
 
-                    reduce {
-                        copy(
-                            schedulesByDate = emptyMap(),
-                        )
+                    if (clearOnError) {
+                        reduce {
+                            copy(
+                                schedulesByDate = emptyMap(),
+                            )
+                        }
                     }
+
                     emitEffect(CalendarSideEffect.ShowToast(ERROR_GET_SCHEDULE_LIST, ToastType.ERROR))
                 },
             )
@@ -386,7 +392,6 @@ class CalendarViewModel(
         val selectedDate = currentState.selectedDate
         val previousSchedules = currentState.selectedDateSchedules
         val previousItems = currentState.selectedDateScheduleItems
-        val previousSchedulesByDate = currentState.schedulesByDate
 
         val targetSchedule =
             previousSchedules.firstOrNull { it.scheduleId == scheduleId }
@@ -398,25 +403,12 @@ class CalendarViewModel(
         val updatedSchedules = previousSchedules.filter { it.scheduleId != scheduleId }
         val updatedItems = previousItems.filter { it.scheduleId != scheduleId }
 
-        val previousMarkersForDate = previousSchedulesByDate[selectedDate].orEmpty()
-        val updatedMarkersForDate = previousMarkersForDate.filter { it.scheduleId != scheduleId }
-
-        val updatedSchedulesByDate =
-            previousSchedulesByDate.toMutableMap().apply {
-                if (updatedMarkersForDate.isEmpty()) {
-                    remove(selectedDate)
-                } else {
-                    this[selectedDate] = updatedMarkersForDate
-                }
-            }
-
         viewModelScope.launch {
             try {
                 reduce {
                     copy(
                         selectedDateSchedules = updatedSchedules,
                         selectedDateScheduleItems = updatedItems,
-                        schedulesByDate = updatedSchedulesByDate,
                     )
                 }
 
@@ -433,6 +425,9 @@ class CalendarViewModel(
                                 ToastType.INFO,
                             ),
                         )
+
+                        // 마커 데이터는 UI에서 optimistic 계산이 어려워서 다시 조회
+                        getScheduleMarkersInRange(selectedDate, false)
                     }
 
                     is AppResult.Error -> {
@@ -442,21 +437,6 @@ class CalendarViewModel(
                             date = selectedDate,
                             schedules = previousSchedules,
                         )
-
-                        val rolledBackSchedulesByDate =
-                            currentState.schedulesByDate.toMutableMap().apply {
-                                if (previousMarkersForDate.isEmpty()) {
-                                    remove(selectedDate)
-                                } else {
-                                    this[selectedDate] = previousMarkersForDate
-                                }
-                            }
-
-                        reduce {
-                            copy(
-                                schedulesByDate = rolledBackSchedulesByDate,
-                            )
-                        }
 
                         if (targetSchedule.hasActiveAlarm) {
                             applyAlarmToggleSerially(
@@ -476,21 +456,6 @@ class CalendarViewModel(
                     date = selectedDate,
                     schedules = previousSchedules,
                 )
-
-                val rolledBackSchedulesByDate =
-                    currentState.schedulesByDate.toMutableMap().apply {
-                        if (previousMarkersForDate.isEmpty()) {
-                            remove(selectedDate)
-                        } else {
-                            this[selectedDate] = previousMarkersForDate
-                        }
-                    }
-
-                reduce {
-                    copy(
-                        schedulesByDate = rolledBackSchedulesByDate,
-                    )
-                }
 
                 if (targetSchedule.hasActiveAlarm) {
                     applyAlarmToggleSerially(
