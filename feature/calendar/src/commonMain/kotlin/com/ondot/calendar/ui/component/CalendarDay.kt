@@ -50,8 +50,8 @@ fun CalendarDay(
         }
     val backgroundColor =
         when {
-            cell.isSelected -> Gray600
             cell.isToday -> Green900
+            cell.isSelected -> Gray600
             else -> Color.Transparent
         }
 
@@ -106,7 +106,7 @@ fun CalendarDay(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(3.dp),
                     ) {
-                        cell.markers.take(3).forEach { marker ->
+                        cell.markers.take(5).forEach { marker ->
                             ScheduleChip(
                                 text = marker.title,
                             )
@@ -129,7 +129,7 @@ fun CalendarDay(
                         horizontalArrangement = Arrangement.spacedBy(3.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        cell.markers.take(2).forEach { _ ->
+                        cell.markers.take(3).forEach { _ ->
                             Box(
                                 modifier =
                                     Modifier
