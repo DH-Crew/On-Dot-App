@@ -178,6 +178,8 @@ const val DELETE_ALARM_TITLE = "알람 삭제"
 const val DELETE_ALARM_CONTENT = "정말 알람을 삭제하시겠어요?"
 const val MAP_PROVIDER_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
 const val MAP_PROVIDER_CONTENT = "길 안내에 사용될 예정이에요."
+const val DELETE_REPEAT_SCHEDULE_TITLE = "반복 일정 삭제"
+const val DELETE_REPEAT_SCHEDULE_CONTENT = "이 알람을 삭제하면 이후 반복 알람도 함께 사라져요"
 
 // Setting
 const val LOGOUT_SUCCESS_MESSAGE = "정상적으로 로그아웃되었습니다."
