@@ -21,5 +21,6 @@ sealed interface CalendarIntent : Intent {
 
     data class DeleteHistory(
         val scheduleId: Long,
+        val isPast: Boolean,
     ) : CalendarIntent
 }

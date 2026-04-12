@@ -106,7 +106,7 @@ fun CalendarDay(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(3.dp),
                     ) {
-                        cell.markers.take(2).forEach { marker ->
+                        cell.markers.take(3).forEach { marker ->
                             ScheduleChip(
                                 text = marker.title,
                             )
