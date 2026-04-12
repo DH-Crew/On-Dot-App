@@ -63,6 +63,7 @@ class EditScheduleViewModel(
 
     @OptIn(ExperimentalTime::class)
     fun saveSchedule() {
+        // 새로 설정된 약속 날짜, 시간을 조합한 Iso8601 문자열
         val newDate =
             DateTimeFormatter.formatIsoDateTime(
                 date =
@@ -82,7 +83,8 @@ class EditScheduleViewModel(
                         .map { it + 1 },
             )
 
-        if (!newSchedule.preparationAlarm.enabled) cancelAlarm(newSchedule.preparationAlarm.alarmId)
+        // 변경된 데이터가 있을 수 있으므로 기존 알람 취소
+        cancelAlarms()
 
         viewModelScope.launch {
             scheduleRepository.editSchedule(uiState.value.scheduleId, newSchedule).collect {
