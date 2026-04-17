@@ -79,6 +79,7 @@ const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었습니다."
 const val SUCCESS_EDIT_PREPARATION_TIME = "준비 시간이 수정되었어요."
 const val SUCCESS_VALIDATE_TIMETABLE = "시간표 연동에 성공했어요."
 const val SUCCESS_CREATE_EVERYTIME_SCHEDULE = "시간표에 맞춰 알람을 생성했어요."
+const val SUCCESS_DELETE_REPEAT_SCHEDULE = "반복 알람이 삭제되었습니다."
 
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
@@ -179,7 +180,7 @@ const val DELETE_ALARM_CONTENT = "정말 알람을 삭제하시겠어요?"
 const val MAP_PROVIDER_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
 const val MAP_PROVIDER_CONTENT = "길 안내에 사용될 예정이에요."
 const val DELETE_REPEAT_SCHEDULE_TITLE = "반복 일정 삭제"
-const val DELETE_REPEAT_SCHEDULE_CONTENT = "이 알람을 삭제하면 이후 반복 알람도 함께 사라져요"
+const val DELETE_REPEAT_SCHEDULE_CONTENT = "정말 삭제하시겠어요?\n알람을 삭제하면 이후 반복 알람도 \n함께 삭제됩니다."
 
 // Setting
 const val LOGOUT_SUCCESS_MESSAGE = "정상적으로 로그아웃되었습니다."

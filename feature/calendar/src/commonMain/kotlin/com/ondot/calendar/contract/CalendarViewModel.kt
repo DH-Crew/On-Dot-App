@@ -2,6 +2,7 @@ package com.ondot.calendar.contract
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
+import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_REPEAT_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.schedule.Schedule
@@ -428,6 +429,8 @@ class CalendarViewModel(
 
                         // 마커 데이터는 UI에서 optimistic 계산이 어려워서 다시 조회
                         getScheduleMarkersInRange(selectedDate, false)
+
+                        emitEffect(CalendarSideEffect.ShowToast(SUCCESS_DELETE_REPEAT_SCHEDULE, ToastType.INFO))
                     }
 
                     is AppResult.Error -> {
