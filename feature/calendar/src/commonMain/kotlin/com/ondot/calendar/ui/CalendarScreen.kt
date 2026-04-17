@@ -49,6 +49,7 @@ import com.ondot.calendar.contract.CalendarIntent
 import com.ondot.calendar.contract.CalendarInteractionState
 import com.ondot.calendar.contract.CalendarSheetAnchor
 import com.ondot.calendar.contract.CalendarSheetState
+import com.ondot.calendar.contract.CalendarSideEffect
 import com.ondot.calendar.contract.CalendarUiState
 import com.ondot.calendar.contract.CalendarViewModel
 import com.ondot.calendar.contract.GestureAxis
@@ -66,6 +67,7 @@ import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.DialogType
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.ui.util.ToastManager
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import ondot.core.design_system.generated.resources.Res
@@ -83,6 +85,16 @@ fun CalendarRoute(
 
     LaunchedEffect(Unit) {
         viewModel.dispatch(CalendarIntent.Init)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is CalendarSideEffect.ShowToast -> {
+                    ToastManager.show(effect.message, effect.type)
+                }
+            }
+        }
     }
 
     CalendarScreen(
