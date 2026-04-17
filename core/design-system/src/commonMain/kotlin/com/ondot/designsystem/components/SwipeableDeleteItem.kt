@@ -49,6 +49,8 @@ fun SwipeableDeleteItem(
     enabled: Boolean = true,
     deleteWidth: Dp = 80.dp,
     thresholdFraction: Float = 0.3f,
+    deleteTextSpacing: Dp = 7.dp,
+    deleteTextStyle: OnDotTextStyle = OnDotTextStyle.BodyMediumR,
     onDelete: () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -87,18 +89,11 @@ fun SwipeableDeleteItem(
                         .semantics(mergeDescendants = true) {},
                 contentAlignment = Alignment.Center,
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_delete_gray800),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(Gray0),
-                        modifier = Modifier.size(24.dp),
-                    )
-                    Spacer(Modifier.height(7.dp))
-                    OnDotText(text = WORD_DELETE, style = OnDotTextStyle.BodyMediumR, color = Gray0)
-                }
+                DeleteActionContent(
+                    text = WORD_DELETE,
+                    spacing = deleteTextSpacing,
+                    textStyle = deleteTextStyle,
+                )
             }
         }
 
@@ -179,5 +174,31 @@ fun SwipeableDeleteItem(
                     },
             )
         }
+    }
+}
+
+@Composable
+private fun DeleteActionContent(
+    text: String,
+    spacing: Dp = 7.dp,
+    textStyle: OnDotTextStyle = OnDotTextStyle.BodyMediumR,
+    textColor: Color = Gray0,
+    iconSize: Dp = 24.dp,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(Res.drawable.ic_delete_gray800),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(textColor),
+            modifier = Modifier.size(iconSize),
+        )
+        Spacer(modifier = Modifier.height(spacing))
+        OnDotText(
+            text = text,
+            style = textStyle,
+            color = textColor,
+        )
     }
 }
