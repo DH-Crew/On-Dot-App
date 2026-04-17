@@ -125,6 +125,9 @@ fun CalendarBottomSheet(
                     Spacer(Modifier.height(20.dp))
                     schedules.forEach { item ->
                         SwipeableDeleteItem(
+                            deleteWidth = 60.dp,
+                            deleteTextSpacing = 4.dp,
+                            deleteTextStyle = OnDotTextStyle.BodySmallR1,
                             onDelete = {
                                 if (!item.isPast && item.isRepeat) {
                                     onShowScheduleDeleteDialog(item.scheduleId)
