@@ -258,7 +258,7 @@ public final class AlarmKitBridge: NSObject {
             }
         }
     }
-
+    
     public func cancel(_ id: String, _ completion: ((Bool) -> Void)? = nil) {
         do {
             let uuid = Self.stableUUID(for: id)
@@ -270,6 +270,172 @@ public final class AlarmKitBridge: NSObject {
             completion?(false)
         }
     }
+    
+    // MARK: Test
+//    @MainActor
+//    public func scheduleCalendar(
+//        id: String?,
+//        dateComponents: DateComponents,
+//        repeatDays: [Int],
+//        title: String,
+//        scheduleId: Int64,
+//        alarmId: Int64,
+//        alarmType: String,
+//        tintHex: String? = nil,
+//        openMapsOnSecondary: Bool = false,
+//        startLat: NSNumber?, startLng: NSNumber?,
+//        endLat: NSNumber?, endLng: NSNumber?,
+//        mapProvider: String,
+//        _ completion: @escaping (String?, String?) -> Void
+//    ) {
+//        print("[AK_TEST] action=schedule_request id=\(id ?? "nil") alarmId=\(alarmId)")
+//
+//        Task {
+//            do {
+//                var secondaryButton: AlarmButton? = nil
+//                var secondaryIntent: (any LiveActivityIntent)? = nil
+//                if openMapsOnSecondary {
+//                    secondaryButton = AlarmButton(
+//                        text: .init(stringLiteral: "경로안내 보기"),
+//                        textColor: .white,
+//                        systemImageName: "arrow.triangle.turn.up.right.circle.fill"
+//                    )
+//                    secondaryIntent = OpenMapsIntent(
+//                        scheduleId: Int(scheduleId),
+//                        alarmId: Int(alarmId),
+//                        startLat: startLat?.doubleValue,
+//                        startLng: startLng?.doubleValue,
+//                        endLat: endLat?.doubleValue,
+//                        endLng: endLng?.doubleValue,
+//                        name: title,
+//                        mapProvider: mapProvider
+//                    )
+//                }
+//
+//                let alert = AlarmPresentation.Alert(
+//                    title: .init(stringLiteral: title),
+//                    stopButton: AlarmButton(
+//                        text: .init(stringLiteral: "Stop"),
+//                        textColor: .white,
+//                        systemImageName: "stop.circle.fill"
+//                    ),
+//                    secondaryButton: secondaryButton,
+//                    secondaryButtonBehavior: secondaryButton != nil ? .custom : nil
+//                )
+//
+//                let attrs = AlarmAttributes<AlarmBridgeMetadata>(
+//                    presentation: AlarmPresentation(alert: alert),
+//                    metadata: AlarmBridgeMetadata(
+//                        scheduleId: scheduleId,
+//                        alarmId: alarmId,
+//                        alarmType: alarmType,
+//                        title: title,
+//                        startLat: startLat?.doubleValue,
+//                        startLng: startLng?.doubleValue,
+//                        endLat: endLat?.doubleValue,
+//                        endLng: endLng?.doubleValue
+//                    ),
+//                    tintColor: (tintHex.flatMap { Color(hex: $0) }) ?? .green
+//                )
+//
+//                let schedule: Alarm.Schedule = {
+//                    let weekdays = repeatDays.compactMap { weekday(from: $0) }
+//
+//                    if !weekdays.isEmpty {
+//                        let hour = dateComponents.hour ?? 0
+//                        let minute = dateComponents.minute ?? 0
+//                        let time = Alarm.Schedule.Relative.Time(hour: hour, minute: minute)
+//                        let recurrence: Alarm.Schedule.Relative.Recurrence = .weekly(weekdays)
+//                        let relative = Alarm.Schedule.Relative(time: time, repeats: recurrence)
+//                        return .relative(relative)
+//                    }
+//
+//                    if dateComponents.year != nil || dateComponents.month != nil || dateComponents.day != nil,
+//                       let date = Calendar.current.date(from: dateComponents) {
+//                        return .fixed(date)
+//                    } else {
+//                        let hour = dateComponents.hour ?? 0
+//                        let minute = dateComponents.minute ?? 0
+//                        let time = Alarm.Schedule.Relative.Time(hour: hour, minute: minute)
+//                        return .relative(.init(time: time, repeats: .never))
+//                    }
+//                }()
+//
+//                let config = AlarmManager.AlarmConfiguration.alarm(
+//                    schedule: schedule,
+//                    attributes: attrs,
+//                    stopIntent: alarmType == "departure" ? OpenMapsIntent(
+//                        scheduleId: Int(scheduleId),
+//                        alarmId: Int(alarmId),
+//                        startLat: startLat?.doubleValue,
+//                        startLng: startLng?.doubleValue,
+//                        endLat: endLat?.doubleValue,
+//                        endLng: endLng?.doubleValue,
+//                        name: title,
+//                        mapProvider: mapProvider
+//                    ) : nil,
+//                    secondaryIntent: secondaryIntent,
+//                    sound: .default
+//                )
+//
+//                let uuid: UUID = {
+//                    if let ext = id, !ext.isEmpty { return Self.stableUUID(for: ext) }
+//                    return UUID()
+//                }()
+//
+//                print("[AK_TEST] action=schedule_uuid_resolved id=\(id ?? "nil") alarmId=\(alarmId) uuid=\(uuid.uuidString)")
+//
+//                do {
+//                    try manager.cancel(id: uuid)
+//                    print("[AK_TEST] action=pre_cancel_success id=\(id ?? "nil") alarmId=\(alarmId) uuid=\(uuid.uuidString)")
+//                } catch {
+//                    print("[AK_TEST] action=pre_cancel_fail id=\(id ?? "nil") alarmId=\(alarmId) uuid=\(uuid.uuidString) error=\(error)")
+//                }
+//
+//                #if DEBUG
+//                if let id, !id.isEmpty {
+//                    Task { @MainActor in
+//                        try? await Task.sleep(nanoseconds: 200_000_000) // 0.2초
+//                        print("[AK_TEST] action=auto_cancel_fire id=\(id) alarmId=\(alarmId)")
+//                        AlarmKitBridge.shared.cancel(id) { ok in
+//                            print("[AK_TEST] action=auto_cancel_result id=\(id) alarmId=\(alarmId) ok=\(ok)")
+//                        }
+//                    }
+//                }
+//
+//                print("[AK_TEST] action=schedule_delay_start id=\(id ?? "nil") alarmId=\(alarmId) uuid=\(uuid.uuidString)")
+//                try await Task.sleep(nanoseconds: 3_000_000_000) // 3초 딜레이
+//                print("[AK_TEST] action=schedule_delay_end id=\(id ?? "nil") alarmId=\(alarmId) uuid=\(uuid.uuidString)")
+//                #endif
+//
+//                _ = try await manager.schedule(id: uuid, configuration: config)
+//                print("[AK_TEST] action=schedule_success id=\(id ?? "nil") alarmId=\(alarmId) uuid=\(uuid.uuidString)")
+//                completion(uuid.uuidString, nil)
+//            } catch {
+//                print("[AK_TEST] action=schedule_fail id=\(id ?? "nil") alarmId=\(alarmId) error=\(error)")
+//                completion(nil, "\(error)")
+//            }
+//        }
+//    }
+//    
+//    public func cancel(_ id: String, _ completion: ((Bool) -> Void)? = nil) {
+//        print("[AK_TEST] action=cancel_request id=\(id)")
+//
+//        do {
+//            let uuid = Self.stableUUID(for: id)
+//            print("[AK_TEST] action=cancel_uuid_resolved id=\(id) uuid=\(uuid.uuidString)")
+//
+//            try manager.cancel(id: uuid)
+//            Self.clearStableUUID(for: id)
+//
+//            print("[AK_TEST] action=cancel_success id=\(id) uuid=\(uuid.uuidString)")
+//            completion?(true)
+//        } catch {
+//            Self.clearStableUUID(for: id)
+//            print("[AK_TEST] action=cancel_fail id=\(id) error=\(error)")
+//            completion?(false)
+//        }
+//    }
     
     // repeatDays를 AlarmKit에서 활용할 수 있도록 변환
     private func weekday(from value: Int) -> Locale.Weekday? {
