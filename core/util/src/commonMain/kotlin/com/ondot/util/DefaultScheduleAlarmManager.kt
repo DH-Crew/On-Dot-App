@@ -33,6 +33,7 @@ class DefaultScheduleAlarmManager(
         val currentAlarmIds = dedupedAlarmInfos.map { it.alarm.alarmId }.toSet()
 
         val toCancel = previouslyScheduledAlarmIds - currentAlarmIds
+        val failedCancelIds = mutableSetOf<Long>()
         toCancel.forEach { alarmId ->
             when (val result = alarmScheduler.cancelAlarm(alarmId)) {
                 AlarmCancelResult.Success,
@@ -42,6 +43,7 @@ class DefaultScheduleAlarmManager(
                 }
                 is AlarmCancelResult.Failure -> {
                     logger.e { "syncAll cancel fail: alarmId=$alarmId, reason=${result.reason}" }
+                    failedCancelIds += alarmId
                 }
             }
         }
@@ -52,7 +54,7 @@ class DefaultScheduleAlarmManager(
             throwOnFailure = false,
         )
 
-        return currentAlarmIds
+        return currentAlarmIds + failedCancelIds
     }
 
     override suspend fun schedule(schedule: Schedule) {
