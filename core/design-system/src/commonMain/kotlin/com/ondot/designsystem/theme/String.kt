@@ -73,6 +73,7 @@ const val ERROR_VALIDATE_EVERYTIME_TIMETABLE = "시간표를 가져오기에 실
 const val ERROR_EMPTY_URL = "URL을 입력해주세요."
 const val ERROR_SELECT_FIRST_CLASS = "요일별 첫 수업을 선택해주세요."
 const val ERROR_CREATE_SCHEDULE_EMPTY_PLACE = "출발지와 도착지를 모두 선택해주세요."
+const val ERROR_UPDATE_ALARM = "알람을 수정하지 못했습니다. 다시 시도해 주세요."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었습니다."
