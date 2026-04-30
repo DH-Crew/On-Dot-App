@@ -334,12 +334,13 @@ class SettingViewModel(
      */
     private suspend fun cancelAllSchedules(): Boolean {
         var isSuccess = false
+        var schedulesToCancel: ScheduleList? = null
 
         scheduleRepository.getScheduleList().collect { result ->
             resultResponse(
                 result,
                 successCallback = { scheduleList ->
-                    onSuccessGetScheduleList(scheduleList)
+                    schedulesToCancel = scheduleList
                     isSuccess = true
                 },
                 errorCallback = { e ->
@@ -349,14 +350,13 @@ class SettingViewModel(
             )
         }
 
+        schedulesToCancel?.let { onSuccessGetScheduleList(it) }
         return isSuccess
     }
 
-    private fun onSuccessGetScheduleList(result: ScheduleList) {
-        viewModelScope.launch {
-            result.scheduleList.forEach { schedule ->
-                scheduleAlarmManager.cancel(schedule)
-            }
+    private suspend fun onSuccessGetScheduleList(result: ScheduleList) {
+        result.scheduleList.forEach { schedule ->
+            scheduleAlarmManager.cancel(schedule)
         }
     }
 
