@@ -76,8 +76,17 @@ public final class AlarmKitBridgeShim: NSObject {
         }
     }
 
+    /**
+     * status:
+     * - "success"
+     * - "not_found"
+     * - "failure"
+     */
     @objc(cancelWithId:completion:)
-    public static func cancel(_ id: String, _ completion: ((Bool) -> Void)?) {
+    public static func cancel(
+        _ id: String,
+        completion: @escaping (String?, String?) -> Void
+    ) {
         Task { @MainActor in
             AlarmKitBridge.shared.cancel(id, completion)
         }
