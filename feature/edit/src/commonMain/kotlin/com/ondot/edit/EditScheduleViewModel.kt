@@ -5,6 +5,7 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_EDIT_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_DETAIL
+import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_ALARM
 import com.ondot.domain.model.enums.TimeBottomSheet
 import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.ToastType
@@ -66,20 +67,16 @@ class EditScheduleViewModel(
 
     @OptIn(ExperimentalTime::class)
     fun saveSchedule() {
-        val originalScheduleDetail =
-            uiState.value.originalSchedule
-                ?: run {
-                    logger.e { "원본 일정이 없어 저장을 진행할 수 없습니다." }
-                    return
-                }
+        val originalScheduleDetail = uiState.value.originalSchedule ?: return
 
-        val selectedDate =
-            uiState.value.selectedDate ?: Clock.System
+        val zone = TimeZone.currentSystemDefault()
+        val today =
+            Clock.System
                 .now()
-                .toLocalDateTime(TimeZone.currentSystemDefault())
+                .toLocalDateTime(zone)
                 .date
+        val selectedDate = uiState.value.selectedDate ?: today
 
-        // 새로 설정된 약속 날짜, 시간을 조합한 Iso8601 문자열
         val newAppointmentAt =
             DateTimeFormatter.formatIsoDateTime(
                 date = selectedDate,
@@ -87,6 +84,7 @@ class EditScheduleViewModel(
                     uiState.value.schedule.appointmentAt
                         .toLocalTimeFromIso(),
             )
+
         val updatedScheduleDetail =
             uiState.value.schedule.copy(
                 appointmentAt = newAppointmentAt,
@@ -95,60 +93,74 @@ class EditScheduleViewModel(
                         .map { it + 1 },
             )
 
-        val originalSchedule = originalScheduleDetail.toSchedule(uiState.value.scheduleId)
-        val updatedSchedule = updatedScheduleDetail.toSchedule(uiState.value.scheduleId)
+        val scheduleId = uiState.value.scheduleId
+        val originalSchedule = originalScheduleDetail.toSchedule(scheduleId)
+        val updatedSchedule = updatedScheduleDetail.toSchedule(scheduleId)
 
         viewModelScope.launch {
-            scheduleRepository.editSchedule(uiState.value.scheduleId, updatedScheduleDetail).collect {
-                resultResponse(
-                    it,
-                    {
-                        viewModelScope.launch {
-                            val replaceResult = scheduleAlarmManager.replace(originalSchedule, updatedSchedule)
-                            replaceResult.onFailure { error ->
-                                logger.e { "알람 재스케줄링 실패: ${error.message}" }
-                            }
-                            emitEventFlow(EditScheduleEvent.NavigateBack)
-                        }
-                    },
-                    ::onFailSaveSchedule,
-                )
+            val replaceResult = scheduleAlarmManager.replace(originalSchedule, updatedSchedule)
+            if (replaceResult.isFailure) {
+                logger.e(replaceResult.exceptionOrNull()) { "알람 재스케줄링 실패" }
+                ToastManager.show(ERROR_UPDATE_ALARM, ToastType.ERROR)
+                return@launch
+            }
+
+            var remoteError: Throwable? = null
+            scheduleRepository.editSchedule(scheduleId, updatedScheduleDetail).collect { result ->
+                result.onFailure { remoteError = it }
+            }
+
+            if (remoteError == null) {
+                scheduleRepository.upsertLocalSchedule(updatedSchedule)
+                emitEventFlow(EditScheduleEvent.NavigateBack)
+            } else {
+                logger.e(remoteError) { "일정 수정 실패, 알람 롤백 시도" }
+
+                val rollbackResult = scheduleAlarmManager.replace(updatedSchedule, originalSchedule)
+                rollbackResult.onFailure { rollbackError ->
+                    logger.e(rollbackError) { "알람 롤백 실패" }
+                }
+
+                ToastManager.show(ERROR_EDIT_SCHEDULE, ToastType.ERROR)
             }
         }
-    }
-
-    private fun onFailSaveSchedule(e: Throwable) {
-        logger.e { "일정 수정 실패: ${e.message}" }
-        viewModelScope.launch { ToastManager.show(ERROR_EDIT_SCHEDULE, ToastType.ERROR) }
     }
 
     /**------------------------------------------일정 삭제-------------------------------------------------*/
 
     fun deleteSchedule() {
-        cancelAlarms()
+        val targetSchedule = uiState.value.schedule.toSchedule(uiState.value.scheduleId)
 
         viewModelScope.launch {
-            scheduleRepository.deleteSchedule(uiState.value.scheduleId).collect {
-                resultResponse(it, ::onSuccessDeleteSchedule, ::onFailDeleteSchedule)
+            try {
+                if (targetSchedule.hasActiveAlarm) {
+                    scheduleAlarmManager.cancel(targetSchedule)
+                }
+
+                var remoteError: Throwable? = null
+                scheduleRepository.deleteSchedule(uiState.value.scheduleId).collect { result ->
+                    result.onFailure { remoteError = it }
+                }
+
+                if (remoteError == null) {
+                    emitEventFlow(EditScheduleEvent.NavigateBack)
+                } else {
+                    logger.e(remoteError) { "일정 삭제 실패, 알람 복구 시도" }
+
+                    runCatching {
+                        if (targetSchedule.hasActiveAlarm) {
+                            scheduleAlarmManager.schedule(targetSchedule)
+                        }
+                    }.onFailure { rollbackError ->
+                        logger.e(rollbackError) { "삭제 실패 후 알람 복구 실패" }
+                    }
+
+                    ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR)
+                }
+            } catch (t: Throwable) {
+                logger.e(t) { "일정 삭제 전 알람 취소 실패" }
+                ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR)
             }
-        }
-    }
-
-    private fun onSuccessDeleteSchedule(result: Unit) {
-        emitEventFlow(EditScheduleEvent.NavigateBack)
-    }
-
-    private fun onFailDeleteSchedule(e: Throwable) {
-        logger.e { "일정 삭제 실패: ${e.message}" }
-        viewModelScope.launch { ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR) }
-    }
-
-    // --------------------------------------------알람 취소-----------------------------------------------
-
-    /**일정을 삭제할 때 스케줄링된 알람도 함께 삭제*/
-    private fun cancelAlarms() {
-        viewModelScope.launch {
-            scheduleAlarmManager.cancel(uiState.value.schedule.toSchedule(uiState.value.scheduleId))
         }
     }
 
