@@ -9,6 +9,8 @@ import androidx.annotation.RequiresPermission
 import co.touchlab.kermit.Logger
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.service.AlarmCancelResult
+import com.ondot.domain.service.AlarmScheduleResult
 import com.ondot.domain.service.AlarmScheduler
 import com.ondot.util.DateTimeFormatter
 
@@ -18,28 +20,37 @@ class AndroidAlarmScheduler(
     private val logger = Logger.withTag("AndroidAlarmScheduler")
 
     @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
-    override fun scheduleAlarm(
+    override suspend fun scheduleAlarm(
         info: AlarmRingInfo,
         mapProvider: MapProvider,
-    ) {
+    ): AlarmScheduleResult {
         val alarm = info.alarm
 
         // 사용자가 알람을 꺼두었다면 리턴
-        if (!alarm.enabled) return
+        if (!alarm.enabled) {
+            logger.d { "skip disabled alarm: alarmId=${alarm.alarmId}" }
+            return AlarmScheduleResult.SkippedDisabled
+        }
+
+        // "2025-05-10T18:30:00" 문자열을 Instant 로 파싱
+        // toEpochMilliseconds()로 밀리초로 변환 -> 이 밀리초 값을 기준으로 AlarmManager 가 예약
+        val triggerAtMillis =
+            runCatching {
+                DateTimeFormatter.isoStringToEpochMillis(iso = alarm.triggeredAt)
+            }.getOrElse { throwable ->
+                logger.e(throwable) { "invalid alarm date: ${alarm.triggeredAt}" }
+                return AlarmScheduleResult.InvalidDate
+            }
+
+        val now = System.currentTimeMillis()
+        if (triggerAtMillis <= now) {
+            logger.d { "past alarm won't be scheduled: triggeredAt=${alarm.triggeredAt}, alarmId=${alarm.alarmId}" }
+            return AlarmScheduleResult.InvalidDate
+        }
 
         // Content.ALARM_SERVICE 를 통해 시스템의 AlarmManager 인스턴스를 꺼냄
         // 이 인스턴스가 실제 OS 차원 알람 예약을 담당
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val now = System.currentTimeMillis()
-        // "2025-05-10T18:30:00" 문자열을 Instant 로 파싱
-        // toEpochMilliseconds()로 밀리초로 변환 -> 이 밀리초 값을 기준으로 AlarmManager 가 예약
-        val triggerAtMillis = DateTimeFormatter.isoStringToEpochMillis(iso = alarm.triggeredAt)
-
-        if (triggerAtMillis <= now) {
-            logger.d { "이미 지난 알람(${alarm.triggeredAt}) 은 예약하지 않습니다." }
-            return
-        }
 
         // AlarmReceiver(BroadcastReceiver)를 깨우기 위한 Intent
         // putExtra 를 통해 alarmId와 type을 전달
@@ -67,34 +78,56 @@ class AndroidAlarmScheduler(
         // RTC_WAKEUP: 휴대폰 꺼진 스크린도 깨워서 예약 시간에 브로드캐스트를 보냄
         // triggerAtMillis: 알람이 예약될 시간
         // pendingIntent: 알람이 예약될 때 실행될 Intent
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            triggerAtMillis,
-            pendingIntent,
-        )
+        return runCatching {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                triggerAtMillis,
+                pendingIntent,
+            )
 
-        logger.d { "Alarm scheduled at $triggerAtMillis, detail: $alarm" }
+            logger.d { "Alarm scheduled at $triggerAtMillis, detail: $alarm" }
+            AlarmScheduleResult.Success(platformId = alarm.alarmId.toString())
+        }.getOrElse { throwable ->
+            logger.e(throwable) { "failed to schedule alarm: alarmId=${alarm.alarmId}" }
+            AlarmScheduleResult.Failure(throwable.message)
+        }
     }
 
-    override fun cancelAlarm(alarmId: Long) {
+    override suspend fun cancelAlarm(alarmId: Long): AlarmCancelResult {
         // AlarmManager는 안드로이드 OS에 알람을 등록하거나 취소할 수 있는 시스템 서비스
         // 알람을 취소할 때는 등록할 때와 동일한 Intent 정보와 requestCode(alarmId.toInt())를 전달해서 취소 가능
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent =
+
+        /*
+         * FLAG_NO_CREATE를 먼저 써서 기존 PendingIntent 존재 여부를 확인한다.
+         * 없으면 NotFound를 반환하고, 있으면 그걸로 cancel 한다.
+         */
+        val existingPendingIntent =
             PendingIntent.getBroadcast(
                 context,
                 alarmId.toInt(),
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE,
             )
-        alarmManager.cancel(pendingIntent)
 
-        logger.d { "Alarm canceled, id: $alarmId" }
+        if (existingPendingIntent == null) {
+            logger.d { "alarm not found, id: $alarmId" }
+            return AlarmCancelResult.NotFound
+        }
+
+        return runCatching {
+            alarmManager.cancel(existingPendingIntent)
+            existingPendingIntent.cancel()
+
+            logger.d { "Alarm canceled, id: $alarmId" }
+            AlarmCancelResult.Success
+        }.getOrElse { throwable ->
+            logger.e(throwable) { "failed to cancel alarm: alarmId=$alarmId" }
+            AlarmCancelResult.Failure(throwable.message)
+        }
     }
 
-    override fun snoozeAlarm(alarmId: Long) {
-        // storage.alarmsFlow에서 알람 찾아 snoozeInterval만큼 뒤로 미룸
-        // 다시 scheduleAlarm 호출
-    }
+    override suspend fun snoozeAlarm(alarmId: Long): AlarmScheduleResult =
+        AlarmScheduleResult.Failure("snooze not implemented on Android yet")
 }
