@@ -3,7 +3,7 @@ package com.ondot.calendar.contract
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_REPEAT_SCHEDULE
-import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
+import com.ondot.domain.model.calendar.RecordSchedule
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.repository.CalendarRepository
@@ -178,14 +178,19 @@ class CalendarViewModel(
                 block = {
                     calendarRepository.getSchedulesFor(key)
                 },
-                onSuccess = onSuccess@{ schedules ->
+                onSuccess = onSuccess@{ response ->
                     if (requestId != schedulesRequestId) return@onSuccess
                     if (currentState.selectedDate != date) return@onSuccess
 
                     reduce {
                         copy(
-                            selectedDateSchedules = schedules,
-                            selectedDateScheduleItems = schedules.map { it.toCalendarScheduleItemUiModel(date) },
+                            selectedDateRecords = response.records,
+                            selectedDateSchedules = response.schedules,
+                            selectedDateScheduleItems =
+                                buildCalendarScheduleItemUiModels(
+                                    records = response.records,
+                                    schedules = response.schedules,
+                                ),
                         )
                     }
                 },
@@ -195,6 +200,7 @@ class CalendarViewModel(
 
                     reduce {
                         copy(
+                            selectedDateRecords = emptyList(),
                             selectedDateSchedules = emptyList(),
                             selectedDateScheduleItems = emptyList(),
                         )
@@ -249,6 +255,7 @@ class CalendarViewModel(
                 applySchedules(
                     date = targetDate,
                     schedules = updatedSchedules,
+                    records = currentState.selectedDateRecords,
                 )
 
                 scheduleRepository.upsertLocalSchedule(updatedSchedule)
@@ -271,12 +278,20 @@ class CalendarViewModel(
                 applySchedules(
                     date = targetDate,
                     schedules = originalSchedules,
+                    records = currentState.selectedDateRecords,
                 )
 
                 applyAlarmToggleSerially(
                     scheduleId = scheduleId,
                     original = originalSchedule,
                     enabled = originalSchedule.hasActiveAlarm,
+                )
+
+                emitEffect(
+                    CalendarSideEffect.ShowToast(
+                        "알람 설정 변경에 실패했습니다.",
+                        ToastType.ERROR,
+                    ),
                 )
 
                 handleError(t)
@@ -294,13 +309,19 @@ class CalendarViewModel(
     private fun applySchedules(
         date: LocalDate,
         schedules: List<Schedule>,
+        records: List<RecordSchedule> = emptyList(),
     ) {
         if (currentState.selectedDate != date) return
 
         reduce {
             copy(
+                selectedDateRecords = records,
                 selectedDateSchedules = schedules,
-                selectedDateScheduleItems = schedules.map { it.toCalendarScheduleItemUiModel(date) },
+                selectedDateScheduleItems =
+                    buildCalendarScheduleItemUiModels(
+                        records = records,
+                        schedules = schedules,
+                    ),
             )
         }
     }
@@ -349,9 +370,11 @@ class CalendarViewModel(
         val date = selectedDate.toApiDateString()
 
         val previousItems = currentState.selectedDateScheduleItems
+        val previousRecords = currentState.selectedDateRecords
         val previousSchedulesByDate = currentState.schedulesByDate
 
         val updatedItems = previousItems.filter { it.scheduleId != scheduleId }
+        val updatedRecords = previousRecords.filter { it.scheduleId != scheduleId }
         if (previousItems.size == updatedItems.size) return
 
         val previousMarkers = previousSchedulesByDate[selectedDate].orEmpty()
@@ -368,6 +391,7 @@ class CalendarViewModel(
 
         reduce {
             copy(
+                selectedDateRecords = updatedRecords,
                 selectedDateScheduleItems = updatedItems,
                 schedulesByDate = updatedSchedulesByDate,
             )
@@ -379,6 +403,7 @@ class CalendarViewModel(
             onError = {
                 reduce {
                     copy(
+                        selectedDateRecords = previousRecords,
                         selectedDateScheduleItems = previousItems,
                         schedulesByDate = previousSchedulesByDate,
                     )
@@ -391,6 +416,7 @@ class CalendarViewModel(
 
     private fun deleteSchedule(scheduleId: Long) {
         val selectedDate = currentState.selectedDate
+        val previousRecords = currentState.selectedDateRecords
         val previousSchedules = currentState.selectedDateSchedules
         val previousItems = currentState.selectedDateScheduleItems
 
@@ -420,13 +446,6 @@ class CalendarViewModel(
 
                 when (val result = scheduleRepository.deleteScheduleAppResult(scheduleId)) {
                     is AppResult.Success -> {
-                        emitEffect(
-                            CalendarSideEffect.ShowToast(
-                                SUCCESS_DELETE_SCHEDULE,
-                                ToastType.INFO,
-                            ),
-                        )
-
                         // 마커 데이터는 UI에서 optimistic 계산이 어려워서 다시 조회
                         getScheduleMarkersInRange(selectedDate, false)
 
@@ -439,6 +458,7 @@ class CalendarViewModel(
                         applySchedules(
                             date = selectedDate,
                             schedules = previousSchedules,
+                            records = previousRecords,
                         )
 
                         if (targetSchedule.hasActiveAlarm) {
@@ -458,6 +478,7 @@ class CalendarViewModel(
                 applySchedules(
                     date = selectedDate,
                     schedules = previousSchedules,
+                    records = previousRecords,
                 )
 
                 if (targetSchedule.hasActiveAlarm) {

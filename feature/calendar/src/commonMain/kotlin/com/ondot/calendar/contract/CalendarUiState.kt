@@ -1,10 +1,12 @@
 package com.ondot.calendar.contract
 
 import androidx.compose.runtime.Immutable
+import com.ondot.domain.model.calendar.RecordSchedule
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.ui.base.UiState
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
@@ -27,6 +29,7 @@ data class CalendarUiState(
     val schedulesByDate: Map<LocalDate, List<CalendarScheduleMarker>> = emptyMap(),
     // 바텀시트 상세용 상태 변수
     val selectedDateScheduleItems: List<CalendarScheduleItemUiModel> = emptyList(),
+    val selectedDateRecords: List<RecordSchedule> = emptyList(),
     // 알람 스케줄링, 취소를 위해서 바텀시트 일정 데이터 원본을 가지고 있어야 함
     val selectedDateSchedules: List<Schedule> = emptyList(),
     val togglingScheduleIds: Set<Long> = emptySet(),
@@ -133,22 +136,21 @@ private fun DayOfWeek.sundayStartIndex(): Int = isoDayNumber % 7
 
 @OptIn(ExperimentalTime::class)
 fun Schedule.toCalendarScheduleItemUiModel(
-    selectedDate: LocalDate,
-    nowDate: LocalDate =
+    now: LocalDateTime =
         Clock.System
             .now()
-            .toLocalDateTime(TimeZone.currentSystemDefault())
-            .date,
+            .toLocalDateTime(TimeZone.currentSystemDefault()),
 ): CalendarScheduleItemUiModel {
-    val appointmentTime = appointmentAt.substringAfter("T", "")
+    val appointmentDateTime = LocalDateTime.parse(appointmentAt)
+    val appointmentTime = appointmentDateTime.time.toString().take(5)
     val preparationTime = preparationAlarm.triggeredAt.substringAfter("T", "").take(5)
     val departureTime = departureAlarm.triggeredAt.substringAfter("T", "").take(5)
-    val isPast = selectedDate < nowDate
+    val isPast = appointmentDateTime < now
 
     return CalendarScheduleItemUiModel(
         scheduleId = scheduleId,
         title = scheduleTitle,
-        appointmentTimeText = appointmentTime.take(5),
+        appointmentTimeText = appointmentTime,
         alarmInfoText = "준비 $preparationTime - 출발 $departureTime",
         isRepeat = isRepeat,
         isAlarmEnabled = hasActiveAlarm,
@@ -156,3 +158,44 @@ fun Schedule.toCalendarScheduleItemUiModel(
         repeatDays = repeatDays,
     )
 }
+
+fun RecordSchedule.toCalendarScheduleItemUiModel(): CalendarScheduleItemUiModel {
+    val appointmentTime =
+        LocalDateTime
+            .parse(appointmentAt)
+            .time
+            .toString()
+            .take(5)
+    val preparationTime = preparationTriggeredAt.substringAfter("T", "").take(5)
+    val departureTime = departureTriggeredAt.substringAfter("T", "").take(5)
+
+    return CalendarScheduleItemUiModel(
+        scheduleId = scheduleId,
+        title = scheduleTitle,
+        appointmentTimeText = appointmentTime,
+        alarmInfoText = "준비 $preparationTime - 출발 $departureTime",
+        isRepeat = isRepeat,
+        isAlarmEnabled = false,
+        isPast = true,
+        repeatDays = repeatDays,
+    )
+}
+
+@OptIn(ExperimentalTime::class)
+fun buildCalendarScheduleItemUiModels(
+    records: List<RecordSchedule>,
+    schedules: List<Schedule>,
+    now: LocalDateTime =
+        Clock.System
+            .now()
+            .toLocalDateTime(TimeZone.currentSystemDefault()),
+): List<CalendarScheduleItemUiModel> =
+    (
+        records.map { record ->
+            record.appointmentAt to record.toCalendarScheduleItemUiModel()
+        } +
+            schedules.map { schedule ->
+                schedule.appointmentAt to schedule.toCalendarScheduleItemUiModel(now)
+            }
+    ).sortedBy { it.first }
+        .map { it.second }
