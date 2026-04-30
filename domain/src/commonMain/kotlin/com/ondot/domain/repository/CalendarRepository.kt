@@ -1,7 +1,7 @@
 package com.ondot.domain.repository
 
 import com.ondot.domain.model.calendar.CalendarDateScheduleSummary
-import com.ondot.domain.model.schedule.Schedule
+import com.ondot.domain.model.calendar.CalendarDateSchedules
 import com.ondot.result.AppResult
 
 interface CalendarRepository {
@@ -10,7 +10,7 @@ interface CalendarRepository {
         endDate: String,
     ): AppResult<List<CalendarDateScheduleSummary>>
 
-    suspend fun getSchedulesFor(date: String): AppResult<List<Schedule>> // 특정 날짜 일정 조회
+    suspend fun getSchedulesFor(date: String): AppResult<CalendarDateSchedules> // 특정 날짜 일정 조회
 
     suspend fun deleteHistory(scheduleId: Long, date: String): AppResult<Unit> // 과거 기록 삭제
 }
