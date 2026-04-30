@@ -5,6 +5,7 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
+import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_ALARM
 import com.dh.ondot.presentation.ui.theme.NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
 import com.ondot.domain.model.enums.MapProvider
@@ -142,7 +143,7 @@ class HomeViewModel(
                 }
 
                 ToastManager.show(
-                    message = ERROR_GET_SCHEDULE_LIST,
+                    message = ERROR_UPDATE_ALARM,
                     type = ToastType.ERROR,
                 )
             }
