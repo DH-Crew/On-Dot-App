@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CalendarDateSchedulesResponse(
+    @SerialName("records")
+    val records: List<RecordScheduleResponse>,
     @SerialName("schedules")
     val schedules: List<ScheduleResponse>,
 )

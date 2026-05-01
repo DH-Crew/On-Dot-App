@@ -4,7 +4,7 @@ import com.ondot.data.model.response.calendar.CalendarDateSchedulesResponse
 import com.ondot.data.model.response.calendar.CalendarRangeResponse
 import com.ondot.data.model.response.calendar.mapper.toDomain
 import com.ondot.domain.model.calendar.CalendarDateScheduleSummary
-import com.ondot.domain.model.schedule.Schedule
+import com.ondot.domain.model.calendar.CalendarDateSchedules
 import com.ondot.domain.repository.CalendarRepository
 import com.ondot.network.HttpMethod
 import com.ondot.network.NetworkClient
@@ -26,7 +26,7 @@ class CalendarRepositoryImpl(
                 ).toDomain()
         }
 
-    override suspend fun getSchedulesFor(date: String): AppResult<List<Schedule>> =
+    override suspend fun getSchedulesFor(date: String): AppResult<CalendarDateSchedules> =
         safeApiCall {
             networkClient
                 .requestOrThrow<CalendarDateSchedulesResponse>(

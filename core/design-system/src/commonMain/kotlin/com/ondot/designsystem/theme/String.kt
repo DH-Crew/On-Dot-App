@@ -73,6 +73,7 @@ const val ERROR_VALIDATE_EVERYTIME_TIMETABLE = "시간표를 가져오기에 실
 const val ERROR_EMPTY_URL = "URL을 입력해주세요."
 const val ERROR_SELECT_FIRST_CLASS = "요일별 첫 수업을 선택해주세요."
 const val ERROR_CREATE_SCHEDULE_EMPTY_PLACE = "출발지와 도착지를 모두 선택해주세요."
+const val ERROR_UPDATE_ALARM = "알람을 수정하지 못했습니다. 다시 시도해 주세요."
 
 // SUCCESS
 const val SUCCESS_DELETE_SCHEDULE = "일정이 삭제되었습니다."
@@ -180,7 +181,7 @@ const val DELETE_ALARM_CONTENT = "정말 알람을 삭제하시겠어요?"
 const val MAP_PROVIDER_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
 const val MAP_PROVIDER_CONTENT = "길 안내에 사용될 예정이에요."
 const val DELETE_REPEAT_SCHEDULE_TITLE = "반복 일정 삭제"
-const val DELETE_REPEAT_SCHEDULE_CONTENT = "정말 삭제하시겠어요?\n알람을 삭제하면 이후 반복 알람도 \n함께 삭제됩니다."
+const val DELETE_REPEAT_SCHEDULE_CONTENT = "정말 삭제하시겠어요?\n알람을 삭제하면 이후 반복 알람도\n함께 삭제됩니다."
 
 // Setting
 const val LOGOUT_SUCCESS_MESSAGE = "정상적으로 로그아웃되었습니다."

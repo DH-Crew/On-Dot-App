@@ -5,6 +5,7 @@ import co.touchlab.kermit.Logger
 import com.dh.ondot.presentation.ui.theme.ERROR_DELETE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_LIST
 import com.dh.ondot.presentation.ui.theme.ERROR_SET_MAP_PROVIDER
+import com.dh.ondot.presentation.ui.theme.ERROR_UPDATE_ALARM
 import com.dh.ondot.presentation.ui.theme.NOTIFICATION_TITLE
 import com.dh.ondot.presentation.ui.theme.SUCCESS_DELETE_SCHEDULE
 import com.ondot.domain.model.enums.MapProvider
@@ -71,50 +72,81 @@ class HomeViewModel(
         id: Long,
         isEnabled: Boolean,
     ) {
-        val schedule = uiState.value.scheduleList.find { it.scheduleId == id } ?: return
+        val previousList = uiState.value.scheduleList
+        val originalSchedule = previousList.find { it.scheduleId == id } ?: return
 
         val updatedSchedule =
-            schedule.copy(
+            originalSchedule.copy(
                 hasActiveAlarm = isEnabled,
-                departureAlarm = schedule.departureAlarm.copy(enabled = isEnabled),
-                preparationAlarm = schedule.preparationAlarm.copy(enabled = isEnabled),
+                departureAlarm = originalSchedule.departureAlarm.copy(enabled = isEnabled),
+                preparationAlarm = originalSchedule.preparationAlarm.copy(enabled = isEnabled),
             )
 
-        val newList =
-            uiState.value.scheduleList.map {
+        val updatedList =
+            previousList.map {
                 if (it.scheduleId == id) updatedSchedule else it
             }
 
-        updateState(uiState.value.copy(scheduleList = newList))
+        updateStateSync(uiState.value.copy(scheduleList = updatedList))
 
         viewModelScope.launch {
-            scheduleAlarmManager.applyToggle(
-                original = schedule,
-                enabled = isEnabled,
-            )
-        }
-
-        if (isEnabled) {
-            lastScheduledAlarms =
-                lastScheduledAlarms +
-                setOf(
-                    schedule.departureAlarm.alarmId,
-                    schedule.preparationAlarm.alarmId,
+            try {
+                // 로컬/OS 알람 반영을 먼저 기다림
+                scheduleAlarmManager.applyToggle(
+                    original = originalSchedule,
+                    enabled = isEnabled,
                 )
-        } else {
-            lastScheduledAlarms =
-                lastScheduledAlarms -
-                setOf(
-                    schedule.departureAlarm.alarmId,
-                    schedule.preparationAlarm.alarmId,
-                )
-        }
 
-        viewModelScope.launch {
-            scheduleRepository.toggleAlarm(scheduleId = id, request = ToggleAlarmRequest(isEnabled = isEnabled)).collect {
-                resultResponse(it, {})
+                // 서버 PATCH도 같은 coroutine에서 순차 처리
+                var remoteError: Throwable? = null
+                scheduleRepository
+                    .toggleAlarm(
+                        scheduleId = id,
+                        request = ToggleAlarmRequest(isEnabled = isEnabled),
+                    ).collect { result ->
+                        result.onFailure { remoteError = it }
+                    }
+
+                remoteError?.let { throw it }
+
+                // 성공 이후에만 lastScheduledAlarms 반영
+                lastScheduledAlarms =
+                    if (isEnabled) {
+                        lastScheduledAlarms +
+                            setOf(
+                                originalSchedule.departureAlarm.alarmId,
+                                originalSchedule.preparationAlarm.alarmId,
+                            )
+                    } else {
+                        lastScheduledAlarms -
+                            setOf(
+                                originalSchedule.departureAlarm.alarmId,
+                                originalSchedule.preparationAlarm.alarmId,
+                            )
+                    }
+
+                getScheduleList()
+            } catch (t: Throwable) {
+                logger.e(t) { "알람 토글 처리 실패" }
+
+                // UI rollback
+                updateStateSync(uiState.value.copy(scheduleList = previousList))
+
+                // OS 알람도 원래 상태로 복구 시도
+                runCatching {
+                    scheduleAlarmManager.applyToggle(
+                        original = originalSchedule,
+                        enabled = originalSchedule.hasActiveAlarm,
+                    )
+                }.onFailure { rollbackError ->
+                    logger.e(rollbackError) { "알람 토글 rollback 실패" }
+                }
+
+                ToastManager.show(
+                    message = ERROR_UPDATE_ALARM,
+                    type = ToastType.ERROR,
+                )
             }
-            getScheduleList()
         }
     }
 
@@ -122,13 +154,18 @@ class HomeViewModel(
 
     fun getScheduleList() {
         viewModelScope.launch {
-            scheduleRepository.getScheduleList().collect {
-                resultResponse(it, ::onSuccessGetScheduleList, ::onFailureGetScheduleList)
+            scheduleRepository.getScheduleList().collect { result ->
+                result
+                    .onSuccess { scheduleList ->
+                        onSuccessGetScheduleList(scheduleList)
+                    }.onFailure { throwable ->
+                        onFailureGetScheduleList(throwable)
+                    }
             }
         }
     }
 
-    private fun onSuccessGetScheduleList(result: ScheduleList) {
+    private suspend fun onSuccessGetScheduleList(result: ScheduleList) {
         earliestAlarmAt = result.earliestAlarmAt.ifBlank { null }
 
         val remainingTime =
@@ -138,7 +175,7 @@ class HomeViewModel(
                 Triple(-1, -1, -1)
             }
 
-        updateState(
+        updateStateSync(
             uiState.value.copy(
                 remainingTime = remainingTime,
                 scheduleList = result.scheduleList,
@@ -148,13 +185,11 @@ class HomeViewModel(
 
         startRemainingTimeTicker()
 
-        viewModelScope.launch {
-            lastScheduledAlarms =
-                scheduleAlarmManager.syncAll(
-                    schedules = result.scheduleList,
-                    previouslyScheduledAlarmIds = lastScheduledAlarms,
-                )
-        }
+        lastScheduledAlarms =
+            scheduleAlarmManager.syncAll(
+                schedules = result.scheduleList,
+                previouslyScheduledAlarmIds = lastScheduledAlarms,
+            )
 
         scheduleNotification(result.scheduleList)
     }
@@ -215,27 +250,38 @@ class HomeViewModel(
                 }
             }
 
-        viewModelScope.launch {
-            scheduleAlarmManager.cancel(targetSchedule)
-        }
-
         updateStateSync(uiState.value.copy(scheduleList = newList))
 
         viewModelScope.launch {
-            ToastManager.show(
-                message = SUCCESS_DELETE_SCHEDULE,
-                type = ToastType.DELETE,
-                callback = {
-                    job.cancel()
-                    updateState(uiState.value.copy(scheduleList = currentList))
+            try {
+                if (targetSchedule.hasActiveAlarm) {
+                    scheduleAlarmManager.cancel(targetSchedule)
+                }
 
-                    viewModelScope.launch {
-                        if (targetSchedule.hasActiveAlarm) {
-                            scheduleAlarmManager.schedule(targetSchedule)
+                ToastManager.show(
+                    message = SUCCESS_DELETE_SCHEDULE,
+                    type = ToastType.DELETE,
+                    callback = {
+                        job.cancel()
+                        updateStateSync(uiState.value.copy(scheduleList = currentList))
+
+                        viewModelScope.launch {
+                            runCatching {
+                                if (targetSchedule.hasActiveAlarm) {
+                                    scheduleAlarmManager.schedule(targetSchedule)
+                                }
+                            }.onFailure { error ->
+                                logger.e(error) { "삭제 undo 시 알람 복구 실패" }
+                            }
                         }
-                    }
-                },
-            )
+                    },
+                )
+            } catch (t: Throwable) {
+                logger.e(t) { "일정 삭제 전 알람 취소 실패" }
+                job.cancel()
+                updateStateSync(uiState.value.copy(scheduleList = currentList))
+                ToastManager.show(ERROR_DELETE_SCHEDULE, ToastType.ERROR)
+            }
         }
     }
 

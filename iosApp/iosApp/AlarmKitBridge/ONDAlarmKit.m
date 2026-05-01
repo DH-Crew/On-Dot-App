@@ -44,34 +44,35 @@
                     scheduleId:(long long)scheduleId
                        alarmId:(long long)alarmId
                      alarmType:(NSString *)alarmType
-                        tintHex:(NSString * _Nullable)tintHex
-             openMapsOnSecondary:(BOOL)openMapsOnSecondary
-                        startLat:(NSNumber * _Nullable)startLat
-                        startLng:(NSNumber * _Nullable)startLng
-                          endLat:(NSNumber * _Nullable)endLat
-                          endLng:(NSNumber * _Nullable)endLng
-                   mapProvider: (NSString * _Nullable)mapProvider
-                      completion:(void(^)(NSString * _Nullable, NSString * _Nullable))completion
+                       tintHex:(NSString * _Nullable)tintHex
+           openMapsOnSecondary:(BOOL)openMapsOnSecondary
+                      startLat:(NSNumber * _Nullable)startLat
+                      startLng:(NSNumber * _Nullable)startLng
+                        endLat:(NSNumber * _Nullable)endLat
+                        endLng:(NSNumber * _Nullable)endLng
+                   mapProvider:(NSString * _Nullable)mapProvider
+                    completion:(void(^)(NSString * _Nullable, NSString * _Nullable))completion
 {
     [AlarmKitBridgeShim scheduleCalendarWithId:alarmUUID
-                                 dateComponents:dateComponents
-                                    repeatDays: repeatDays
-                                          title:title
-                                     scheduleId:scheduleId
-                                        alarmId:alarmId
-                                      alarmType:alarmType
-                                         tintHex:tintHex
-                              openMapsOnSecondary:openMapsOnSecondary
-                                         startLat:startLat
-                                         startLng:startLng
-                                           endLat:endLat
-                                           endLng:endLng
-                                      mapProvider:mapProvider
-                                       completion:completion];
+                                dateComponents:dateComponents
+                                    repeatDays:repeatDays
+                                         title:title
+                                    scheduleId:scheduleId
+                                       alarmId:alarmId
+                                     alarmType:alarmType
+                                        tintHex:tintHex
+                             openMapsOnSecondary:openMapsOnSecondary
+                                       startLat:startLat
+                                       startLng:startLng
+                                         endLat:endLat
+                                         endLng:endLng
+                                    mapProvider:mapProvider
+                                     completion:completion];
 }
 
 + (void)cancelWithId:(NSString *)alarmUUID
-          completion:(void(^ _Nullable)(BOOL ok))completion
+          completion:(void(^ _Nullable)(NSString * _Nullable status,
+                                        NSString * _Nullable errorMsg))completion
 {
     [AlarmKitBridgeShim cancelWithId:alarmUUID completion:completion];
 }

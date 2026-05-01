@@ -21,13 +21,12 @@ import com.ondot.domain.model.request.DeleteAccountRequest
 import com.ondot.domain.model.request.MapProviderRequest
 import com.ondot.domain.model.request.settings.homeAddress.HomeAddressRequest
 import com.ondot.domain.model.request.settings.preparationTime.PreparationTimeRequest
-import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.domain.repository.AuthRepository
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
 import com.ondot.domain.repository.ScheduleRepository
-import com.ondot.domain.service.AlarmScheduler
+import com.ondot.domain.service.ScheduleAlarmManager
 import com.ondot.domain.service.UrlOpener
 import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
@@ -41,7 +40,7 @@ class SettingViewModel(
     private val memberRepository: MemberRepository,
     private val placeRepository: PlaceRepository,
     private val urlOpener: UrlOpener,
-    private val alarmScheduler: AlarmScheduler,
+    private val scheduleAlarmManager: ScheduleAlarmManager,
 ) : BaseViewModel<SettingUiState>(SettingUiState()) {
     private val logger = Logger.withTag("SettingViewModel")
     private var searchJob: Job? = null
@@ -335,12 +334,13 @@ class SettingViewModel(
      */
     private suspend fun cancelAllSchedules(): Boolean {
         var isSuccess = false
+        var schedulesToCancel: ScheduleList? = null
 
         scheduleRepository.getScheduleList().collect { result ->
             resultResponse(
                 result,
                 successCallback = { scheduleList ->
-                    onSuccessGetScheduleList(scheduleList)
+                    schedulesToCancel = scheduleList
                     isSuccess = true
                 },
                 errorCallback = { e ->
@@ -350,21 +350,17 @@ class SettingViewModel(
             )
         }
 
+        schedulesToCancel?.let { onSuccessGetScheduleList(it) }
         return isSuccess
     }
 
-    private fun onSuccessGetScheduleList(result: ScheduleList) {
+    private suspend fun onSuccessGetScheduleList(result: ScheduleList) {
         result.scheduleList.forEach { schedule ->
-            cancelAlarms(schedule)
+            scheduleAlarmManager.cancel(schedule)
         }
     }
 
     private fun onFailCancelAllSchedules(e: Throwable) {
         logger.e { "onFailCancelAllSchedules: ${e.message}" }
-    }
-
-    private fun cancelAlarms(schedule: Schedule) {
-        alarmScheduler.cancelAlarm(schedule.departureAlarm.alarmId)
-        alarmScheduler.cancelAlarm(schedule.preparationAlarm.alarmId)
     }
 }

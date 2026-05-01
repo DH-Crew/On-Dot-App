@@ -5,15 +5,14 @@ import com.dh.ondot.alarmkit.ONDAlarmKit
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
 import com.ondot.domain.model.ui.AlarmRingInfo
+import com.ondot.domain.service.AlarmCancelResult
+import com.ondot.domain.service.AlarmScheduleResult
 import com.ondot.domain.service.AlarmScheduler
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeout
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
 import platform.Foundation.NSCalendarUnitHour
@@ -30,87 +29,142 @@ import platform.Foundation.localeWithLocaleIdentifier
 import platform.Foundation.numberWithDouble
 import platform.Foundation.timeZoneWithName
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+
+private const val ALARMKIT_CANCEL_TIMEOUT_MS = 3_000L
+private const val ALARMKIT_SCHEDULE_TIMEOUT_MS = 5_000L
 
 @OptIn(ExperimentalForeignApi::class)
 class IosAlarmScheduler : AlarmScheduler {
     private val logger = Logger.withTag("IOSAlarmScheduler")
     private var isAuthorized: Boolean? = null
     private val authMutex = Mutex()
-    private val schedulingScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private val schedulingMutex = Mutex() // 동시 접근 방지
+
+    /*
+     * schedule / cancel / snooze 전부 동일한 직렬화 경로를 타게 한다.
+     * 이 mutex 바깥에서 AlarmKit 상태 변경 작업을 하지 않는다.
+     */
+    private val operationMutex = Mutex()
 
     private suspend fun ensureAuthorization(): Boolean =
         authMutex.withLock {
             isAuthorized?.let { return it }
 
-            suspendCancellableCoroutine { cont ->
+            suspendCoroutine { cont ->
                 ONDAlarmKit.requestAuthorization { ok ->
                     isAuthorized = ok
-                    if (cont.isActive) cont.resume(ok)
+                    cont.resume(ok)
                 }
             }
         }
 
-    override fun scheduleAlarm(
+    override suspend fun scheduleAlarm(
         info: AlarmRingInfo,
         mapProvider: MapProvider,
-    ) {
-        schedulingScope.launch {
+    ): AlarmScheduleResult =
+        operationMutex.withLock {
             if (!ensureAuthorization()) {
-                logger.e("AlarmKit: authorization denied")
-                return@launch
+                logger.e { "AlarmKit: authorization denied" }
+                return@withLock AlarmScheduleResult.Unauthorized
             }
 
-            schedulingMutex.withLock {
-                val alarm = info.alarm
-                if (!alarm.enabled) return@withLock
+            val alarm = info.alarm
+            if (!alarm.enabled) {
+                logger.d { "AlarmKit: skip disabled alarmId=${alarm.alarmId}" }
+                return@withLock AlarmScheduleResult.SkippedDisabled
+            }
 
-                val comps = isoStringToDateComponents(alarm.triggeredAt)
-                if (comps == null) {
-                    logger.e("AlarmKit: invalid date: ${alarm.triggeredAt}")
-                    return@withLock
+            val comps = isoStringToDateComponents(alarm.triggeredAt)
+            if (comps == null) {
+                logger.e { "AlarmKit: invalid date=${alarm.triggeredAt}" }
+                return@withLock AlarmScheduleResult.InvalidDate
+            }
+
+            val title =
+                when (info.alarmType) {
+                    AlarmType.Preparation -> "준비 알람"
+                    AlarmType.Departure -> "출발 알람"
                 }
 
-                val title =
-                    when (info.alarmType) {
-                        AlarmType.Preparation -> "준비 알람"
-                        AlarmType.Departure -> "출발 알람"
-                    }
-
-                ONDAlarmKit.scheduleCalendarWithId(
-                    alarmUUID = alarm.alarmId.toString(),
-                    dateComponents = comps,
-                    repeatDays = info.repeatDays,
-                    title = title,
-                    scheduleId = info.scheduleId,
-                    alarmId = alarm.alarmId,
-                    alarmType = info.alarmType.name.lowercase(),
-                    tintHex = null,
-                    openMapsOnSecondary = info.alarmType == AlarmType.Departure,
-                    startLat = info.startLat.toNSNumber(),
-                    startLng = info.startLng.toNSNumber(),
-                    endLat = info.endLat.toNSNumber(),
-                    endLng = info.endLng.toNSNumber(),
-                    mapProvider = mapProvider.name.lowercase(),
-                ) { uuid, err ->
-                    if (err != null) {
-                        logger.e("AlarmKit schedule FAIL: $err")
-                    } else {
-                        logger.d("AlarmKit scheduled: $uuid")
+            // 알람킷 브릿지가
+            try {
+                withTimeout(ALARMKIT_SCHEDULE_TIMEOUT_MS) {
+                    suspendCoroutine<AlarmScheduleResult> { cont ->
+                        ONDAlarmKit.scheduleCalendarWithId(
+                            alarmUUID = alarm.alarmId.toString(),
+                            dateComponents = comps,
+                            repeatDays = info.repeatDays,
+                            title = title,
+                            scheduleId = info.scheduleId,
+                            alarmId = alarm.alarmId,
+                            alarmType = info.alarmType.name.lowercase(),
+                            tintHex = null,
+                            openMapsOnSecondary = info.alarmType == AlarmType.Departure,
+                            startLat = info.startLat.toNSNumber(),
+                            startLng = info.startLng.toNSNumber(),
+                            endLat = info.endLat.toNSNumber(),
+                            endLng = info.endLng.toNSNumber(),
+                            mapProvider = mapProvider.name.lowercase(),
+                        ) { uuid, err ->
+                            if (err != null) {
+                                logger.e { "AlarmKit schedule FAIL: alarmId=${alarm.alarmId}, err=$err" }
+                                cont.resume(AlarmScheduleResult.Failure(err))
+                            } else {
+                                logger.d { "AlarmKit scheduled: alarmId=${alarm.alarmId}, uuid=$uuid" }
+                                cont.resume(AlarmScheduleResult.Success(uuid))
+                            }
+                        }
                     }
                 }
+            } catch (_: TimeoutCancellationException) {
+                logger.e { "AlarmKit schedule timeout: alarmId=${alarm.alarmId}" }
+                AlarmScheduleResult.Failure("timeout")
             }
         }
-    }
 
-    override fun cancelAlarm(alarmId: Long) {
-        ONDAlarmKit.cancelWithId(alarmId.toString()) { ok ->
-            logger.d { "[알람 삭제 여부] alarmId: $alarmId, ok: $ok" }
+    override suspend fun cancelAlarm(alarmId: Long): AlarmCancelResult =
+        operationMutex.withLock {
+            if (!ensureAuthorization()) {
+                logger.e { "AlarmKit: authorization denied on cancel, alarmId=$alarmId" }
+                return@withLock AlarmCancelResult.Failure("authorization denied")
+            }
+
+            try {
+                withTimeout(ALARMKIT_CANCEL_TIMEOUT_MS) {
+                    suspendCoroutine<AlarmCancelResult> { cont ->
+                        /*
+                         * status:
+                         * - "success"
+                         * - "not_found"
+                         * - "failure"
+                         */
+                        ONDAlarmKit.cancelWithId(
+                            alarmUUID = alarmId.toString(),
+                        ) { status, error ->
+                            when (status) {
+                                "success" -> {
+                                    logger.d { "AlarmKit cancel success: alarmId=$alarmId" }
+                                    cont.resume(AlarmCancelResult.Success)
+                                }
+                                "not_found" -> {
+                                    logger.d { "AlarmKit cancel not found: alarmId=$alarmId" }
+                                    cont.resume(AlarmCancelResult.NotFound)
+                                }
+                                else -> {
+                                    logger.e { "AlarmKit cancel fail: alarmId=$alarmId, error=$error" }
+                                    cont.resume(AlarmCancelResult.Failure(error))
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (_: TimeoutCancellationException) {
+                logger.e { "AlarmKit cancel timeout: alarmId=$alarmId" }
+                AlarmCancelResult.Failure("timeout")
+            }
         }
-    }
 
-    override fun snoozeAlarm(alarmId: Long) {
-    }
+    override suspend fun snoozeAlarm(alarmId: Long): AlarmScheduleResult = AlarmScheduleResult.Failure("snooze not implemented on iOS yet")
 
     private fun isoStringToDateComponents(iso: String): NSDateComponents? {
         val kst = NSTimeZone.timeZoneWithName("Asia/Seoul") ?: NSTimeZone.localTimeZone

@@ -32,23 +32,29 @@ NS_ASSUME_NONNULL_BEGIN
                     scheduleId:(long long)scheduleId
                        alarmId:(long long)alarmId
                      alarmType:(NSString *)alarmType
-                        tintHex:(NSString * _Nullable)tintHex
-             openMapsOnSecondary:(BOOL)openMapsOnSecondary
-                        startLat:(NSNumber * _Nullable)startLat
-                        startLng:(NSNumber * _Nullable)startLng
-                          endLat:(NSNumber * _Nullable)endLat
-                          endLng:(NSNumber * _Nullable)endLng
-                     mapProvider:(NSString * _Nullable)mapProvider
-                      completion:(void(^)(NSString * _Nullable alarmUUID,
-                                           NSString * _Nullable errorMsg))completion;
+                       tintHex:(NSString * _Nullable)tintHex
+           openMapsOnSecondary:(BOOL)openMapsOnSecondary
+                      startLat:(NSNumber * _Nullable)startLat
+                      startLng:(NSNumber * _Nullable)startLng
+                        endLat:(NSNumber * _Nullable)endLat
+                        endLng:(NSNumber * _Nullable)endLng
+                   mapProvider:(NSString * _Nullable)mapProvider
+                    completion:(void(^)(NSString * _Nullable alarmUUID,
+                                         NSString * _Nullable errorMsg))completion;
 
+/**
+ * status:
+ * - @"success"
+ * - @"not_found"
+ * - @"failure"
+ */
 + (void)cancelWithId:(NSString *)alarmUUID
-          completion:(void(^ _Nullable)(BOOL ok))completion;
+          completion:(void(^ _Nullable)(NSString * _Nullable status,
+                                        NSString * _Nullable errorMsg))completion;
 
 @end
 
 #else
-// 낮은 SDK에서 파싱만 통과시키는 더미 (사용되지 않음)
 @interface ONDAlarmKit : NSObject
 @end
 #endif
