@@ -49,7 +49,7 @@ fun CalendarMonthGrid(
                     Modifier
                         .fillMaxWidth()
                         .height(rowHeight),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 week.forEach { cell ->
                     CalendarDay(

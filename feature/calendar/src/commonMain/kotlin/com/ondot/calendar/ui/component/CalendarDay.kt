@@ -95,7 +95,7 @@ fun CalendarDay(
                 BoxWithConstraints(
                     contentAlignment = Alignment.TopCenter,
                 ) {
-                    val chipHeight = 14.dp
+                    val chipHeight = 16.dp
                     val chipSpacing = 3.dp
                     val maxChipCount =
                         ((maxHeight + chipSpacing) / (chipHeight + chipSpacing))

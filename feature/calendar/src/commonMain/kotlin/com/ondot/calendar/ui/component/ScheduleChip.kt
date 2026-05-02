@@ -23,7 +23,7 @@ fun ScheduleChip(text: String) {
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(14.dp)
+                .height(16.dp)
                 .clip(RoundedCornerShape(2.dp))
                 .background(Green500)
                 .padding(horizontal = 2.dp, vertical = 1.dp),
@@ -31,7 +31,7 @@ fun ScheduleChip(text: String) {
     ) {
         OnDotText(
             text = text,
-            style = OnDotTextStyle.BodySmallR3,
+            style = OnDotTextStyle.BodySmallR2,
             color = Gray900,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
