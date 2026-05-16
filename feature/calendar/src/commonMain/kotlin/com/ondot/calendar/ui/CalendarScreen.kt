@@ -47,6 +47,7 @@ import com.dh.ondot.presentation.ui.theme.DELETE_REPEAT_SCHEDULE_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_DELETE
 import com.ondot.calendar.contract.CalendarIntent
 import com.ondot.calendar.contract.CalendarInteractionState
+import com.ondot.calendar.contract.CalendarMonth
 import com.ondot.calendar.contract.CalendarSheetAnchor
 import com.ondot.calendar.contract.CalendarSheetState
 import com.ondot.calendar.contract.CalendarSideEffect
@@ -60,6 +61,7 @@ import com.ondot.calendar.ui.component.CalendarBottomSheet
 import com.ondot.calendar.ui.component.CalendarMonthGrid
 import com.ondot.calendar.ui.component.CalendarTopBar
 import com.ondot.calendar.ui.component.CalendarWeekHeader
+import com.ondot.calendar.ui.component.TodayFAB
 import com.ondot.designsystem.components.OnDotDialog
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray800
@@ -70,10 +72,15 @@ import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.ui.util.ToastManager
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_plus
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun CalendarRoute(
@@ -102,6 +109,7 @@ fun CalendarRoute(
         onSelectDate = { viewModel.dispatch(CalendarIntent.SelectDate(it)) },
         onMoveToPreviousMonth = { viewModel.dispatch(CalendarIntent.MoveToPreviousMonth) },
         onMoveToNextMonth = { viewModel.dispatch(CalendarIntent.MoveToNextMonth) },
+        onMoveToToday = { viewModel.dispatch(CalendarIntent.MoveToToday) },
         onToggleAlarm = { scheduleId, enabled -> viewModel.dispatch(CalendarIntent.ToggleAlarm(scheduleId, enabled)) },
         onAddSchedule = navigateToCreateGeneralSchedule,
         onDelete = { id, isPast -> viewModel.dispatch(CalendarIntent.DeleteScheduleItem(id, isPast)) },
@@ -109,12 +117,14 @@ fun CalendarRoute(
     )
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun CalendarScreen(
     uiState: CalendarUiState,
     onSelectDate: (LocalDate) -> Unit,
     onMoveToPreviousMonth: () -> Unit,
     onMoveToNextMonth: () -> Unit,
+    onMoveToToday: () -> Unit,
     onToggleAlarm: (Long, Boolean) -> Unit,
     onAddSchedule: () -> Unit,
     onDelete: (Long, Boolean) -> Unit,
@@ -148,6 +158,19 @@ private fun CalendarScreen(
     val dimAlpha = peekToExpanded * 0.08f
 
     var scheduleIdPendingDelete by remember { mutableStateOf<Long?>(null) }
+
+    // TodayFAB 렌더링을 위한 상태 변수
+    val today =
+        remember {
+            Clock.System
+                .now()
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+                .date
+        }
+    val todayMonth = remember(today) {
+        CalendarMonth(today.year, today.month.number)
+    }
+    val shouldShowTodayFab = uiState.currentMonth != todayMonth
 
     BoxWithConstraints(
         modifier =
@@ -427,6 +450,16 @@ private fun CalendarScreen(
                         .padding(bottom = 20.dp, end = 22.dp),
                 onClick = onAddSchedule,
             )
+
+            if (shouldShowTodayFab) {
+                TodayFAB(
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 24.dp),
+                    onClick = onMoveToToday,
+                )
+            }
 
             if (scheduleIdPendingDelete != null) {
                 OnDotDialog(
