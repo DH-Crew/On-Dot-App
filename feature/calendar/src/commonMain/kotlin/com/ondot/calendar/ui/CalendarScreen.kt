@@ -300,7 +300,7 @@ private fun CalendarScreen(
                         Spacer(Modifier.height(20.dp))
 
                         CalendarWeekHeader(
-                            modifier = Modifier.padding(horizontal = 22.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp),
                         )
                     }
 
@@ -309,7 +309,7 @@ private fun CalendarScreen(
                             Modifier
                                 .fillMaxWidth()
                                 .height(calendarBodyHeight)
-                                .padding(horizontal = 22.dp)
+                                .padding(horizontal = 16.dp)
                                 .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)),
                     ) {
                         AnimatedContent(
