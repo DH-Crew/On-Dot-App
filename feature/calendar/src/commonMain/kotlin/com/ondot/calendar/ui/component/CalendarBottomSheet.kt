@@ -38,7 +38,6 @@ import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.ui.util.noRippleClickable
-import com.ondot.util.DateTimeFormatter.formatKoreanMonthDay
 import com.ondot.util.DateTimeFormatter.formatKoreanMonthDayWithoutPad
 import kotlinx.datetime.LocalDate
 import ondot.core.design_system.generated.resources.Res

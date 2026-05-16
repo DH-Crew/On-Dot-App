@@ -17,7 +17,6 @@ import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.designsystem.theme.OnDotColor.Gray300
 import com.ondot.designsystem.theme.OnDotColor.Gray900
-import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
 
 @Composable
@@ -39,7 +38,7 @@ fun TodayFAB(
         OnDotText(
             text = WORD_TODAY,
             style = OnDotTextStyle.BodyLargeR1,
-            color = Gray900
+            color = Gray900,
         )
     }
 }

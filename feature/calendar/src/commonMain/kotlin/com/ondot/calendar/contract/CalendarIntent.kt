@@ -12,7 +12,7 @@ sealed interface CalendarIntent : Intent {
 
     data object MoveToNextMonth : CalendarIntent
 
-    data object MoveToToday: CalendarIntent
+    data object MoveToToday : CalendarIntent
 
     data class ToggleAlarm(
         val scheduleId: Long,

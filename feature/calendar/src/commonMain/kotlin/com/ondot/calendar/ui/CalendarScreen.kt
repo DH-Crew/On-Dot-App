@@ -167,9 +167,10 @@ private fun CalendarScreen(
                 .toLocalDateTime(TimeZone.currentSystemDefault())
                 .date
         }
-    val todayMonth = remember(today) {
-        CalendarMonth(today.year, today.month.number)
-    }
+    val todayMonth =
+        remember(today) {
+            CalendarMonth(today.year, today.month.number)
+        }
     val shouldShowTodayFab = uiState.currentMonth != todayMonth
 
     BoxWithConstraints(
