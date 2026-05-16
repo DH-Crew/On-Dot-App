@@ -39,6 +39,7 @@ import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.ui.util.noRippleClickable
 import com.ondot.util.DateTimeFormatter.formatKoreanMonthDay
+import com.ondot.util.DateTimeFormatter.formatKoreanMonthDayWithoutPad
 import kotlinx.datetime.LocalDate
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_no_clock
@@ -79,7 +80,7 @@ fun CalendarBottomSheet(
             )
 
             OnDotText(
-                text = selectedDate.formatKoreanMonthDay(),
+                text = selectedDate.formatKoreanMonthDayWithoutPad(),
                 color = Gray0,
                 style = OnDotTextStyle.TitleSmallSB,
                 modifier =
