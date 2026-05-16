@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.CALENDAR_EMPTY_SCHEDULES_GUIDE
+import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION_ITEM
 import com.ondot.calendar.contract.CalendarScheduleItemUiModel
 import com.ondot.designsystem.components.OnDotSwitch
 import com.ondot.designsystem.components.OnDotText
@@ -34,8 +35,10 @@ import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.designsystem.theme.OnDotColor.Gray200
 import com.ondot.designsystem.theme.OnDotColor.Gray300
 import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Gray500
 import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.designsystem.theme.OnDotColor.Green500
+import com.ondot.designsystem.theme.OnDotColor.Green600
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.ui.util.noRippleClickable
 import com.ondot.util.DateTimeFormatter.formatKoreanMonthDayWithoutPad
@@ -257,5 +260,38 @@ private fun CalendarScheduleListItem(
                 )
             }
         }
+
+        if (item.preparationNote.isNotBlank()) {
+            Spacer(Modifier.height(12.dp))
+            PreparationNoteItem(item.preparationNote)
+        }
+    }
+}
+
+@Composable
+private fun PreparationNoteItem(note: String) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(65.dp)
+                .background(Gray500, RoundedCornerShape(8.dp))
+                .padding(12.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        OnDotText(
+            text = WORD_PREPARATION_ITEM,
+            style = OnDotTextStyle.BodySmallR1,
+            color = Gray200,
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        OnDotText(
+            text = note,
+            style = OnDotTextStyle.BodyMediumR,
+            color = Green600,
+        )
     }
 }
