@@ -156,6 +156,7 @@ fun Schedule.toCalendarScheduleItemUiModel(
         isAlarmEnabled = hasActiveAlarm,
         isPast = isPast,
         repeatDays = repeatDays,
+        preparationNote = preparationNote,
     )
 }
 

@@ -12,4 +12,5 @@ data class CalendarScheduleItemUiModel(
     val isAlarmEnabled: Boolean,
     val isPast: Boolean,
     val repeatDays: List<Int>,
+    val preparationNote: String = "",
 )
