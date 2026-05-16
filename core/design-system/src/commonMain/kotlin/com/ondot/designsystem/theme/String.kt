@@ -38,6 +38,7 @@ const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
 const val WORD_RESTORE_ACTION = "되돌리기"
 const val WORD_HOME = "집"
 const val WORD_EVERYTIME = "에브리타임"
+const val WORD_TODAY = "오늘"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
