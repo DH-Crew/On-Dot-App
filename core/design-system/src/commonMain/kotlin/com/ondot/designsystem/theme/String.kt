@@ -257,3 +257,5 @@ const val EVERYTIME_ROUTE_LOADING_LABEL = "수업 일정에 맞춰\n알람을 �
 
 // Calendar
 const val CALENDAR_EMPTY_SCHEDULES_GUIDE = "등록된 알람이 없습니다."
+
+fun calendarOverflowScheduleCount(count: Int) = "+$count"
