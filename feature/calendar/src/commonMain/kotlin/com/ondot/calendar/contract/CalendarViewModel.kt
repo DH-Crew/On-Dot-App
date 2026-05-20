@@ -160,7 +160,12 @@ class CalendarViewModel(
                         summaries.associate { summary ->
                             summary.date to
                                 summary.schedules.map { schedule ->
-                                    CalendarScheduleMarker(scheduleId = schedule.scheduleId, title = schedule.title)
+                                    CalendarScheduleMarker(
+                                        scheduleId = schedule.scheduleId,
+                                        title = schedule.title,
+                                        isRepeat = schedule.isRepeat,
+                                        hasActiveAlarm = schedule.hasActiveAlarm,
+                                    )
                                 }
                         }
 
