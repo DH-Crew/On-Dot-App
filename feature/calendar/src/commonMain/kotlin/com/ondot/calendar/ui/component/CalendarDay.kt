@@ -127,7 +127,11 @@ fun CalendarDay(
                             verticalArrangement = Arrangement.spacedBy(chipSpacing),
                         ) {
                             visibleScheduleChips.markers.forEach { marker ->
-                                ScheduleChip(text = marker.title)
+                                ScheduleChip(
+                                    text = marker.title,
+                                    isRepeat = marker.isRepeat,
+                                    hasActiveAlarm = marker.hasActiveAlarm,
+                                )
                             }
 
                             if (visibleScheduleChips.overflowCount > 0) {
