@@ -10,4 +10,6 @@ data class CalendarDateScheduleSummary(
 data class CalendarDateScheduleSummaryItem(
     val scheduleId: Long,
     val title: String,
+    val isRepeat: Boolean,
+    val hasActiveAlarm: Boolean,
 )
