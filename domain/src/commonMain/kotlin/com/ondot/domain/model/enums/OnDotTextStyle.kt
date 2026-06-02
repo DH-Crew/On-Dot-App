@@ -20,4 +20,5 @@ enum class OnDotTextStyle {
     BodySmallR1,
     BodySmallR2,
     BodySmallR3,
+    BodySmallM,
 }

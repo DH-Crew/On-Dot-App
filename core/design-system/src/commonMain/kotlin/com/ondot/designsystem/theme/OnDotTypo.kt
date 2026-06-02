@@ -51,6 +51,7 @@ data class OnDotTypography(
     val bodySmallR1: TextStyle,
     val bodySmallR2: TextStyle,
     val bodySmallR3: TextStyle,
+    val bodySmallM: TextStyle,
 )
 
 @Composable
@@ -79,5 +80,6 @@ fun OnDotTypo(): OnDotTypography {
         bodySmallR1 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = lh(12)),
         bodySmallR2 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 11.sp, lineHeight = lh(11)),
         bodySmallR3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 8.sp, lineHeight = lh(8)),
+        bodySmallM = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Medium, fontSize = 9.sp, lineHeight = lh(9)),
     )
 }
