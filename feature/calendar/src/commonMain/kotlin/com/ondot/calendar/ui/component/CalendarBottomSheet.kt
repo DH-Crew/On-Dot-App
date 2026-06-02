@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.CALENDAR_EMPTY_SCHEDULES_GUIDE
 import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION_ITEM
@@ -290,6 +291,8 @@ private fun PreparationNoteItem(note: String) {
             text = WORD_PREPARATION_ITEM,
             style = OnDotTextStyle.BodySmallR1,
             color = Gray200,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
 
         Spacer(Modifier.height(4.dp))
