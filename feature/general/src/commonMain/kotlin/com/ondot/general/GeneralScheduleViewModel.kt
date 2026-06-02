@@ -219,6 +219,7 @@ class GeneralScheduleViewModel(
                     uiState.value.copy(
                         placePickerState =
                             uiState.value.placePickerState.copy(
+                                isChecked = uiState.value.placePickerState.isChecked && value.isHomeAddressInput(),
                                 departurePlaceInput = value,
                                 selectedDeparturePlace = null,
                             ),
@@ -260,6 +261,7 @@ class GeneralScheduleViewModel(
                         placePickerState =
                             uiState.value.placePickerState.copy(
                                 placeList = emptyList(),
+                                isChecked = uiState.value.placePickerState.isChecked && place.isHomeAddress(),
                                 departurePlaceInput = place.title,
                                 selectedDeparturePlace = place,
                             ),
@@ -304,6 +306,18 @@ class GeneralScheduleViewModel(
                     ),
             ),
         )
+    }
+
+    private fun String.isHomeAddressInput(): Boolean {
+        val homeAddress = uiState.value.placePickerState.homeAddress
+        return this == homeAddress.roadAddress || this == homeAddress.title
+    }
+
+    private fun AddressInfo.isHomeAddress(): Boolean {
+        val homeAddress = uiState.value.placePickerState.homeAddress
+        return roadAddress == homeAddress.roadAddress &&
+            latitude == homeAddress.latitude &&
+            longitude == homeAddress.longitude
     }
 
     fun updateInitialPlacePicker(value: Boolean) {
