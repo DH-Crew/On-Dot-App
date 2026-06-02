@@ -41,6 +41,8 @@ import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.designsystem.theme.OnDotColor.Green600
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.ui.util.noRippleClickable
+import com.ondot.ui.util.traceDraw
+import com.ondot.ui.util.traceLayout
 import com.ondot.util.DateTimeFormatter.formatKoreanMonthDayWithoutPad
 import kotlinx.datetime.LocalDate
 import ondot.core.design_system.generated.resources.Res
@@ -58,9 +60,13 @@ fun CalendarBottomSheet(
     onDelete: (Long, Boolean) -> Unit = { _, _ -> }, // 반복 일정이 아닌 경우 그냥 삭제
     onClickSchedule: (Long) -> Unit = {},
     onShowScheduleDeleteDialog: (Long) -> Unit = {}, // 반복 일정인 경우 삭제 다이얼로그 띄우기
+    traceName: String = "CalendarBottomSheet",
 ) {
     Surface(
-        modifier = modifier,
+        modifier =
+            modifier
+                .traceLayout(traceName)
+                .traceDraw(traceName),
         color = Gray700,
         shadowElevation = 10.dp,
     ) {

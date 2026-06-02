@@ -408,6 +408,7 @@ private fun CalendarScreen(
                             onDelete = onDelete,
                             onClickSchedule = onClickSchedule,
                             onShowScheduleDeleteDialog = { scheduleIdPendingDelete = it },
+                            traceName = "CalendarBottomSheetBase",
                         )
                     }
                 }
@@ -441,6 +442,7 @@ private fun CalendarScreen(
                     onDelete = onDelete,
                     onClickSchedule = onClickSchedule,
                     onShowScheduleDeleteDialog = { scheduleIdPendingDelete = it },
+                    traceName = "CalendarBottomSheetOverlay",
                 )
             }
 
