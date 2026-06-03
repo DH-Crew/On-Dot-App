@@ -45,6 +45,8 @@ data class CalendarMonth(
 data class CalendarScheduleMarker(
     val scheduleId: Long,
     val title: String,
+    val isRepeat: Boolean,
+    val hasActiveAlarm: Boolean,
 )
 
 @Immutable
@@ -156,6 +158,7 @@ fun Schedule.toCalendarScheduleItemUiModel(
         isAlarmEnabled = hasActiveAlarm,
         isPast = isPast,
         repeatDays = repeatDays,
+        preparationNote = preparationNote,
     )
 }
 

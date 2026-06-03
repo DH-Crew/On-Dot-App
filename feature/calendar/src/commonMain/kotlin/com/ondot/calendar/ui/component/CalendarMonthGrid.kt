@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ondot.calendar.contract.CalendarDayCell
 import com.ondot.designsystem.theme.OnDotColor.Gray700
+import com.ondot.ui.util.traceDraw
+import com.ondot.ui.util.traceLayout
 import kotlinx.datetime.LocalDate
 import kotlin.collections.chunked
 import kotlin.collections.forEach
@@ -40,7 +42,11 @@ fun CalendarMonthGrid(
             .coerceAtLeast(0.dp)
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .traceLayout("CalendarMonthGrid")
+                .traceDraw("CalendarMonthGrid"),
         verticalArrangement = Arrangement.spacedBy(verticalGap),
     ) {
         weeks.forEachIndexed { index, week ->
@@ -49,7 +55,7 @@ fun CalendarMonthGrid(
                     Modifier
                         .fillMaxWidth()
                         .height(rowHeight),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 week.forEach { cell ->
                     CalendarDay(

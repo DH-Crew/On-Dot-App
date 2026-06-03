@@ -29,4 +29,6 @@ data class CalendarScheduleSummaryResponse(
     val isRepeat: Boolean,
     @SerialName("appointmentAt")
     val appointmentAt: String,
+    @SerialName("hasActiveAlarm")
+    val hasActiveAlarm: Boolean,
 )

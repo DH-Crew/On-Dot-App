@@ -19,9 +19,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class CalendarViewModel(
     private val calendarRepository: CalendarRepository,
@@ -84,6 +88,21 @@ class CalendarViewModel(
                 loadSchedulesFor(nextSelectedDate)
             }
 
+            CalendarIntent.MoveToToday -> {
+                val today = today()
+                val todayMonth = CalendarMonth(today.year, today.month.number)
+
+                reduce {
+                    copy(
+                        currentMonth = todayMonth,
+                        selectedDate = today,
+                    )
+                }
+
+                getScheduleMarkersInRange(today)
+                loadSchedulesFor(today)
+            }
+
             is CalendarIntent.ToggleAlarm -> {
                 toggleAlarm(
                     scheduleId = intent.scheduleId,
@@ -141,7 +160,12 @@ class CalendarViewModel(
                         summaries.associate { summary ->
                             summary.date to
                                 summary.schedules.map { schedule ->
-                                    CalendarScheduleMarker(scheduleId = schedule.scheduleId, title = schedule.title)
+                                    CalendarScheduleMarker(
+                                        scheduleId = schedule.scheduleId,
+                                        title = schedule.title,
+                                        isRepeat = schedule.isRepeat,
+                                        hasActiveAlarm = schedule.hasActiveAlarm,
+                                    )
                                 }
                         }
 
@@ -513,3 +537,10 @@ private fun daysInMonth(
     }
 
 private fun isLeapYear(year: Int): Boolean = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+
+@OptIn(ExperimentalTime::class)
+private fun today(): LocalDate =
+    Clock.System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date

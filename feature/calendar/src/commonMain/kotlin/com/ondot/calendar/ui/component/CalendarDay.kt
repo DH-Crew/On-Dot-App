@@ -17,10 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.dh.ondot.presentation.ui.theme.calendarOverflowScheduleCount
 import com.ondot.calendar.contract.CalendarDayCell
+import com.ondot.calendar.contract.CalendarScheduleMarker
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.theme.OnDotColor.Gray100
+import com.ondot.designsystem.theme.OnDotColor.Gray300
 import com.ondot.designsystem.theme.OnDotColor.Gray400
 import com.ondot.designsystem.theme.OnDotColor.Gray600
 import com.ondot.designsystem.theme.OnDotColor.Green500
@@ -95,12 +99,17 @@ fun CalendarDay(
                 BoxWithConstraints(
                     contentAlignment = Alignment.TopCenter,
                 ) {
-                    val chipHeight = 14.dp
+                    val chipHeight = 16.dp
                     val chipSpacing = 3.dp
                     val maxChipCount =
                         ((maxHeight + chipSpacing) / (chipHeight + chipSpacing))
                             .toInt()
                             .coerceAtLeast(1)
+                    val visibleScheduleChips =
+                        resolveVisibleScheduleChips(
+                            markers = cell.markers,
+                            maxSlotCount = maxChipCount,
+                        )
 
                     Box(
                         modifier =
@@ -117,9 +126,20 @@ fun CalendarDay(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(chipSpacing),
                         ) {
-                            cell.markers.take(maxChipCount).forEach { marker ->
+                            visibleScheduleChips.markers.forEach { marker ->
                                 ScheduleChip(
                                     text = marker.title,
+                                    isRepeat = marker.isRepeat,
+                                    hasActiveAlarm = marker.hasActiveAlarm,
+                                )
+                            }
+
+                            if (visibleScheduleChips.overflowCount > 0) {
+                                OnDotText(
+                                    text = calendarOverflowScheduleCount(visibleScheduleChips.overflowCount),
+                                    style = OnDotTextStyle.BodySmallR2,
+                                    color = Gray300,
+                                    textAlign = TextAlign.Center,
                                 )
                             }
                         }
@@ -155,4 +175,28 @@ fun CalendarDay(
             }
         }
     }
+}
+
+private data class VisibleScheduleChips(
+    val markers: List<CalendarScheduleMarker>,
+    val overflowCount: Int,
+)
+
+private fun resolveVisibleScheduleChips(
+    markers: List<CalendarScheduleMarker>,
+    maxSlotCount: Int,
+): VisibleScheduleChips {
+    if (markers.size <= maxSlotCount) {
+        return VisibleScheduleChips(
+            markers = markers,
+            overflowCount = 0,
+        )
+    }
+
+    val visibleCount = (maxSlotCount - 1).coerceAtLeast(0)
+
+    return VisibleScheduleChips(
+        markers = markers.take(visibleCount),
+        overflowCount = markers.size - visibleCount,
+    )
 }

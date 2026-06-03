@@ -156,6 +156,9 @@ object DateTimeFormatter {
     /** LocalDate 06월 13일 화요일 형태로 포맷 */
     fun LocalDate.formatKoreanMonthDay(): String = "${month.number.pad2()}월 ${day.pad2()}일 ${this.extractDayOfWeek()}"
 
+    /** LocalDate 6월 13일 화요일 형태로 포맷 */
+    fun LocalDate.formatKoreanMonthDayWithoutPad(): String = "${month.number}월 ${day}일 ${this.extractDayOfWeek()}"
+
     /** iso 문자열을 days 만큼 뒤로 미룸 */
     fun plusDays(
         iso: String,
