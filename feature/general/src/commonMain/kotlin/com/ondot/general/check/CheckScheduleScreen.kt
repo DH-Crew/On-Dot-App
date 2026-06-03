@@ -91,8 +91,6 @@ fun CheckScheduleScreen(
 
     CheckScheduleContent(
         uiState = uiState,
-        departurePlaceInput = uiState.placePickerState.departurePlaceInput,
-        arrivalPlaceInput = uiState.placePickerState.arrivalPlaceInput,
         focusRequester = focusRequest,
         onClickBack = popScreen,
         onCreateSchedule = viewModel::createSchedule,
@@ -106,8 +104,6 @@ fun CheckScheduleScreen(
 @Composable
 fun CheckScheduleContent(
     uiState: GeneralScheduleUiState,
-    departurePlaceInput: String,
-    arrivalPlaceInput: String,
     focusRequester: FocusRequester,
     onClickBack: () -> Unit,
     onCreateSchedule: (Boolean, String) -> Unit,
@@ -150,8 +146,8 @@ fun CheckScheduleContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 RouteInputSection(
-                    departurePlaceInput = departurePlaceInput,
-                    arrivalPlaceInput = arrivalPlaceInput,
+                    departurePlaceInput = uiState.placePickerState.departurePlaceInput,
+                    arrivalPlaceInput = uiState.placePickerState.arrivalPlaceInput,
                     readOnly = true,
                 )
 

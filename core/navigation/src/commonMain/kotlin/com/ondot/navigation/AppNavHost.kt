@@ -117,6 +117,10 @@ private fun String.toScreenViewEventName(): String =
         NavRoutes.PlacePicker.route -> "screen_view_place_picker"
         NavRoutes.RouteLoading.route -> "screen_view_route_loading"
         NavRoutes.CheckSchedule.route -> "screen_view_check_schedule"
+        NavRoutes.ScheduleRepeatSettingMvi.route -> "screen_view_schedule_repeat_setting"
+        NavRoutes.PlacePickerMvi.route -> "screen_view_place_picker"
+        NavRoutes.RouteLoadingMvi.route -> "screen_view_route_loading"
+        NavRoutes.CheckScheduleMvi.route -> "screen_view_check_schedule"
 
         NavRoutes.DeleteAccount.route -> "screen_view_delete_account"
         NavRoutes.HomeAddressSetting.route -> "screen_view_home_address_setting"

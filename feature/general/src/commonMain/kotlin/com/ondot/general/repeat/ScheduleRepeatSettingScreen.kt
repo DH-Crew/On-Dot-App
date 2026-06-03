@@ -2,7 +2,6 @@ package com.ondot.general.repeat
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,7 +44,6 @@ fun ScheduleRepeatSettingScreen(
     navigateToPlacePicker: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val interactionSource = remember { MutableInteractionSource() }
     val scrollState = rememberScrollState()
 
     LaunchedEffect(uiState.totalStep) {
@@ -71,7 +68,6 @@ fun ScheduleRepeatSettingScreen(
 
     ScheduleRepeatSettingContent(
         uiState = uiState,
-        interactionSource = interactionSource,
         scrollState = scrollState,
         isButtonEnabled = viewModel.isButtonEnabled(),
         onClickSwitch = viewModel::onClickSwitch,
@@ -91,7 +87,6 @@ fun ScheduleRepeatSettingScreen(
 @Composable
 fun ScheduleRepeatSettingContent(
     uiState: GeneralScheduleUiState,
-    interactionSource: MutableInteractionSource,
     scrollState: ScrollState,
     isButtonEnabled: Boolean = false,
     onClickSwitch: (Boolean) -> Unit,
@@ -160,7 +155,6 @@ fun ScheduleRepeatSettingContent(
                     today = uiState.today,
                     selectedTime = uiState.selectedTime,
                     isActiveDial = uiState.isActiveDial,
-                    interactionSource = interactionSource,
                     onToggleCalendar = onToggleCalendar,
                     onToggleDial = onToggleDial,
                     onPrevMonth = onPrevMonth,
