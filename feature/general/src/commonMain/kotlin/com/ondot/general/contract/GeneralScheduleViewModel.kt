@@ -56,6 +56,7 @@ class GeneralScheduleViewModel(
                 .distinctUntilChanged()
                 .onEach { value ->
                     if (value.isBlank()) {
+                        searchPlaceJob?.cancel()
                         reduce {
                             copy(
                                 placePickerState = placePickerState.copy(placeList = emptyList()),
