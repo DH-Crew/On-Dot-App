@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -119,7 +120,7 @@ fun TimeSectionHeader(
     isActiveDial: Boolean,
     onToggleDial: () -> Unit,
 ) {
-    val interactionSource = MutableInteractionSource()
+    val interactionSource = remember { MutableInteractionSource() }
 
     Row(
         modifier =
@@ -156,7 +157,7 @@ fun DateSectionHeader(
     activeWeekDays: Set<Int>,
     onToggleCalendar: () -> Unit,
 ) {
-    val interactionSource = MutableInteractionSource()
+    val interactionSource = remember { MutableInteractionSource() }
 
     Row(
         modifier =
