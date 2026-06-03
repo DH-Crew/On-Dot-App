@@ -41,7 +41,6 @@ fun DateSettingSection(
     today: LocalDate,
     selectedTime: LocalTime?,
     isActiveDial: Boolean,
-    interactionSource: MutableInteractionSource,
     onToggleCalendar: () -> Unit,
     onToggleDial: () -> Unit,
     onPrevMonth: () -> Unit,
@@ -63,7 +62,6 @@ fun DateSettingSection(
         DateSectionHeader(
             selectedDate = selectedDate,
             isActiveCalendar = isActiveCalendar,
-            interactionSource = interactionSource,
             isRepeat = isRepeat,
             activeWeekDays = activeWeekDays,
             onToggleCalendar = onToggleCalendar,
@@ -97,7 +95,6 @@ fun DateSettingSection(
         TimeSectionHeader(
             selectedTime = selectedTime,
             isActiveDial = isActiveDial,
-            interactionSource = interactionSource,
             onToggleDial = onToggleDial,
         )
 
@@ -120,9 +117,10 @@ fun DateSettingSection(
 fun TimeSectionHeader(
     selectedTime: LocalTime?,
     isActiveDial: Boolean,
-    interactionSource: MutableInteractionSource,
     onToggleDial: () -> Unit,
 ) {
+    val interactionSource = MutableInteractionSource()
+
     Row(
         modifier =
             Modifier
@@ -154,11 +152,12 @@ fun TimeSectionHeader(
 fun DateSectionHeader(
     selectedDate: LocalDate?,
     isActiveCalendar: Boolean,
-    interactionSource: MutableInteractionSource,
     isRepeat: Boolean,
     activeWeekDays: Set<Int>,
     onToggleCalendar: () -> Unit,
 ) {
+    val interactionSource = MutableInteractionSource()
+
     Row(
         modifier =
             Modifier
