@@ -7,6 +7,7 @@ import com.ondot.data.mapper.SchedulePreparationResponseMapper
 import com.ondot.data.model.request.everytime.EverytimeValidateRequest
 import com.ondot.data.model.request.everytime.mapper.toRequest
 import com.ondot.data.model.response.schedule.EverytimeValidateResponse
+import com.ondot.data.model.response.schedule.ScheduleAlarmResponse
 import com.ondot.data.model.response.schedule.mapper.toDomain
 import com.ondot.domain.datasource.ScheduleLocalDataSource
 import com.ondot.domain.model.command.CreateEverytimeScheduleCommand
@@ -104,6 +105,25 @@ class ScheduleRepositoryImpl(
                 method = HttpMethod.POST,
                 path = "/schedules/everytime",
                 body = command.toRequest(),
+            )
+        }
+
+    override suspend fun fetchScheduleAlarms(request: ScheduleAlarmRequest): AppResult<ScheduleAlarm> =
+        safeApiCall {
+            networkClient
+                .requestOrThrow<ScheduleAlarmResponse>(
+                    method = HttpMethod.POST,
+                    path = "/alarms/setting",
+                    body = request,
+                ).let(ScheduleAlarmResponseMapper::responseToModel)
+        }
+
+    override suspend fun createScheduleAppResult(request: CreateScheduleRequest): AppResult<Unit> =
+        safeApiCall {
+            networkClient.requestOrThrow<Unit>(
+                method = HttpMethod.POST,
+                path = "/schedules",
+                body = request,
             )
         }
 

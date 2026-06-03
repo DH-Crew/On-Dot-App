@@ -43,6 +43,10 @@ interface ScheduleRepository {
 
     suspend fun createEverytimeSchedule(command: CreateEverytimeScheduleCommand): AppResult<Unit>
 
+    suspend fun fetchScheduleAlarms(request: ScheduleAlarmRequest): AppResult<ScheduleAlarm>
+
+    suspend fun createScheduleAppResult(request: CreateScheduleRequest): AppResult<Unit>
+
     suspend fun toggleAlarm(
         scheduleId: Long,
         isEnabled: Boolean,
