@@ -1,6 +1,7 @@
 package com.ondot.everytime.contract
 
 import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.ui.base.mvi.Intent
@@ -41,4 +42,8 @@ sealed interface EverytimeIntent : Intent {
     ) : EverytimeIntent
 
     data object InitPlaceHistory : EverytimeIntent
+
+    data class UpdateTransportType(
+        val type: TransportType,
+    ) : EverytimeIntent
 }
