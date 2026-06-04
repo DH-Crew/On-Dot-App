@@ -34,12 +34,12 @@ fun AlarmInfoItem(
     info: Alarm,
     type: AlarmType,
     scheduleDate: String,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onClick: () -> Unit = {},
     onToggleSwitch: () -> Unit = {},
 ) {
     val (period, time) = DateTimeFormatter.formatAmPmTimePair(info.triggeredAt)
     val isYesterday = DateTimeFormatter.isYesterday(scheduleDate, info.triggeredAt)
+    val interactionSource = remember { MutableInteractionSource() }
 
     Box(
         modifier =

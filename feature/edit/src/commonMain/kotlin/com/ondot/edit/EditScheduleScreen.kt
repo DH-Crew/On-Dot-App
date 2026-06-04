@@ -91,7 +91,6 @@ fun EditScheduleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
-    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         delay(200)
@@ -112,7 +111,6 @@ fun EditScheduleScreen(
     if (uiState.isInitialized) {
         EditScheduleContent(
             uiState = uiState,
-            interactionSource = interactionSource,
             focusRequester = focusRequester,
             onClickClose = popScreen,
             onValueChanged = viewModel::updateScheduleTitle,
@@ -136,7 +134,6 @@ fun EditScheduleScreen(
 @Composable
 fun EditScheduleContent(
     uiState: EditScheduleUiState,
-    interactionSource: MutableInteractionSource,
     focusRequester: FocusRequester,
     onClickClose: () -> Unit,
     onValueChanged: (String) -> Unit,
@@ -204,7 +201,6 @@ fun EditScheduleContent(
                             repeatDays = uiState.schedule.repeatDays,
                             date = uiState.selectedDate,
                             time = appointmentDate,
-                            interactionSource = interactionSource,
                             onClickDate = onShowDateBottomSheet,
                             onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) },
                         )
@@ -232,7 +228,6 @@ fun EditScheduleContent(
                             info = uiState.schedule.preparationAlarm,
                             type = AlarmType.Preparation,
                             scheduleDate = uiState.schedule.appointmentAt,
-                            interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
                             onToggleSwitch = onToggleSwitch,
                         )
@@ -243,7 +238,6 @@ fun EditScheduleContent(
                             info = uiState.schedule.departureAlarm,
                             type = AlarmType.Departure,
                             scheduleDate = uiState.schedule.appointmentAt,
-                            interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) },
                         )
 

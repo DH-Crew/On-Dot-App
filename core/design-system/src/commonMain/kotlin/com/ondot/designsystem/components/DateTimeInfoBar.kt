@@ -30,11 +30,12 @@ fun DateTimeInfoBar(
     repeatDays: List<Int> = emptyList(),
     date: LocalDate?,
     time: LocalTime,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     backgroundColor: Color = Green900,
     onClickDate: () -> Unit = {},
     onClickTime: () -> Unit = {},
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier =
             Modifier
