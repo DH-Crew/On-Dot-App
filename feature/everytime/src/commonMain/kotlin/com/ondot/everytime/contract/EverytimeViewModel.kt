@@ -77,6 +77,7 @@ class EverytimeViewModel(
             is EverytimeIntent.UpdateRouteInput -> updateRouteInput(intent.input)
             is EverytimeIntent.SetSelectedPlace -> setSelectedPlace(intent.place)
             EverytimeIntent.InitPlaceHistory -> fetchHistory()
+            is EverytimeIntent.UpdateTransportType -> setTransportType(intent.type)
         }
     }
 
@@ -163,7 +164,7 @@ class EverytimeViewModel(
                 selectedLectures = selectedLectures,
                 departurePlace = departure,
                 arrivalPlace = arrival,
-                transportType = TransportType.PUBLIC_TRANSPORT,
+                transportType = currentState.placePickerState.selectedTransportType,
             )
 
         launchResult(
@@ -304,6 +305,11 @@ class EverytimeViewModel(
                 }
             }
         }
+    }
+
+    // 교통수단 선택
+    private fun setTransportType(type: TransportType) {
+        reduce { copy(placePickerState = currentState.placePickerState.copy(selectedTransportType = type)) }
     }
 
     // 가장 최근 활성화 된 텍스트 필드 타입 저장

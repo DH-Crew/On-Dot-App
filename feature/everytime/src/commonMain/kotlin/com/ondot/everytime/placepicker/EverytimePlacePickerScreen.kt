@@ -71,6 +71,7 @@ fun EverytimePlacePickerRoute(
         },
         onDeleteHistory = { viewModel.dispatch(EverytimeIntent.DeleteHistory(it)) },
         onToggleCheckBox = { viewModel.dispatch(EverytimeIntent.ToggleCheckBox) },
+        onTransportTypeChanged = { viewModel.dispatch(EverytimeIntent.UpdateTransportType(it)) },
         onNext = { viewModel.dispatch(EverytimeIntent.CreateSchedule) },
         popScreen = popScreen,
     )

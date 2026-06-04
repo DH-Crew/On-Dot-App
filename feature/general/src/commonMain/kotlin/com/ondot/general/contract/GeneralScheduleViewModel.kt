@@ -8,6 +8,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.member.PlaceHistory
@@ -97,11 +98,18 @@ class GeneralScheduleViewModel(
             GeneralScheduleIntent.TogglePreparationAlarm -> togglePreparationAlarm()
             is GeneralScheduleIntent.SetBottomSheetVisible -> setBottomSheetVisible(intent.visible)
             is GeneralScheduleIntent.CreateSchedule -> createSchedule(intent.isMedicationRequired, intent.preparationNote)
+            is GeneralScheduleIntent.UpdateTransportType -> setTransportType(intent.type)
         }
     }
 
     private fun initStep() {
-        reduce { copy(totalStep = 2, currentStep = 1) }
+        reduce {
+            copy(
+                totalStep = 2,
+                currentStep = 1,
+                placePickerState = placePickerState.copy(steps = Pair(1, 2))
+            )
+        }
     }
 
     private fun toggleRepeat(newValue: Boolean) {
@@ -411,7 +419,7 @@ class GeneralScheduleViewModel(
     }
 
     @OptIn(ExperimentalTime::class)
-    private suspend fun createSchedule(
+    private fun createSchedule(
         isMedicationRequired: Boolean,
         preparationNote: String,
     ) {
@@ -438,6 +446,7 @@ class GeneralScheduleViewModel(
                 appointmentAt = appointmentAt,
                 preparationAlarm = currentState.preparationAlarm,
                 departureAlarm = currentState.departureAlarm,
+                transportType = currentState.placePickerState.selectedTransportType.name,
             )
 
         launchResult(
@@ -463,11 +472,24 @@ class GeneralScheduleViewModel(
         reduce { copy(showBottomSheet = visible) }
     }
 
+    private fun setTransportType(type: TransportType) {
+        reduce {
+            copy(
+                placePickerState = placePickerState.copy(selectedTransportType = type)
+            )
+        }
+    }
+
     private suspend fun clickNext() {
         when (currentState.currentStep) {
             1 -> {
-                reduce { copy(currentStep = currentStep + 1) }
                 emitEffect(GeneralScheduleSideEffect.NavigateToPlacePicker)
+                reduce {
+                    copy(
+                        currentStep = currentStep + 1,
+                        placePickerState = placePickerState.copy(steps = Pair(currentStep + 1, totalStep))
+                    )
+                }
             }
 
             2 -> {
