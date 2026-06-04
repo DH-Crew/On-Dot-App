@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import co.touchlab.kermit.Logger
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.service.DirectionsOpener
 
 class AndroidDirectionsOpener(
@@ -20,11 +21,12 @@ class AndroidDirectionsOpener(
         provider: MapProvider,
         startName: String,
         endName: String,
+        transportType: TransportType,
     ) {
         val mode =
             when (provider) {
-                MapProvider.KAKAO -> "PUBLICTRANSIT"
-                MapProvider.NAVER -> "public"
+                MapProvider.KAKAO -> transportType.toKakaoRouteMode()
+                MapProvider.NAVER -> transportType.toNaverRouteMode()
                 MapProvider.APPLE -> error("unreachable")
             }
         val intent =
@@ -85,4 +87,16 @@ class AndroidDirectionsOpener(
             }
         }
     }
+
+    private fun TransportType.toKakaoRouteMode(): String =
+        when (this) {
+            TransportType.PUBLIC_TRANSPORT -> "PUBLICTRANSIT"
+            TransportType.CAR -> "CAR"
+        }
+
+    private fun TransportType.toNaverRouteMode(): String =
+        when (this) {
+            TransportType.PUBLIC_TRANSPORT -> "public"
+            TransportType.CAR -> "car"
+        }
 }

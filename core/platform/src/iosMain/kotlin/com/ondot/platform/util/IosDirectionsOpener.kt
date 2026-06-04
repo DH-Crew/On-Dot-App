@@ -1,6 +1,7 @@
 package com.ondot.platform.util
 
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.service.DirectionsOpener
 import com.ondot.util.toUtf8
 import platform.Foundation.NSBundle
@@ -19,6 +20,7 @@ class IosDirectionsOpener : DirectionsOpener {
         provider: MapProvider,
         startName: String,
         endName: String,
+        transportType: TransportType,
     ) {
         val app = UIApplication.sharedApplication
 
@@ -41,13 +43,13 @@ class IosDirectionsOpener : DirectionsOpener {
 
         when (provider) {
             MapProvider.KAKAO -> {
-                val mode = "publictransit"
+                val mode = transportType.toKakaoRouteMode()
                 val url = "kakaomap://route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
                 val web = "https://m.map.kakao.com/scheme/route?sp=$startLat,$startLng&ep=$endLat,$endLng&by=$mode"
                 open(url, web)
             }
             MapProvider.NAVER -> {
-                val mode = "public"
+                val mode = transportType.toNaverRouteMode()
                 val bundleId = NSBundle.mainBundle.bundleIdentifier ?: "com.dh.ondot.iosApp"
                 val url =
                     "nmap://route/$mode" +
@@ -58,7 +60,7 @@ class IosDirectionsOpener : DirectionsOpener {
                 open(url, "http://itunes.apple.com/app/id311867728?mt=8")
             }
             MapProvider.APPLE -> {
-                val dir = "r"
+                val dir = transportType.toAppleDirectionFlag()
                 // Apple 공식 Map Links
                 val url = "http://maps.apple.com/?saddr=$startLat,$startLng&daddr=$endLat,$endLng&dirflg=$dir"
                 open(url)
@@ -69,4 +71,22 @@ class IosDirectionsOpener : DirectionsOpener {
     private fun ensureMain(block: () -> Unit) {
         if (NSThread.isMainThread) block() else dispatch_async(dispatch_get_main_queue()) { block() }
     }
+
+    private fun TransportType.toKakaoRouteMode(): String =
+        when (this) {
+            TransportType.PUBLIC_TRANSPORT -> "publictransit"
+            TransportType.CAR -> "car"
+        }
+
+    private fun TransportType.toNaverRouteMode(): String =
+        when (this) {
+            TransportType.PUBLIC_TRANSPORT -> "public"
+            TransportType.CAR -> "car"
+        }
+
+    private fun TransportType.toAppleDirectionFlag(): String =
+        when (this) {
+            TransportType.PUBLIC_TRANSPORT -> "r"
+            TransportType.CAR -> "d"
+        }
 }

@@ -1,6 +1,7 @@
 package com.ondot.domain.service
 
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.TransportType
 
 interface DirectionsOpener {
     fun openDirections(
@@ -11,5 +12,6 @@ interface DirectionsOpener {
         provider: MapProvider,
         startName: String,
         endName: String,
+        transportType: TransportType,
     )
 }
