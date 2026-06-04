@@ -2,6 +2,7 @@ package com.ondot.ui.screen.placepicker.model
 
 import androidx.compose.runtime.Immutable
 import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.util.DateTimeFormatter
@@ -18,6 +19,7 @@ data class PlacePickerUiModel(
     val placeHistory: List<PlaceHistory> = emptyList(), // 검색 기록 리스트,
     val lastFocusedTextField: RouterType = RouterType.Departure, // 두개의 텍스트 필드 중 가장 마지막으로 포커스된 텍스트 필드
     val homeAddress: AddressInfo = AddressInfo(),
+    val selectedTransportType: TransportType = TransportType.PUBLIC_TRANSPORT,
 ) {
     companion object {
         fun formattedDate(date: String) = DateTimeFormatter.formatKoreanDateMonthDay(date)

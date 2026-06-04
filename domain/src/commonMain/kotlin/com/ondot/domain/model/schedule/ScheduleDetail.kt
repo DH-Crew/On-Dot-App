@@ -1,6 +1,7 @@
 package com.ondot.domain.model.schedule
 
 import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import kotlinx.serialization.Serializable
 
@@ -14,4 +15,5 @@ data class ScheduleDetail(
     val arrivalPlace: AddressInfo = AddressInfo(),
     val preparationAlarm: Alarm = Alarm(),
     val departureAlarm: Alarm = Alarm(),
+    val transportType: TransportType = TransportType.PUBLIC_TRANSPORT,
 )
