@@ -464,6 +464,7 @@ class GeneralScheduleViewModel(
                 appointmentAt = appointmentAt,
                 preparationAlarm = uiState.value.preparationAlarm,
                 departureAlarm = uiState.value.departureAlarm,
+                transportType = "",
             )
 
         viewModelScope.launch {
