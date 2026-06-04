@@ -15,6 +15,9 @@ fun TransportType.toTransportInfo(): TransportInfo =
     TransportInfo(
         title = if (this == TransportType.PUBLIC_TRANSPORT) "대중교통 이용" else "자가용 이용",
         icon =
-            if (this == TransportType.PUBLIC_TRANSPORT) Res.drawable.ic_public_transport
-            else Res.drawable.ic_car
+            if (this == TransportType.PUBLIC_TRANSPORT) {
+                Res.drawable.ic_public_transport
+            } else {
+                Res.drawable.ic_car
+            },
     )

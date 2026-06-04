@@ -3,7 +3,6 @@ package com.ondot.general.contract
 import androidx.compose.runtime.Immutable
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
 import com.ondot.domain.model.alarm.Alarm
-import com.ondot.domain.model.enums.TransportType
 import com.ondot.general.GeneralScheduleUiState
 import com.ondot.ui.base.UiState
 import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
