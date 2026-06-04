@@ -107,7 +107,7 @@ class GeneralScheduleViewModel(
             copy(
                 totalStep = 2,
                 currentStep = 1,
-                placePickerState = placePickerState.copy(steps = Pair(1, 2))
+                placePickerState = placePickerState.copy(steps = Pair(1, 2)),
             )
         }
     }
@@ -475,7 +475,7 @@ class GeneralScheduleViewModel(
     private fun setTransportType(type: TransportType) {
         reduce {
             copy(
-                placePickerState = placePickerState.copy(selectedTransportType = type)
+                placePickerState = placePickerState.copy(selectedTransportType = type),
             )
         }
     }
@@ -487,7 +487,7 @@ class GeneralScheduleViewModel(
                 reduce {
                     copy(
                         currentStep = currentStep + 1,
-                        placePickerState = placePickerState.copy(steps = Pair(currentStep + 1, totalStep))
+                        placePickerState = placePickerState.copy(steps = Pair(currentStep + 1, totalStep)),
                     )
                 }
             }
