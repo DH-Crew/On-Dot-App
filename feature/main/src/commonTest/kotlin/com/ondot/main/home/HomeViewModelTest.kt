@@ -4,6 +4,7 @@ import co.touchlab.kermit.Logger
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.repository.AlarmRepository
 import com.ondot.testing.fake.FakeAlarmRepository
@@ -434,6 +435,7 @@ class HomeViewModelTest {
             assertEquals(s1.endLatitude, call.endLat)
             assertEquals(s1.endLongitude, call.endLng)
             assertEquals(MapProvider.NAVER, call.provider)
+            assertEquals(TransportType.PUBLIC_TRANSPORT, call.transportType)
         }
 
     /**---------------------------------------------더미 데이터 생성 유틸 메서드----------------------------------------------*/

@@ -1,6 +1,7 @@
 package com.ondot.data.mapper
 
 import com.ondot.data.model.response.schedule.ScheduleListResponse
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.ScheduleList
 import com.ondot.network.base.Mapper
@@ -28,6 +29,7 @@ object ScheduleListResponseMapper : Mapper<ScheduleListResponse, ScheduleList> {
                             departureAlarm = AlarmResponseMapper.responseToModel(scheduleResponse.departureAlarm),
                             hasActiveAlarm = scheduleResponse.hasActiveAlarm,
                             preparationNote = scheduleResponse.preparationNote ?: "",
+                            transportType = TransportType.from(scheduleResponse.transportType),
                         )
                     } ?: emptyList(),
             )

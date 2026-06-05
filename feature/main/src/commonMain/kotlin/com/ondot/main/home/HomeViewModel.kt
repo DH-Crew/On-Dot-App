@@ -312,6 +312,7 @@ class HomeViewModel(
             provider = mapProvider,
             startName = "출발지",
             endName = "도착지",
+            transportType = schedule.transportType,
         )
     }
 

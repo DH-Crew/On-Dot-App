@@ -48,14 +48,6 @@ data class GeneralScheduleState(
     val isPlacePickerButtonEnabled: Boolean
         get() = placePickerState.selectedDeparturePlace != null && placePickerState.selectedArrivalPlace != null
 
-    val isCurrentStepButtonEnabled: Boolean
-        get() =
-            when (currentStep) {
-                1 -> isRepeatStepButtonEnabled
-                2 -> isPlacePickerButtonEnabled
-                else -> false
-            }
-
     companion object {
         fun formattedDate(date: String) = DateTimeFormatter.formatKoreanDateMonthDay(date)
     }

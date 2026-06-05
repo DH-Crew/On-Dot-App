@@ -55,6 +55,7 @@ public final class AlarmKitBridgeShim: NSObject {
         startLat: NSNumber?, startLng: NSNumber?,
         endLat: NSNumber?,   endLng: NSNumber?,
         mapProvider: String,
+        transportType: String,
         completion: @escaping (String?, String?) -> Void
     ) {
         Task { @MainActor in
@@ -71,6 +72,7 @@ public final class AlarmKitBridgeShim: NSObject {
                 startLat: startLat, startLng: startLng,
                 endLat: endLat,     endLng: endLng,
                 mapProvider: mapProvider,
+                transportType: transportType,
                 completion
             )
         }

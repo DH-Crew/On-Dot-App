@@ -78,6 +78,7 @@ fun PlacePickerRoute(
         },
         onDeleteHistory = viewModel::deletePlaceHistory,
         onToggleCheckBox = viewModel::onClickCheckBox,
+        onTransportTypeChanged = {},
         onNext = viewModel::onClickNextButton,
         popScreen = {
             viewModel.onClickBackButton()

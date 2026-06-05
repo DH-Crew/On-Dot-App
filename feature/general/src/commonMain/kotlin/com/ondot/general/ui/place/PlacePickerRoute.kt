@@ -79,6 +79,7 @@ fun PlacePickerRoute(
         },
         onDeleteHistory = { viewModel.dispatch(GeneralScheduleIntent.DeleteHistory(it)) },
         onToggleCheckBox = { viewModel.dispatch(GeneralScheduleIntent.ToggleHomeDeparture) },
+        onTransportTypeChanged = { viewModel.dispatch(GeneralScheduleIntent.UpdateTransportType(it)) },
         onNext = { viewModel.dispatch(GeneralScheduleIntent.ClickNext) },
         popScreen = {
             viewModel.dispatch(GeneralScheduleIntent.ClickBack)

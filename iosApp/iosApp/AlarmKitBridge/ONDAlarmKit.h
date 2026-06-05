@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
                         endLat:(NSNumber * _Nullable)endLat
                         endLng:(NSNumber * _Nullable)endLng
                    mapProvider:(NSString * _Nullable)mapProvider
+                 transportType:(NSString * _Nullable)transportType
                     completion:(void(^)(NSString * _Nullable alarmUUID,
                                          NSString * _Nullable errorMsg))completion;
 

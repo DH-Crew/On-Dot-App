@@ -15,7 +15,8 @@ CREATE TABLE schedule_entity (
   appointmentAt     TEXT    NOT NULL,
   preparationAlarm  TEXT AS Alarm NOT NULL,
   departureAlarm    TEXT AS Alarm NOT NULL,
-  hasActiveAlarm    INTEGER AS Boolean NOT NULL
+  hasActiveAlarm    INTEGER AS Boolean NOT NULL,
+  transportType     TEXT    NOT NULL DEFAULT 'PUBLIC_TRANSPORT'
 );
 
 CREATE INDEX IF NOT EXISTS idx_schedule_appointmentAt ON schedule_entity(appointmentAt);
@@ -32,8 +33,8 @@ upsert:
 INSERT OR REPLACE INTO schedule_entity(
   scheduleId, startLongitude, startLatitude, endLongitude, endLatitude,
   scheduleTitle, isRepeat, repeatDays, appointmentAt,
-  preparationAlarm, departureAlarm, hasActiveAlarm
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  preparationAlarm, departureAlarm, hasActiveAlarm, transportType
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteById:
 DELETE FROM schedule_entity WHERE scheduleId = ?;

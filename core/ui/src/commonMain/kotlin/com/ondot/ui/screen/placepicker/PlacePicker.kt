@@ -1,8 +1,10 @@
 package com.ondot.ui.screen.placepicker
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,15 +13,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE
@@ -38,15 +43,22 @@ import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.designsystem.theme.OnDotColor.Gray200
+import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Gray600
 import com.ondot.designsystem.theme.OnDotColor.Gray800
 import com.ondot.designsystem.theme.OnDotColor.Gray900
+import com.ondot.designsystem.theme.OnDotColor.Green500
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.TopBarType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
+import com.ondot.ui.model.toTransportInfo
 import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
+import com.ondot.ui.util.noRippleClickable
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun PlacePickerScreen(
@@ -61,6 +73,7 @@ fun PlacePickerScreen(
     onHistorySelected: (PlaceHistory) -> Unit,
     onDeleteHistory: (PlaceHistory) -> Unit,
     onToggleCheckBox: () -> Unit,
+    onTransportTypeChanged: (TransportType) -> Unit,
     onNext: () -> Unit,
     popScreen: () -> Unit,
 ) {
@@ -102,14 +115,21 @@ fun PlacePickerScreen(
                 color = Gray0,
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            TransportTypeSection(
+                currentType = state.selectedTransportType,
+                onClick = onTransportTypeChanged,
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             HomeDepartureOption(
                 isChecked = state.isChecked,
                 onClick = onToggleCheckBox,
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             RouteInputSection(
                 departurePlaceInput = state.departurePlaceInput,
@@ -176,6 +196,74 @@ fun HomeDepartureOption(
         )
 
         Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
+@Composable
+private fun TransportTypeSection(
+    currentType: TransportType = TransportType.PUBLIC_TRANSPORT,
+    onClick: (TransportType) -> Unit = {},
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        TransportItem(
+            modifier = Modifier.weight(1f),
+            type = TransportType.PUBLIC_TRANSPORT,
+            isSelected = currentType == TransportType.PUBLIC_TRANSPORT,
+            onClick = onClick,
+        )
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        TransportItem(
+            modifier = Modifier.weight(1f),
+            type = TransportType.CAR,
+            isSelected = currentType == TransportType.CAR,
+            onClick = onClick,
+        )
+    }
+}
+
+@Composable
+private fun TransportItem(
+    modifier: Modifier = Modifier,
+    type: TransportType,
+    isSelected: Boolean,
+    onClick: (TransportType) -> Unit,
+) {
+    val color = if (isSelected) Green500 else Gray400
+    val backgroundColor = if (isSelected) Gray600 else Gray900
+    val info = type.toTransportInfo()
+
+    Row(
+        modifier =
+            modifier
+                .height(38.dp)
+                .background(backgroundColor, RoundedCornerShape(99.dp))
+                .noRippleClickable(onClick = { onClick(type) }),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Image(
+            painter = painterResource(info.icon),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(color),
+            modifier =
+                Modifier
+                    .size(24.dp),
+        )
+
+        Spacer(Modifier.width(10.dp))
+
+        OnDotText(
+            text = info.title,
+            style = OnDotTextStyle.BodyLargeR1,
+            color = color,
+        )
     }
 }
 

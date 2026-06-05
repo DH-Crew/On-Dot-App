@@ -9,6 +9,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.member.PlaceHistory
@@ -464,6 +465,7 @@ class GeneralScheduleViewModel(
                 appointmentAt = appointmentAt,
                 preparationAlarm = uiState.value.preparationAlarm,
                 departureAlarm = uiState.value.departureAlarm,
+                transportType = TransportType.PUBLIC_TRANSPORT.name,
             )
 
         viewModelScope.launch {

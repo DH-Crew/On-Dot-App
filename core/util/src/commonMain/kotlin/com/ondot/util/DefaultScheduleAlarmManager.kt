@@ -214,6 +214,7 @@ private fun Schedule.toPreparationInfo() =
         endLat = endLatitude,
         endLng = endLongitude,
         repeatDays = repeatDays,
+        transportType = transportType,
     )
 
 private fun Schedule.toDepartureInfo() =
@@ -228,4 +229,5 @@ private fun Schedule.toDepartureInfo() =
         endLat = endLatitude,
         endLng = endLongitude,
         repeatDays = repeatDays,
+        transportType = transportType,
     )

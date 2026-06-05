@@ -1,6 +1,7 @@
 package com.ondot.testing.fake.util
 
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.service.DirectionsOpener
 
 class FakeDirectionsOpener : DirectionsOpener {
@@ -10,6 +11,7 @@ class FakeDirectionsOpener : DirectionsOpener {
         val endLat: Double,
         val endLng: Double,
         val provider: MapProvider,
+        val transportType: TransportType,
     )
 
     val calls = mutableListOf<Call>()
@@ -22,6 +24,7 @@ class FakeDirectionsOpener : DirectionsOpener {
         provider: MapProvider,
         startName: String,
         endName: String,
+        transportType: TransportType,
     ) {
         calls +=
             Call(
@@ -30,6 +33,7 @@ class FakeDirectionsOpener : DirectionsOpener {
                 endLat = endLat,
                 endLng = endLng,
                 provider = provider,
+                transportType = transportType,
             )
     }
 }

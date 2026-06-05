@@ -14,4 +14,5 @@ data class ScheduleDetailResponse(
     val arrivalPlace: AddressResponse = AddressResponse(),
     val preparationAlarm: AlarmResponse = AlarmResponse(),
     val departureAlarm: AlarmResponse = AlarmResponse(),
+    val transportType: String? = null,
 )

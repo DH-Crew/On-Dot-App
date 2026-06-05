@@ -332,5 +332,6 @@ class EditScheduleViewModel(
             endLatitude = arrivalPlace.latitude,
             endLongitude = arrivalPlace.longitude,
             hasActiveAlarm = departureAlarm.enabled || preparationAlarm.enabled,
+            transportType = transportType,
         )
 }

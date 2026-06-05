@@ -51,6 +51,7 @@
                         endLat:(NSNumber * _Nullable)endLat
                         endLng:(NSNumber * _Nullable)endLng
                    mapProvider:(NSString * _Nullable)mapProvider
+                 transportType:(NSString * _Nullable)transportType
                     completion:(void(^)(NSString * _Nullable, NSString * _Nullable))completion
 {
     [AlarmKitBridgeShim scheduleCalendarWithId:alarmUUID
@@ -67,6 +68,7 @@
                                          endLat:endLat
                                          endLng:endLng
                                     mapProvider:mapProvider
+                                  transportType:transportType
                                      completion:completion];
 }
 

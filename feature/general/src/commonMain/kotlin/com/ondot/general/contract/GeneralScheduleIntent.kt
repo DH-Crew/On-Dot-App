@@ -1,6 +1,7 @@
 package com.ondot.general.contract
 
 import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
 import com.ondot.ui.base.mvi.Intent
@@ -85,5 +86,9 @@ sealed interface GeneralScheduleIntent : Intent {
     data class CreateSchedule(
         val isMedicationRequired: Boolean,
         val preparationNote: String,
+    ) : GeneralScheduleIntent
+
+    data class UpdateTransportType(
+        val type: TransportType,
     ) : GeneralScheduleIntent
 }
