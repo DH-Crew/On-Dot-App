@@ -2,6 +2,7 @@ package com.ondot.testing.fake
 
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.command.CreateEverytimeScheduleCommand
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
@@ -64,6 +65,7 @@ class FakeScheduleRepository : ScheduleRepository {
                     hasActiveAlarm = false,
                     departureAlarm = request.departureAlarm,
                     preparationAlarm = request.preparationAlarm,
+                    transportType = TransportType.from(request.transportType),
                 )
 
             scheduleMap[newId] = schedule
@@ -168,6 +170,7 @@ class FakeScheduleRepository : ScheduleRepository {
                 hasActiveAlarm = false,
                 departureAlarm = request.departureAlarm,
                 preparationAlarm = request.preparationAlarm,
+                transportType = TransportType.from(request.transportType),
             )
 
         scheduleMap[newId] = schedule

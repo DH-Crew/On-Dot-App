@@ -163,6 +163,7 @@ public final class AlarmKitBridge: NSObject {
         startLat: NSNumber?, startLng: NSNumber?,
         endLat: NSNumber?, endLng: NSNumber?,
         mapProvider: String,
+        transportType: String,
         _ completion: @escaping (String?, String?) -> Void
     ) {
         Task {
@@ -184,7 +185,8 @@ public final class AlarmKitBridge: NSObject {
                         endLat: endLat?.doubleValue,
                         endLng: endLng?.doubleValue,
                         name: title,
-                        mapProvider: mapProvider
+                        mapProvider: mapProvider,
+                        transportType: transportType
                     )
                 }
 
@@ -247,7 +249,8 @@ public final class AlarmKitBridge: NSObject {
                         endLat: endLat?.doubleValue,
                         endLng: endLng?.doubleValue,
                         name: title,
-                        mapProvider: mapProvider
+                        mapProvider: mapProvider,
+                        transportType: transportType
                     ) : nil,
                     secondaryIntent: secondaryIntent,
                     sound: .default
@@ -353,6 +356,7 @@ struct OpenMapsIntent: LiveActivityIntent {
     @Parameter(title: "End Longitude")  var endLng: Double?
     @Parameter(title: "Name")           var name: String?
     @Parameter(title: "Map Provider")   var mapProvider: String?
+    @Parameter(title: "Transport Type") var transportType: String?
 
     init() {}
 
@@ -364,7 +368,8 @@ struct OpenMapsIntent: LiveActivityIntent {
         endLat: Double?,
         endLng: Double?,
         name: String?,
-        mapProvider: String?
+        mapProvider: String?,
+        transportType: String?
     ) {
         self.scheduleId = scheduleId
         self.alarmId = alarmId
@@ -374,14 +379,17 @@ struct OpenMapsIntent: LiveActivityIntent {
         self.endLng   = endLng
         self.name     = name
         self.mapProvider = mapProvider
+        self.transportType = transportType
     }
 
     @MainActor
     func perform() async throws -> some IntentResult {
         guard let sLat = startLat, let sLng = startLng,
-              let eLat = endLat,   let eLng = endLng, let mapProvider = mapProvider else {
+              let eLat = endLat,   let eLng = endLng else {
             return .result()
         }
+        let mapProvider = mapProvider ?? "kakao"
+        let transportType = transportType ?? "public_transport"
 
         if let ud = UserDefaults(suiteName: "group.com.dh.ondot.shared") {
             ud.set(
@@ -394,7 +402,8 @@ struct OpenMapsIntent: LiveActivityIntent {
                     "elng": eLng,
                     "sname": "출발지",
                     "ename": name ?? "도착지",
-                    "provider": mapProvider
+                    "provider": mapProvider,
+                    "transportType": transportType
                 ],
                 forKey: "pendingOpenDirections"
             )

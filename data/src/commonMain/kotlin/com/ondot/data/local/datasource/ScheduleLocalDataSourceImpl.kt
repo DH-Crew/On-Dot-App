@@ -89,6 +89,7 @@ class ScheduleLocalDataSourceImpl(
             preparationAlarm = item.preparationAlarm,
             departureAlarm = item.departureAlarm,
             hasActiveAlarm = item.hasActiveAlarm,
+            transportType = item.transportType.name,
         )
     }
 

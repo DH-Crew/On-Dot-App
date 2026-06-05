@@ -1,6 +1,7 @@
 package com.ondot.data.local.db
 
 import com.dh.ondot.data.local.db.Schedule_entity
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.schedule.Schedule
 
 fun Schedule_entity.toDomain(): Schedule =
@@ -17,6 +18,7 @@ fun Schedule_entity.toDomain(): Schedule =
         preparationAlarm = preparationAlarm,
         departureAlarm = departureAlarm,
         hasActiveAlarm = hasActiveAlarm,
+        transportType = TransportType.from(transportType),
     )
 
 fun Schedule.toEntity() =
@@ -33,4 +35,5 @@ fun Schedule.toEntity() =
         preparationAlarm = preparationAlarm,
         departureAlarm = departureAlarm,
         hasActiveAlarm = hasActiveAlarm,
+        transportType = transportType.name,
     )

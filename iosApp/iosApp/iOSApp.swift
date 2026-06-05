@@ -58,6 +58,7 @@ private func consumePendingDirectionsAndOpen() {
     let sname = (payload["sname"] as? String) ?? "출발지"
     let ename = (payload["ename"] as? String) ?? "도착지"
     let providerStr = (payload["provider"] as? String)?.lowercased() ?? "kakao"
+    let transportTypeStr = (payload["transportType"] as? String)?.lowercased() ?? "public_transport"
 
     guard
       let sLat = slat, let sLng = slng,
@@ -71,6 +72,13 @@ private func consumePendingDirectionsAndOpen() {
         default:      return .kakao
         }
     }()
+
+    let transportType: composeApp.DomainTransportType = {
+        switch transportTypeStr {
+        case "car": return .car
+        default:    return .publicTransport
+        }
+    }()
     
     composeApp.TriggeredAlarmManager().recordTriggeredAlarm(
         scheduleId: Int64(scheduleId),
@@ -82,6 +90,7 @@ private func consumePendingDirectionsAndOpen() {
         startLat: sLat, startLng: sLng,
         endLat:   eLat, endLng:   eLng,
         provider: provider,
-        startName: sname, endName: ename
+        startName: sname, endName: ename,
+        transportType: transportType
     )
 }
