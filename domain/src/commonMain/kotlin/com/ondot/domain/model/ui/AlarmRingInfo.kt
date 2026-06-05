@@ -2,6 +2,7 @@ package com.ondot.domain.model.ui
 
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.AlarmType
+import com.ondot.domain.model.enums.TransportType
 
 data class AlarmRingInfo(
     val alarm: Alarm = Alarm(),
@@ -14,4 +15,5 @@ data class AlarmRingInfo(
     val endLat: Double = 0.0,
     val endLng: Double = 0.0,
     val repeatDays: List<Int> = emptyList(),
+    val transportType: TransportType = TransportType.PUBLIC_TRANSPORT,
 )

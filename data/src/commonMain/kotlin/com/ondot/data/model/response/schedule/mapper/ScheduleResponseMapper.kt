@@ -6,6 +6,7 @@ import com.ondot.data.model.response.schedule.ScheduleResponse
 import com.ondot.data.model.response.schedule.TimetableEntryResponse
 import com.ondot.domain.model.enums.DayOfWeekKey
 import com.ondot.domain.model.enums.ScheduleType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.schedule.EverytimeValidateTimetable
 import com.ondot.domain.model.schedule.Schedule
 import com.ondot.domain.model.schedule.TimetableEntry
@@ -44,6 +45,7 @@ fun ScheduleResponse.toDomain(): Schedule =
         endLongitude = endLongitude,
         endLatitude = endLatitude,
         preparationNote = preparationNote.orEmpty(),
+        transportType = TransportType.from(transportType),
     )
 
 private fun String.toDayOfWeekKeyOrNull(): DayOfWeekKey? = runCatching { DayOfWeekKey.valueOf(this) }.getOrNull()

@@ -19,4 +19,5 @@ data class ScheduleResponse(
     val departureAlarm: AlarmResponse = AlarmResponse(),
     val hasActiveAlarm: Boolean = false,
     val preparationNote: String? = null,
+    val transportType: String? = null,
 )
