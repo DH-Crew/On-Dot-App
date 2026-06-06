@@ -72,6 +72,7 @@ import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.edit.bottomSheet.EditDateBottomSheet
 import com.ondot.edit.bottomSheet.EditTimeBottomSheet
+import com.ondot.ui.util.noRippleClickable
 import com.ondot.util.DateTimeFormatter.toLocalDateFromIso
 import com.ondot.util.DateTimeFormatter.toLocalTimeFromIso
 import kotlinx.coroutines.delay
@@ -87,6 +88,8 @@ fun EditScheduleScreen(
     scheduleId: Long,
     viewModel: EditScheduleViewModel = koinViewModel(),
     popScreen: () -> Unit,
+    navigateToPlacePicker: () -> Unit,
+    navigateToRouteLoading: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
@@ -103,6 +106,7 @@ fun EditScheduleScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is EditScheduleEvent.NavigateBack -> popScreen()
+                else -> Unit
             }
         }
     }
@@ -124,6 +128,8 @@ fun EditScheduleScreen(
             onShowTimeBottomSheet = viewModel::showTimeBottomSheet,
             onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
             onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet,
+            onClickRouteInput = navigateToPlacePicker,
+            navigateToRouteLoading = navigateToRouteLoading,
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -147,6 +153,8 @@ fun EditScheduleContent(
     onShowTimeBottomSheet: (TimeType) -> Unit,
     onDismissDateBottomSheet: () -> Unit,
     onDismissTimeBottomSheet: () -> Unit,
+    onClickRouteInput: () -> Unit,
+    navigateToRouteLoading: () -> Unit,
 ) {
     val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
     val scrollState = rememberScrollState()
@@ -206,11 +214,18 @@ fun EditScheduleContent(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        RouteInputSection(
-                            departurePlaceInput = uiState.schedule.departurePlace.title,
-                            arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
-                            readOnly = true,
-                        )
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .noRippleClickable { onClickRouteInput() },
+                        ) {
+                            RouteInputSection(
+                                departurePlaceInput = uiState.schedule.departurePlace.title,
+                                arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
+                                readOnly = true,
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -278,7 +293,11 @@ fun EditScheduleContent(
                     isRepeat = uiState.schedule.isRepeat,
                     repeatDays = uiState.schedule.repeatDays.toSet(),
                     currentDate = uiState.schedule.appointmentAt.toLocalDateFromIso(),
-                    onEditDate = onEditDate,
+                    onEditDate = { isRepeat, repeatDays, date ->
+                        onEditDate(isRepeat, repeatDays, date)
+                        onDismissDateBottomSheet()
+                        navigateToRouteLoading()
+                    },
                     onDismiss = onDismissDateBottomSheet,
                 )
             }
@@ -300,8 +319,12 @@ fun EditScheduleContent(
                         onDismissTimeBottomSheet()
                     },
                     onTimeSelected = { date, time ->
+                        val shouldRecalculate = uiState.selectedTimeType == TimeType.APPOINTMENT
                         onEditTime(date, time)
                         onDismissTimeBottomSheet()
+                        if (shouldRecalculate) {
+                            navigateToRouteLoading()
+                        }
                     },
                 )
             }
