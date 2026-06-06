@@ -42,5 +42,10 @@ fun CheckScheduleRoute(
         onToggleSwitch = { viewModel.dispatch(GeneralScheduleIntent.TogglePreparationAlarm) },
         onShowBottomSheet = { viewModel.dispatch(GeneralScheduleIntent.SetBottomSheetVisible(true)) },
         onDismiss = { viewModel.dispatch(GeneralScheduleIntent.SetBottomSheetVisible(false)) },
+        onShowAlarmTimeBottomSheet = { viewModel.dispatch(GeneralScheduleIntent.SetAlarmTimeBottomSheet(it)) },
+        onDismissAlarmTimeBottomSheet = { viewModel.dispatch(GeneralScheduleIntent.SetAlarmTimeBottomSheet(null)) },
+        onEditAlarmTime = { type, date, time ->
+            viewModel.dispatch(GeneralScheduleIntent.UpdateAlarmTime(type, date, time))
+        },
     )
 }
