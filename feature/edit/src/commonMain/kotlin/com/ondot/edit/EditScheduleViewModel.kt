@@ -405,6 +405,33 @@ class EditScheduleViewModel(
         updateState(uiState.value.copy(isInitialPlacePicker = value))
     }
 
+    fun preparePlacePicker() {
+        val current = uiState.value
+        val currentSchedule = current.schedule
+        val currentPlacePickerState = current.placePickerState
+        val isHomeDeparture =
+            currentPlacePickerState.homeAddress.title.isNotBlank() &&
+                currentSchedule.departurePlace.isHomeAddress()
+
+        updateStateSync(
+            current.copy(
+                placePickerState =
+                    currentPlacePickerState.copy(
+                        isChecked = isHomeDeparture,
+                        departurePlaceInput = currentSchedule.departurePlace.title,
+                        arrivalPlaceInput = currentSchedule.arrivalPlace.title,
+                        selectedDeparturePlace = currentSchedule.departurePlace,
+                        selectedArrivalPlace = currentSchedule.arrivalPlace,
+                        placeList = emptyList(),
+                        lastFocusedTextField = RouterType.Departure,
+                        selectedTransportType = currentSchedule.transportType,
+                    ),
+                isInitialPlacePicker = true,
+            ),
+        )
+        query.value = ""
+    }
+
     fun applyRouteChangesAndFetchAlarms(): Boolean {
         val current = uiState.value
         val departurePlace = current.placePickerState.selectedDeparturePlace ?: return false
@@ -608,6 +635,8 @@ class EditScheduleViewModel(
 
         if (departurePlace.title.isBlank() || arrivalPlace.title.isBlank()) return
 
+        updateStateSync(current.copy(isAlarmRecalculating = true))
+
         val zone = TimeZone.currentSystemDefault()
         val today =
             Clock.System
@@ -639,18 +668,20 @@ class EditScheduleViewModel(
     }
 
     private fun onSuccessGetScheduleAlarms(result: ScheduleAlarm) {
-        updateState(
+        updateStateSync(
             uiState.value.copy(
                 schedule =
                     uiState.value.schedule.copy(
                         preparationAlarm = result.preparationAlarm,
                         departureAlarm = result.departureAlarm,
                     ),
+                isAlarmRecalculating = false,
             ),
         )
     }
 
     private fun onFailGetScheduleAlarms(e: Throwable) {
+        updateStateSync(uiState.value.copy(isAlarmRecalculating = false))
         logger.e { "알람 정보 계산 실패: ${e.message}" }
         viewModelScope.launch { ToastManager.show(ERROR_GET_SCHEDULE_ALARMS, ToastType.ERROR) }
     }
@@ -671,7 +702,7 @@ class EditScheduleViewModel(
     }
 
     private fun updatePlacePickerState(block: PlacePickerUiModel.() -> PlacePickerUiModel) {
-        updateState(uiState.value.copy(placePickerState = uiState.value.placePickerState.block()))
+        updateStateSync(uiState.value.copy(placePickerState = uiState.value.placePickerState.block()))
     }
 
     private fun ScheduleDetail.shiftDate(newAppointmentDate: LocalDate): ScheduleDetail {

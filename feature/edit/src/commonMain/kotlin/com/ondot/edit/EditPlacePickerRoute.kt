@@ -23,6 +23,8 @@ fun EditPlacePickerRoute(
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
+        viewModel.preparePlacePicker()
+
         if (uiState.placePickerState.homeAddress.title
                 .isBlank() &&
             !uiState.isHomeAddressInitialized
