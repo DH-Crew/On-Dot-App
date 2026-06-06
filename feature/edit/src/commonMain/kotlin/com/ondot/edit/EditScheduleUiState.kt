@@ -33,6 +33,7 @@ data class EditScheduleUiState
         val placePickerState: PlacePickerUiModel = PlacePickerUiModel(),
         val isInitialPlacePicker: Boolean = true,
         val isHomeAddressInitialized: Boolean = false,
+        val isAlarmRecalculating: Boolean = false,
     ) : UiState {
         val isPlacePickerButtonEnabled: Boolean
             get() =
