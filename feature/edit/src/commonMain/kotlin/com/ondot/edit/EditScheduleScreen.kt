@@ -55,7 +55,8 @@ import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.OnDotDialog
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.RouteInputSection
-import com.ondot.designsystem.components.TopBar
+import com.ondot.designsystem.components.topbar.CommonTopBar
+import com.ondot.designsystem.components.topbar.model.TopBarStyle
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor.GradientGreenBottom
 import com.ondot.designsystem.theme.OnDotColor.GradientGreenTop
@@ -69,7 +70,6 @@ import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TimeBottomSheet
 import com.ondot.domain.model.enums.TimeType
-import com.ondot.domain.model.enums.TopBarType
 import com.ondot.edit.bottomSheet.EditDateBottomSheet
 import com.ondot.edit.bottomSheet.EditTimeBottomSheet
 import com.ondot.ui.util.noRippleClickable
@@ -129,7 +129,10 @@ fun EditScheduleScreen(
             onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
             onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet,
             onClickRouteInput = navigateToPlacePicker,
-            navigateToRouteLoading = navigateToRouteLoading,
+            onEditAppointmentTime = { date, time ->
+                viewModel.editTime(date, time)
+                navigateToRouteLoading()
+            },
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -154,7 +157,7 @@ fun EditScheduleContent(
     onDismissDateBottomSheet: () -> Unit,
     onDismissTimeBottomSheet: () -> Unit,
     onClickRouteInput: () -> Unit,
-    navigateToRouteLoading: () -> Unit,
+    onEditAppointmentTime: (LocalDate, LocalTime) -> Unit,
 ) {
     val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
     val scrollState = rememberScrollState()
@@ -295,8 +298,6 @@ fun EditScheduleContent(
                     currentDate = uiState.schedule.appointmentAt.toLocalDateFromIso(),
                     onEditDate = { isRepeat, repeatDays, date ->
                         onEditDate(isRepeat, repeatDays, date)
-                        onDismissDateBottomSheet()
-                        navigateToRouteLoading()
                     },
                     onDismiss = onDismissDateBottomSheet,
                 )
@@ -319,12 +320,12 @@ fun EditScheduleContent(
                         onDismissTimeBottomSheet()
                     },
                     onTimeSelected = { date, time ->
-                        val shouldRecalculate = uiState.selectedTimeType == TimeType.APPOINTMENT
-                        onEditTime(date, time)
-                        onDismissTimeBottomSheet()
-                        if (shouldRecalculate) {
-                            navigateToRouteLoading()
+                        if (uiState.selectedTimeType == TimeType.APPOINTMENT) {
+                            onEditAppointmentTime(date, time)
+                        } else {
+                            onEditTime(date, time)
                         }
+                        onDismissTimeBottomSheet()
                     },
                 )
             }
@@ -369,13 +370,13 @@ private fun TopBarSection(
     }
     val focusManager = LocalFocusManager.current
 
-    TopBar(
-        type = TopBarType.CLOSE,
+    CommonTopBar(
         buttonColor = Gray800,
+        style = TopBarStyle.CloseTitleEdit,
         onClick = onClickClose,
         content = {
             Row(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 BasicTextField(

@@ -42,9 +42,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -439,18 +442,24 @@ class EditScheduleViewModel(
 
         if (isRepeat && repeatDays.isEmpty()) return
 
+        val current = uiState.value
+        val nextSchedule =
+            if (!isRepeat && date != null) {
+                current.schedule.shiftDate(date)
+            } else {
+                current.schedule
+            }
+
         updateStateSync(
-            uiState.value.copy(
+            current.copy(
                 schedule =
-                    uiState.value.schedule.copy(
+                    nextSchedule.copy(
                         isRepeat = isRepeat,
                         repeatDays = repeatDays.toList(),
                     ),
                 selectedDate = if (isRepeat) null else date,
             ),
         )
-
-        fetchScheduleAlarms()
     }
 
     fun showDateBottomSheet() {
@@ -664,6 +673,30 @@ class EditScheduleViewModel(
     private fun updatePlacePickerState(block: PlacePickerUiModel.() -> PlacePickerUiModel) {
         updateState(uiState.value.copy(placePickerState = uiState.value.placePickerState.block()))
     }
+
+    private fun ScheduleDetail.shiftDate(newAppointmentDate: LocalDate): ScheduleDetail {
+        val currentAppointmentDate =
+            runCatching {
+                appointmentAt.toLocalDateFromIso()
+            }.getOrNull() ?: return this
+        val deltaDays = currentAppointmentDate.daysUntil(newAppointmentDate)
+
+        if (deltaDays == 0) return this
+
+        return copy(
+            appointmentAt = appointmentAt.shiftDateBy(deltaDays),
+            preparationAlarm = preparationAlarm.copy(triggeredAt = preparationAlarm.triggeredAt.shiftDateBy(deltaDays)),
+            departureAlarm = departureAlarm.copy(triggeredAt = departureAlarm.triggeredAt.shiftDateBy(deltaDays)),
+        )
+    }
+
+    private fun String.shiftDateBy(deltaDays: Int): String =
+        runCatching {
+            DateTimeFormatter.formatIsoDateTime(
+                date = toLocalDateFromIso().plus(DatePeriod(days = deltaDays)),
+                time = toLocalTimeFromIso(),
+            )
+        }.getOrDefault(this)
 
     private fun String.isHomeAddressInput(): Boolean {
         val homeAddress = uiState.value.placePickerState.homeAddress
