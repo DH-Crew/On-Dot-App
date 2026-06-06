@@ -68,6 +68,7 @@ fun PlacePickerScreen(
     departureFocusRequester: FocusRequester = remember { FocusRequester() },
     arrivalFocusRequester: FocusRequester = remember { FocusRequester() },
     onRouteInputChanged: (String) -> Unit,
+    onRouteInputChangedByType: (RouterType, String) -> Unit = { _, value -> onRouteInputChanged(value) },
     onRouteInputFocused: (RouterType) -> Unit,
     onPlaceSelected: (AddressInfo) -> Unit,
     onHistorySelected: (PlaceHistory) -> Unit,
@@ -137,6 +138,7 @@ fun PlacePickerScreen(
                 departureFocusRequester = departureFocusRequester,
                 arrivalFocusRequester = arrivalFocusRequester,
                 onRouteInputChanged = onRouteInputChanged,
+                onRouteInputChangedByType = onRouteInputChangedByType,
                 onRouteInputFocused = onRouteInputFocused,
             )
 

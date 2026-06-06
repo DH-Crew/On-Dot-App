@@ -87,6 +87,7 @@ class GeneralScheduleViewModel(
             GeneralScheduleIntent.InitPlaceHistory -> fetchPlaceHistory()
             is GeneralScheduleIntent.SetFocusedRouterType -> setFocusedRouterType(intent.type)
             is GeneralScheduleIntent.UpdateRouteInput -> updateRouteInput(intent.input)
+            is GeneralScheduleIntent.UpdateRouteInputByType -> updateRouteInput(intent.type, intent.input)
             is GeneralScheduleIntent.SelectPlace -> selectPlace(intent.place)
             is GeneralScheduleIntent.SelectHistory -> selectHistory(intent.history)
             is GeneralScheduleIntent.DeleteHistory -> deleteHistory(intent.history)
@@ -237,12 +238,20 @@ class GeneralScheduleViewModel(
     }
 
     private fun updateRouteInput(value: String) {
-        when (currentState.placePickerState.lastFocusedTextField) {
+        updateRouteInput(currentState.placePickerState.lastFocusedTextField, value)
+    }
+
+    private fun updateRouteInput(
+        type: RouterType,
+        value: String,
+    ) {
+        when (type) {
             RouterType.Departure ->
                 reduce {
                     copy(
                         placePickerState =
                             placePickerState.copy(
+                                lastFocusedTextField = type,
                                 isChecked = placePickerState.isChecked && value.isHomeAddressInput(),
                                 departurePlaceInput = value,
                                 selectedDeparturePlace = null,
@@ -255,6 +264,7 @@ class GeneralScheduleViewModel(
                     copy(
                         placePickerState =
                             placePickerState.copy(
+                                lastFocusedTextField = type,
                                 arrivalPlaceInput = value,
                                 selectedArrivalPlace = null,
                             ),
@@ -399,6 +409,7 @@ class GeneralScheduleViewModel(
                             startLongitude = departurePlace.longitude,
                             endLatitude = arrivalPlace.latitude,
                             endLongitude = arrivalPlace.longitude,
+                            transportType = currentState.placePickerState.selectedTransportType.name,
                         ),
                 )
             },

@@ -67,6 +67,7 @@ fun PlacePickerRoute(
         departureFocusRequester = departureFocusRequester,
         arrivalFocusRequester = arrivalFocusRequester,
         onRouteInputChanged = viewModel::onRouteInputChanged,
+        onRouteInputChangedByType = viewModel::onRouteInputChanged,
         onRouteInputFocused = viewModel::onRouteInputFieldFocused,
         onPlaceSelected = {
             viewModel.onPlaceSelected(it)

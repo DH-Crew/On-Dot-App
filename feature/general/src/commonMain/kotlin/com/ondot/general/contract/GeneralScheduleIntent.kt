@@ -51,6 +51,11 @@ sealed interface GeneralScheduleIntent : Intent {
         val input: String,
     ) : GeneralScheduleIntent
 
+    data class UpdateRouteInputByType(
+        val type: RouterType,
+        val input: String,
+    ) : GeneralScheduleIntent
+
     data class SelectPlace(
         val place: AddressInfo,
     ) : GeneralScheduleIntent

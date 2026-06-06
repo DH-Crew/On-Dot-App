@@ -209,17 +209,29 @@ class GeneralScheduleViewModel(
     }
 
     fun onRouteInputChanged(value: String) {
-        onInputValueChanged(value)
+        onInputValueChanged(uiState.value.placePickerState.lastFocusedTextField, value)
         query.value = value
     }
 
-    private fun onInputValueChanged(value: String) {
-        when (uiState.value.placePickerState.lastFocusedTextField) {
+    fun onRouteInputChanged(
+        type: RouterType,
+        value: String,
+    ) {
+        onInputValueChanged(type, value)
+        query.value = value
+    }
+
+    private fun onInputValueChanged(
+        type: RouterType,
+        value: String,
+    ) {
+        when (type) {
             RouterType.Departure ->
                 updateState(
                     uiState.value.copy(
                         placePickerState =
                             uiState.value.placePickerState.copy(
+                                lastFocusedTextField = type,
                                 isChecked = uiState.value.placePickerState.isChecked && value.isHomeAddressInput(),
                                 departurePlaceInput = value,
                                 selectedDeparturePlace = null,
@@ -231,6 +243,7 @@ class GeneralScheduleViewModel(
                     uiState.value.copy(
                         placePickerState =
                             uiState.value.placePickerState.copy(
+                                lastFocusedTextField = type,
                                 arrivalPlaceInput = value,
                                 selectedArrivalPlace = null,
                             ),
@@ -413,6 +426,7 @@ class GeneralScheduleViewModel(
                             startLongitude = departurePlace.longitude,
                             endLatitude = arrivalPlace.latitude,
                             endLongitude = arrivalPlace.longitude,
+                            transportType = TransportType.PUBLIC_TRANSPORT.name,
                         ),
                 ).collect {
                     resultResponse(it, ::onSuccessGetScheduleAlarms, ::onFailedGetScheduleAlarms)

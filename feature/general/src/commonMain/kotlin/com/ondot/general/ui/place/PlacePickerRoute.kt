@@ -68,6 +68,9 @@ fun PlacePickerRoute(
         departureFocusRequester = departureFocusRequester,
         arrivalFocusRequester = arrivalFocusRequester,
         onRouteInputChanged = { viewModel.dispatch(GeneralScheduleIntent.UpdateRouteInput(it)) },
+        onRouteInputChangedByType = { type, input ->
+            viewModel.dispatch(GeneralScheduleIntent.UpdateRouteInputByType(type, input))
+        },
         onRouteInputFocused = { viewModel.dispatch(GeneralScheduleIntent.SetFocusedRouterType(it)) },
         onPlaceSelected = {
             viewModel.dispatch(GeneralScheduleIntent.SelectPlace(it))
