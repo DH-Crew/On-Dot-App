@@ -1,6 +1,7 @@
 package com.ondot.general.contract
 
 import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.PlaceHistory
@@ -86,6 +87,16 @@ sealed interface GeneralScheduleIntent : Intent {
 
     data class SetBottomSheetVisible(
         val visible: Boolean,
+    ) : GeneralScheduleIntent
+
+    data class SetAlarmTimeBottomSheet(
+        val type: TimeType?,
+    ) : GeneralScheduleIntent
+
+    data class UpdateAlarmTime(
+        val type: TimeType,
+        val date: LocalDate,
+        val time: LocalTime,
     ) : GeneralScheduleIntent
 
     data class CreateSchedule(
