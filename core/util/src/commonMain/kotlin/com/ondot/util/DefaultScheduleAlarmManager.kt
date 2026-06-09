@@ -28,7 +28,10 @@ class DefaultScheduleAlarmManager(
         val mapProvider = currentMapProvider()
         val dedupedAlarmInfos =
             dedupeAlarmInfos(
-                schedules.flatMap { schedule -> enabledAlarmInfos(schedule) },
+                validAlarmInfos(
+                    infos = schedules.flatMap { schedule -> enabledAlarmInfos(schedule) },
+                    throwOnInvalid = false,
+                ),
             )
         val currentAlarmIds = dedupedAlarmInfos.map { it.alarm.alarmId }.toSet()
 
@@ -59,7 +62,13 @@ class DefaultScheduleAlarmManager(
 
     override suspend fun schedule(schedule: Schedule) {
         val mapProvider = currentMapProvider()
-        val dedupedAlarmInfos = dedupeAlarmInfos(enabledAlarmInfos(schedule))
+        val dedupedAlarmInfos =
+            dedupeAlarmInfos(
+                validAlarmInfos(
+                    infos = enabledAlarmInfos(schedule),
+                    throwOnInvalid = true,
+                ),
+            )
 
         scheduleInfos(
             infos = dedupedAlarmInfos,
@@ -188,6 +197,31 @@ class DefaultScheduleAlarmManager(
     }
 
     private suspend fun currentMapProvider(): MapProvider = memberRepository.getLocalMapProvider().first()
+
+    private fun validAlarmInfos(
+        infos: List<AlarmRingInfo>,
+        throwOnInvalid: Boolean,
+    ): List<AlarmRingInfo> {
+        val invalidInfos = infos.filter { it.alarm.alarmId <= 0 }
+
+        if (invalidInfos.isNotEmpty()) {
+            val message =
+                invalidInfos.joinToString(
+                    prefix = "invalid alarmId detected: ",
+                    separator = ", ",
+                ) { info ->
+                    "scheduleId=${info.scheduleId}, alarmId=${info.alarm.alarmId}, type=${info.alarmType}"
+                }
+
+            if (throwOnInvalid) {
+                throw IllegalStateException(message)
+            } else {
+                logger.e { message }
+            }
+        }
+
+        return infos.filter { it.alarm.alarmId > 0 }
+    }
 
     private fun enabledAlarmIds(schedule: Schedule): List<Long> =
         buildList {
