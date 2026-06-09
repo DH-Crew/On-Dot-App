@@ -668,12 +668,23 @@ class EditScheduleViewModel(
     }
 
     private fun onSuccessGetScheduleAlarms(result: ScheduleAlarm) {
+        val current = uiState.value
+        val originalSchedule = current.originalSchedule ?: current.schedule
+
         updateStateSync(
-            uiState.value.copy(
+            current.copy(
                 schedule =
-                    uiState.value.schedule.copy(
-                        preparationAlarm = result.preparationAlarm,
-                        departureAlarm = result.departureAlarm,
+                    current.schedule.copy(
+                        preparationAlarm =
+                            result.preparationAlarm.copy(
+                                alarmId = originalSchedule.preparationAlarm.alarmId,
+                                enabled = current.schedule.preparationAlarm.enabled,
+                            ),
+                        departureAlarm =
+                            result.departureAlarm.copy(
+                                alarmId = originalSchedule.departureAlarm.alarmId,
+                                enabled = current.schedule.departureAlarm.enabled,
+                            ),
                     ),
                 isAlarmRecalculating = false,
             ),
