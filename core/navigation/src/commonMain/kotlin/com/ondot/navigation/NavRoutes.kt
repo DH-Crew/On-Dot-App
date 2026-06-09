@@ -102,6 +102,10 @@ sealed class NavRoutes(
         }
     }
 
+    data object EditPlacePicker : NavRoutes("editPlacePicker")
+
+    data object EditRouteLoading : NavRoutes("editRouteLoading")
+
     // DeleteAccount
     data object DeleteAccountGraph : NavRoutes("deleteAccountGraph")
 

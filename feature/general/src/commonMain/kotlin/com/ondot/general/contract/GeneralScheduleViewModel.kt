@@ -7,6 +7,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_PLACE_HISTORY
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.ondot.domain.model.enums.RouterType
+import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
@@ -87,6 +88,7 @@ class GeneralScheduleViewModel(
             GeneralScheduleIntent.InitPlaceHistory -> fetchPlaceHistory()
             is GeneralScheduleIntent.SetFocusedRouterType -> setFocusedRouterType(intent.type)
             is GeneralScheduleIntent.UpdateRouteInput -> updateRouteInput(intent.input)
+            is GeneralScheduleIntent.UpdateRouteInputByType -> updateRouteInput(intent.type, intent.input)
             is GeneralScheduleIntent.SelectPlace -> selectPlace(intent.place)
             is GeneralScheduleIntent.SelectHistory -> selectHistory(intent.history)
             is GeneralScheduleIntent.DeleteHistory -> deleteHistory(intent.history)
@@ -97,6 +99,8 @@ class GeneralScheduleViewModel(
             is GeneralScheduleIntent.UpdateScheduleTitle -> updateScheduleTitle(intent.title)
             GeneralScheduleIntent.TogglePreparationAlarm -> togglePreparationAlarm()
             is GeneralScheduleIntent.SetBottomSheetVisible -> setBottomSheetVisible(intent.visible)
+            is GeneralScheduleIntent.SetAlarmTimeBottomSheet -> setAlarmTimeBottomSheet(intent.type)
+            is GeneralScheduleIntent.UpdateAlarmTime -> updateAlarmTime(intent.type, intent.date, intent.time)
             is GeneralScheduleIntent.CreateSchedule -> createSchedule(intent.isMedicationRequired, intent.preparationNote)
             is GeneralScheduleIntent.UpdateTransportType -> setTransportType(intent.type)
         }
@@ -237,12 +241,20 @@ class GeneralScheduleViewModel(
     }
 
     private fun updateRouteInput(value: String) {
-        when (currentState.placePickerState.lastFocusedTextField) {
+        updateRouteInput(currentState.placePickerState.lastFocusedTextField, value)
+    }
+
+    private fun updateRouteInput(
+        type: RouterType,
+        value: String,
+    ) {
+        when (type) {
             RouterType.Departure ->
                 reduce {
                     copy(
                         placePickerState =
                             placePickerState.copy(
+                                lastFocusedTextField = type,
                                 isChecked = placePickerState.isChecked && value.isHomeAddressInput(),
                                 departurePlaceInput = value,
                                 selectedDeparturePlace = null,
@@ -255,6 +267,7 @@ class GeneralScheduleViewModel(
                     copy(
                         placePickerState =
                             placePickerState.copy(
+                                lastFocusedTextField = type,
                                 arrivalPlaceInput = value,
                                 selectedArrivalPlace = null,
                             ),
@@ -399,6 +412,7 @@ class GeneralScheduleViewModel(
                             startLongitude = departurePlace.longitude,
                             endLatitude = arrivalPlace.latitude,
                             endLongitude = arrivalPlace.longitude,
+                            transportType = currentState.placePickerState.selectedTransportType.name,
                         ),
                 )
             },
@@ -470,6 +484,38 @@ class GeneralScheduleViewModel(
 
     private fun setBottomSheetVisible(visible: Boolean) {
         reduce { copy(showBottomSheet = visible) }
+    }
+
+    private fun setAlarmTimeBottomSheet(type: TimeType?) {
+        reduce { copy(activeAlarmTimeBottomSheet = type) }
+    }
+
+    private fun updateAlarmTime(
+        type: TimeType,
+        date: LocalDate,
+        time: LocalTime,
+    ) {
+        val triggeredAt = DateTimeFormatter.formatIsoDateTime(date, time)
+
+        when (type) {
+            TimeType.PREPARATION ->
+                reduce {
+                    copy(
+                        preparationAlarm = preparationAlarm.copy(triggeredAt = triggeredAt),
+                        activeAlarmTimeBottomSheet = null,
+                    )
+                }
+
+            TimeType.DEPARTURE ->
+                reduce {
+                    copy(
+                        departureAlarm = departureAlarm.copy(triggeredAt = triggeredAt),
+                        activeAlarmTimeBottomSheet = null,
+                    )
+                }
+
+            TimeType.APPOINTMENT -> Unit
+        }
     }
 
     private fun setTransportType(type: TransportType) {

@@ -62,12 +62,17 @@ import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.AlarmType
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
+import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.TopBarType
 import com.ondot.general.GeneralScheduleEvent
 import com.ondot.general.GeneralScheduleUiState
 import com.ondot.general.GeneralScheduleViewModel
 import com.ondot.util.DateTimeFormatter.toIsoDateString
+import com.ondot.util.DateTimeFormatter.toLocalDateFromIso
+import com.ondot.util.DateTimeFormatter.toLocalTimeFromIso
 import com.ondot.util.platform
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_pencil_white
 import org.jetbrains.compose.resources.painterResource
@@ -98,6 +103,9 @@ fun CheckScheduleScreen(
         onToggleSwitch = viewModel::updatePreparationAlarmEnabled,
         onShowBottomSheet = { viewModel.updateBottomSheetVisible(true) },
         onDismiss = { viewModel.updateBottomSheetVisible(false) },
+        onShowAlarmTimeBottomSheet = {},
+        onDismissAlarmTimeBottomSheet = {},
+        onEditAlarmTime = { _, _, _ -> },
     )
 }
 
@@ -111,6 +119,9 @@ fun CheckScheduleContent(
     onToggleSwitch: () -> Unit,
     onShowBottomSheet: () -> Unit,
     onDismiss: () -> Unit,
+    onShowAlarmTimeBottomSheet: (TimeType) -> Unit,
+    onDismissAlarmTimeBottomSheet: () -> Unit,
+    onEditAlarmTime: (TimeType, LocalDate, LocalTime) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -166,6 +177,7 @@ fun CheckScheduleContent(
                     info = uiState.preparationAlarm,
                     type = AlarmType.Preparation,
                     scheduleDate = uiState.selectedDate?.toIsoDateString() ?: "",
+                    onClick = { onShowAlarmTimeBottomSheet(TimeType.PREPARATION) },
                     onToggleSwitch = onToggleSwitch,
                 )
 
@@ -175,6 +187,7 @@ fun CheckScheduleContent(
                     info = uiState.departureAlarm,
                     type = AlarmType.Departure,
                     scheduleDate = uiState.selectedDate?.toIsoDateString() ?: "",
+                    onClick = { onShowAlarmTimeBottomSheet(TimeType.DEPARTURE) },
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -198,6 +211,31 @@ fun CheckScheduleContent(
                     onDismiss = onDismiss,
                     content = { BottomSheetContent(onCreateSchedule = onCreateSchedule) },
                     scrollable = platform() != ANDROID,
+                )
+            }
+        }
+
+        uiState.activeAlarmTimeBottomSheet?.let { type ->
+            AnimatedVisibility(
+                visible = true,
+                modifier = Modifier.fillMaxSize(),
+                enter = slideInVertically { fullHeight -> fullHeight } + fadeIn(),
+                exit = slideOutVertically { fullHeight -> -fullHeight } + fadeOut(),
+            ) {
+                val alarm =
+                    when (type) {
+                        TimeType.PREPARATION -> uiState.preparationAlarm
+                        TimeType.DEPARTURE -> uiState.departureAlarm
+                        TimeType.APPOINTMENT -> uiState.departureAlarm
+                    }
+
+                GeneralAlarmTimeBottomSheet(
+                    currentTime = alarm.triggeredAt.toLocalTimeFromIso(),
+                    currentDate = alarm.triggeredAt.toLocalDateFromIso(),
+                    onDismiss = onDismissAlarmTimeBottomSheet,
+                    onTimeSelected = { date, time ->
+                        onEditAlarmTime(type, date, time)
+                    },
                 )
             }
         }

@@ -109,6 +109,8 @@ private fun String.toScreenViewEventName(): String =
 
         // 패턴 라우트는 ROUTE로 매칭
         NavRoutes.EditSchedule.ROUTE -> "screen_view_edit_schedule"
+        NavRoutes.EditPlacePicker.route -> "screen_view_edit_place_picker"
+        NavRoutes.EditRouteLoading.route -> "screen_view_edit_route_loading"
         NavRoutes.PreparationAlarm.ROUTE -> "screen_view_preparation_alarm"
         NavRoutes.DepartureAlarm.ROUTE -> "screen_view_departure_alarm"
         NavRoutes.ServiceTerms.ROUTE -> "screen_view_service_terms"
