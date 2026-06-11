@@ -12,6 +12,7 @@ fun Project.addComposeCommonDependencies(libs: VersionCatalog) {
             implementation(libs.findLibrary("compose-foundation").get())
             implementation(libs.findLibrary("compose-ui").get())
             implementation(libs.findLibrary("compose-material3").get())
+            implementation(libs.findLibrary("compose-components-ui-tooling-preview").get())
             implementation(libs.findLibrary("compose-components-resources").get())
         }
     }

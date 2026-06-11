@@ -19,6 +19,8 @@ fun CalendarRangeResponse.toDomain(): List<CalendarDateScheduleSummary> =
                     CalendarDateScheduleSummaryItem(
                         scheduleId = it.scheduleId,
                         title = it.title,
+                        isRepeat = it.isRepeat,
+                        hasActiveAlarm = it.hasActiveAlarm,
                     )
                 },
         )

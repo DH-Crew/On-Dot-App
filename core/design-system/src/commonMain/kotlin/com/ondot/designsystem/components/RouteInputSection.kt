@@ -52,6 +52,7 @@ fun RouteInputSection(
     departureFocusRequester: FocusRequester = FocusRequester(),
     arrivalFocusRequester: FocusRequester = FocusRequester(),
     onRouteInputChanged: (String) -> Unit = {},
+    onRouteInputChangedByType: (RouterType, String) -> Unit = { _, value -> onRouteInputChanged(value) },
     onRouteInputFocused: (RouterType) -> Unit = {},
 ) {
     Column(
@@ -67,7 +68,7 @@ fun RouteInputSection(
             input = departurePlaceInput,
             readOnly = readOnly,
             focusRequester = departureFocusRequester,
-            onValueChanged = onRouteInputChanged,
+            onValueChanged = { onRouteInputChangedByType(RouterType.Departure, it) },
             onRouteInputFocused = onRouteInputFocused,
         )
 
@@ -82,7 +83,7 @@ fun RouteInputSection(
             input = arrivalPlaceInput,
             readOnly = readOnly,
             focusRequester = arrivalFocusRequester,
-            onValueChanged = onRouteInputChanged,
+            onValueChanged = { onRouteInputChangedByType(RouterType.Arrival, it) },
             onRouteInputFocused = onRouteInputFocused,
         )
     }
@@ -140,6 +141,7 @@ fun RouteInputTextField(
                 }
             },
             readOnly = readOnly,
+            enabled = !readOnly,
             singleLine = true,
             textStyle = OnDotTypo().bodyLargeR1.copy(color = Gray0),
             cursorBrush = SolidColor(Gray0),

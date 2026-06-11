@@ -67,6 +67,7 @@ fun PlacePickerRoute(
         departureFocusRequester = departureFocusRequester,
         arrivalFocusRequester = arrivalFocusRequester,
         onRouteInputChanged = viewModel::onRouteInputChanged,
+        onRouteInputChangedByType = viewModel::onRouteInputChanged,
         onRouteInputFocused = viewModel::onRouteInputFieldFocused,
         onPlaceSelected = {
             viewModel.onPlaceSelected(it)
@@ -78,6 +79,7 @@ fun PlacePickerRoute(
         },
         onDeleteHistory = viewModel::deletePlaceHistory,
         onToggleCheckBox = viewModel::onClickCheckBox,
+        onTransportTypeChanged = {},
         onNext = viewModel::onClickNextButton,
         popScreen = {
             viewModel.onClickBackButton()

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,6 @@ fun DateSettingSection(
     today: LocalDate,
     selectedTime: LocalTime?,
     isActiveDial: Boolean,
-    interactionSource: MutableInteractionSource,
     onToggleCalendar: () -> Unit,
     onToggleDial: () -> Unit,
     onPrevMonth: () -> Unit,
@@ -63,7 +63,6 @@ fun DateSettingSection(
         DateSectionHeader(
             selectedDate = selectedDate,
             isActiveCalendar = isActiveCalendar,
-            interactionSource = interactionSource,
             isRepeat = isRepeat,
             activeWeekDays = activeWeekDays,
             onToggleCalendar = onToggleCalendar,
@@ -97,7 +96,6 @@ fun DateSettingSection(
         TimeSectionHeader(
             selectedTime = selectedTime,
             isActiveDial = isActiveDial,
-            interactionSource = interactionSource,
             onToggleDial = onToggleDial,
         )
 
@@ -120,9 +118,10 @@ fun DateSettingSection(
 fun TimeSectionHeader(
     selectedTime: LocalTime?,
     isActiveDial: Boolean,
-    interactionSource: MutableInteractionSource,
     onToggleDial: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier =
             Modifier
@@ -154,11 +153,12 @@ fun TimeSectionHeader(
 fun DateSectionHeader(
     selectedDate: LocalDate?,
     isActiveCalendar: Boolean,
-    interactionSource: MutableInteractionSource,
     isRepeat: Boolean,
     activeWeekDays: Set<Int>,
     onToggleCalendar: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier =
             Modifier

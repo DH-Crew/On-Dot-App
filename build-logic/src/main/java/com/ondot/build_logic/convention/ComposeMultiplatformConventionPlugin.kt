@@ -45,6 +45,10 @@ class ComposeMultiplatformConventionPlugin: Plugin<Project> {
 
         addComposeCommonDependencies(libs)
 
+        dependencies.add(
+            "debugImplementation",
+            libs.findLibrary("compose-uiTooling").get(),
+        )
 
         // TODO(이후에 feature 모듈로 분리되어야 함)
         extensions.configure<KotlinMultiplatformExtension> {

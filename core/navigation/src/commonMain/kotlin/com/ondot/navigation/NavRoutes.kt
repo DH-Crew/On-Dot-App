@@ -76,6 +76,17 @@ sealed class NavRoutes(
 
     data object CheckSchedule : NavRoutes("checkSchedule")
 
+    // General Mvi
+    data object GeneralScheduleMviGraph : NavRoutes("generalScheduleMviGraph")
+
+    data object ScheduleRepeatSettingMvi : NavRoutes("scheduleRepeatSettingMvi")
+
+    data object PlacePickerMvi : NavRoutes("placePickerMvi")
+
+    data object RouteLoadingMvi : NavRoutes("routeLoadingMvi")
+
+    data object CheckScheduleMvi : NavRoutes("checkScheduleMvi")
+
     // EditSchedule
     @Serializable
     data object EditScheduleGraph : NavRoutes("editScheduleGraph")
@@ -90,6 +101,10 @@ sealed class NavRoutes(
             fun createRoute(id: Long) = "editSchedule/$id"
         }
     }
+
+    data object EditPlacePicker : NavRoutes("editPlacePicker")
+
+    data object EditRouteLoading : NavRoutes("editRouteLoading")
 
     // DeleteAccount
     data object DeleteAccountGraph : NavRoutes("deleteAccountGraph")

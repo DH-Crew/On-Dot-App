@@ -29,5 +29,6 @@ fun OnDotTextStyle.toTextStyle(): TextStyle {
         OnDotTextStyle.BodySmallR1 -> typo.bodySmallR1
         OnDotTextStyle.BodySmallR2 -> typo.bodySmallR2
         OnDotTextStyle.BodySmallR3 -> typo.bodySmallR3
+        OnDotTextStyle.BodySmallM -> typo.bodySmallM
     }
 }

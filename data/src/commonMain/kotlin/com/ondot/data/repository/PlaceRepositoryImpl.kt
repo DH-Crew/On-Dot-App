@@ -2,6 +2,7 @@ package com.ondot.data.repository
 
 import com.ondot.data.mapper.AddressListResponseMapper
 import com.ondot.data.mapper.PlaceHistoryResponseMapper
+import com.ondot.data.model.response.member.AddressResponse
 import com.ondot.data.model.response.member.PlaceHistoryResponse
 import com.ondot.data.model.response.member.mapper.toDomain
 import com.ondot.domain.model.member.AddressInfo
@@ -45,6 +46,16 @@ class PlaceRepositoryImpl(
     override suspend fun deletePlaceHistory(request: DeletePlaceHistoryRequest): Flow<Result<Unit>> =
         flow {
             emit(fetch(HttpMethod.DELETE, "/places/history", body = request))
+        }
+
+    override suspend fun searchPlaceAppResult(query: String): AppResult<List<AddressInfo>> =
+        safeApiCall {
+            networkClient
+                .requestOrThrow<List<AddressResponse>>(
+                    method = HttpMethod.GET,
+                    path = "/places/search",
+                    queryParams = mapOf("query" to query),
+                ).let(AddressListResponseMapper::responseToModel)
         }
 
     override suspend fun deleteHistory(searchedAt: String): AppResult<Unit> =

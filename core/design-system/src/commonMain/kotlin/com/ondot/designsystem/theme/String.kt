@@ -33,11 +33,13 @@ const val WORD_DELETE = "삭제"
 const val WORD_YES = "예"
 const val WORD_NO = "아니요"
 const val WORD_PREPARATION = "준비"
+const val WORD_PREPARATION_ITEM = "준비물"
 const val WORD_DEPARTURE = "출발"
 const val WORD_DELETE_ACCOUNT_ACTION = "탈퇴하기"
 const val WORD_RESTORE_ACTION = "되돌리기"
 const val WORD_HOME = "집"
 const val WORD_EVERYTIME = "에브리타임"
+const val WORD_TODAY = "오늘"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -255,3 +257,5 @@ const val EVERYTIME_ROUTE_LOADING_LABEL = "수업 일정에 맞춰\n알람을 �
 
 // Calendar
 const val CALENDAR_EMPTY_SCHEDULES_GUIDE = "등록된 알람이 없습니다."
+
+fun calendarOverflowScheduleCount(count: Int) = "+$count"

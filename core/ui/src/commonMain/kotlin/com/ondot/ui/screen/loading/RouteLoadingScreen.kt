@@ -29,6 +29,7 @@ import ondot.core.design_system.generated.resources.Res
 @Composable
 fun RouteLoadingScreen(
     label: String = ROUTE_CALCULATE_LABEL,
+    autoNavigate: Boolean = true,
     navigateToNext: () -> Unit,
 ) {
     val composition by rememberLottieComposition {
@@ -39,9 +40,11 @@ fun RouteLoadingScreen(
         iterations = Compottie.IterateForever,
     )
 
-    LaunchedEffect(Unit) {
-        delay(2000L)
-        navigateToNext()
+    LaunchedEffect(autoNavigate) {
+        if (autoNavigate) {
+            delay(2000L)
+            navigateToNext()
+        }
     }
 
     Box(

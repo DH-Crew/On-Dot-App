@@ -105,6 +105,7 @@ class IosAlarmScheduler : AlarmScheduler {
                             endLat = info.endLat.toNSNumber(),
                             endLng = info.endLng.toNSNumber(),
                             mapProvider = mapProvider.name.lowercase(),
+                            transportType = info.transportType.name.lowercase(),
                         ) { uuid, err ->
                             if (err != null) {
                                 logger.e { "AlarmKit schedule FAIL: alarmId=${alarm.alarmId}, err=$err" }

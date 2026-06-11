@@ -2,6 +2,7 @@ package com.ondot.testing.fake
 
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.command.CreateEverytimeScheduleCommand
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.request.CreateScheduleRequest
 import com.ondot.domain.model.request.ScheduleAlarmRequest
 import com.ondot.domain.model.request.ToggleAlarmRequest
@@ -64,6 +65,7 @@ class FakeScheduleRepository : ScheduleRepository {
                     hasActiveAlarm = false,
                     departureAlarm = request.departureAlarm,
                     preparationAlarm = request.preparationAlarm,
+                    transportType = TransportType.from(request.transportType),
                 )
 
             scheduleMap[newId] = schedule
@@ -150,6 +152,30 @@ class FakeScheduleRepository : ScheduleRepository {
 
     override suspend fun createEverytimeSchedule(command: CreateEverytimeScheduleCommand): AppResult<Unit> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchScheduleAlarms(request: ScheduleAlarmRequest): AppResult<ScheduleAlarm> =
+        AppResult.Success(ScheduleAlarm(preparationAlarm = Alarm(alarmId = 1), departureAlarm = Alarm(alarmId = 2)))
+
+    override suspend fun createScheduleAppResult(request: CreateScheduleRequest): AppResult<Unit> {
+        val newId = (scheduleMap.keys.maxOrNull() ?: 0L) + 1L
+
+        val schedule =
+            Schedule(
+                scheduleId = newId,
+                scheduleTitle = request.title,
+                appointmentAt = request.appointmentAt,
+                repeatDays = request.repeatDays,
+                preparationNote = request.preparationNote,
+                hasActiveAlarm = false,
+                departureAlarm = request.departureAlarm,
+                preparationAlarm = request.preparationAlarm,
+                transportType = TransportType.from(request.transportType),
+            )
+
+        scheduleMap[newId] = schedule
+
+        return AppResult.Success(Unit)
     }
 
     override suspend fun toggleAlarm(

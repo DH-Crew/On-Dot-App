@@ -1,6 +1,7 @@
 package com.ondot.data.mapper
 
 import com.ondot.data.model.response.schedule.ScheduleDetailResponse
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.schedule.ScheduleDetail
 import com.ondot.network.base.Mapper
 
@@ -16,6 +17,7 @@ object ScheduleDetailResponseMapper : Mapper<ScheduleDetailResponse, ScheduleDet
                 departurePlace = AddressResponseMapper.responseToModel(it.departurePlace),
                 preparationAlarm = AlarmResponseMapper.responseToModel(it.preparationAlarm),
                 departureAlarm = AlarmResponseMapper.responseToModel(it.departureAlarm),
+                transportType = TransportType.from(it.transportType),
             )
         } ?: ScheduleDetail()
 }

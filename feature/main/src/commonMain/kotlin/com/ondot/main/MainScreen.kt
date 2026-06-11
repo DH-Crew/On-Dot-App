@@ -132,7 +132,7 @@ fun BottomNavBar(
                     .fillMaxWidth()
                     .height(if (getPlatform() == ANDROID) 72.dp else 93.dp)
                     .background(Gray800.copy(alpha = 0.8f)),
-            horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
+            horizontalArrangement = Arrangement.spacedBy(85.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.Top,
         ) {
             BottomNavItem(

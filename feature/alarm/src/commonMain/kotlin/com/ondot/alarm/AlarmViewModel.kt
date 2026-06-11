@@ -154,6 +154,7 @@ class AlarmViewModel(
             startName = "출발지",
             endName = "도착지",
             provider = uiState.value.mapProvider,
+            transportType = schedule.transportType,
         )
     }
 
@@ -205,6 +206,7 @@ class AlarmViewModel(
                         startLng = nextSchedule.startLongitude,
                         endLat = nextSchedule.endLatitude,
                         endLng = nextSchedule.endLongitude,
+                        transportType = nextSchedule.transportType,
                     )
 
                 alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
@@ -221,6 +223,7 @@ class AlarmViewModel(
                     startLng = nextSchedule.startLongitude,
                     endLat = nextSchedule.endLatitude,
                     endLng = nextSchedule.endLongitude,
+                    transportType = nextSchedule.transportType,
                 )
             alarmScheduler.scheduleAlarm(alarmInfo, uiState.value.mapProvider)
         }
@@ -282,6 +285,7 @@ class AlarmViewModel(
                     endLng = newSchedule.endLongitude,
                     scheduleTitle = newSchedule.scheduleTitle,
                     appointmentAt = newSchedule.appointmentAt,
+                    transportType = newSchedule.transportType,
                 ),
                 mapProvider = uiState.value.mapProvider,
             )

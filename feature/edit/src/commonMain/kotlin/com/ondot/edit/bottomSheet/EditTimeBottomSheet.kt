@@ -1,6 +1,5 @@
 package com.ondot.edit.bottomSheet
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,7 +44,6 @@ fun EditTimeBottomSheet(
 ) {
     val viewModel: EditBottomSheetViewModel = viewModel { EditBottomSheetViewModel() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val interactionSource = remember { MutableInteractionSource() }
 
     val periodState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
     val hourState = rememberLazyListState(initialFirstVisibleItemIndex = currentTime.hour.coerceIn(0, 23))
@@ -78,7 +75,6 @@ fun EditTimeBottomSheet(
                             isActiveCalendar = uiState.isActiveCalendar,
                             isRepeat = false,
                             activeWeekDays = emptySet(),
-                            interactionSource = interactionSource,
                             onToggleCalendar = viewModel::onToggleCalendar,
                         )
 
@@ -110,7 +106,6 @@ fun EditTimeBottomSheet(
                     TimeSectionHeader(
                         selectedTime = uiState.currentTime,
                         isActiveDial = true,
-                        interactionSource = interactionSource,
                         onToggleDial = {},
                     )
 

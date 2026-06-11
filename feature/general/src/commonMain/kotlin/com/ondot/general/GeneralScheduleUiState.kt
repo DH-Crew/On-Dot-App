@@ -2,6 +2,7 @@ package com.ondot.general
 
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
 import com.ondot.domain.model.alarm.Alarm
+import com.ondot.domain.model.enums.TimeType
 import com.ondot.ui.base.UiState
 import com.ondot.ui.screen.placepicker.model.PlacePickerUiModel
 import com.ondot.util.DateTimeFormatter
@@ -52,6 +53,7 @@ data class GeneralScheduleUiState
         // CheckSchedule
         val scheduleTitle: String = NEW_SCHEDULE_LABEL,
         val showBottomSheet: Boolean = false,
+        val activeAlarmTimeBottomSheet: TimeType? = null,
     ) : UiState {
         companion object {
             fun formattedDate(date: String) = DateTimeFormatter.formatKoreanDateMonthDay(date)

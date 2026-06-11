@@ -2,6 +2,7 @@ package com.ondot.domain.model.schedule
 
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.ScheduleType
+import com.ondot.domain.model.enums.TransportType
 
 data class Schedule(
     val scheduleId: Long = -1L,
@@ -18,4 +19,5 @@ data class Schedule(
     val departureAlarm: Alarm = Alarm(),
     val hasActiveAlarm: Boolean = false,
     val preparationNote: String = "",
+    val transportType: TransportType = TransportType.PUBLIC_TRANSPORT,
 )

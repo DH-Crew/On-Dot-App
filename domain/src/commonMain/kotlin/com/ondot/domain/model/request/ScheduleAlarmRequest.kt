@@ -8,4 +8,5 @@ data class ScheduleAlarmRequest(
     val startLatitude: Double,
     val endLongitude: Double,
     val endLatitude: Double,
+    val transportType: String,
 )

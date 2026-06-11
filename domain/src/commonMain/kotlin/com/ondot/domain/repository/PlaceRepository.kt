@@ -16,6 +16,8 @@ interface PlaceRepository {
     suspend fun deletePlaceHistory(request: DeletePlaceHistoryRequest): Flow<Result<Unit>>
 
     // -----------MVI
+    suspend fun searchPlaceAppResult(query: String): AppResult<List<AddressInfo>>
+
     suspend fun deleteHistory(searchedAt: String): AppResult<Unit>
 
     suspend fun fetchHistory(): AppResult<List<PlaceHistory>>

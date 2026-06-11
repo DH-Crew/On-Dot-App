@@ -9,6 +9,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.ToastType
+import com.ondot.domain.model.enums.TransportType
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.member.HomeAddressInfo
 import com.ondot.domain.model.member.PlaceHistory
@@ -208,17 +209,30 @@ class GeneralScheduleViewModel(
     }
 
     fun onRouteInputChanged(value: String) {
-        onInputValueChanged(value)
+        onInputValueChanged(uiState.value.placePickerState.lastFocusedTextField, value)
         query.value = value
     }
 
-    private fun onInputValueChanged(value: String) {
-        when (uiState.value.placePickerState.lastFocusedTextField) {
+    fun onRouteInputChanged(
+        type: RouterType,
+        value: String,
+    ) {
+        onInputValueChanged(type, value)
+        query.value = value
+    }
+
+    private fun onInputValueChanged(
+        type: RouterType,
+        value: String,
+    ) {
+        when (type) {
             RouterType.Departure ->
                 updateState(
                     uiState.value.copy(
                         placePickerState =
                             uiState.value.placePickerState.copy(
+                                lastFocusedTextField = type,
+                                isChecked = uiState.value.placePickerState.isChecked && value.isHomeAddressInput(),
                                 departurePlaceInput = value,
                                 selectedDeparturePlace = null,
                             ),
@@ -229,6 +243,7 @@ class GeneralScheduleViewModel(
                     uiState.value.copy(
                         placePickerState =
                             uiState.value.placePickerState.copy(
+                                lastFocusedTextField = type,
                                 arrivalPlaceInput = value,
                                 selectedArrivalPlace = null,
                             ),
@@ -260,6 +275,7 @@ class GeneralScheduleViewModel(
                         placePickerState =
                             uiState.value.placePickerState.copy(
                                 placeList = emptyList(),
+                                isChecked = uiState.value.placePickerState.isChecked && place.isHomeAddress(),
                                 departurePlaceInput = place.title,
                                 selectedDeparturePlace = place,
                             ),
@@ -304,6 +320,18 @@ class GeneralScheduleViewModel(
                     ),
             ),
         )
+    }
+
+    private fun String.isHomeAddressInput(): Boolean {
+        val homeAddress = uiState.value.placePickerState.homeAddress
+        return this == homeAddress.roadAddress || this == homeAddress.title
+    }
+
+    private fun AddressInfo.isHomeAddress(): Boolean {
+        val homeAddress = uiState.value.placePickerState.homeAddress
+        return roadAddress == homeAddress.roadAddress &&
+            latitude == homeAddress.latitude &&
+            longitude == homeAddress.longitude
     }
 
     fun updateInitialPlacePicker(value: Boolean) {
@@ -398,6 +426,7 @@ class GeneralScheduleViewModel(
                             startLongitude = departurePlace.longitude,
                             endLatitude = arrivalPlace.latitude,
                             endLongitude = arrivalPlace.longitude,
+                            transportType = TransportType.PUBLIC_TRANSPORT.name,
                         ),
                 ).collect {
                     resultResponse(it, ::onSuccessGetScheduleAlarms, ::onFailedGetScheduleAlarms)
@@ -450,6 +479,7 @@ class GeneralScheduleViewModel(
                 appointmentAt = appointmentAt,
                 preparationAlarm = uiState.value.preparationAlarm,
                 departureAlarm = uiState.value.departureAlarm,
+                transportType = TransportType.PUBLIC_TRANSPORT.name,
             )
 
         viewModelScope.launch {

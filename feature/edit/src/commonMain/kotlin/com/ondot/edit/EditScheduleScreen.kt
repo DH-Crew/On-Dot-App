@@ -8,7 +8,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,7 +55,8 @@ import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.OnDotDialog
 import com.ondot.designsystem.components.OnDotText
 import com.ondot.designsystem.components.RouteInputSection
-import com.ondot.designsystem.components.TopBar
+import com.ondot.designsystem.components.topbar.CommonTopBar
+import com.ondot.designsystem.components.topbar.model.TopBarStyle
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor.GradientGreenBottom
 import com.ondot.designsystem.theme.OnDotColor.GradientGreenTop
@@ -70,9 +70,9 @@ import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.domain.model.enums.TimeBottomSheet
 import com.ondot.domain.model.enums.TimeType
-import com.ondot.domain.model.enums.TopBarType
 import com.ondot.edit.bottomSheet.EditDateBottomSheet
 import com.ondot.edit.bottomSheet.EditTimeBottomSheet
+import com.ondot.ui.util.noRippleClickable
 import com.ondot.util.DateTimeFormatter.toLocalDateFromIso
 import com.ondot.util.DateTimeFormatter.toLocalTimeFromIso
 import kotlinx.coroutines.delay
@@ -88,10 +88,11 @@ fun EditScheduleScreen(
     scheduleId: Long,
     viewModel: EditScheduleViewModel = koinViewModel(),
     popScreen: () -> Unit,
+    navigateToPlacePicker: () -> Unit,
+    navigateToRouteLoading: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
-    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         delay(200)
@@ -105,6 +106,7 @@ fun EditScheduleScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is EditScheduleEvent.NavigateBack -> popScreen()
+                else -> Unit
             }
         }
     }
@@ -112,7 +114,6 @@ fun EditScheduleScreen(
     if (uiState.isInitialized) {
         EditScheduleContent(
             uiState = uiState,
-            interactionSource = interactionSource,
             focusRequester = focusRequester,
             onClickClose = popScreen,
             onValueChanged = viewModel::updateScheduleTitle,
@@ -127,6 +128,11 @@ fun EditScheduleScreen(
             onShowTimeBottomSheet = viewModel::showTimeBottomSheet,
             onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
             onDismissTimeBottomSheet = viewModel::hideTimeBottomSheet,
+            onClickRouteInput = navigateToPlacePicker,
+            onEditAppointmentTime = { date, time ->
+                viewModel.editTime(date, time)
+                navigateToRouteLoading()
+            },
         )
     } else {
         Box(modifier = Modifier.fillMaxSize().background(Gray900))
@@ -136,7 +142,6 @@ fun EditScheduleScreen(
 @Composable
 fun EditScheduleContent(
     uiState: EditScheduleUiState,
-    interactionSource: MutableInteractionSource,
     focusRequester: FocusRequester,
     onClickClose: () -> Unit,
     onValueChanged: (String) -> Unit,
@@ -151,6 +156,8 @@ fun EditScheduleContent(
     onShowTimeBottomSheet: (TimeType) -> Unit,
     onDismissDateBottomSheet: () -> Unit,
     onDismissTimeBottomSheet: () -> Unit,
+    onClickRouteInput: () -> Unit,
+    onEditAppointmentTime: (LocalDate, LocalTime) -> Unit,
 ) {
     val appointmentDate = uiState.schedule.appointmentAt.toLocalTimeFromIso()
     val scrollState = rememberScrollState()
@@ -204,18 +211,24 @@ fun EditScheduleContent(
                             repeatDays = uiState.schedule.repeatDays,
                             date = uiState.selectedDate,
                             time = appointmentDate,
-                            interactionSource = interactionSource,
                             onClickDate = onShowDateBottomSheet,
                             onClickTime = { onShowTimeBottomSheet(TimeType.APPOINTMENT) },
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        RouteInputSection(
-                            departurePlaceInput = uiState.schedule.departurePlace.title,
-                            arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
-                            readOnly = true,
-                        )
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .noRippleClickable { onClickRouteInput() },
+                        ) {
+                            RouteInputSection(
+                                departurePlaceInput = uiState.schedule.departurePlace.title,
+                                arrivalPlaceInput = uiState.schedule.arrivalPlace.title,
+                                readOnly = true,
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -232,7 +245,6 @@ fun EditScheduleContent(
                             info = uiState.schedule.preparationAlarm,
                             type = AlarmType.Preparation,
                             scheduleDate = uiState.schedule.appointmentAt,
-                            interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.PREPARATION) },
                             onToggleSwitch = onToggleSwitch,
                         )
@@ -243,7 +255,6 @@ fun EditScheduleContent(
                             info = uiState.schedule.departureAlarm,
                             type = AlarmType.Departure,
                             scheduleDate = uiState.schedule.appointmentAt,
-                            interactionSource = interactionSource,
                             onClick = { onShowTimeBottomSheet(TimeType.DEPARTURE) },
                         )
 
@@ -285,7 +296,9 @@ fun EditScheduleContent(
                     isRepeat = uiState.schedule.isRepeat,
                     repeatDays = uiState.schedule.repeatDays.toSet(),
                     currentDate = uiState.schedule.appointmentAt.toLocalDateFromIso(),
-                    onEditDate = onEditDate,
+                    onEditDate = { isRepeat, repeatDays, date ->
+                        onEditDate(isRepeat, repeatDays, date)
+                    },
                     onDismiss = onDismissDateBottomSheet,
                 )
             }
@@ -307,7 +320,11 @@ fun EditScheduleContent(
                         onDismissTimeBottomSheet()
                     },
                     onTimeSelected = { date, time ->
-                        onEditTime(date, time)
+                        if (uiState.selectedTimeType == TimeType.APPOINTMENT) {
+                            onEditAppointmentTime(date, time)
+                        } else {
+                            onEditTime(date, time)
+                        }
                         onDismissTimeBottomSheet()
                     },
                 )
@@ -353,13 +370,13 @@ private fun TopBarSection(
     }
     val focusManager = LocalFocusManager.current
 
-    TopBar(
-        type = TopBarType.CLOSE,
+    CommonTopBar(
         buttonColor = Gray800,
+        style = TopBarStyle.CloseTitleEdit,
         onClick = onClickClose,
         content = {
             Row(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 BasicTextField(

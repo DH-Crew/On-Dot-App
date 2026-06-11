@@ -24,8 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dh.ondot.presentation.ui.theme.CALENDAR_EMPTY_SCHEDULES_GUIDE
+import com.dh.ondot.presentation.ui.theme.WORD_PREPARATION_ITEM
 import com.ondot.calendar.contract.CalendarScheduleItemUiModel
 import com.ondot.designsystem.components.OnDotSwitch
 import com.ondot.designsystem.components.OnDotText
@@ -34,11 +36,15 @@ import com.ondot.designsystem.theme.OnDotColor.Gray0
 import com.ondot.designsystem.theme.OnDotColor.Gray200
 import com.ondot.designsystem.theme.OnDotColor.Gray300
 import com.ondot.designsystem.theme.OnDotColor.Gray400
+import com.ondot.designsystem.theme.OnDotColor.Gray500
 import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.designsystem.theme.OnDotColor.Green500
+import com.ondot.designsystem.theme.OnDotColor.Green600
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.ui.util.noRippleClickable
-import com.ondot.util.DateTimeFormatter.formatKoreanMonthDay
+import com.ondot.ui.util.traceDraw
+import com.ondot.ui.util.traceLayout
+import com.ondot.util.DateTimeFormatter.formatKoreanMonthDayWithoutPad
 import kotlinx.datetime.LocalDate
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_no_clock
@@ -55,9 +61,13 @@ fun CalendarBottomSheet(
     onDelete: (Long, Boolean) -> Unit = { _, _ -> }, // 반복 일정이 아닌 경우 그냥 삭제
     onClickSchedule: (Long) -> Unit = {},
     onShowScheduleDeleteDialog: (Long) -> Unit = {}, // 반복 일정인 경우 삭제 다이얼로그 띄우기
+    traceName: String = "CalendarBottomSheet",
 ) {
     Surface(
-        modifier = modifier,
+        modifier =
+            modifier
+                .traceLayout(traceName)
+                .traceDraw(traceName),
         color = Gray700,
         shadowElevation = 10.dp,
     ) {
@@ -79,7 +89,7 @@ fun CalendarBottomSheet(
             )
 
             OnDotText(
-                text = selectedDate.formatKoreanMonthDay(),
+                text = selectedDate.formatKoreanMonthDayWithoutPad(),
                 color = Gray0,
                 style = OnDotTextStyle.TitleSmallSB,
                 modifier =
@@ -257,5 +267,40 @@ private fun CalendarScheduleListItem(
                 )
             }
         }
+
+        if (item.preparationNote.isNotBlank()) {
+            Spacer(Modifier.height(12.dp))
+            PreparationNoteItem(item.preparationNote)
+        }
+    }
+}
+
+@Composable
+private fun PreparationNoteItem(note: String) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(65.dp)
+                .background(Gray500, RoundedCornerShape(8.dp))
+                .padding(12.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        OnDotText(
+            text = WORD_PREPARATION_ITEM,
+            style = OnDotTextStyle.BodySmallR1,
+            color = Gray200,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        OnDotText(
+            text = note,
+            style = OnDotTextStyle.BodyMediumR,
+            color = Green600,
+        )
     }
 }
