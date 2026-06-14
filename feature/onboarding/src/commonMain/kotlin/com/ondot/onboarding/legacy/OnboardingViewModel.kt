@@ -1,4 +1,4 @@
-package com.ondot.onboarding
+package com.ondot.onboarding.legacy
 
 import androidx.lifecycle.viewModelScope
 import com.dh.ondot.presentation.ui.theme.ANDROID
@@ -19,6 +19,7 @@ import com.ondot.ui.base.BaseViewModel
 import com.ondot.ui.util.ToastManager
 import kotlinx.coroutines.launch
 
+@Deprecated("Deprecated")
 class OnboardingViewModel(
     private val placeRepository: PlaceRepository,
     private val memberRepository: MemberRepository,

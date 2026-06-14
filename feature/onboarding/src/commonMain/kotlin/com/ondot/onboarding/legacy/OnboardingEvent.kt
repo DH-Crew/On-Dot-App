@@ -1,4 +1,4 @@
-package com.ondot.onboarding
+package com.ondot.onboarding.legacy
 
 import com.ondot.ui.base.Event
 

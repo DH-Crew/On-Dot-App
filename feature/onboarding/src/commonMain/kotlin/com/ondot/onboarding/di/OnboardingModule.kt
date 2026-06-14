@@ -1,7 +1,7 @@
 package com.ondot.onboarding.di
 
 import com.ondot.navigation.base.NavGraphContributor
-import com.ondot.onboarding.OnboardingViewModel
+import com.ondot.onboarding.legacy.OnboardingViewModel
 import com.ondot.onboarding.navigation.OnboardingNavGraph
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named

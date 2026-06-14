@@ -1,4 +1,4 @@
-package com.ondot.onboarding
+package com.ondot.onboarding.legacy
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,9 +23,9 @@ import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.member.AddressInfo
-import com.ondot.onboarding.step.OnboardingStep1
-import com.ondot.onboarding.step.OnboardingStep2
-import com.ondot.onboarding.step.OnboardingStep3
+import com.ondot.onboarding.legacy.step.OnboardingStep1
+import com.ondot.onboarding.legacy.step.OnboardingStep2
+import com.ondot.onboarding.legacy.step.OnboardingStep3
 import com.ondot.platform.util.BackPressHandler
 import org.koin.compose.viewmodel.koinViewModel
 

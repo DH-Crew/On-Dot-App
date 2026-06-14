@@ -1,4 +1,4 @@
-package com.ondot.onboarding
+package com.ondot.onboarding.legacy
 
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
 import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE

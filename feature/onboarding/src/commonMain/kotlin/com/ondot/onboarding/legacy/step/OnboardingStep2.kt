@@ -1,4 +1,4 @@
-package com.ondot.onboarding.step
+package com.ondot.onboarding.legacy.step
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
