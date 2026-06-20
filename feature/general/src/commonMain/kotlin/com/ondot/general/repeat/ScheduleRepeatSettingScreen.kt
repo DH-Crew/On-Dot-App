@@ -42,6 +42,7 @@ fun ScheduleRepeatSettingScreen(
     viewModel: GeneralScheduleViewModel,
     navigateToMain: () -> Unit,
     navigateToPlacePicker: () -> Unit,
+    popScreen: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -81,6 +82,7 @@ fun ScheduleRepeatSettingScreen(
         onTimeSelected = viewModel::onTimeSelected,
         navigateToMain = navigateToMain,
         onClickButton = viewModel::onClickNextButton,
+        onBack = popScreen,
     )
 }
 
@@ -100,6 +102,7 @@ fun ScheduleRepeatSettingContent(
     onTimeSelected: (LocalTime) -> Unit,
     navigateToMain: () -> Unit,
     onClickButton: () -> Unit,
+    onBack: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -108,7 +111,7 @@ fun ScheduleRepeatSettingContent(
                 .background(Gray900)
                 .padding(horizontal = 22.dp),
     ) {
-        TopBar(type = TopBarType.CLOSE, onClick = navigateToMain)
+        TopBar(type = TopBarType.CLOSE, onClick = onBack)
 
         Spacer(modifier = Modifier.height(24.dp))
 

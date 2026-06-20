@@ -17,6 +17,7 @@ fun ScheduleRepeatSettingRoute(
     viewModel: GeneralScheduleViewModel = koinViewModel(),
     navigateToMain: () -> Unit,
     navigateToPlacePicker: () -> Unit,
+    popScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -57,5 +58,6 @@ fun ScheduleRepeatSettingRoute(
         onTimeSelected = { viewModel.dispatch(GeneralScheduleIntent.SelectTime(it)) },
         navigateToMain = navigateToMain,
         onClickButton = { viewModel.dispatch(GeneralScheduleIntent.ClickNext) },
+        onBack = popScreen,
     )
 }
