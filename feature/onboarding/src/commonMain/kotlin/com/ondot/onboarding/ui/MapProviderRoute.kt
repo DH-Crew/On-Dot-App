@@ -54,21 +54,18 @@ import com.ondot.designsystem.theme.OnDotColor.Gray400
 import com.ondot.designsystem.theme.OnDotColor.Gray900
 import com.ondot.domain.model.enums.ButtonType
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
 import com.ondot.domain.model.enums.OnDotTextStyle
 import com.ondot.onboarding.contract.OnboardingIntent
+import com.ondot.onboarding.contract.OnboardingSideEffect
 import com.ondot.onboarding.contract.OnboardingViewModel
 import com.ondot.ui.platform
+import com.ondot.ui.util.ToastManager
 import com.ondot.ui.util.buttonPadding
 import ondot.core.design_system.generated.resources.Res
 import ondot.core.design_system.generated.resources.ic_bus
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-
-private enum class NavigationType {
-    EveryTime,
-    GeneralSchedule,
-    Home,
-}
 
 @Composable
 fun MapProviderRoute(
@@ -80,19 +77,29 @@ fun MapProviderRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is OnboardingSideEffect.NavigateToEverytime -> navigateToEverytime()
+                is OnboardingSideEffect.NavigateToGeneralSchedule -> navigateToGeneralSchedule()
+                is OnboardingSideEffect.NavigateToMainScreen -> navigateToHome()
+                is OnboardingSideEffect.ShowToast -> {
+                    ToastManager.show(
+                        message = effect.message,
+                        type = effect.type,
+                    )
+                }
+            }
+        }
+    }
+
     MapProviderScreen(
         totalStep = uiState.totalStep,
         currentStep = uiState.currentStep,
         selectedProvider = uiState.selectedMapProvider,
         onBack = popScreen,
         onProviderClick = { viewModel.dispatch(OnboardingIntent.SetMapProvider(it)) },
-        onComplete = {
-            when (it) {
-                NavigationType.EveryTime -> navigateToEverytime()
-                NavigationType.GeneralSchedule -> navigateToGeneralSchedule()
-                NavigationType.Home -> navigateToHome()
-            }
-        },
+        onComplete = { viewModel.dispatch(OnboardingIntent.SetOccupation(it)) },
     )
 }
 
@@ -103,7 +110,7 @@ private fun MapProviderScreen(
     selectedProvider: MapProvider = MapProvider.NAVER,
     onBack: () -> Unit = {},
     onProviderClick: (MapProvider) -> Unit = {},
-    onComplete: (NavigationType) -> Unit = {},
+    onComplete: (Occupation) -> Unit = {},
 ) {
     var showUserTypeBottomSheet by remember { mutableStateOf(false) }
     val bottomSheetTransitionState = remember { MutableTransitionState(false) }
@@ -201,7 +208,7 @@ private fun MapProviderScreen(
 }
 
 @Composable
-private fun UserTypeBottomSheetContent(onClick: (NavigationType) -> Unit = {}) {
+private fun UserTypeBottomSheetContent(onClick: (Occupation) -> Unit = {}) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -251,7 +258,7 @@ private fun UserTypeBottomSheetContent(onClick: (NavigationType) -> Unit = {}) {
 }
 
 @Composable
-private fun UserTypeButtons(onClick: (NavigationType) -> Unit = {}) {
+private fun UserTypeButtons(onClick: (Occupation) -> Unit = {}) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -260,14 +267,14 @@ private fun UserTypeButtons(onClick: (NavigationType) -> Unit = {}) {
                 modifier = Modifier.weight(1f),
                 buttonText = ONBOARDING4_USER_TYPE_WORKER,
                 buttonType = ButtonType.Gray400,
-                onClick = { onClick(NavigationType.GeneralSchedule) },
+                onClick = { onClick(Occupation.OFFICE_WORKER) },
             )
             Spacer(Modifier.width(12.dp))
             OnDotButton(
                 modifier = Modifier.weight(1f),
                 buttonText = ONBOARDING4_USER_TYPE_STUDENT,
                 buttonType = ButtonType.Gray400,
-                onClick = { onClick(NavigationType.EveryTime) },
+                onClick = { onClick(Occupation.UNIVERSITY_STUDENT) },
             )
         }
         Spacer(Modifier.height(12.dp))
@@ -278,7 +285,7 @@ private fun UserTypeButtons(onClick: (NavigationType) -> Unit = {}) {
             textDecoration = TextDecoration.Underline,
             modifier =
                 Modifier
-                    .clickable { onClick(NavigationType.Home) },
+                    .clickable { onClick(Occupation.ETC) },
         )
     }
 }
