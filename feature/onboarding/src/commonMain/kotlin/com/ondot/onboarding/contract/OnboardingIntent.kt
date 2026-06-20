@@ -1,6 +1,7 @@
 package com.ondot.onboarding.contract
 
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.ui.base.mvi.Intent
 
@@ -42,5 +43,9 @@ sealed interface OnboardingIntent : Intent {
 
     data class SetMapProvider(
         val mapProvider: MapProvider,
+    ) : OnboardingIntent
+
+    data class SetOccupation(
+        val occupation: Occupation,
     ) : OnboardingIntent
 }
