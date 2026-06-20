@@ -100,4 +100,14 @@ class MemberRepositoryImpl(
                     path = "/members/home-address",
                 ).toDomain()
         }
+
+    override suspend fun completeOnboardingMvi(request: OnboardingRequest): AppResult<AuthTokens> =
+        safeApiCall {
+            networkClient
+                .requestOrThrow<AuthTokens>(
+                    method = HttpMethod.POST,
+                    path = "/members/onboarding",
+                    body = request,
+                )
+        }
 }

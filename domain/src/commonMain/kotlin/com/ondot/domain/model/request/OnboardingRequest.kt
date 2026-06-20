@@ -1,6 +1,8 @@
 package com.ondot.domain.model.request
 
 import com.ondot.domain.model.enums.AlarmMode
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
 import com.ondot.domain.model.enums.RingTone
 import com.ondot.domain.model.enums.SoundCategory
 import kotlinx.serialization.Serializable
@@ -19,4 +21,6 @@ data class OnboardingRequest(
     val ringTone: RingTone,
     val volume: Float,
     val questions: List<QuestionAnswer>,
+    val mapProvider: MapProvider,
+    val occupation: Occupation,
 )
