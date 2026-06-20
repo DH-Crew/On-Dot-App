@@ -56,6 +56,17 @@ sealed class NavRoutes(
 
     data object Onboarding : NavRoutes("onboarding")
 
+    // Onboarding Mvi
+    data object OnboardingMviGraph : NavRoutes("onboardingMviGraph")
+
+    data object PreparationTime : NavRoutes("preparationTime")
+
+    data object HomeAddress : NavRoutes("homeAddress")
+
+    data object AlarmSound : NavRoutes("alarmSound")
+
+    data object MapProvider : NavRoutes("mapProvider")
+
     // Main
     data object MainGraph : NavRoutes("mainGraph")
 
