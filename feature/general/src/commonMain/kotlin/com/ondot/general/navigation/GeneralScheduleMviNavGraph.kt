@@ -45,7 +45,7 @@ object GeneralScheduleMviNavGraph : NavGraphContributor {
                             launchSingleTop = true
                         }
                     },
-                    popScreen = { navController.popBackStack() }
+                    popScreen = { navController.popBackStack() },
                 )
             }
 
