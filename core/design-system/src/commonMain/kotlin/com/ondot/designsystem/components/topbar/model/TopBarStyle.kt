@@ -1,6 +1,8 @@
 package com.ondot.designsystem.components.topbar.model
 
 sealed interface TopBarStyle {
+    data object None : TopBarStyle
+
     data object CloseOnly : TopBarStyle
 
     data object CloseTitleEdit : TopBarStyle
