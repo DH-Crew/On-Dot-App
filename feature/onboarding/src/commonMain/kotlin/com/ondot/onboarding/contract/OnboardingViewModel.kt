@@ -92,7 +92,7 @@ class OnboardingViewModel(
         reduce {
             copy(
                 homeAddress = homeAddress,
-                addressInput = homeAddress.roadAddress,
+                addressInput = homeAddress.title,
                 placeList = emptyList(),
             )
         }
