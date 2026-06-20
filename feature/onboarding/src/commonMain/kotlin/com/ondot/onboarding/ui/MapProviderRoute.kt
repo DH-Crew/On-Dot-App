@@ -77,6 +77,15 @@ fun MapProviderRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.dispatch(
+            OnboardingIntent.InitStep(
+                currentStep = if (platform() == ANDROID) 4 else 3,
+                totalStep = if (platform() == ANDROID) 4 else 3,
+            ),
+        )
+    }
+
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
@@ -97,6 +106,7 @@ fun MapProviderRoute(
         totalStep = uiState.totalStep,
         currentStep = uiState.currentStep,
         selectedProvider = uiState.selectedMapProvider,
+        isSubmitting = uiState.isSubmitting,
         onBack = popScreen,
         onProviderClick = { viewModel.dispatch(OnboardingIntent.SetMapProvider(it)) },
         onComplete = { viewModel.dispatch(OnboardingIntent.SetOccupation(it)) },
@@ -108,6 +118,7 @@ private fun MapProviderScreen(
     totalStep: Int = 2,
     currentStep: Int = 1,
     selectedProvider: MapProvider = MapProvider.NAVER,
+    isSubmitting: Boolean = false,
     onBack: () -> Unit = {},
     onProviderClick: (MapProvider) -> Unit = {},
     onComplete: (Occupation) -> Unit = {},
@@ -198,6 +209,7 @@ private fun MapProviderScreen(
             onDismiss = { showUserTypeBottomSheet = false },
         ) {
             UserTypeBottomSheetContent(
+                isSubmitting = isSubmitting,
                 onClick = {
                     showUserTypeBottomSheet = false
                     onComplete(it)
@@ -208,7 +220,10 @@ private fun MapProviderScreen(
 }
 
 @Composable
-private fun UserTypeBottomSheetContent(onClick: (Occupation) -> Unit = {}) {
+private fun UserTypeBottomSheetContent(
+    isSubmitting: Boolean = false,
+    onClick: (Occupation) -> Unit = {},
+) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -253,12 +268,18 @@ private fun UserTypeBottomSheetContent(onClick: (Occupation) -> Unit = {}) {
             )
         }
         Spacer(Modifier.height(36.dp))
-        UserTypeButtons(onClick = onClick)
+        UserTypeButtons(
+            isSubmitting = isSubmitting,
+            onClick = onClick,
+        )
     }
 }
 
 @Composable
-private fun UserTypeButtons(onClick: (Occupation) -> Unit = {}) {
+private fun UserTypeButtons(
+    isSubmitting: Boolean = false,
+    onClick: (Occupation) -> Unit = {},
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -267,6 +288,7 @@ private fun UserTypeButtons(onClick: (Occupation) -> Unit = {}) {
                 modifier = Modifier.weight(1f),
                 buttonText = ONBOARDING4_USER_TYPE_WORKER,
                 buttonType = ButtonType.Gray400,
+                enabled = !isSubmitting,
                 onClick = { onClick(Occupation.OFFICE_WORKER) },
             )
             Spacer(Modifier.width(12.dp))
@@ -274,6 +296,7 @@ private fun UserTypeButtons(onClick: (Occupation) -> Unit = {}) {
                 modifier = Modifier.weight(1f),
                 buttonText = ONBOARDING4_USER_TYPE_STUDENT,
                 buttonType = ButtonType.Gray400,
+                enabled = !isSubmitting,
                 onClick = { onClick(Occupation.UNIVERSITY_STUDENT) },
             )
         }
@@ -285,7 +308,7 @@ private fun UserTypeButtons(onClick: (Occupation) -> Unit = {}) {
             textDecoration = TextDecoration.Underline,
             modifier =
                 Modifier
-                    .clickable { onClick(Occupation.ETC) },
+                    .clickable(enabled = !isSubmitting) { onClick(Occupation.ETC) },
         )
     }
 }
