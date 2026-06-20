@@ -42,6 +42,7 @@ data class OnboardingUiState(
     // Step4
     val selectedMapProvider: MapProvider = MapProvider.NAVER,
     val selectedOccupation: Occupation = Occupation.OFFICE_WORKER,
+    val isSubmitting: Boolean = false,
 ) : UiState {
     val preparationTimeEnabled: Boolean
         get() = preparationTime > 0
