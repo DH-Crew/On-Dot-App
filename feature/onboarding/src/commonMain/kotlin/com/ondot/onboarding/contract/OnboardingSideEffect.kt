@@ -8,4 +8,10 @@ sealed interface OnboardingSideEffect : SideEffect {
         val message: String,
         val type: ToastType,
     ) : OnboardingSideEffect
+
+    object NavigateToMainScreen : OnboardingSideEffect
+
+    object NavigateToEverytime : OnboardingSideEffect
+
+    object NavigateToGeneralSchedule : OnboardingSideEffect
 }
