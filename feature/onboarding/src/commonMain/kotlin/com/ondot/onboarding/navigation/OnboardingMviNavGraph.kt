@@ -94,11 +94,17 @@ object OnboardingMviNavGraph : NavGraphContributor {
                     viewModel = viewModel,
                     navigateToEverytime = {
                         navController.navigate(NavRoutes.UrlInput.route) {
+                            popUpTo(graphRoute.route) {
+                                inclusive = true
+                            }
                             launchSingleTop = true
                         }
                     },
                     navigateToGeneralSchedule = {
                         navController.navigate(NavRoutes.GeneralScheduleMviGraph.route) {
+                            popUpTo(graphRoute.route) {
+                                inclusive = true
+                            }
                             launchSingleTop = true
                         }
                     },
