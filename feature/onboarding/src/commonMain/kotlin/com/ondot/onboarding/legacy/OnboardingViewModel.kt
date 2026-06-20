@@ -5,6 +5,8 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.ondot.designsystem.getPlatform
 import com.ondot.domain.model.auth.AuthTokens
 import com.ondot.domain.model.enums.AlarmMode
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
 import com.ondot.domain.model.enums.RingTone
 import com.ondot.domain.model.enums.SoundCategory
 import com.ondot.domain.model.enums.ToastType
@@ -258,6 +260,8 @@ class OnboardingViewModel(
                                 answerId = uiState.value.answer2[0].id,
                             ),
                         ),
+                    mapProvider = MapProvider.KAKAO,
+                    occupation = Occupation.OFFICE_WORKER,
                 )
 
             memberRepository.completeOnboarding(request).collect {
