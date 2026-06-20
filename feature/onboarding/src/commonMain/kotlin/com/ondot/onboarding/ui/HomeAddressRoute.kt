@@ -150,6 +150,9 @@ private fun HomeAddressScreen(
                 Spacer(Modifier.height(40.dp))
 
                 RoundedTextField(
+                    modifier =
+                        Modifier
+                            .height(54.dp),
                     value = addressInput,
                     onValueChange = onInputChanged,
                     maxLength = 50,
