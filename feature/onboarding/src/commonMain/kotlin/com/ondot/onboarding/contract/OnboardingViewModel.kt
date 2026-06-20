@@ -166,6 +166,8 @@ class OnboardingViewModel(
     }
 
     private fun setOccupation(occupation: Occupation) {
+        if (currentState.isSubmitting) return
+
         reduce { copy(selectedOccupation = occupation) }
         completeOnboarding()
     }
@@ -202,12 +204,18 @@ class OnboardingViewModel(
                             answerId = 5,
                         ),
                     ),
-                mapProvider = MapProvider.KAKAO,
-                occupation = Occupation.OFFICE_WORKER,
+                mapProvider = currentState.selectedMapProvider,
+                occupation = currentState.selectedOccupation,
             )
 
         launchResult(
             block = { memberRepository.completeOnboardingMvi(request) },
+            onStart = {
+                reduce { copy(isSubmitting = true) }
+            },
+            onFinally = {
+                reduce { copy(isSubmitting = false) }
+            },
             onSuccess = {
                 tokenProvider.saveToken(it)
                 mapProviderStorage.setMapProvider(currentState.selectedMapProvider)
