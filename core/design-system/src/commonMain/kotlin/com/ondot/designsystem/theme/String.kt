@@ -87,22 +87,35 @@ const val SUCCESS_DELETE_REPEAT_SCHEDULE = "반복 알람이 삭제되었습니�
 // Onboarding
 const val ONBOARDING1_TITLE = "평소 외출 준비하는데\n얼마나 소요되나요?"
 const val ONBOARDING1_TITLE_HIGHLIGHT = "외출 준비"
-const val ONBOARDING1_SUB_TITLE = "30분, 1시간 20분 등 자유롭게 적어주세요!"
+const val ONBOARDING1_SUB_TITLE = "30분, 1시간 20분 등 자유롭게 조절하세요!"
 const val ONBOARDING1_HOUR_PLACEHOLDER = "1자 이내의 숫자"
 const val ONBOARDING1_MINUTE_PLACEHOLDER = "2자 이내의 숫자"
 
-const val ONBOARDING2_TITLE = "빠른 일정 등록을 위한 주소를 입력해 주세요."
+fun formatPreparationTime(
+    hour: Int,
+    minute: Int,
+): String = "${hour}시간 ${minute}분"
+
+const val ONBOARDING2_TITLE = "빠른 일정 등록을 위한\n주소를 입력해 주세요."
 const val ONBOARDING2_TITLE_HIGHLIGHT = "주소"
-const val ONBOARDING2_SUB_TITLE = "빠른 일정 등록에 꼭 필요한 정보예요. \n집 주소는 안전하게 저장되며 언제든 수정할 수 있어요."
+const val ONBOARDING2_SUB_TITLE = "집 주소는 안전하게 저장되며 언제든 수정할 수 있어요."
 const val ONBOARDING2_PLACEHOLDER = "도로명 주소"
 
-const val ONBOARDING3_TITLE = "알람의 초기 사운드를 설정해 주세요."
+const val ONBOARDING3_TITLE = "알람의 초기 사운드를\n설정해 주세요."
 const val ONBOARDING3_TITLE_HIGHLIGHT = "알람의 초기 사운드"
 const val ONBOARDING3_SUB_TITLE = "추후에 마이페이지에서 수정할 수 있어요."
 
-const val ONBOARDING4_TITLE = "ONDOT을 사용하면서\n어떤 것을 가장 기대하나요?"
-const val ONBOARDING4_TITLE_HIGHLIGHT = "기대"
-const val ONBOARDING4_SUB_TITLE = "한 개의 항목만 선택이 가능해요."
+const val ONBOARDING4_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
+const val ONBOARDING4_TITLE_HIGHLIGHT = "지도 앱"
+const val ONBOARDING4_SUB_TITLE = "길 안내에 사용될 예정이예요.\n세팅에서 다시 변경할 수 있으니 걱정마세요!"
+const val ONBOARDING4_USER_TYPE_TITLE1 = "내가 직장인이거나"
+const val ONBOARDING4_USER_TYPE_TITLE1_HIGHLIGHT = "직장인"
+const val ONBOARDING4_USER_TYPE_TITLE2 = "대학생이라면?"
+const val ONBOARDING4_USER_TYPE_TITLE2_HIGHLIGHT = "대학생"
+const val ONBOARDING4_USER_TYPE_SUB_TITLE = "출근이나 통학 일정 등록을 도와드릴게요!"
+const val ONBOARDING4_USER_TYPE_WORKER = "직장인이에요"
+const val ONBOARDING4_USER_TYPE_STUDENT = "대학생이에요"
+const val ONBOARDING4_USER_TYPE_NONE = "모두 해당되지 않아요"
 const val ONBOARDING4_ANSWER1 = "지각 방지"
 const val ONBOARDING4_ANSWER2 = "신경 쓰임 해소"
 const val ONBOARDING4_ANSWER3 = "간편한 일정 관리"
