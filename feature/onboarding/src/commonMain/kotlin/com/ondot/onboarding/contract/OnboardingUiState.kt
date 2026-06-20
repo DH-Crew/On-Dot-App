@@ -3,6 +3,7 @@ package com.ondot.onboarding.contract
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
 import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
 import com.ondot.domain.model.enums.RingTone
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.ui.AlarmSound
@@ -40,6 +41,7 @@ data class OnboardingUiState(
     val volume: Float = 0.5f,
     // Step4
     val selectedMapProvider: MapProvider = MapProvider.NAVER,
+    val selectedOccupation: Occupation = Occupation.OFFICE_WORKER,
 ) : UiState {
     val preparationTimeEnabled: Boolean
         get() = preparationTime > 0
