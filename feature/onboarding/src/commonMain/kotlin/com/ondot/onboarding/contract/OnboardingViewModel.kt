@@ -1,13 +1,22 @@
 package com.ondot.onboarding.contract
 
 import androidx.lifecycle.viewModelScope
+import com.dh.ondot.presentation.ui.theme.ERROR_COMPLETE_ONBOARDING
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
+import com.ondot.domain.model.enums.AlarmMode
 import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
+import com.ondot.domain.model.enums.RingTone
+import com.ondot.domain.model.enums.SoundCategory
 import com.ondot.domain.model.enums.ToastType
 import com.ondot.domain.model.member.AddressInfo
+import com.ondot.domain.model.request.OnboardingRequest
+import com.ondot.domain.model.request.QuestionAnswer
 import com.ondot.domain.repository.MemberRepository
 import com.ondot.domain.repository.PlaceRepository
+import com.ondot.domain.service.MapProviderStorage
 import com.ondot.domain.service.SoundPlayer
+import com.ondot.domain.service.TokenProvider
 import com.ondot.ui.base.mvi.BaseViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -23,6 +32,8 @@ class OnboardingViewModel(
     private val memberRepository: MemberRepository,
     private val placeRepository: PlaceRepository,
     private val soundPlayer: SoundPlayer,
+    private val tokenProvider: TokenProvider,
+    private val mapProviderStorage: MapProviderStorage,
 ) : BaseViewModel<OnboardingUiState, OnboardingIntent, OnboardingSideEffect>(OnboardingUiState()) {
     private val query = MutableStateFlow("")
     private var searchPlaceJob: Job? = null
@@ -63,6 +74,7 @@ class OnboardingViewModel(
             is OnboardingIntent.SetVolume -> setVolume(intent.volume)
             is OnboardingIntent.StopSound -> stopSound()
             is OnboardingIntent.SetMapProvider -> setMapProvider(intent.mapProvider)
+            is OnboardingIntent.SetOccupation -> setOccupation(intent.occupation)
         }
     }
 
@@ -151,5 +163,63 @@ class OnboardingViewModel(
                     emitEffect(OnboardingSideEffect.ShowToast(ERROR_SEARCH_PLACE, ToastType.ERROR))
                 },
             )
+    }
+
+    private fun setOccupation(occupation: Occupation) {
+        reduce { copy(selectedOccupation = occupation) }
+        completeOnboarding()
+    }
+
+    private fun completeOnboarding() {
+        val soundCategory =
+            when (currentState.selectedCategoryIndex) {
+                0 -> SoundCategory.BRIGHT_ENERGY
+                1 -> SoundCategory.FAST_INTENSE
+                else -> SoundCategory.BRIGHT_ENERGY
+            }
+
+        val request =
+            OnboardingRequest(
+                preparationTime = currentState.preparationTime,
+                roadAddress = currentState.homeAddress?.roadAddress ?: "",
+                longitude = currentState.homeAddress?.longitude ?: 0.0,
+                latitude = currentState.homeAddress?.latitude ?: 0.0,
+                alarmMode = if (currentState.isMuted) AlarmMode.SILENT else AlarmMode.SOUND,
+                isSnoozeEnabled = true,
+                snoozeInterval = 1,
+                snoozeCount = 3,
+                soundCategory = soundCategory,
+                ringTone = RingTone.getNameById(currentState.selectedSound ?: ""),
+                volume = currentState.volume,
+                questions =
+                    listOf(
+                        QuestionAnswer(
+                            questionId = 1,
+                            answerId = 1,
+                        ),
+                        QuestionAnswer(
+                            questionId = 2,
+                            answerId = 5,
+                        ),
+                    ),
+                mapProvider = MapProvider.KAKAO,
+                occupation = Occupation.OFFICE_WORKER,
+            )
+
+        launchResult(
+            block = { memberRepository.completeOnboardingMvi(request) },
+            onSuccess = {
+                tokenProvider.saveToken(it)
+                mapProviderStorage.setMapProvider(currentState.selectedMapProvider)
+                when (currentState.selectedOccupation) {
+                    Occupation.OFFICE_WORKER -> emitEffect(OnboardingSideEffect.NavigateToGeneralSchedule)
+                    Occupation.UNIVERSITY_STUDENT -> emitEffect(OnboardingSideEffect.NavigateToEverytime)
+                    Occupation.ETC -> emitEffect(OnboardingSideEffect.NavigateToMainScreen)
+                }
+            },
+            onError = {
+                emitEffect(OnboardingSideEffect.ShowToast(ERROR_COMPLETE_ONBOARDING, ToastType.ERROR))
+            },
+        )
     }
 }
