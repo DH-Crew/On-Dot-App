@@ -30,6 +30,7 @@ fun OnDotButton(
     buttonText: String,
     buttonType: ButtonType,
     buttonHeight: Dp = 52.dp,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -50,7 +51,7 @@ fun OnDotButton(
                         style = Stroke(width = width),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius),
                     )
-                }.clickable { onClick() },
+                }.clickable(enabled) { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Row(
