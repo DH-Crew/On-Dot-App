@@ -2,6 +2,7 @@ package com.ondot.general.contract
 
 import androidx.compose.runtime.Immutable
 import com.dh.ondot.presentation.ui.theme.NEW_SCHEDULE_LABEL
+import com.dh.ondot.presentation.ui.theme.WORD_COMMUTE
 import com.ondot.domain.model.alarm.Alarm
 import com.ondot.domain.model.enums.TimeType
 import com.ondot.general.GeneralScheduleUiState
@@ -43,6 +44,7 @@ data class GeneralScheduleState(
     val scheduleTitle: String = NEW_SCHEDULE_LABEL,
     val showBottomSheet: Boolean = false,
     val activeAlarmTimeBottomSheet: TimeType? = null,
+    val isFromOnboarding: Boolean = false,
 ) : UiState {
     val isRepeatStepButtonEnabled: Boolean
         get() = selectedTime != null && (selectedDate != null || activeWeekDays.isNotEmpty())
@@ -57,6 +59,7 @@ data class GeneralScheduleState(
 
 fun GeneralScheduleState.toLegacyUiState(): GeneralScheduleUiState =
     GeneralScheduleUiState(
+        isFromOnboarding = isFromOnboarding,
         currentStep = currentStep,
         totalStep = totalStep,
         isRepeat = isRepeat,
@@ -73,7 +76,7 @@ fun GeneralScheduleState.toLegacyUiState(): GeneralScheduleUiState =
         placePickerState = placePickerState,
         preparationAlarm = preparationAlarm,
         departureAlarm = departureAlarm,
-        scheduleTitle = scheduleTitle,
+        scheduleTitle = if (isFromOnboarding) WORD_COMMUTE else scheduleTitle,
         showBottomSheet = showBottomSheet,
         activeAlarmTimeBottomSheet = activeAlarmTimeBottomSheet,
     )

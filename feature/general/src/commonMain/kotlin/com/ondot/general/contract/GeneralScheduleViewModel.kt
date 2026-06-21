@@ -75,6 +75,7 @@ class GeneralScheduleViewModel(
     override suspend fun handleIntent(intent: GeneralScheduleIntent) {
         when (intent) {
             GeneralScheduleIntent.InitStep -> initStep()
+            is GeneralScheduleIntent.SetOnboardingEntry -> setOnboardingEntry(intent.isFromOnboarding)
             is GeneralScheduleIntent.ToggleRepeat -> toggleRepeat(intent.isRepeat)
             is GeneralScheduleIntent.SelectRepeatPreset -> selectRepeatPreset(intent.index)
             is GeneralScheduleIntent.ToggleWeekDay -> toggleWeekDay(intent.index)
@@ -114,6 +115,10 @@ class GeneralScheduleViewModel(
                 placePickerState = placePickerState.copy(steps = Pair(1, 2)),
             )
         }
+    }
+
+    private fun setOnboardingEntry(isFromOnboarding: Boolean) {
+        reduce { copy(isFromOnboarding = isFromOnboarding) }
     }
 
     private fun toggleRepeat(newValue: Boolean) {

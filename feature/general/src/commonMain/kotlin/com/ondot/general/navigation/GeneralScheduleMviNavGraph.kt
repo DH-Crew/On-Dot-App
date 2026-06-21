@@ -3,8 +3,11 @@ package com.ondot.general.navigation
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
+import androidx.savedstate.read
 import com.ondot.general.contract.GeneralScheduleViewModel
 import com.ondot.general.ui.check.CheckScheduleRoute
 import com.ondot.general.ui.place.PlacePickerRoute
@@ -24,16 +27,28 @@ object GeneralScheduleMviNavGraph : NavGraphContributor {
         navigation(
             route = graphRoute.route,
             startDestination = startDestination,
+            arguments =
+                listOf(
+                    navArgument("isFromOnboarding") {
+                        type = NavType.BoolType
+                        defaultValue = false
+                    },
+                ),
         ) {
             composable(NavRoutes.ScheduleRepeatSettingMvi.route) { backStackEntry ->
                 val parentEntry =
                     remember(backStackEntry) {
                         navController.getBackStackEntry(graphRoute.route)
                     }
+                val isFromOnboarding =
+                    parentEntry.arguments?.read {
+                        getBoolean("isFromOnboarding")
+                    } ?: false
                 val viewModel: GeneralScheduleViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
                 ScheduleRepeatSettingRoute(
                     viewModel = viewModel,
+                    isFromOnboarding = isFromOnboarding,
                     navigateToMain = {
                         navController.navigate(NavRoutes.Main.route) {
                             popUpTo(graphRoute.route) { inclusive = true }

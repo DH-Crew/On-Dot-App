@@ -16,6 +16,7 @@ import kotlin.time.ExperimentalTime
 data class GeneralScheduleUiState
     @OptIn(ExperimentalTime::class)
     constructor(
+        val isFromOnboarding: Boolean = false,
         val currentStep: Int = 0,
         val totalStep: Int = 0,
         // ScheduleRepeat

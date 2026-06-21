@@ -1,5 +1,6 @@
 package com.ondot.navigation
 
+import com.ondot.navigation.arg.GeneralScheduleNavArg
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -88,7 +89,10 @@ sealed class NavRoutes(
     data object CheckSchedule : NavRoutes("checkSchedule")
 
     // General Mvi
-    data object GeneralScheduleMviGraph : NavRoutes("generalScheduleMviGraph")
+    data object GeneralScheduleMviGraph : NavRoutes("generalScheduleMviGraph?isFromOnboarding={isFromOnboarding}") {
+        fun createRoute(arg: GeneralScheduleNavArg = GeneralScheduleNavArg()): String =
+            "generalScheduleMviGraph?isFromOnboarding=${arg.isFromOnboarding}"
+    }
 
     data object ScheduleRepeatSettingMvi : NavRoutes("scheduleRepeatSettingMvi")
 

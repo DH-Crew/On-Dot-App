@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.ONBOARDING_SCHEDULE_REPEAT_TITLE
 import com.dh.ondot.presentation.ui.theme.SCHEDULE_REPEAT_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 import com.ondot.designsystem.components.DateSettingSection
@@ -120,7 +121,7 @@ fun ScheduleRepeatSettingContent(
         Spacer(modifier = Modifier.height(34.dp))
 
         OnDotText(
-            text = SCHEDULE_REPEAT_TITLE,
+            text = if (uiState.isFromOnboarding) ONBOARDING_SCHEDULE_REPEAT_TITLE else SCHEDULE_REPEAT_TITLE,
             style = OnDotTextStyle.TitleMediumM,
             color = Gray0,
         )

@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.ondot.navigation.NavRoutes
+import com.ondot.navigation.arg.GeneralScheduleNavArg
 import com.ondot.navigation.base.NavGraphContributor
 import com.ondot.onboarding.contract.OnboardingViewModel
 import com.ondot.onboarding.ui.AlarmSoundRoute
@@ -101,7 +102,11 @@ object OnboardingMviNavGraph : NavGraphContributor {
                         }
                     },
                     navigateToGeneralSchedule = {
-                        navController.navigate(NavRoutes.GeneralScheduleMviGraph.route) {
+                        navController.navigate(
+                            NavRoutes.GeneralScheduleMviGraph.createRoute(
+                                GeneralScheduleNavArg(isFromOnboarding = true),
+                            ),
+                        ) {
                             popUpTo(graphRoute.route) {
                                 inclusive = true
                             }
