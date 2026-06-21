@@ -1,35 +1,23 @@
-package com.ondot.onboarding
+package com.ondot.onboarding.contract
 
 import com.dh.ondot.presentation.ui.theme.CATEGORY_BRIGHT_ENERGY
 import com.dh.ondot.presentation.ui.theme.CATEGORY_FAST_INTENSE
-import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER1
-import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER2
-import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER3
-import com.dh.ondot.presentation.ui.theme.ONBOARDING4_ANSWER4
-import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER1
-import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER2
-import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER3
-import com.dh.ondot.presentation.ui.theme.ONBOARDING5_ANSWER4
+import com.ondot.domain.model.enums.MapProvider
+import com.ondot.domain.model.enums.Occupation
 import com.ondot.domain.model.enums.RingTone
 import com.ondot.domain.model.member.AddressInfo
 import com.ondot.domain.model.ui.AlarmSound
-import com.ondot.domain.model.ui.UserAnswer
 import com.ondot.ui.base.UiState
 
 data class OnboardingUiState(
     val currentStep: Int = 0,
     val totalStep: Int = 0,
     // Step1
-    val preparationTime: Int = 0,
-    val hourInput: String = "",
-    val minuteInput: String = "",
+    val preparationTime: Int = 60,
     // Step2
     val addressInput: String = "",
-    val roadAddress: String = "",
-    val longitude: Double = 0.0,
-    val latitude: Double = 0.0,
-    val addressList: List<AddressInfo> = emptyList(),
-    val selectedAddress: AddressInfo? = null,
+    val placeList: List<AddressInfo> = emptyList(),
+    val homeAddress: AddressInfo? = null,
     // Step3
     val isMuted: Boolean = false,
     val selectedCategoryIndex: Int = 0,
@@ -52,21 +40,16 @@ data class OnboardingUiState(
     val selectedSound: String? = null,
     val volume: Float = 0.5f,
     // Step4
-    val answer1: List<UserAnswer> =
-        listOf(
-            UserAnswer(1, ONBOARDING4_ANSWER1),
-            UserAnswer(2, ONBOARDING4_ANSWER2),
-            UserAnswer(3, ONBOARDING4_ANSWER3),
-            UserAnswer(4, ONBOARDING4_ANSWER4),
-        ),
-    val selectedAnswer1Index: Int = 0,
-    // Step5
-    val answer2: List<UserAnswer> =
-        listOf(
-            UserAnswer(5, ONBOARDING5_ANSWER1),
-            UserAnswer(6, ONBOARDING5_ANSWER2),
-            UserAnswer(7, ONBOARDING5_ANSWER3),
-            UserAnswer(8, ONBOARDING5_ANSWER4),
-        ),
-    val selectedAnswer2Index: Int = 0,
-) : UiState
+    val selectedMapProvider: MapProvider = MapProvider.NAVER,
+    val selectedOccupation: Occupation = Occupation.OFFICE_WORKER,
+    val isSubmitting: Boolean = false,
+) : UiState {
+    val preparationTimeEnabled: Boolean
+        get() = preparationTime > 0
+
+    val addressInputEnabled: Boolean
+        get() = homeAddress != null
+
+    val alarmSoundEnabled: Boolean
+        get() = isMuted || selectedSound != null
+}

@@ -22,7 +22,7 @@ object LoginNavGraph : NavGraphContributor {
             composable(NavRoutes.Login.route) {
                 LoginScreen(
                     navigateToOnboarding = {
-                        navController.navigate(NavRoutes.Onboarding.route) {
+                        navController.navigate(NavRoutes.OnboardingMviGraph.route) {
                             popUpTo(NavRoutes.Login.route) { inclusive = true }
                             launchSingleTop = true
                         }

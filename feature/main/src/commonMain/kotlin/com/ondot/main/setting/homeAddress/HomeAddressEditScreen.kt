@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -40,9 +38,9 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.OnDotTypo
 import com.dh.ondot.presentation.ui.theme.SETTING_HOME_ADDRESS_EDIT_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_SAVE
+import com.ondot.designsystem.components.AddressList
 import com.ondot.designsystem.components.OnDotButton
 import com.ondot.designsystem.components.OnDotText
-import com.ondot.designsystem.components.PlaceSearchResultItem
 import com.ondot.designsystem.components.TopBar
 import com.ondot.designsystem.getPlatform
 import com.ondot.designsystem.theme.OnDotColor
@@ -146,7 +144,7 @@ fun HomeAddressEditContent(
             modifier = Modifier.weight(1f),
             query = query,
             addressList = addressList,
-            onClickAddress = onClickAddress,
+            onClick = onClickAddress,
         )
 
         OnDotButton(
@@ -223,43 +221,5 @@ private fun HomeAddressSearchTextField(
                         onValueChange("")
                     },
         )
-    }
-}
-
-@Composable
-private fun AddressList(
-    modifier: Modifier = Modifier,
-    query: String,
-    addressList: List<AddressInfo>,
-    onClickAddress: (AddressInfo) -> Unit,
-) {
-    LazyColumn(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 22.dp),
-    ) {
-        itemsIndexed(addressList, key = {
-            _,
-            item,
-            ->
-            "${item.roadAddress}|${item.title}|${item.latitude}|${item.longitude}"
-        }) { index, item ->
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable { onClickAddress(item) },
-            ) {
-                PlaceSearchResultItem(
-                    addressInput = query,
-                    item = item,
-                )
-
-                if (index < addressList.lastIndex) {
-                    HorizontalDivider(thickness = (0.5).dp, modifier = Modifier.fillMaxWidth(), color = Gray800)
-                }
-            }
-        }
     }
 }

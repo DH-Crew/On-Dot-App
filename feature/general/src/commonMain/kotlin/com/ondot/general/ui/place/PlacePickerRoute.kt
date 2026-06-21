@@ -64,6 +64,7 @@ fun PlacePickerRoute(
 
     PlacePickerScreen(
         state = uiState.placePickerState,
+        isFromOnboarding = uiState.isFromOnboarding,
         buttonEnabled = uiState.isPlacePickerButtonEnabled,
         departureFocusRequester = departureFocusRequester,
         arrivalFocusRequester = arrivalFocusRequester,

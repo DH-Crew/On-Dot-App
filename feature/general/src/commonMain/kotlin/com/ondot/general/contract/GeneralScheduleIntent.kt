@@ -12,6 +12,10 @@ import kotlinx.datetime.LocalTime
 sealed interface GeneralScheduleIntent : Intent {
     data object InitStep : GeneralScheduleIntent
 
+    data class SetOnboardingEntry(
+        val isFromOnboarding: Boolean,
+    ) : GeneralScheduleIntent
+
     data class ToggleRepeat(
         val isRepeat: Boolean,
     ) : GeneralScheduleIntent

@@ -70,4 +70,14 @@ object OnDotColor {
         Brush.verticalGradient(
             colors = listOf(Color(0xFF666666), Color(0xFF666666).copy(alpha = 0.2f)),
         )
+
+    val GradientHorizontalDivider =
+        Brush.horizontalGradient(
+            colorStops =
+                arrayOf(
+                    0.0f to Color(0xFF232323).copy(alpha = 0f),
+                    0.5f to Color(0xFF232323),
+                    1.0f to Color(0xFF232323).copy(alpha = 0f),
+                ),
+        )
 }

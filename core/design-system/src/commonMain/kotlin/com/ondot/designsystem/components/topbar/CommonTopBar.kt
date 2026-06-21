@@ -47,6 +47,7 @@ fun CommonTopBar(
     ) {
         // leading
         when (style) {
+            is TopBarStyle.None -> Box(modifier = Modifier.size(24.dp))
             is TopBarStyle.CloseOnly,
             is TopBarStyle.CloseTitleEdit,
             -> {
@@ -67,7 +68,9 @@ fun CommonTopBar(
 
         // center
         when (style) {
-            is TopBarStyle.CloseOnly -> {
+            is TopBarStyle.None,
+            is TopBarStyle.CloseOnly,
+            -> {
                 Spacer(Modifier.weight(1f))
             }
 

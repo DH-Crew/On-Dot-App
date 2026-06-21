@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.ondot.designsystem.theme.OnDotColor.Gray700
 import com.ondot.designsystem.theme.OnDotColor.Gray900
 
+@Deprecated("CommonBottomSheet로 마이그레이션")
 @Composable
 fun OnDotBottomSheet(
     content: @Composable () -> Unit,

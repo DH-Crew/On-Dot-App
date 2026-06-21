@@ -36,4 +36,6 @@ interface MemberRepository {
     // -------------------MVI Migration
 
     suspend fun fetchHomeAddress(): AppResult<HomeAddressInfo>
+
+    suspend fun completeOnboardingMvi(request: OnboardingRequest): AppResult<AuthTokens>
 }

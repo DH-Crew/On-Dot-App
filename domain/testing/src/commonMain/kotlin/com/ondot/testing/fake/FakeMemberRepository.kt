@@ -60,6 +60,22 @@ class FakeMemberRepository : MemberRepository {
             }
         }
 
+    override suspend fun completeOnboardingMvi(request: OnboardingRequest): AppResult<AuthTokens> {
+        lastOnboardingRequest = request
+
+        return if (shouldFailOnboarding) {
+            AppResult.Error(AppError.Unknown(Throwable("onboarding 실패")))
+        } else {
+            val tokens =
+                authTokens ?: AuthTokens(
+                    accessToken = "fake_access",
+                    refreshToken = "fake_refresh",
+                ).also { authTokens = it }
+
+            AppResult.Success(tokens)
+        }
+    }
+
     override suspend fun getHomeAddress(): Flow<Result<HomeAddressInfo>> =
         flow {
             if (shouldFailHomeAddress) {

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import co.touchlab.kermit.Logger
+import com.dh.ondot.presentation.ui.theme.OnDotTheme
 import com.dh.ondot.presentation.ui.theme.WORD_COMPETE
 import com.ondot.designsystem.components.Calendar
 import com.ondot.designsystem.components.DateSectionHeader
@@ -29,6 +30,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -148,6 +150,18 @@ fun EditTimeBottomSheet(
                     Spacer(Modifier.height(12.dp))
                 }
             },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    OnDotTheme {
+        EditTimeBottomSheet(
+            currentTime = LocalTime(12, 0),
+            onDismiss = {},
+            onTimeSelected = { _, _ -> },
         )
     }
 }

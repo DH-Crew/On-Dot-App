@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dh.ondot.presentation.ui.theme.ANDROID
+import com.dh.ondot.presentation.ui.theme.ONBOARDING_SCHEDULE_REPEAT_TITLE
 import com.dh.ondot.presentation.ui.theme.SCHEDULE_REPEAT_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 import com.ondot.designsystem.components.DateSettingSection
@@ -42,6 +43,7 @@ fun ScheduleRepeatSettingScreen(
     viewModel: GeneralScheduleViewModel,
     navigateToMain: () -> Unit,
     navigateToPlacePicker: () -> Unit,
+    popScreen: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -81,6 +83,7 @@ fun ScheduleRepeatSettingScreen(
         onTimeSelected = viewModel::onTimeSelected,
         navigateToMain = navigateToMain,
         onClickButton = viewModel::onClickNextButton,
+        onBack = popScreen,
     )
 }
 
@@ -100,6 +103,7 @@ fun ScheduleRepeatSettingContent(
     onTimeSelected: (LocalTime) -> Unit,
     navigateToMain: () -> Unit,
     onClickButton: () -> Unit,
+    onBack: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -108,7 +112,7 @@ fun ScheduleRepeatSettingContent(
                 .background(Gray900)
                 .padding(horizontal = 22.dp),
     ) {
-        TopBar(type = TopBarType.CLOSE, onClick = navigateToMain)
+        TopBar(type = TopBarType.CLOSE, onClick = onBack)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -117,7 +121,7 @@ fun ScheduleRepeatSettingContent(
         Spacer(modifier = Modifier.height(34.dp))
 
         OnDotText(
-            text = SCHEDULE_REPEAT_TITLE,
+            text = if (uiState.isFromOnboarding) ONBOARDING_SCHEDULE_REPEAT_TITLE else SCHEDULE_REPEAT_TITLE,
             style = OnDotTextStyle.TitleMediumM,
             color = Gray0,
         )

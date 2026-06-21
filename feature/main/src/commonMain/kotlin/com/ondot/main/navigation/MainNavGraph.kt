@@ -22,7 +22,7 @@ object MainNavGraph : NavGraphContributor {
             composable(NavRoutes.Main.route) {
                 MainScreen(
                     navigateToGeneralSchedule = {
-                        navController.navigate(NavRoutes.GeneralScheduleMviGraph.route) {
+                        navController.navigate(NavRoutes.GeneralScheduleMviGraph.createRoute()) {
                             launchSingleTop = true
                         }
                     },

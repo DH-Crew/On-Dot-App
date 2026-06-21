@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.ondot.navigation.NavRoutes
 import com.ondot.navigation.base.NavGraphContributor
-import com.ondot.onboarding.OnboardingScreen
+import com.ondot.onboarding.legacy.OnboardingScreen
 
 object OnboardingNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes

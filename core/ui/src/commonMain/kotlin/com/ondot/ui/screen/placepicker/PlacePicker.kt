@@ -30,6 +30,7 @@ import com.dh.ondot.presentation.ui.theme.ANDROID
 import com.dh.ondot.presentation.ui.theme.CREATE_SCHEDULE
 import com.dh.ondot.presentation.ui.theme.DEPARTURE_FROM_HOME
 import com.dh.ondot.presentation.ui.theme.EVERYTIME_PLACE_PICKER_TITLE
+import com.dh.ondot.presentation.ui.theme.ONBOARDING_PLACE_PICKER_TITLE
 import com.dh.ondot.presentation.ui.theme.PLACE_PICKER_TITLE
 import com.dh.ondot.presentation.ui.theme.WORD_NEXT
 import com.ondot.designsystem.components.OnDotButton
@@ -64,6 +65,7 @@ import org.jetbrains.compose.resources.painterResource
 fun PlacePickerScreen(
     state: PlacePickerUiModel,
     isEverytime: Boolean = false,
+    isFromOnboarding: Boolean = false,
     buttonEnabled: Boolean = false,
     departureFocusRequester: FocusRequester = remember { FocusRequester() },
     arrivalFocusRequester: FocusRequester = remember { FocusRequester() },
@@ -111,7 +113,14 @@ fun PlacePickerScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             OnDotText(
-                text = if (isEverytime) EVERYTIME_PLACE_PICKER_TITLE else PLACE_PICKER_TITLE,
+                text =
+                    if (isEverytime) {
+                        EVERYTIME_PLACE_PICKER_TITLE
+                    } else if (isFromOnboarding) {
+                        ONBOARDING_PLACE_PICKER_TITLE
+                    } else {
+                        PLACE_PICKER_TITLE
+                    },
                 style = OnDotTextStyle.TitleMediumM,
                 color = Gray0,
             )

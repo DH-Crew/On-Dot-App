@@ -6,6 +6,7 @@ import com.dh.ondot.presentation.ui.theme.ERROR_GET_HOME_ADDRESS
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_PLACE_HISTORY
 import com.dh.ondot.presentation.ui.theme.ERROR_GET_SCHEDULE_ALARMS
 import com.dh.ondot.presentation.ui.theme.ERROR_SEARCH_PLACE
+import com.dh.ondot.presentation.ui.theme.WORD_COMMUTE
 import com.ondot.domain.model.enums.RouterType
 import com.ondot.domain.model.enums.TimeType
 import com.ondot.domain.model.enums.ToastType
@@ -75,6 +76,7 @@ class GeneralScheduleViewModel(
     override suspend fun handleIntent(intent: GeneralScheduleIntent) {
         when (intent) {
             GeneralScheduleIntent.InitStep -> initStep()
+            is GeneralScheduleIntent.SetOnboardingEntry -> setOnboardingEntry(intent.isFromOnboarding)
             is GeneralScheduleIntent.ToggleRepeat -> toggleRepeat(intent.isRepeat)
             is GeneralScheduleIntent.SelectRepeatPreset -> selectRepeatPreset(intent.index)
             is GeneralScheduleIntent.ToggleWeekDay -> toggleWeekDay(intent.index)
@@ -112,6 +114,15 @@ class GeneralScheduleViewModel(
                 totalStep = 2,
                 currentStep = 1,
                 placePickerState = placePickerState.copy(steps = Pair(1, 2)),
+            )
+        }
+    }
+
+    private fun setOnboardingEntry(isFromOnboarding: Boolean) {
+        reduce {
+            copy(
+                isFromOnboarding = isFromOnboarding,
+                scheduleTitle = if (isFromOnboarding) WORD_COMMUTE else currentState.scheduleTitle,
             )
         }
     }

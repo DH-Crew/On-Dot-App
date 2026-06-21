@@ -15,11 +15,17 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun ScheduleRepeatSettingRoute(
     viewModel: GeneralScheduleViewModel = koinViewModel(),
+    isFromOnboarding: Boolean,
     navigateToMain: () -> Unit,
     navigateToPlacePicker: () -> Unit,
+    popScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(isFromOnboarding) {
+        viewModel.dispatch(GeneralScheduleIntent.SetOnboardingEntry(isFromOnboarding))
+    }
 
     LaunchedEffect(uiState.totalStep) {
         if (uiState.totalStep == 0) {
@@ -57,5 +63,6 @@ fun ScheduleRepeatSettingRoute(
         onTimeSelected = { viewModel.dispatch(GeneralScheduleIntent.SelectTime(it)) },
         navigateToMain = navigateToMain,
         onClickButton = { viewModel.dispatch(GeneralScheduleIntent.ClickNext) },
+        onBack = popScreen,
     )
 }
