@@ -40,6 +40,7 @@ const val WORD_RESTORE_ACTION = "되돌리기"
 const val WORD_HOME = "집"
 const val WORD_EVERYTIME = "에브리타임"
 const val WORD_TODAY = "오늘"
+const val WORD_COMMUTE = "출근"
 
 // 알람 카테고리
 const val CATEGORY_GENERAL = "기본"
@@ -143,7 +144,9 @@ fun appointmentTime(time: String) = "일정 $time"
 
 // General
 const val SCHEDULE_REPEAT_TITLE = "약속시간과 날짜를 알려주세요."
+const val ONBOARDING_SCHEDULE_REPEAT_TITLE = "출근 시간과 요일을 알려주세요."
 const val PLACE_PICKER_TITLE = "출발지와 약속 장소를 알려주세요."
+const val ONBOARDING_PLACE_PICKER_TITLE = "출발지와 직장 위치를 알려주세요."
 const val DEPARTURE_INPUT_PLACEHOLDER = "출발지: "
 const val ARRIVAL_INPUT_PLACEHOLDER = "도착지: "
 const val DEPARTURE_FROM_HOME = "집에서 출발해요"
