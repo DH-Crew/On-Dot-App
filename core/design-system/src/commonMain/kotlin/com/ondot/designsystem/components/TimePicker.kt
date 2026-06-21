@@ -151,11 +151,12 @@ fun TimePicker(
     hourState: LazyListState,
     minuteState: LazyListState,
     modifier: Modifier = Modifier,
+    minuteStep: Int = 1,
     onTimeSelected: (LocalTime) -> Unit,
 ) {
     val period = listOf(WORD_AM, WORD_PM)
     val hour = (0..23).toList().map { it.toString().padStart(2, '0') }
-    val minute = (0..59).toList().map { it.toString().padStart(2, '0') }
+    val minute = (0..59 step minuteStep).toList().map { it.toString().padStart(2, '0') }
     var selPeriod by remember { mutableStateOf(period.first()) }
     var selHour by remember { mutableStateOf(hour[hourState.firstVisibleItemIndex]) }
     var selMin by remember { mutableStateOf(minute[minuteState.firstVisibleItemIndex]) }

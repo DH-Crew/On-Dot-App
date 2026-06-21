@@ -181,6 +181,7 @@ private fun PreparationTimeBottomSheet(
             periodState = periodState,
             hourState = hourState,
             minuteState = minuteState,
+            minuteStep = 5,
             onTimeSelected = { time ->
                 selectedPreparationTime = time.hour * 60 + time.minute
             },
