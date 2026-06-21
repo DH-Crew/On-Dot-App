@@ -109,7 +109,7 @@ const val ONBOARDING3_SUB_TITLE = "추후에 마이페이지에서 수정할 수
 
 const val ONBOARDING4_TITLE = "어떤 지도 앱을\n자주 사용하시나요?"
 const val ONBOARDING4_TITLE_HIGHLIGHT = "지도 앱"
-const val ONBOARDING4_SUB_TITLE = "길 안내에 사용될 예정이예요.\n세팅에서 다시 변경할 수 있으니 걱정마세요!"
+const val ONBOARDING4_SUB_TITLE = "길 안내에 사용될 예정이에요.\n세팅에서 다시 변경할 수 있으니 걱정마세요!"
 const val ONBOARDING4_USER_TYPE_TITLE1 = "내가 직장인이거나"
 const val ONBOARDING4_USER_TYPE_TITLE1_HIGHLIGHT = "직장인"
 const val ONBOARDING4_USER_TYPE_TITLE2 = "대학생이라면?"
