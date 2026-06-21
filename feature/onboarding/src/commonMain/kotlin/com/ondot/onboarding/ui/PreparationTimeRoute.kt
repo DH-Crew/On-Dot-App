@@ -166,9 +166,11 @@ private fun PreparationTimeBottomSheet(
     onPreparationTimeSelected: (Int) -> Unit = {},
     onDismiss: () -> Unit = {},
 ) {
+    val minuteStep = 5
     val periodState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
     val hourState = rememberLazyListState(initialFirstVisibleItemIndex = preparationTime / 60)
-    val minuteState = rememberLazyListState(initialFirstVisibleItemIndex = preparationTime % 60)
+    val minuteState =
+        rememberLazyListState(initialFirstVisibleItemIndex = ((preparationTime % 60) / minuteStep).coerceIn(0, 59 / minuteStep))
     var selectedPreparationTime by remember(preparationTime) {
         mutableStateOf(preparationTime)
     }
@@ -181,7 +183,7 @@ private fun PreparationTimeBottomSheet(
             periodState = periodState,
             hourState = hourState,
             minuteState = minuteState,
-            minuteStep = 5,
+            minuteStep = minuteStep,
             onTimeSelected = { time ->
                 selectedPreparationTime = time.hour * 60 + time.minute
             },
